@@ -1,0 +1,10 @@
+test_information:
+  name: "bad object schema"
+  parse_error: true
+
+test_schema:
+  validator:
+    type: object
+    # This property is not appropriate for objects.
+    disallowed-key:
+      you-know-it

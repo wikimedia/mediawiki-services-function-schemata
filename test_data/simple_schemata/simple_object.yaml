@@ -1,0 +1,44 @@
+test_information:
+  name: "object schema"
+  parse_error: false
+
+test_schema:
+  validator:
+    type: object
+    required:
+      - pulp
+    properties:
+      pulp:
+        type: string
+      skin:
+        type: string
+    additionalProperties:
+      type: string
+
+test_objects:
+  success:
+    - name: "good fruit"
+      object:
+        pulp: "lots"
+        skin: "not so much"
+        juice: "bitter"
+
+  failure:
+    - name: "additional property is array, not string"
+      object:
+        pulp: "lots"
+        skin: "more"
+        juice:
+          - "bitter"
+
+    - name: "object is actually a string"
+      object: "pulp"
+
+    - name: "object is actually an array"
+      object:
+        - "pulp"
+
+    - name: "pulp is required but not present"
+      object:
+        skin: "not so much"
+        juice: "very little"

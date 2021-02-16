@@ -1,0 +1,36 @@
+version: v4
+base: docker-registry.wikimedia.org/buster-nodejs10-slim
+lives:
+  in: /srv/service
+
+variants:
+  build:
+    base: docker-registry.wikimedia.org/buster-nodejs10-devel
+    apt: { packages: [git, build-essential, python-pkgconfig] }
+
+  copy-files:
+    lives:
+      in: /srv/service
+    copies:
+    - from: local
+      source: .
+      destination: .
+
+  test:
+    includes: [build]
+    lives:
+      in: /srv/service/javascript
+    copies:
+    - from: copy-files
+      source: /srv/service/javascript
+      destination: /srv/service/javascript
+    - from: copy-files
+      source: /srv/service/data
+      destination: /srv/service/data
+    - from: copy-files
+      source: /srv/service/test_data
+      destination: /srv/service/test_data
+    node:
+      requirements:
+      - ./package.json
+    entrypoint: [npm, test]

@@ -1,0 +1,32 @@
+test_information:
+  name: "array schema"
+  parse_error: false
+
+test_schema:
+  validator:
+    type: array
+    items:
+      type: array
+      items:
+        type: string
+
+test_objects:
+  success:
+    - name: "happy arrays"
+      object:
+        - - "list"
+          - "vector"
+  
+  failure:
+    - name: "shallow array"
+      object:
+        - "materialistic"
+
+    - name: "very deep array"
+      object:
+        - - - "navel"
+          - - "gazing"
+
+    - name: "wrong item type"
+      object:
+        - - mismatched: "type"

@@ -1,0 +1,27 @@
+test_information:
+  name: "string schema"
+  parse_error: false
+
+test_schema:
+  validator:
+    type: string
+    enum:
+      - parasol
+
+test_objects:
+  success:
+    - name: "regular parasol"
+      object: "parasol"
+
+  failure:
+    - name: "string is actually an array"
+      object:
+        - "parasol"
+
+    - name: "string is actually an object"
+      object:
+        property: "parasol"
+
+    - name: "string is not one of the enumerated values"
+      object:
+        property: "umbrella"

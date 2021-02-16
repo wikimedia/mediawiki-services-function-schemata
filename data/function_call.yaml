@@ -1,0 +1,126 @@
+type: object
+required:
+  - Z1K1
+  - Z7K1  # K_FUNCTION
+properties:
+  Z1K1:
+    type: string
+    enum:
+      - Z7  # V_FUNCTION_CALL
+  Z7K1:  # K_FUNCTION
+    $ref: "#/definitions/v1/Z8"
+additionalProperties:
+  $ref: "#/definitions/v1/ArgumentInstantiation"
+
+definitions:
+  v1:
+    Z8:  # V_FUNCTION
+      type: object
+      required:
+        - Z1K1  # K_TYPE
+        - Z8K1  # K_ARGUMENTS
+        - Z8K2  # K_RETURN_TYPE
+        - Z8K3  # K_TESTERS
+        - Z8K4  # K_IMPLEMENTATION
+        - Z8K5  # K_IDENTITY
+      properties:
+        Z1K1:  # K_TYPE
+          type: string
+          enum:
+            - Z8  # V_FUNCTION
+        Z8K1:  # K_ARGUMENTS
+          type: array
+          items:
+            $ref: "#/definitions/v1/Z17"
+        Z8K2:  # K_RETURN_TYPE:
+          $ref: "#/definitions/v1/ZReturnType"
+        Z8K3:  # K_TESTERS
+          # TODO: This is a placeholder; what do testers actually look like?
+          type: array
+          items:
+            type: object
+        Z8K4:  # K_IMPLEMENTATION
+          type: array
+          items:
+            $ref: "#/definitions/v1/Z14"
+        Z8K5:  # K_IDENTITY
+          type: string
+
+    Z17:  # V_ARGUMENT_DECLARATION
+      type: object
+      required:
+        - Z1K1  # K_TYPE
+        - Z17K1  # K_ARGUMENT_TYPE
+        - Z17K2  # K_KEY_ID
+        - Z17K3  # K_LABEL
+      properties:
+        Z1K1:  # K_TYPE
+          type: string
+          enum:
+            - Z17  # V_ARGUMENT_DECLARATION
+        Z17K1:  # K_ARGUMENT_TYPE
+          type: string
+        Z17K2:  # K_KEY_ID
+          type: string
+        Z17K3:  # K_LABEL
+          type: object
+          properties:
+            Z1K1:  # K_TYPE
+              type: string
+            Z12K1:  # K_TEXTS
+              type: array
+              items:
+                type: object
+                properties:
+                  Z1K1:  # K_TYPE
+                    type: string
+                    enum:
+                      - Z11  # V_MONOLINGUAL_TEXT
+                  Z11K1:  # K_LANGUAGE
+                    type: string
+                  Z11K2:  # K_TEXT
+                    type: string
+
+    ZReturnType:
+      type: string
+
+    Z14:  # V_IMPLEMENTATION
+      type: object
+      required:
+        - Z1K1  # K_TYPE
+        - Z14K3  # K_CODE
+      properties:
+        Z1K1:  # K_TYPE
+          type: string
+          enum:
+            - Z14  # V_IMPLEMENTATION
+        Z14K3:  # K_CODE
+          $ref: "#/definitions/v1/Z16"
+
+    Z16:  # V_CODE
+      type: object
+      required:
+        - Z1K1  # K_TYPE
+        - Z16K1  # K_LANGUAGE
+        - Z16K2  # K_CODE_BLOCK
+      properties:
+        Z1K1:  # K_TYPE
+          type: string
+          enum:
+            - Z16  # V_CODE
+        Z16K1:  # K_LANGUAGE
+          type: string
+          enum:
+            - Z301  # Javascript
+            - Z302  # ?
+        Z16K2:  # K_CODE_BLOCK
+          type: string
+
+    ArgumentInstantiation:
+      type: object
+      required:
+        - Z1K1  # K_TYPE
+      properties:
+        Z1K1:  # K_TYPE
+          type: string
+      additionalProperties: true
