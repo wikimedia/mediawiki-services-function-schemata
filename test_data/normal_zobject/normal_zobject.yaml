@@ -1,0 +1,121 @@
+test_information:
+  name: normalized ZObject
+
+test_objects:
+  success:
+  - name: arbitrary ZObject
+    object:
+      Z1:
+        Z1K1: Z6
+        Z6K1: arbitrary string
+      Z2K34:
+        Z89:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+
+  - name: happy Z9 reference
+    object:
+      Z1K1: Z9
+      Z9K1: "A1"  # A notorious sauce.
+
+  - name: happy Z9 array empty
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+
+  - name: happy Z13
+    object:
+      Z1K1: Z9
+      Z9K1: Z13
+
+  - name: happy nested Z13
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: "wherewith"
+      Z10K2:
+        Z1K1: Z9
+        Z9K1: Z13
+
+  - name: happy Z9 array
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: "fanatics"
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: "have"
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1: Z6
+            Z6K1: "their"
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+            Z10K1:
+              Z1K1: Z6
+              Z6K1: "dreams"
+            Z10K2:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+
+  - name: happy Z6
+    object:
+      Z1K1: Z6
+      Z6K1: "any old string will do here"
+
+  - name: happy 2
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z70
+      Z70K1:
+        Z1K1: Z6
+        Z6K1: "2"
+
+  - name: happy error
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z5
+      Z5K1:
+        Z1K1: Z9
+        Z9K1: Z401
+
+  failure:
+  - name: sad Z6
+    object:
+      Z1K1: Z6
+      Z6K1: [an array]
+
+  - name: nonterminal as terminal
+    object:
+      Z1K1: Z3
+      Z70K1: "4"
+
+  - name: array with only one Z10K* value
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z6
+          Z6K1: "fanatics"

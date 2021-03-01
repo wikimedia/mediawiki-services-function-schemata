@@ -1,13 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const YAML = require('yaml');
-
-function readYaml(fileName) {
-	const text = fs.readFileSync(fileName, { encoding: 'utf8' });
-	return YAML.parse(text);
-}
-
 function testValidation(baseName, validator, testObjects) {
 	// Serialized function calls subsumed in the "success" block should validate
 	// successfully.
@@ -31,4 +23,4 @@ function testValidation(baseName, validator, testObjects) {
 	}
 }
 
-module.exports = { readYaml, testValidation };
+module.exports = { testValidation };

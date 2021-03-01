@@ -1,0 +1,29 @@
+$ref: "#/definitions/objects/canonical_zobject"
+
+definitions:
+  objects:
+    canonical_zobject:
+      oneOf:
+      - $ref: "#/definitions/objects/canonical_array"
+      - $ref: "#/definitions/objects/canonical_string"
+      - $ref: "#/definitions/objects/canonical_record"
+
+    canonical_string:
+      type: string
+
+    canonical_array:
+      type: array
+      items:
+        $ref: "#/definitions/objects/canonical_zobject"
+
+    canonical_record:
+      type: object
+      required:
+      - Z1K1
+      properties:
+        Z1K1:
+          $ref: "#/definitions/objects/canonical_zobject"
+      patternProperties:
+        "^(Z[1-9][0-9]*)?K[1-9][0-9]*$":
+          $ref: "#/definitions/objects/canonical_zobject"
+      additionalProperties: false

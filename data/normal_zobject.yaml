@@ -1,0 +1,114 @@
+$ref: '#/definitions/objects/normal_zobject'
+
+definitions:
+
+  objects:
+    normal_zobject:
+      oneOf:
+      - $ref: '#/definitions/objects/normal_nonterminal_zobject'
+      - $ref: '#/definitions/objects/normal_terminal_zobject'
+
+    normal_nonterminal_zobject:
+      type: object
+      properties:
+        Z1K1:
+          $ref: '#/definitions/objects/normal_terminal_zobject'
+      patternProperties:
+        ^(Z[1-9][0-9]*)?K[1-9][0-9]*:
+          $ref: '#/definitions/objects/normal_zobject'
+
+    normal_terminal_zobject:
+      oneOf:
+      - $ref: '#/definitions/objects/normal_Z6'
+      - $ref: '#/definitions/objects/normal_Z9'
+
+    normal_Z6:
+      type: object
+      required:
+      - Z1K1
+      - Z6K1
+      properties:
+        Z1K1:
+          type: string
+          enum:
+          - Z6
+        Z6K1:
+          type: string
+
+    normal_Z9:
+      oneOf:
+      - $ref: '#/definitions/objects/Z9_reference'
+      - $ref: '#/definitions/objects/Z9_array'
+
+    Z9_reference:
+      type: object
+      required:
+      - Z1K1
+      - Z9K1
+      properties:
+        Z1K1:
+          type: string
+          enum:
+          - Z9
+        Z9K1:
+          type: string
+          pattern: ^([A-Y][1-9][0-9]*|Z[02-9][0-9]*|Z1[124-9]|Z1[0-9][0-9][0-9]*)$
+
+    Z9_Z10:
+      type: object
+      required:
+      - Z1K1
+      - Z9K1
+      properties:
+        Z1K1:
+          type: string
+          enum:
+          - Z9
+        Z9K1:
+          type: string
+          enum:
+          - Z10
+
+    Z9_Z13:
+      type: object
+      required:
+      - Z1K1
+      - Z9K1
+      properties:
+        Z1K1:
+          type: string
+          enum:
+          - Z9
+        Z9K1:
+          type: string
+          enum:
+          - Z13
+
+    Z9_array:
+      oneOf:
+      - $ref: '#/definitions/objects/Z10_full'
+      - $ref: '#/definitions/objects/Z10_empty'
+
+    Z10_empty:
+      oneOf:
+      - type: object
+        properties:
+          Z1K1:
+            $ref: '#/definitions/objects/Z9_Z10'
+        additionalProperties: false
+      - $ref: '#/definitions/objects/Z9_Z13'
+
+    Z10_full:
+      type: object
+      required:
+      - Z1K1
+      - Z10K1
+      - Z10K2
+      properties:
+        Z1K1:
+          $ref: '#/definitions/objects/Z9_Z10'
+        Z10K1:
+          $ref: '#/definitions/objects/normal_zobject'
+        Z10K2:
+          $ref: '#/definitions/objects/Z9_array'
+      additionalProperties: false

@@ -6,11 +6,11 @@ const schema = require('../../src/schema.js');
 const { readYaml } = require('../../src/util.js');
 const { testValidation } = require('../util.js');
 
-QUnit.module('function_call');
+QUnit.module('normal_zobject');
 
-const validator_ = schema.Schema.for('FUNCTION_CALL');
+const validator_ = schema.Schema.for('NORMAL');
 
-const testDirectory_ = path.join('..', 'test_data', 'function_call');
+const testDirectory_ = path.join('..', 'test_data', 'normal_zobject');
 
 // Every .yaml file in testDirectory_ contains serialized function calls.
 fs.readdirSync(testDirectory_).forEach((file) => {

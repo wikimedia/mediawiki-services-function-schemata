@@ -3,7 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 const schema = require('../../src/schema.js');
-const { readYaml, testValidation } = require('../util.js');
+const { readYaml } = require('../../src/util.js');
+const { testValidation } = require('../util.js');
 
 QUnit.module('simple_schemata');
 

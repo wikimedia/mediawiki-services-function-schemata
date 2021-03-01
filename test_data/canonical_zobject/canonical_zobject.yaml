@@ -1,0 +1,30 @@
+test_information:
+  name: canonicalized ZObject
+
+test_objects:
+  success:
+  - name: good string
+    object: perfectly normal string, not a deviant
+
+  - name: good array
+    object:
+    - a string
+    - Z1K1: a ZObject
+    - - a nested array
+
+  - name: good record
+    object:
+      Z1K1: this is required
+      Z2K1:
+        Z1K1: this is required
+        K7: this is optional
+
+  failure:
+  - name: bad additional key
+    object:
+      Z1K1: Z2
+      "4K4": Z3
+
+  - name: record lacks Z1K1
+    object:
+      Z4K4: Z3

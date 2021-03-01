@@ -41,3 +41,39 @@ QUnit.test('validation matches ajv\'s decision', (assert) => {
 	assert.false(schema.validate(errayObject));
 	assert.false(schema.validate_(errayObject));
 });
+
+QUnit.test('errors is populated', (assert) => {
+	const schema = Schema.parse({
+		type: 'object',
+		required: ['prop1'],
+		properties: {
+			prop1: {
+				type: 'string'
+			}
+		}
+	});
+
+    // No errors so far.
+    assert.deepEqual([], schema.errors);
+
+    // Unsuccessful validation populates errors.
+    assert.false(schema.validate({ prop1: ['erray'] }));
+    assert.deepEqual(
+        [
+            {
+                keyword: 'type',
+                dataPath: '/prop1',
+                schemaPath: '#/properties/prop1/type',
+                params: {
+                    type: 'string'
+                },
+                message: 'should be string'
+            }
+        ],
+        schema.errors
+    );
+
+    // Unsuccessful validation populates errors.
+    assert.true(schema.validate({ prop1: 'string' }));
+    assert.deepEqual([], schema.errors);
+});
