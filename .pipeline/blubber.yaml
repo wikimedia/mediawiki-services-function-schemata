@@ -16,11 +16,22 @@ variants:
       source: .
       destination: .
 
-  test:
+  build-js:
     includes: [build]
+    lives:
+      in: /srv/service
+    node:
+      requirements:
+      - package.json
+
+  test:
+    includes: [build-js]
     lives:
       in: /srv/service/javascript
     copies:
+    - from: copy-files
+      source: /srv/service/package.json
+      destination: /srv/service/javascript/package.json
     - from: copy-files
       source: /srv/service/javascript
       destination: /srv/service/javascript
@@ -30,7 +41,4 @@ variants:
     - from: copy-files
       source: /srv/service/test_data
       destination: /srv/service/test_data
-    node:
-      requirements:
-      - ./package.json
     entrypoint: [npm, test]

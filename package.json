@@ -1,1 +1,23 @@
-javascript/package.json
+{
+  "name": "function-schemata",
+  "version": "1.0.0",
+  "description": "",
+  "main": "schema.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "qunit"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ajv": "7.1.1",
+    "eslint-config-wikimedia": "0.17.0",
+    "qunit": "2.14.0",
+    "yaml": "1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "7.20.0"
+  }
+}
