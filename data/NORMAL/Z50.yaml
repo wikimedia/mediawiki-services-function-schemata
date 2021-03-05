@@ -1,0 +1,47 @@
+# Z50/Error type (Z4/Type)
+$id: Z50
+$ref: '#/definitions/objects/Z50'
+definitions:
+  objects:
+    Z10_of_Z3:
+      allOf:
+      - $ref: Z10#/definitions/objects/Z10
+      - oneOf:
+        - $ref: Z10#/definitions/objects/Z10_empty
+        - properties:
+            Z10K1:
+              $ref: Z3#/definitions/objects/Z3
+            Z10K2:
+              $ref: '#/definitions/objects/Z10_of_Z3'
+          required:
+          - Z10K1
+          - Z10K2
+          type: object
+    Z50:
+      $ref: '#/definitions/objects/Z50_literal'
+    Z50_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z50
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+        Z50K1:
+          $ref: '#/definitions/objects/Z10_of_Z3'
+      required:
+      - Z1K1
+      - Z50K1
+      type: object

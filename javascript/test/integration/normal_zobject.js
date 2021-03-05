@@ -2,21 +2,26 @@
 
 const fs = require('fs');
 const path = require('path');
-const schema = require('../../src/schema.js');
+const { SchemaFactory } = require('../../src/schema.js');
 const { readYaml } = require('../../src/util.js');
 const { testValidation } = require('../util.js');
 
-QUnit.module('normal_zobject');
+QUnit.module('NORMAL');
 
-const validator_ = schema.Schema.for('NORMAL');
+const factory = SchemaFactory.NORMAL();
 
-const testDirectory_ = path.join('..', 'test_data', 'normal_zobject');
-
-// Every .yaml file in testDirectory_ contains serialized function calls.
-fs.readdirSync(testDirectory_).forEach((file) => {
-	const fileName = path.join(testDirectory_, file);
-	const testDescriptor = readYaml(fileName);
+function test(ZID) {
+    const normalValidator = factory.create(ZID);
+    const normalFile = path.join('..', 'test_data', 'normal_zobject', ZID + '.yaml');
+    const testDescriptor = readYaml(normalFile);
 	const info = testDescriptor.test_information;
+	testValidation(info.name, normalValidator, testDescriptor.test_objects);
+}
 
-	testValidation(info.name, validator_, testDescriptor.test_objects);
-});
+test('Z1');
+test('Z2');
+test('Z10');
+test('Z22');
+test('Z39');
+test('Z40');
+test('Z86');

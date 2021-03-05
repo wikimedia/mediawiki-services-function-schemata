@@ -1,0 +1,36 @@
+# Z7/Function call (Z4/Type)
+$id: Z7
+$ref: '#/definitions/objects/Z7'
+definitions:
+  objects:
+    Z7:
+      $ref: '#/definitions/objects/Z7_literal'
+    Z7_literal:
+      additionalProperties: false
+      patternProperties:
+        ^Z[1-9]\d*(K[1-9]\d*)?$:
+          $ref: Z1#/definitions/objects/Z1
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z7
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+        Z7K1:
+          $ref: Z4#/definitions/objects/Z4
+      required:
+      - Z1K1
+      - Z7K1
+      type: object

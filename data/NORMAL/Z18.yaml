@@ -1,0 +1,33 @@
+# Z18/Argument reference (Z4/Type)
+$id: Z18
+$ref: '#/definitions/objects/Z18'
+definitions:
+  objects:
+    Z18:
+      $ref: '#/definitions/objects/Z18_literal'
+    Z18_literal:
+      additionalProperties: false
+      properties:
+        Z18K1:
+          $ref: Z6#/definitions/objects/Z6
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z18
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+      required:
+      - Z18K1
+      - Z1K1
+      type: object

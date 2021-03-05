@@ -1,0 +1,39 @@
+# Z17/Argument declaration (Z4/Type)
+$id: Z17
+$ref: '#/definitions/objects/Z17'
+definitions:
+  objects:
+    Z17:
+      $ref: '#/definitions/objects/Z17_literal'
+    Z17_literal:
+      additionalProperties: false
+      properties:
+        Z17K1:
+          $ref: Z4#/definitions/objects/Z4
+        Z17K2:
+          $ref: Z6#/definitions/objects/Z6
+        Z17K3:
+          $ref: Z12#/definitions/objects/Z12
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z17
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+      required:
+      - Z17K1
+      - Z17K2
+      - Z17K3
+      - Z1K1
+      type: object

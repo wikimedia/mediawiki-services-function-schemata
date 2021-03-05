@@ -1,0 +1,33 @@
+# Z1/Object (Z4/Type)
+$id: Z1
+$ref: '#/definitions/objects/Z1'
+definitions:
+  objects:
+    Z1:
+      $ref: '#/definitions/objects/Z1_literal'
+    Z1_generic:
+      oneOf:
+      - $ref: '#/definitions/objects/Z1_terminal'
+      - $ref: '#/definitions/objects/Z1_nonterminal'
+    Z1_literal:
+      oneOf:
+      - $ref: '#/definitions/objects/Z1_generic'
+      - $ref: '#/definitions/objects/Z1_nongeneric'
+    Z1_nongeneric:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          $ref: Z4#/definitions/objects/Z4
+      required:
+      - Z1K1
+      type: object
+    Z1_nonterminal:
+      additionalProperties: false
+      patternProperties:
+        ^Z[1-9]\d*(K[1-9]\d*)?$:
+          $ref: '#/definitions/objects/Z1_generic'
+      type: object
+    Z1_terminal:
+      oneOf:
+      - $ref: Z6#/definitions/objects/Z6
+      - $ref: Z9#/definitions/objects/Z9

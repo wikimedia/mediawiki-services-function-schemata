@@ -1,0 +1,39 @@
+# Z3/Key (Z4/Type)
+$id: Z3
+$ref: '#/definitions/objects/Z3'
+definitions:
+  objects:
+    Z3:
+      $ref: '#/definitions/objects/Z3_literal'
+    Z3_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z3
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+        Z3K1:
+          $ref: Z4#/definitions/objects/Z4
+        Z3K2:
+          $ref: Z6#/definitions/objects/Z6
+        Z3K3:
+          $ref: Z12#/definitions/objects/Z12
+      required:
+      - Z1K1
+      - Z3K1
+      - Z3K2
+      - Z3K3
+      type: object

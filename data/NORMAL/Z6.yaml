@@ -1,0 +1,19 @@
+# Z6/String (Z4/Type)
+$id: Z6
+$ref: '#/definitions/objects/Z6'
+definitions:
+  objects:
+    Z6:
+      $ref: '#/definitions/objects/Z6_literal'
+    Z6_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          enum:
+          - Z6
+          type: string
+        Z6K1:
+          type: string
+      required:
+      - Z1K1
+      - Z6K1

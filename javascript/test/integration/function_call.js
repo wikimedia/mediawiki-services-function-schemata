@@ -2,14 +2,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const schema = require('../../src/schema.js');
+const { SchemaFactory } = require('../../src/schema.js');
 const { readYaml } = require('../../src/util.js');
 const { testValidation } = require('../util.js');
 
 QUnit.module('function_call');
 
-const validator_ = schema.Schema.for('FUNCTION_CALL');
-
+// TODO: Collapse this test into normal/canonical tests.
+const factory = SchemaFactory.FUNCTION_CALL();
+const validator_ = factory.create('Z7');
 const testDirectory_ = path.join('..', 'test_data', 'function_call');
 
 // Every .yaml file in testDirectory_ contains serialized function calls.

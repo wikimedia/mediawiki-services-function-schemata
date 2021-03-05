@@ -1,0 +1,23 @@
+test_information:
+  name: normalized Z40
+
+test_objects:
+  success:
+  - name: TRUTH
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z41
+
+  - name: mendacity 
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z42
+
+  failure:
+  - name: literally nothing else is okay
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z43

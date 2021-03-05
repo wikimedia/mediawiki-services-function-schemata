@@ -17,7 +17,7 @@ test_objects:
   - name: happy Z9 reference
     object:
       Z1K1: Z9
-      Z9K1: "A1"  # A notorious sauce.
+      Z9K1: Z1
 
   - name: happy Z9 array empty
     object:
@@ -109,13 +109,3 @@ test_objects:
     object:
       Z1K1: Z3
       Z70K1: "4"
-
-  - name: array with only one Z10K* value
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z10
-      Z10K1:
-        Z1K1:
-          Z1K1: Z6
-          Z6K1: "fanatics"

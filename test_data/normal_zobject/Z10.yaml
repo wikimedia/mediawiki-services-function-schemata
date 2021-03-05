@@ -1,0 +1,65 @@
+test_information:
+  name: normal Z10
+
+test_objects:
+  success:
+  - name: good, empty Z10
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+  - name: good, full Z10
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: air on the z string
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+  - name: good, fuller Z10
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: air on the z string
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: symphony in z
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    
+  failure:
+  - name: bad, malformed Z10 lacking Z10K2
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1: 
+        Z1K1: Z13
+
+  - name: bad, malformed Z10 lacking Z10K1
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K2: 
+        Z1K1: Z13
+
+  - name: bad array 
+    object: [ "ZSTRING" ]
+
+  - name: bad Z10 with malformed Z1K1
+    object:
+      Z1K1: Z10

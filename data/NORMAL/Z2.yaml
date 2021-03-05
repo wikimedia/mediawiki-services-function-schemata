@@ -1,0 +1,39 @@
+# Z2/Persistent object (Z4/Type)
+$id: Z2
+$ref: '#/definitions/objects/Z2'
+definitions:
+  objects:
+    Z2:
+      $ref: '#/definitions/objects/Z2_literal'
+    Z2_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z2
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+        Z2K1:
+          $ref: Z6#/definitions/objects/Z6
+        Z2K2:
+          $ref: Z1#/definitions/objects/Z1
+        Z2K3:
+          $ref: Z12#/definitions/objects/Z12
+      required:
+      - Z1K1
+      - Z2K1
+      - Z2K2
+      - Z2K3
+      type: object

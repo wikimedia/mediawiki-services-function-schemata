@@ -1,0 +1,33 @@
+# Z80/Byte (Z4/Type)
+$id: Z80
+$ref: '#/definitions/objects/Z80'
+definitions:
+  objects:
+    Z80:
+      $ref: '#/definitions/objects/Z80_literal'
+    Z80_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z80
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+        Z80K1:
+          $ref: Z6#/definitions/objects/Z6
+      required:
+      - Z1K1
+      - Z80K1
+      type: object

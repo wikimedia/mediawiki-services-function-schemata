@@ -1,0 +1,42 @@
+# Z14/Implementation (Z4/Type)
+$id: Z14
+$ref: '#/definitions/objects/Z14'
+definitions:
+  objects:
+    Z14:
+      $ref: '#/definitions/objects/Z14_literal'
+    Z14_literal:
+      additionalProperties: false
+      properties:
+        Z14K1:
+          $ref: Z8#/definitions/objects/Z8
+        Z14K2:
+          $ref: Z7#/definitions/objects/Z7
+        Z14K3:
+          $ref: Z16#/definitions/objects/Z16
+        Z14K4:
+          $ref: Z6#/definitions/objects/Z6
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z14
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+      required:
+      - Z14K1
+      - Z14K2
+      - Z14K3
+      - Z14K4
+      - Z1K1
+      type: object

@@ -2,7 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const schema = require('../../src/schema.js');
+const { SchemaFactory } = require('../../src/schema.js');
 const { readYaml } = require('../../src/util.js');
 const { testValidation } = require('../util.js');
 
@@ -16,7 +16,8 @@ fs.readdirSync(directory_).forEach((file) => {
 	const fileName = path.join(directory_, file);
 	const testDescriptor = readYaml(fileName);
 	const info = testDescriptor.test_information;
-	const validator = schema.Schema.parse(testDescriptor.test_schema.validator);
+    const factory = new SchemaFactory();
+	const validator = factory.parse(testDescriptor.test_schema.validator);
 
 	if (info.parse_error) {
 		// When parse_error is true, the schema itself is degenerate, so parse()

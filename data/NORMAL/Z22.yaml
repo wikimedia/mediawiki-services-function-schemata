@@ -1,0 +1,36 @@
+# Z22/Pair (Z4/Type)
+$id: Z22
+$ref: '#/definitions/objects/Z22'
+definitions:
+  objects:
+    Z22:
+      $ref: '#/definitions/objects/Z22_literal'
+    Z22_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z22
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
+        Z22K1:
+          $ref: Z1#/definitions/objects/Z1
+        Z22K2:
+          $ref: Z1#/definitions/objects/Z1
+      required:
+      - Z1K1
+      - Z22K1
+      - Z22K2
+      type: object

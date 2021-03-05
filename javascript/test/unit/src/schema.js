@@ -1,27 +1,29 @@
 'use strict';
 
-const { Schema } = require('../../../src/schema.js');
+const { SchemaFactory } = require('../../../src/schema.js');
 
 QUnit.module('schema.js');
 
+const factory = new SchemaFactory();
+
 QUnit.test('successful parse', (assert) => {
 	// Trivial valid JSON Schema.
-	const schema = Schema.parse({
+	const schema = factory.parse({
 		type: 'object'
 	});
 
-	assert.true(schema instanceof Schema);
+	assert.notEqual(null, schema);
 });
 
 QUnit.test('unsuccessul parse', (assert) => {
-	const schema = Schema.parse({
+	const schema = factory.parse({
 		type: 'not supported'
 	});
 	assert.deepEqual(null, schema);
 });
 
 QUnit.test('validation matches ajv\'s decision', (assert) => {
-	const schema = Schema.parse({
+	const schema = factory.parse({
 		type: 'object',
 		required: ['prop1'],
 		properties: {
@@ -43,7 +45,7 @@ QUnit.test('validation matches ajv\'s decision', (assert) => {
 });
 
 QUnit.test('errors is populated', (assert) => {
-	const schema = Schema.parse({
+	const schema = factory.parse({
 		type: 'object',
 		required: ['prop1'],
 		properties: {

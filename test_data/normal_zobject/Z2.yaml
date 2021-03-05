@@ -1,0 +1,126 @@
+test_information:
+  name: normalized Z2
+
+test_objects:
+  success:
+  - name: arbitrary Z2
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K1:
+        Z1K1: Z6
+        Z6K1: my identification
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: an object
+      Z2K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z11
+            Z11K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z60
+              Z60K1:
+                Z1K1: Z6
+                Z6K1: en
+            Z11K2:
+              Z1K1: Z6
+              Z6K1: english text
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+            
+  - name: obmutescent Z2
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K1:
+        Z1K1: Z6
+        Z6K1: my identification
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: an object
+      Z2K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+
+  failure:
+  - name: bad Z2 lacks Z1K1
+    object:
+      Z2K1:
+        Z1K1: Z6
+        Z6K1: my identification
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: an object
+      Z2K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+            
+  - name: bad Z2 lacks Z2K1 (id)
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: an object
+      Z2K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+            
+  - name: bad Z2 lacks Z2K2 (value)
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K1:
+        Z1K1: Z6
+        Z6K1: my identification
+      Z2K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+            
+  - name: bad Z2 lacks Z2K3 (multilingual text)
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K1:
+        Z1K1: Z6
+        Z6K1: my identification
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: an object

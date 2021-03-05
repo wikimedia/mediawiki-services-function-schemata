@@ -1,19 +1,23 @@
-type: object
-required:
-  - Z1K1
-  - Z7K1  # K_FUNCTION
-properties:
-  Z1K1:
-    type: string
-    enum:
-      - Z7  # V_FUNCTION_CALL
-  Z7K1:  # K_FUNCTION
-    $ref: "#/definitions/v1/Z8"
-additionalProperties:
-  $ref: "#/definitions/v1/ArgumentInstantiation"
+$ref: "#/definitions/v1/Z7"
+$id: "function_call.yaml"
 
 definitions:
   v1:
+    Z7:  # V_FUNCTION_CALL
+      type: object
+      required:
+        - Z1K1
+        - Z7K1  # K_FUNCTION
+      properties:
+        Z1K1:
+          type: string
+          enum:
+            - Z7  # V_FUNCTION_CALL
+        Z7K1:  # K_FUNCTION
+          $ref: "#/definitions/v1/Z8"
+      additionalProperties:
+        $ref: "#/definitions/v1/ArgumentInstantiation"
+
     Z8:  # V_FUNCTION
       type: object
       required:
@@ -21,7 +25,6 @@ definitions:
         - Z8K1  # K_ARGUMENTS
         - Z8K2  # K_RETURN_TYPE
         - Z8K3  # K_TESTERS
-        - Z8K4  # K_IMPLEMENTATION
         - Z8K5  # K_IDENTITY
       properties:
         Z1K1:  # K_TYPE
@@ -117,6 +120,7 @@ definitions:
           type: string
 
     ArgumentInstantiation:
+      # TODO: Make this a canonical ZObject.
       type: object
       required:
         - Z1K1  # K_TYPE
