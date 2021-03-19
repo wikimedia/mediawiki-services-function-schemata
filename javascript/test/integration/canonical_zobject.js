@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const { SchemaFactory } = require('../../src/schema.js');
 const { readYaml } = require('../../src/util.js');

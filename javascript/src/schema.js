@@ -32,15 +32,14 @@ class Schema {
 
 function dataDir(...pathComponents) {
     return path.join(
-            path.dirname( path.dirname( path.dirname( __filename ) ) ),
-            'data', ...pathComponents );
+            path.dirname(path.dirname(path.dirname(__filename))),
+            'data', ...pathComponents);
 }
-
 
 class SchemaFactory {
 
     constructor(ajv = null) {
-        if ( ajv === null ) {
+        if (ajv === null) {
             ajv = new Ajv({ allowMatchingProperties: true });
         }
         this.ajv_ = ajv;
@@ -48,12 +47,14 @@ class SchemaFactory {
 
     /**
      * Initializes a SchemaFactory linking schemata for canonical ZObjects.
+     *
+     * @return {SchemaFactory} factory with all canonical schemata included
      */
     static CANONICAL() {
         // Add all schemata for normal ZObjects to ajv's parsing context.
         const ajv = new Ajv({ allowMatchingProperties: true });
         const fileName = dataDir('CANONICAL', 'canonical_zobject.yaml');
-        ajv.addSchema( readYaml( fileName ), 'Z1'); 
+        ajv.addSchema(readYaml(fileName), 'Z1');
         return new SchemaFactory(ajv);
     }
 
@@ -61,33 +62,35 @@ class SchemaFactory {
      * Initializes a SchemaFactory for function calls.
      *
      * TODO: Remove this; Z7s can be normal or canonical like anything else.
+     *
+     * @return {SchemaFactory} factory with lonely function call schema
      */
     static FUNCTION_CALL() {
         // Add all schemata for normal ZObjects to ajv's parsing context.
         const ajv = new Ajv({ allowMatchingProperties: true });
         const fileName = dataDir('function_call', 'Z7.yaml');
-        ajv.addSchema( readYaml( fileName ), 'Z7'); 
+        ajv.addSchema(readYaml(fileName), 'Z7');
         return new SchemaFactory(ajv);
     }
 
     /**
      * Initializes a SchemaFactory linking schemata for normal-form ZObjects.
+     *
+     * @return {SchemaFactory} factory with all normal-form schemata included
      */
     static NORMAL() {
         // Add all schemata for normal ZObjects to ajv's parsing context.
         const ajv = new Ajv({ allowMatchingProperties: true });
         const directory = dataDir('NORMAL');
         const fileRegex = /Z[1-9]\d*(K[1-9]\d*)?\.yaml/;
-        const yamlRegex = /\.yaml$/;
 
         for (const fileName of fs.readdirSync(directory)) {
             if (fileName.match(fileRegex) === null) {
                 console.log('Who\'s that? ' + fileName);
                 continue;
             }
-            const fullFile = path.join( directory, fileName );
-            const ZID = fileName.replace(yamlRegex, '');
-            ajv.addSchema( readYaml( fullFile ) ); 
+            const fullFile = path.join(directory, fileName);
+            ajv.addSchema(readYaml(fullFile));
         }
         return new SchemaFactory(ajv);
     }
@@ -97,7 +100,7 @@ class SchemaFactory {
      * resolve references among multiple files.
      *
      * @param {Object} schema a JSON object containing a JSON Schema object
-     * @returns {Schema} a Schema wrapping the resulting validator or null
+     * @return {Schema} a Schema wrapping the resulting validator or null
      */
     parse(schema) {
         try {
@@ -120,21 +123,24 @@ class SchemaFactory {
      *  const Z10Schema = factory.create("Z10");
      *
      * TODO: Update the above as this API metamorphoses.
+     *
      * @param {string} schemaName the name of a supported schema
-     * @returns {Schema} a fully-initialized Schema or null if unsupported
+     * @return {Schema} a fully-initialized Schema or null if unsupported
      */
     create(schemaName) {
-        /*
-        const schemaFile = this.supported_.get( schemaName );
-        if (schema === undefined) {
-            console.log('no schema for ' + schemaName);
+        let type = schemaName;
+        // TODO: Remove these special cases once references work properly.
+        if (schemaName === 'Z13') {
+            type = 'Z10';
+        }
+        if (schemaName === 'Z41' || schemaName === 'Z42') {
+            type = 'Z40';
+        }
+        const validate = this.ajv_.getSchema(type);
+        if (validate === null) {
             return null;
         }
-        return this.parse( readYaml( schemaFile ) );
-        */
-        console.log('tried to get ' + schemaName + '; got');
-        console.log(this.ajv_.getSchema( schemaName ));
-        return new Schema( this.ajv_.getSchema( schemaName ) );
+        return new Schema(validate);
     }
 
 }

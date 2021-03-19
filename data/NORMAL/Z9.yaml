@@ -18,3 +18,4 @@ definitions:
       required:
       - Z1K1
       - Z9K1
+      type: object

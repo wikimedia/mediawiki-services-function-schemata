@@ -17,3 +17,4 @@ definitions:
       required:
       - Z1K1
       - Z6K1
+      type: object
