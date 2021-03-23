@@ -1,0 +1,15 @@
+pipelines:
+  test:
+    blubberfile: blubber.yaml
+    stages:
+      - name: build-js
+        build: build-js
+        run: false
+      - name: build-php
+        build: build-php
+        run: false
+      - name: test-js
+      - name: test-php
+    execution:
+      - [build-js, test-js]
+      - [build-php, test-php]

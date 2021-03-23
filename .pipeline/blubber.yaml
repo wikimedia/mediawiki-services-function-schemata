@@ -4,10 +4,6 @@ lives:
   in: /srv/service
 
 variants:
-  build:
-    base: docker-registry.wikimedia.org/buster-nodejs10-devel
-    apt: { packages: [git, build-essential, python-pkgconfig] }
-
   copy-files:
     lives:
       in: /srv/service
@@ -17,21 +13,17 @@ variants:
       destination: .
 
   build-js:
-    includes: [build]
-    lives:
-      in: /srv/service
+    base: docker-registry.wikimedia.org/buster-nodejs10-devel
+    apt: { packages: [git, build-essential, python-pkgconfig] }
     node:
       requirements:
       - package.json
 
-  test:
+  test-js:
     includes: [build-js]
     lives:
       in: /srv/service/javascript
     copies:
-    - from: copy-files
-      source: /srv/service/package.json
-      destination: /srv/service/javascript/package.json
     - from: copy-files
       source: /srv/service/javascript
       destination: /srv/service/javascript
@@ -42,3 +34,24 @@ variants:
       source: /srv/service/test_data
       destination: /srv/service/test_data
     entrypoint: [npm, test]
+
+  build-php:
+    base: docker-registry.wikimedia.org/dev/mediawiki
+    apt: { packages: [git, build-essential, python-pkgconfig, php-xml, php-dev, php-curl, php-mbstring] }
+    builder:
+      command: [composer, install]
+      requirements: [composer.json, composer.lock]
+
+  test-php:
+    includes: [build-php]
+    copies:
+    - from: copy-files
+      source: /srv/service/php
+      destination: /srv/service/php
+    - from: copy-files
+      source: /srv/service/data
+      destination: /srv/service/data
+    - from: copy-files
+      source: /srv/service/test_data
+      destination: /srv/service/test_data
+    entrypoint: [composer, test-no-phpcs]
