@@ -4,12 +4,16 @@ $ref: '#/definitions/objects/Z40'
 definitions:
   objects:
     Z40:
-      $ref: '#/definitions/objects/Z40_literal'
+      anyOf:
+      - $ref: '#/definitions/objects/Z40_literal'
+      - $ref: Z9#/definitions/objects/Z9
     Z40_literal:
       additionalProperties: false
       properties:
         Z1K1:
           $ref: '#/definitions/objects/Z9_for_Z40'
+        Z40K1:
+          $ref: '#/definitions/objects/Z40'
       required:
       - Z1K1
       type: object

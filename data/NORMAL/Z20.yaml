@@ -4,7 +4,9 @@ $ref: '#/definitions/objects/Z20'
 definitions:
   objects:
     Z20:
-      $ref: '#/definitions/objects/Z20_literal'
+      anyOf:
+      - $ref: '#/definitions/objects/Z20_literal'
+      - $ref: Z9#/definitions/objects/Z9
     Z20_literal:
       additionalProperties: false
       properties:

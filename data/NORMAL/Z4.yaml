@@ -18,7 +18,9 @@ definitions:
           - Z10K2
           type: object
     Z4:
-      $ref: '#/definitions/objects/Z4_literal'
+      anyOf:
+      - $ref: '#/definitions/objects/Z4_literal'
+      - $ref: Z9#/definitions/objects/Z9
     Z4_literal:
       additionalProperties: false
       properties:

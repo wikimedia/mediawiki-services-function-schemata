@@ -4,13 +4,15 @@ $ref: '#/definitions/objects/Z1'
 definitions:
   objects:
     Z1:
-      $ref: '#/definitions/objects/Z1_literal'
+      anyOf:
+      - $ref: '#/definitions/objects/Z1_literal'
+      - $ref: Z9#/definitions/objects/Z9
     Z1_generic:
-      oneOf:
+      anyOf:
       - $ref: '#/definitions/objects/Z1_terminal'
       - $ref: '#/definitions/objects/Z1_nonterminal'
     Z1_literal:
-      oneOf:
+      anyOf:
       - $ref: '#/definitions/objects/Z1_generic'
       - $ref: '#/definitions/objects/Z1_nongeneric'
     Z1_nongeneric:
@@ -28,6 +30,6 @@ definitions:
           $ref: '#/definitions/objects/Z1_generic'
       type: object
     Z1_terminal:
-      oneOf:
+      anyOf:
       - $ref: Z6#/definitions/objects/Z6
       - $ref: Z9#/definitions/objects/Z9

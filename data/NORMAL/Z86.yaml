@@ -12,7 +12,9 @@ definitions:
             type: string
         type: object
     Z86:
-      $ref: '#/definitions/objects/Z86_literal'
+      anyOf:
+      - $ref: '#/definitions/objects/Z86_literal'
+      - $ref: Z9#/definitions/objects/Z9
     Z86_literal:
       additionalProperties: false
       properties:

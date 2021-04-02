@@ -4,7 +4,9 @@ $ref: '#/definitions/objects/Z5'
 definitions:
   objects:
     Z5:
-      $ref: '#/definitions/objects/Z5_literal'
+      anyOf:
+      - $ref: '#/definitions/objects/Z5_literal'
+      - $ref: Z9#/definitions/objects/Z9
     Z5_literal:
       additionalProperties: false
       properties:
