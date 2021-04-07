@@ -10,19 +10,25 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
 final class SchemaFactoryTest extends TestCase {
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaFactory::getNormalFormFactory
+	 */
 	public function testNormal(): void {
 		$mockLoader = $this->createMock( YumYumYamlLoader::class );
 		$mockLoader->expects( $this->once() )->method( 'registerPath' )->with(
 			$this->equalTo( SchemataUtils::joinPath( SchemataUtils::dataDirectory(), "NORMAL" ) ),
 			$this->equalTo( "NORMAL" )
 		);
-		$factory = SchemaFactory::NORMAL( $mockLoader );
+		$factory = SchemaFactory::getNormalFormFactory( $mockLoader );
 		$schema = $factory->create( "Z10" );
 		$this->assertInstanceOf( ISchema::class, $schema );
 	}
 
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaFactory::getStandAloneFactory
+	 */
 	public function testStandAlone(): void {
-		$factory = SchemaFactory::STANDALONE();
+		$factory = SchemaFactory::getStandAloneFactory();
 		$yamlContents = "type: string";
 		/*
 		$yamlContents = <<<EOYAML

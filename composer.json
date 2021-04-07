@@ -19,12 +19,6 @@
 			"@phpcs",
             "minus-x check php/"
 		],
-        "test-no-phpcs": [
-			"@phpunit",
-			"@lint",
-			"@phan",
-            "minus-x check php/"
-        ],
 		"fix": [
             "minus-x fix php/",
             "phpcbf --ignore=*vendor/* php/"

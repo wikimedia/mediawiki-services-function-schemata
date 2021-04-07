@@ -6,16 +6,23 @@ use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils;
 use PHPUnit\Framework\TestCase;
 
 final class SchemataUtilsTest extends TestCase {
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils::joinPath
+	 */
 	public function testJoinPath(): void {
 		$this->assertEquals(
 			"top" . DIRECTORY_SEPARATOR . "middle" . DIRECTORY_SEPARATOR . "bottom",
 			SchemataUtils::joinPath(
-				"top" . DIRECTORY_SEPARATOR,  // Supererogatory separator will be omitted.
+				// Supererogatory separator will be omitted.
+				"top" . DIRECTORY_SEPARATOR,
 				"middle", "bottom"
 			)
 		);
 	}
 
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils::dataDirectory
+	 */
 	public function testDataDirectory(): void {
 		$dataDirectory = SchemataUtils::dataDirectory();
 		$this->assertTrue( is_dir( $dataDirectory ) );
@@ -23,6 +30,9 @@ final class SchemataUtilsTest extends TestCase {
 		$this->assertEquals( "data", end( $components ) );
 	}
 
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils::testDataDirectory
+	 */
 	public function testTestDataDirectory(): void {
 		$testDataDirectory = SchemataUtils::testDataDirectory();
 		$this->assertTrue( is_dir( $testDataDirectory ) );
@@ -30,6 +40,9 @@ final class SchemataUtilsTest extends TestCase {
 		$this->assertEquals( "test_data", end( $components ) );
 	}
 
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils::readYaml
+	 */
 	public function testReadYaml(): void {
 		$yamlContents = (
 			"key: value\n" .
@@ -50,6 +63,9 @@ final class SchemataUtilsTest extends TestCase {
 		);
 	}
 
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils::readYamlAsSecretJson
+	 */
 	public function testReadYamlAsSecretJson(): void {
 		$yamlContents = (
 			"key: value\n" .

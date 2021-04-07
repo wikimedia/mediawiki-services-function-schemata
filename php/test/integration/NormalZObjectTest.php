@@ -7,10 +7,11 @@ use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils;
 
 final class NormalZObjectTest extends ValidationTest {
 	/**
+	 * @coversNothing
 	 * @dataProvider provideZIDs
 	 */
 	public function testNormalizedZObject( $ZID ): void {
-		$validator = ( SchemaFactory::NORMAL() )->create( $ZID );
+		$validator = ( SchemaFactory::getNormalFormFactory() )->create( $ZID );
 		$normalFile = SchemataUtils::joinPath(
 			SchemataUtils::testDataDirectory(), "normal_zobject", $ZID . ".yaml"
 		);

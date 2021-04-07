@@ -64,7 +64,7 @@ class YumYumYamlLoader implements ISchemaLoader {
 	}
 
 	/**
-	 * @param string $dir
+	 * @param string $directory
 	 * @param string $uri_prefix
 	 * @return bool
 	 */

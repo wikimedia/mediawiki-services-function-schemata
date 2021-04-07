@@ -29,14 +29,18 @@ class ISchema {
 	 */
 	public $errors;
 
-	function __construct( Schema $schema, Validator $validator ) {
+	/**
+	 * @param Schema $schema
+	 * @param Validator $validator
+	 */
+	public function __construct( Schema $schema, Validator $validator ) {
 		$this->schema = $schema;
 		$this->validator = $validator;
 		$this->errors = [];
 	}
 
 	/**
-	 * @param mixed JSON array-like object to validate
+	 * @param mixed $maybeValid JSON array-like object to validate
 	 * @return bool
 	 */
 	public function validate( $maybeValid ): bool {

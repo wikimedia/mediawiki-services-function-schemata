@@ -17,6 +17,9 @@ class SchemaFactory {
 	 */
 	private $loader;
 
+	/**
+	 * @param string|null $loader Which loader to use
+	 */
 	private function __construct( $loader = null ) {
 		$this->loader = $loader;
 	}
@@ -24,13 +27,14 @@ class SchemaFactory {
 	/**
 	 * Creates a SchemaFactory for normal-form ZObjects.
 	 *
+	 * @param string|null $loader Which loader to use
 	 * @return SchemaFactory
 	 */
-	public static function NORMAL( $loader = null ): SchemaFactory {
+	public static function getNormalFormFactory( $loader = null ): SchemaFactory {
 		if ( $loader == null ) {
 			$loader = new YumYumYamlLoader();
 		}
-		$normalDirectory = SchemataUtils::joinPath( SchemataUtils::dataDirectory(), "NORMAL" );
+		$normalDirectory = SchemataUtils::joinPath( SchemataUtils::dataDirectory(), 'NORMAL' );
 		$loader->registerPath( $normalDirectory, 'NORMAL' );
 		return new SchemaFactory( $loader );
 	}
@@ -40,10 +44,14 @@ class SchemaFactory {
 	 *
 	 * @return SchemaFactory
 	 */
-	public static function STANDALONE(): SchemaFactory {
+	public static function getStandAloneFactory(): SchemaFactory {
 		return new SchemaFactory();
 	}
 
+	/**
+	 * @param mixed $schemaSpec
+	 * @return ISchema
+	 */
 	public function parse( $schemaSpec ) {
 		$validator = new \Opis\JsonSchema\Validator();
 		$jsonEncoded = json_encode( $schemaSpec );

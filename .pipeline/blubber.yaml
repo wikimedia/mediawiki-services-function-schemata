@@ -40,7 +40,7 @@ variants:
     apt: { packages: [git, build-essential, python-pkgconfig, php-xml, php-dev, php-curl, php-mbstring] }
     builder:
       command: [composer, install]
-      requirements: [composer.json, composer.lock]
+      requirements: [composer.json, composer.lock, .phpcs.xml]
 
   test-php:
     includes: [build-php]
@@ -54,4 +54,4 @@ variants:
     - from: copy-files
       source: /srv/service/test_data
       destination: /srv/service/test_data
-    entrypoint: [composer, test-no-phpcs]
+    entrypoint: [composer, test]

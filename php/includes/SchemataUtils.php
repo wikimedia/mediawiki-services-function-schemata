@@ -13,6 +13,7 @@ class SchemataUtils {
 
 	/**
 	 * Joins an arbitrary number of path components via DIRECTORY_SEPARATOR.
+	 * @return string
 	 */
 	public static function joinPath() : string {
 		$components = [];
@@ -23,18 +24,32 @@ class SchemataUtils {
 		return implode( DIRECTORY_SEPARATOR, $components );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function dataDirectory() : string {
 		return self::joinPath( __DIR__, "..", "..", "data" );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function testDataDirectory() : string {
 		return self::joinPath( __DIR__, "..", "..", "test_data" );
 	}
 
+	/**
+	 * @param string $yamlFile File to read
+	 * @return string
+	 */
 	public static function readYaml( string $yamlFile ) {
 		return Yaml::parseFile( $yamlFile );
 	}
 
+	/**
+	 * @param string $yamlFile File to read
+	 * @return string
+	 */
 	public static function readYamlAsSecretJson( string $yamlFile ) {
 		return json_encode( self::readYaml( $yamlFile ) );
 	}
