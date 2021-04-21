@@ -1,0 +1,442 @@
+test_information:
+  name: canonicalize normal ZObject
+
+test_objects:
+
+  success:
+  - name: list with empty string
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: ""
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      - ""
+
+  - name: list with two empty strings
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: ""
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: ""
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - ""
+      - ""
+
+  - name: lists with ordered strings
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: a
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: b
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - a
+      - b
+
+  - name: lists with unordered strings
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: b
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: a
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - b
+      - a
+
+  - name: list with lists
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+      Z10K2:
+        Z1K1: 
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1: 
+          Z1K1: 
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1: 
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+    expected:
+      - []
+      - [[]]
+      - []
+
+
+  - name: string unordered
+    object:
+      Z1K1: Z6
+      Z6K1: "ba"
+    expected: "ba"
+
+  - name: untrimmed string left
+    object:
+      Z1K1: Z6
+      Z6K1: " a"
+    expected: " a"
+
+  - name: untrimmed string right
+    object:
+      Z1K1: Z6
+      Z6K1: "a "
+    expected: "a "
+
+  - name: untrimmed string left two
+    object:
+      Z1K1: Z6
+      Z6K1: "  a"
+    expected: "  a"
+
+  - name: untrimmed string both
+    object:
+      Z1K1: Z6
+      Z6K1: " a "
+    expected: " a "
+
+  - name: empty record with reference type
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z1
+    expected:
+      Z1K1: Z1
+
+  - name: simple record
+    object:
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z60
+      Z60K1: 
+        Z1K1: Z6
+        Z6K1: a
+    expected: 
+      Z1K1: Z60
+      Z60K1: a
+
+  - name: escaped string
+    object:
+      Z1K1: Z6
+      Z6K1: Z6
+    expected:
+      Z1K1: Z6
+      Z6K1: Z6
+
+  - name: escaped string QID
+    object:
+      Z1K1: Z6
+      Z6K1: Q42
+    expected: 
+      Z1K1: Z6
+      Z6K1: Q42
+
+  - name: unneccessary escaped string key
+    object:
+      Z1K1: Z6
+      Z6K1: Z1K1
+    expected: Z1K1
+
+  - name: unneccessary escaped string key with whitespace
+    object:
+      Z1K1: Z6
+      Z6K1: " Z1"
+    expected: " Z1"
+
+  - name: array with escaped string
+    object:
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: Z6
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: Z
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - Z1K1: Z6
+        Z6K1: Z6
+      - Z
+
+  - name: object with escaped string
+    object:
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: Z6
+    expected:
+      Z1K1: Z2
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: Z6
+
+  - name: object with unneccessarily escaped string
+    object:
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K2:
+        Z1K1: Z6
+        Z6K1: Z
+    expected:
+      Z1K1: Z2
+      Z2K2: Z
+
+  - name: explicit reference
+    object:
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K2:
+        Z1K1: Z9
+        Z9K1: Z1
+    expected:
+      Z1K1: Z2
+      Z2K2: Z1
+
+  - name: implicit reference
+    object: 
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z2
+      Z2K2:
+        Z1K1: Z9
+        Z9K1: Z1
+    expected: 
+      Z1K1: Z2
+      Z2K2: Z1
+
+  - name: empty list as object, type as explicit reference
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+    expected: []
+
+  - name: single string in list as object, no tail
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1: 
+        Z1K1: Z6
+        Z6K1: a
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      - a
+
+  - name: single string in list as object, tail object
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1: 
+        Z1K1: Z6
+        Z6K1: a
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      - a
+
+  - name: two strings in list as ZObject, all tails ZObject
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: a
+      Z10K2: 
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: b
+        Z10K2:
+          Z1K1: 
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - a
+      - b
+
+  - name: two strings in list as ZObject, no tail in tail
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: a
+      Z10K2: 
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: b
+        Z10K2:
+          Z1K1: 
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - a
+      - b
+
+  - name: empty list in list
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+      Z10K2:
+        Z1K1: 
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      - []
+
+  - name: empty lists in list
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+      Z10K2:
+        Z1K1: 
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      - []
+      - []
+
+  - name: object in list
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1: 
+        Z1K1: Z9
+        Z9K1: Z1
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      - Z1
+
+  - name: list object in object
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z60
+      Z60K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      Z1K1: Z60
+      Z60K1: []
+
+  throws:
+  - name: string with wrong key
+    object:
+      Z1K1: Z6
+      Z6K2: Z

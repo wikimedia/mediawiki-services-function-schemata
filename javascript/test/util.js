@@ -23,4 +23,28 @@ function testValidation(baseName, validator, testObjects) {
 	}
 }
 
-module.exports = { testValidation };
+/**
+ * Runs a set of tests for the given function.
+ *
+ * @param {string} baseName the test set name as defined in the .yaml
+ * @param {Function} fn the function that will be tested
+ * @param {Object} testObjects the .yaml object containing test definitions
+ */
+function test(baseName, fn, testObjects) {
+	const successes = testObjects.success || [];
+	successes.forEach((testObject) => {
+		QUnit.test(`${baseName}: ${testObject.name}`, (assert) => {
+			assert.deepEqual(fn(testObject.object), testObject.expected);
+		});
+	});
+
+	const errors = testObjects.throws || [];
+	errors.forEach((testObject) => {
+		QUnit.test(`${baseName}: ${testObject.name}`, (assert) => {
+			// TODO: we could have a RegExp as argumento to "throws" for a error message match
+			assert.throws(() => fn(testObject.object));
+		});
+	});
+}
+
+module.exports = { test, testValidation };
