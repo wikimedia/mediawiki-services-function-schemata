@@ -9,7 +9,7 @@
 	],
 	"scripts": {
 		"lint": "parallel-lint . --exclude vendor",
-		"phpcs": "phpcs -p -s --ignore=*vendor/* php/",
+		"phpcs": "phpcs -p -s",
 		"phpunit": "phpunit php/test",
 		"phan": "phan -p --allow-polyfill-parser --long-progress-bar",
 		"test": [
@@ -17,11 +17,11 @@
 			"@lint",
 			"@phan",
 			"@phpcs",
-			"minus-x check php/"
+			"minus-x check ."
 		],
 		"fix": [
-			"minus-x fix php/",
-			"phpcbf --ignore=*vendor/* php/"
+			"minus-x fix .",
+			"phpcbf"
 		]
 	},
 	"require": {
