@@ -6,7 +6,7 @@
   "extends": [
     "wikimedia/server"
   ],
-  "plugins": ["json", "jsdoc"],
+  "plugins": ["jsdoc"],
   "rules": {
     "array-bracket-spacing": "off",
     "camelcase": [

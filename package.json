@@ -16,8 +16,8 @@
     "yaml": "1.10.0"
   },
   "devDependencies": {
-    "eslint": "7.20.0",
-    "eslint-config-wikimedia": "0.17.0",
+    "eslint": "7.25.0",
+    "eslint-config-wikimedia": "0.20.0",
     "qunit": "2.14.0"
   }
 }
