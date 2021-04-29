@@ -3,7 +3,7 @@
 const Ajv = require('ajv').default;
 const fs = require('fs');
 const path = require('path');
-const { readYaml } = require('./util.js');
+const { readYaml } = require('./utils.js');
 
 class Schema {
     constructor(validate) {
