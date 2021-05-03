@@ -16,7 +16,7 @@ fs.readdirSync(directory_).forEach((file) => {
 	const fileName = path.join(directory_, file);
 	const testDescriptor = readYaml(fileName);
 	const info = testDescriptor.test_information;
-    const factory = new SchemaFactory();
+	const factory = new SchemaFactory();
 	const validator = factory.parse(testDescriptor.test_schema.validator);
 
 	if (info.parse_error) {

@@ -55,27 +55,27 @@ QUnit.test('errors is populated', (assert) => {
 		}
 	});
 
-    // No errors so far.
-    assert.deepEqual([], schema.errors);
+	// No errors so far.
+	assert.deepEqual([], schema.errors);
 
-    // Unsuccessful validation populates errors.
-    assert.false(schema.validate({ prop1: ['erray'] }));
-    assert.deepEqual(
-        [
-            {
-                keyword: 'type',
-                dataPath: '/prop1',
-                schemaPath: '#/properties/prop1/type',
-                params: {
-                    type: 'string'
-                },
-                message: 'should be string'
-            }
-        ],
-        schema.errors
-    );
+	// Unsuccessful validation populates errors.
+	assert.false(schema.validate({ prop1: ['erray'] }));
+	assert.deepEqual(
+		[
+			{
+				keyword: 'type',
+				dataPath: '/prop1',
+				schemaPath: '#/properties/prop1/type',
+				params: {
+					type: 'string'
+				},
+				message: 'should be string'
+			}
+		],
+		schema.errors
+	);
 
-    // Unsuccessful validation populates errors.
-    assert.true(schema.validate({ prop1: 'string' }));
-    assert.deepEqual([], schema.errors);
+	// Unsuccessful validation populates errors.
+	assert.true(schema.validate({ prop1: 'string' }));
+	assert.deepEqual([], schema.errors);
 });
