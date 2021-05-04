@@ -1,5 +1,5 @@
 test_information:
-  name: canonicalize normal ZObject
+  name: canonicalize ZObject
 
 test_objects:
 
@@ -435,8 +435,40 @@ test_objects:
       Z1K1: Z60
       Z60K1: []
 
+  - name: "mixed form: normal Z10 of canonical strings"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1: "a string"
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+    expected:
+      - "a string"
+
+  - name: "mixed form: canonical Z10 of mixed Z6s"
+    object:
+      - "a string"
+      - Z1K1: Z6
+        Z6K1: "another string"
+    expected:
+      - "a string"
+      - "another string"
+
   throws:
   - name: string with wrong key
     object:
       Z1K1: Z6
       Z6K2: Z
+
+  - name: malformed normalized reference
+    object:
+      Z1K1: Z9
+      Z9K1: tuber
+
+  - name: malformed key
+    object:
+      Z1K1: Z9
+      tuber: Z7

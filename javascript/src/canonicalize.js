@@ -5,6 +5,7 @@
 const { error } = require('./error.js');
 const { is_string, is_array, is_reference, Z10ToArray } = require('./utils.js'); // eslint-disable-line camelcase
 const { SchemaFactory } = require('./schema');
+const normalize = require('./normalize.js');
 
 const normalFactory = SchemaFactory.NORMAL();
 const normalZ1Validator = normalFactory.create('Z1');
@@ -76,11 +77,21 @@ function canonicalize(o) {
  * @throws {Error} throws if argument "o" is not in normal form
  */
 function canonicalizeExport(o) {
-	if (!normalZ1Validator.validate(o)) {
-		throw new Error('canonicalize: argument "o" is not a normalized ZObject.');
-	}
+    let wellFormed = true;
+    let normalized;
+    try {
+        normalized = normalize(o);
+    } catch (e) {
+        wellFormed = false;
+    }
+    if (!normalZ1Validator.validate(normalized)) {
+        wellFormed = false;
+    }
+    if (!wellFormed) {
+        throw new Error('canonicalize: argument "o" is not a well-formed ZObject.');
+    }
 
-	return canonicalize(o);
+    return canonicalize(normalized);
 }
 
 module.exports = canonicalizeExport;

@@ -1,5 +1,5 @@
 test_information:
-  name: normalize canonical ZObject
+  name: normalize ZObject
 
 test_objects:
 
@@ -539,3 +539,9 @@ test_objects:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
+
+  throws:
+  - name: maleformed key
+    object:
+      Z1K1: Z9
+      tuber: Z7

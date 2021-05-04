@@ -7,7 +7,9 @@ const { is_string, is_reference, is_array, arrayToZ10 } = require('./utils.js');
 const { SchemaFactory } = require('./schema');
 
 const canonicalFactory = SchemaFactory.CANONICAL();
-const canonicalZ1Validator = canonicalFactory.create('Z1');
+// Canonical form syntax is a superset of normal form syntax, so this validator
+// captures mixed forms.
+const mixedZ1Validator = canonicalFactory.create('Z1');
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
 function normalize(o) {
@@ -60,8 +62,8 @@ function normalize(o) {
  * @throws {Error} throws if argument "o" is not in canonical form
  */
 function normalizeExport(o) {
-	if (!canonicalZ1Validator.validate(o)) {
-		throw new Error('normalize: argument "o" is not a canonical ZObject.');
+	if (!mixedZ1Validator.validate(o)) {
+		throw new Error('normalize: argument "o" is not a well-formed ZObject.');
 	}
 
 	return normalize(o);
