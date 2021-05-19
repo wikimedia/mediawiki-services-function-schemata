@@ -13,7 +13,7 @@ definitions:
           - Z9
           type: string
         Z9K1:
-          pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
+          pattern: ^Z[1-9]\d*$
           type: string
       required:
       - Z1K1

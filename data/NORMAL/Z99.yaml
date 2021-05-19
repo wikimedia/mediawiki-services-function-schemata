@@ -4,9 +4,7 @@ $ref: '#/definitions/objects/Z99'
 definitions:
   objects:
     Z99:
-      anyOf:
-      - $ref: '#/definitions/objects/Z99_literal'
-      - $ref: Z9#/definitions/objects/Z9
+      $ref: '#/definitions/objects/Z99_literal'
     Z99_literal:
       additionalProperties: false
       properties:
@@ -28,7 +26,7 @@ definitions:
             - Z9K1
             type: object
         Z99K1:
-          $ref: Z1#/definitions/objects/Z1
+          type: object
       required:
       - Z1K1
       - Z99K1

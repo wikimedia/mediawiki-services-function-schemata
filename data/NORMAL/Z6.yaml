@@ -20,3 +20,12 @@ definitions:
       - Z1K1
       - Z6K1
       type: object
+    Z6_ZnKn:
+      allOf:
+      - $ref: '#/definitions/objects/Z6'
+      - properties:
+          Z6K1:
+            pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
+            type: string
+        type: object
+

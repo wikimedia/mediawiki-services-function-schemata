@@ -165,9 +165,9 @@ test_objects:
     object:
       Z1K1:
         Z1K1: Z9
-        Z9K1: Z1
+        Z9K1: Z2
     expected:
-      Z1K1: Z1
+      Z1K1: Z2
 
   - name: simple record
     object:
@@ -266,10 +266,10 @@ test_objects:
         Z9K1: Z2
       Z2K2:
         Z1K1: Z9
-        Z9K1: Z1
+        Z9K1: Z6
     expected:
       Z1K1: Z2
-      Z2K2: Z1
+      Z2K2: Z6
 
   - name: implicit reference
     object: 
@@ -278,10 +278,10 @@ test_objects:
         Z9K1: Z2
       Z2K2:
         Z1K1: Z9
-        Z9K1: Z1
+        Z9K1: Z6
     expected: 
       Z1K1: Z2
-      Z2K2: Z1
+      Z2K2: Z6
 
   - name: empty list as object, type as explicit reference
     object:
@@ -414,13 +414,13 @@ test_objects:
         Z9K1: Z10
       Z10K1: 
         Z1K1: Z9
-        Z9K1: Z1
+        Z9K1: Z2
       Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
     expected:
-      - Z1
+      - Z2
 
   - name: list object in object
     object:

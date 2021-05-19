@@ -30,7 +30,16 @@ definitions:
         Z2K1:
           $ref: Z6#/definitions/objects/Z6
         Z2K2:
-          $ref: Z1#/definitions/objects/Z1
+          allOf:
+          - $ref: Z1#/definitions/objects/Z1
+          - not:
+              anyOf:
+              - $ref: Z2#/definitions/objects/Z2_literal
+              - $ref: Z3#/definitions/objects/Z3_literal
+              - $ref: Z9#/definitions/objects/Z9_literal
+              - $ref: Z17#/definitions/objects/Z17_literal
+              - $ref: Z18#/definitions/objects/Z18_literal
+              - $ref: Z39#/definitions/objects/Z39
         Z2K3:
           $ref: Z12#/definitions/objects/Z12
       required:

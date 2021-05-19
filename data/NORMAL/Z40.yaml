@@ -11,9 +11,24 @@ definitions:
       additionalProperties: false
       properties:
         Z1K1:
-          $ref: '#/definitions/objects/Z9_for_Z40'
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - additionalProperties: false
+            properties:
+              Z1K1:
+                enum:
+                - Z9
+                type: string
+              Z9K1:
+                enum:
+                - Z40
+                type: string
+            required:
+            - Z1K1
+            - Z9K1
+            type: object
         Z40K1:
-          $ref: '#/definitions/objects/Z40'
+          $ref: '#/definitions/objects/Z9_for_Z40'
       required:
       - Z1K1
       type: object

@@ -1,9 +1,13 @@
 'use strict';
 
-function innerError(codes, args) {
+function innerError(codes, args, normalized = false) {
+	const z1k1 = normalized ?
+		{ Z1K1: 'Z9', Z9K1: codes[0] } :
+		codes[0];
+
 	if (codes.length === 1) {
 		const errorObject = {
-			Z1K1: codes[ 0 ]
+			Z1K1: z1k1
 		};
 		for (let i = 0; i < args.length; i++) {
 			errorObject[ codes + 'K' + (i + 1).toString() ] = args[ i ];
@@ -11,17 +15,48 @@ function innerError(codes, args) {
 		return errorObject;
 	} else {
 		return {
-			Z1K1: codes[ 0 ],
+			Z1K1: z1k1,
 			[ codes[ 0 ] + 'K1' ]: innerError(codes.slice(1), args)
 		};
 	}
 }
 
+/**
+ * A helper function that takes error codes and error arguments and creates a Z5/Error in canonical
+ * form. When codes.length > 1, arguments refer to the last error code informed.
+ * The arguments are not validated!
+ *
+ * @param {Array} codes An array of error codes Zxxx
+ * @param {Array} args The arguments of the last error in 'codes'
+ * @return {Object}
+ */
 function canonicalError(codes, args) {
-	// TODO: Create normalized error types and helpers.
 	return {
 		Z1K1: 'Z5',
 		Z5K1: innerError(codes, args)
+	};
+}
+
+/**
+ * A helper function that takes error codes and error arguments and creates a Z5/Error in normal
+ * form.
+ * The arguments are not validated!
+ *
+ * @param {Array} codes An array of error codes Zxxx
+ * @param {Array} args The arguments of the last error in 'codes'
+ * @return {Object}
+ */
+function normalError(codes, args) {
+	const argsZ6 = args.map((el) =>
+		typeof el === 'string' ? { Z1K1 : 'Z6', Z6K1 : el } : el
+	);
+
+	return {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z5'
+		},
+		Z5K1: innerError(codes, argsZ6, true)
 	};
 }
 
@@ -60,5 +95,6 @@ const error = {
 
 module.exports = {
 	error,
-	canonicalError
+	canonicalError,
+	normalError
 };

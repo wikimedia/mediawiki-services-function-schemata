@@ -13,7 +13,7 @@ definitions:
         Z17K1:
           $ref: Z4#/definitions/objects/Z4
         Z17K2:
-          $ref: Z6#/definitions/objects/Z6
+          $ref: Z6#/definitions/objects/Z6_ZnKn
         Z17K3:
           $ref: Z12#/definitions/objects/Z12
         Z1K1:

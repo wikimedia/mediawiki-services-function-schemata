@@ -20,7 +20,13 @@ function test(ZID) {
 test('Z1');
 test('Z2');
 test('Z10');
+test('Z14');
+test('Z17');
+test('Z18');
 test('Z22');
 test('Z39');
 test('Z40');
+test('Z61');
+test('Z80');
 test('Z86');
+test('Z99');

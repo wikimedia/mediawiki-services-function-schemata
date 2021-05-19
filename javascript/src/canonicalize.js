@@ -77,21 +77,21 @@ function canonicalize(o) {
  * @throws {Error} throws if argument "o" is not in normal form
  */
 function canonicalizeExport(o) {
-    let wellFormed = true;
-    let normalized;
-    try {
-        normalized = normalize(o);
-    } catch (e) {
-        wellFormed = false;
-    }
-    if (!normalZ1Validator.validate(normalized)) {
-        wellFormed = false;
-    }
-    if (!wellFormed) {
-        throw new Error('canonicalize: argument "o" is not a well-formed ZObject.');
-    }
+	let wellFormed = true;
+	let normalized;
+	try {
+		normalized = normalize(o);
+	} catch (e) {
+		wellFormed = false;
+	}
+	if (!normalZ1Validator.validate(normalized)) {
+		wellFormed = false;
+	}
+	if (!wellFormed) {
+		throw new Error('canonicalize: argument "o" is not a well-formed ZObject.');
+	}
 
-    return canonicalize(normalized);
+	return canonicalize(normalized);
 }
 
 module.exports = canonicalizeExport;

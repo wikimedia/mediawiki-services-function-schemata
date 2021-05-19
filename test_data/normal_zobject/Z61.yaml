@@ -1,0 +1,32 @@
+test_information:
+  name: normalized Z60
+
+test_objects:
+  success:
+  - name: good programming language
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z61
+      Z61K1:
+        Z1K1: Z6
+        Z6K1: python-three
+
+  failure:
+  - name: bad programming language (number)
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z61
+      Z61K1:
+        Z1K1: Z6
+        Z6K1: python-4
+
+  - name: bad programming language (symbols)
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z61
+      Z61K1:
+        Z1K1: Z6
+        Z6K1: there's no bad programming language :)

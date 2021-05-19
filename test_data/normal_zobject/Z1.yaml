@@ -3,21 +3,10 @@ test_information:
 
 test_objects:
   success:
-  - name: arbitrary ZObject
-    object:
-      Z1:
-        Z1K1: Z6
-        Z6K1: arbitrary string
-      Z2K34:
-        Z89:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-
   - name: happy Z9 reference
     object:
       Z1K1: Z9
-      Z9K1: Z1
+      Z9K1: Z2
 
   - name: happy Z9 array empty
     object:
@@ -99,7 +88,67 @@ test_objects:
         Z1K1: Z9
         Z9K1: Z401
 
+  - name: happy Z23 reference
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z9
+        Z9K1: Z23
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+
+  - name: happy Z1 with a Z99 leaf
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z99
+        Z99K1:
+          some: random
+          object: that
+          is: not
+          a: Z1
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+
+  - name: happy Z1 with a Z99 non-leaf
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z99
+        Z99K1:
+          Z1K1: Z6
+          Z6K1: quoted string
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+
   failure:
+  - name: arbitrary ZObject
+    object:
+      Z1:
+        Z1K1: Z6
+        Z6K1: arbitrary string
+      Z2K34:
+        Z89:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+
   - name: sad Z6
     object:
       Z1K1: Z6
@@ -109,3 +158,23 @@ test_objects:
     object:
       Z1K1: Z3
       Z70K1: "4"
+
+  - name: Z1 of type Z1
+    object:
+      Z1K1: 
+        Z1K1: Z9
+        Z9K1: Z1
+
+  - name: Z23 should never be instanced
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z23
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10

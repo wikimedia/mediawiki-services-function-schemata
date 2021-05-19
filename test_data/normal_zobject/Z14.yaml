@@ -1,0 +1,86 @@
+test_information:
+  name: normal Z14
+
+test_objects:
+  success:
+    - name: good Z14 (function call)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z14
+        Z14K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z14K2:
+          Z1K1: Z9
+          Z9K1: Z7
+
+    - name: good Z14 (code)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z14
+        Z14K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z14K3:
+          Z1K1: Z9
+          Z9K1: Z16
+
+    - name: good Z14 (string)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z14
+        Z14K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z14K4:
+          Z1K1: Z6
+          Z6K1: Z1234
+
+  failure:
+    - name: bad Z14 (has Z14K2 AND Z14K3)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z14
+        Z14K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z14K2:
+          Z1K1: Z9
+          Z6K1: Z7
+        Z14K3:
+          Z1K1: Z9
+          Z6K1: Z16
+
+    - name: bad Z14 (has Z14K2 AND Z14K4)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z14
+        Z14K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z14K2:
+          Z1K1: Z9
+          Z6K1: Z7
+        Z14K4:
+          Z1K1: Z6
+          Z6K1: Z1234
+
+    - name: bad Z14 (has Z14K3 AND Z14K4)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z14
+        Z14K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z14K3:
+          Z1K1: Z9
+          Z6K1: Z16
+        Z14K4:
+          Z1K1: Z6
+          Z6K1: Z1234

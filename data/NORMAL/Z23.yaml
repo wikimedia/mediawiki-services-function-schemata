@@ -4,29 +4,20 @@ $ref: '#/definitions/objects/Z23'
 definitions:
   objects:
     Z23:
-      anyOf:
-      - $ref: '#/definitions/objects/Z23_literal'
+      allOf:
       - $ref: Z9#/definitions/objects/Z9
-    Z23_literal:
-      additionalProperties: false
-      properties:
-        Z1K1:
-          allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - additionalProperties: false
-            properties:
-              Z1K1:
-                enum:
-                - Z9
-                type: string
-              Z9K1:
-                enum:
-                - Z23
-                type: string
-            required:
-            - Z1K1
-            - Z9K1
-            type: object
-      required:
-      - Z1K1
-      type: object
+      - additionalProperties: false
+        properties:
+          Z1K1:
+            enum:
+            - Z9
+            type: string
+          Z9K1:
+            enum:
+            - Z23
+            type: string
+        required:
+        - Z1K1
+        - Z9K1
+        type: object
+

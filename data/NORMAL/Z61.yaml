@@ -28,8 +28,18 @@ definitions:
             - Z9K1
             type: object
         Z61K1:
-          $ref: Z6#/definitions/objects/Z6
+          $ref: '#/definitions/objects/Z6_prog_lang'
       required:
       - Z1K1
       - Z61K1
       type: object
+    Z6_prog_lang:
+      allOf:
+      - $ref: Z6#/definitions/objects/Z6
+      - properties:
+          Z6K1:
+            pattern: ^[a-zA-Z][a-zA-Z-]+[a-zA-Z]$
+            type: string
+        required:
+        - Z6K1
+        type: object

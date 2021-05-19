@@ -11,7 +11,7 @@ definitions:
       additionalProperties: false
       properties:
         Z18K1:
-          $ref: Z6#/definitions/objects/Z6
+          $ref: Z6#/definitions/objects/Z6_ZnKn
         Z1K1:
           allOf:
           - $ref: Z9#/definitions/objects/Z9

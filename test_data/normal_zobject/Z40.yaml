@@ -3,9 +3,12 @@ test_information:
 
 test_objects:
   success:
-  - name: TRUTH
+  - name: truth
     object:
       Z1K1:
+        Z1K1: Z9
+        Z9K1: Z40
+      Z40K1:
         Z1K1: Z9
         Z9K1: Z41
 
@@ -13,11 +16,17 @@ test_objects:
     object:
       Z1K1:
         Z1K1: Z9
+        Z9K1: Z40
+      Z40K1:
+        Z1K1: Z9
         Z9K1: Z42
 
   failure:
   - name: literally nothing else is okay
     object:
       Z1K1:
+        Z1K1: Z9
+        Z9K1: Z40
+      Z40K1:
         Z1K1: Z9
         Z9K1: Z43

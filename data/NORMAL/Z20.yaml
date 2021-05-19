@@ -30,7 +30,12 @@ definitions:
         Z20K1:
           $ref: Z7#/definitions/objects/Z7
         Z20K2:
-          $ref: Z8#/definitions/objects/Z8
+          allOf:
+          - $ref: Z8#/definitions/objects/Z8
+          - properties:
+              Z8K2:
+                $ref: Z40#/definitions/objects/Z40
+            type: object
       required:
       - Z1K1
       - Z20K1

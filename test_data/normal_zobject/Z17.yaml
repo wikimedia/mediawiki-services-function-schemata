@@ -1,0 +1,45 @@
+test_information:
+  name: normalized Z17
+
+test_objects:
+  success:
+  - name: good argument declaration
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z17
+      Z17K1:
+        Z1K1: Z9
+        Z9K1: Z6
+      Z17K2:
+        Z1K1: Z6
+        Z6K1: Z1234K1234
+      Z17K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+
+  failure:
+  - name: bad argument declaration (invalid Z17K2)
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z17
+      Z17K1:
+        Z1K1: Z9
+        Z9K1: Z6
+      Z17K2:
+        Z1K1: Z6
+        Z6K1: my argument declaration
+      Z17K3:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10

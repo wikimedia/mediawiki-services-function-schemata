@@ -12,18 +12,6 @@ test_objects:
         Z1K1: Z6
         Z6K1: any string?
 
-  - name: good reference with object
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z39
-      Z39K1:
-        Z1K1: Z6
-        Z6K1: any string?
-      Z39K2:
-        Z1K1: Z6
-        Z6K1: technically an object!
-
   failure:
   - name: bad Z39 with incorrect Z1K1
     object:
