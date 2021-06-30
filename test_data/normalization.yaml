@@ -108,11 +108,11 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
-        Z10K1: 
-          Z1K1: 
+        Z10K1:
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
           Z10K1:
@@ -127,7 +127,7 @@ test_objects:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z10
-          Z10K1: 
+          Z10K1:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10
@@ -176,14 +176,14 @@ test_objects:
         Z9K1: Z1
 
   - name: simple record
-    object: 
+    object:
       Z1K1: Z60
       Z60K1: a
     expected:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z60
-      Z60K1: 
+      Z60K1:
         Z1K1: Z6
         Z6K1: a
 
@@ -199,13 +199,13 @@ test_objects:
     object:
       Z1K1: Z6
       Z6K1: Q42
-    expected: 
+    expected:
       Z1K1: Z6
       Z6K1: Q42
 
-  - name: potential key string 
+  - name: potential key string
     object: Z1K1
-    expected: 
+    expected:
       Z1K1: Z6
       Z6K1: Z1K1
 
@@ -215,7 +215,7 @@ test_objects:
       Z6K2: Z
     expected:
       Z1K1: Z6
-      Z6K2: 
+      Z6K2:
         Z1K1: Z6
         Z6K1: Z
 
@@ -225,7 +225,7 @@ test_objects:
         Z6K1: Z6
       - Z
     expected:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z10
       Z10K1:
@@ -250,7 +250,7 @@ test_objects:
         Z1K1: Z6
         Z6K1: Z6
     expected:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
@@ -262,7 +262,7 @@ test_objects:
       Z1K1: Z2
       Z2K2: Z1
     expected:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
@@ -270,11 +270,11 @@ test_objects:
         Z9K1: Z1
 
   - name: implicit reference
-    object: 
+    object:
       Z1K1: Z2
       Z2K2: Z1
-    expected: 
-      Z1K1: 
+    expected:
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
@@ -314,7 +314,7 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z6
         Z6K1: a
       Z10K2: []
@@ -322,7 +322,7 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z6
         Z6K1: a
       Z10K2:
@@ -332,12 +332,12 @@ test_objects:
 
   - name: single string in list as object
     object:
-      - a  
+      - a
     expected:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z6
         Z6K1: a
       Z10K2:
@@ -357,7 +357,7 @@ test_objects:
       Z10K1:
         Z1K1: Z6
         Z6K1: a
-      Z10K2: 
+      Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
@@ -365,7 +365,7 @@ test_objects:
           Z1K1: Z6
           Z6K1: b
         Z10K2:
-          Z1K1: 
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
 
@@ -382,7 +382,7 @@ test_objects:
       Z10K1:
         Z1K1: Z6
         Z6K1: a
-      Z10K2: 
+      Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
@@ -390,7 +390,7 @@ test_objects:
           Z1K1: Z6
           Z6K1: b
         Z10K2:
-          Z1K1: 
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
 
@@ -402,7 +402,7 @@ test_objects:
       Z10K1:
         Z1K1: Z6
         Z6K1: a
-      Z10K2: 
+      Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
@@ -417,7 +417,7 @@ test_objects:
       Z10K1:
         Z1K1: Z6
         Z6K1: a
-      Z10K2: 
+      Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
@@ -425,7 +425,7 @@ test_objects:
           Z1K1: Z6
           Z6K1: b
         Z10K2:
-          Z1K1: 
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
 
@@ -442,7 +442,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
 
@@ -459,7 +459,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
         Z10K1:
@@ -483,7 +483,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
 
@@ -500,7 +500,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
         Z10K1:
@@ -519,7 +519,7 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z9
         Z9K1: Z1
       Z10K2:

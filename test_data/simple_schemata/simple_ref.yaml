@@ -30,4 +30,4 @@ test_objects:
 
     - name: "referenced object was never an object in the first place!"
       object: "prep"
-        
+

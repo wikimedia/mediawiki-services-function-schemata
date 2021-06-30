@@ -27,7 +27,7 @@ test_schema:
           properties:
             quod:
               type: string
-    
+
 
 test_objects:
   success:

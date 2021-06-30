@@ -15,7 +15,7 @@ test_objects:
     - name: "happy arrays"
       object:
         - ["list", "vector"]
-  
+
   failure:
     - name: "shallow array"
       object:

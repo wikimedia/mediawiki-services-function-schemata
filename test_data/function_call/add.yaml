@@ -44,7 +44,7 @@ test_objects:
         Z70K1: '2'
 
   failure:
-  - name: wrong type for Z7 
+  - name: wrong type for Z7
     object:
       Z1K1: Z
       Z7K1:

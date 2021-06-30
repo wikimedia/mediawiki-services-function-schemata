@@ -12,7 +12,7 @@ test_objects:
         Z1K1: Z9
         Z9K1: Z41
 
-  - name: mendacity 
+  - name: mendacity
     object:
       Z1K1:
         Z1K1: Z9

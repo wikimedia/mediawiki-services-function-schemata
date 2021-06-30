@@ -161,7 +161,7 @@ test_objects:
 
   - name: Z1 of type Z1
     object:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z1
 

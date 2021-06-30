@@ -51,7 +51,7 @@ test_objects:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10
-            
+
   - name: aglossic Z3
     object:
       Z1K1:

@@ -98,11 +98,11 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
-        Z10K1: 
-          Z1K1: 
+        Z10K1:
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
           Z10K1:
@@ -117,7 +117,7 @@ test_objects:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z10
-          Z10K1: 
+          Z10K1:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10
@@ -171,13 +171,13 @@ test_objects:
 
   - name: simple record
     object:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z60
-      Z60K1: 
+      Z60K1:
         Z1K1: Z6
         Z6K1: a
-    expected: 
+    expected:
       Z1K1: Z60
       Z60K1: a
 
@@ -193,7 +193,7 @@ test_objects:
     object:
       Z1K1: Z6
       Z6K1: Q42
-    expected: 
+    expected:
       Z1K1: Z6
       Z6K1: Q42
 
@@ -211,7 +211,7 @@ test_objects:
 
   - name: array with escaped string
     object:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z10
       Z10K1:
@@ -235,7 +235,7 @@ test_objects:
 
   - name: object with escaped string
     object:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
@@ -249,7 +249,7 @@ test_objects:
 
   - name: object with unneccessarily escaped string
     object:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
@@ -261,7 +261,7 @@ test_objects:
 
   - name: explicit reference
     object:
-      Z1K1: 
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
@@ -272,14 +272,14 @@ test_objects:
       Z2K2: Z6
 
   - name: implicit reference
-    object: 
-      Z1K1: 
+    object:
+      Z1K1:
         Z1K1: Z9
         Z9K1: Z2
       Z2K2:
         Z1K1: Z9
         Z9K1: Z6
-    expected: 
+    expected:
       Z1K1: Z2
       Z2K2: Z6
 
@@ -295,7 +295,7 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z6
         Z6K1: a
       Z10K2:
@@ -310,7 +310,7 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z6
         Z6K1: a
       Z10K2:
@@ -328,7 +328,7 @@ test_objects:
       Z10K1:
         Z1K1: Z6
         Z6K1: a
-      Z10K2: 
+      Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
@@ -336,7 +336,7 @@ test_objects:
           Z1K1: Z6
           Z6K1: b
         Z10K2:
-          Z1K1: 
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
     expected:
@@ -351,7 +351,7 @@ test_objects:
       Z10K1:
         Z1K1: Z6
         Z6K1: a
-      Z10K2: 
+      Z10K2:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
@@ -359,7 +359,7 @@ test_objects:
           Z1K1: Z6
           Z6K1: b
         Z10K2:
-          Z1K1: 
+          Z1K1:
             Z1K1: Z9
             Z9K1: Z10
     expected:
@@ -376,7 +376,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
     expected:
@@ -392,7 +392,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
       Z10K2:
-        Z1K1: 
+        Z1K1:
           Z1K1: Z9
           Z9K1: Z10
         Z10K1:
@@ -412,7 +412,7 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z10
-      Z10K1: 
+      Z10K1:
         Z1K1: Z9
         Z9K1: Z2
       Z10K2:
