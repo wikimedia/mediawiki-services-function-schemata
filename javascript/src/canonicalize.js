@@ -40,13 +40,6 @@ function canonicalizeObject(o) {
 		return Z10ToArray(o).map(canonicalize);
 	}
 
-	o.Z1K1 = canonicalize(o.Z1K1);
-
-	if (o.Z1K1 === 'Z5' &&
-		(o.Z5K1.Z1K1 === error.syntax_error || o.Z5K1.Z1K1 === error.not_wellformed)) {
-		return o;
-	}
-
 	const keys = Object.keys(o);
 	const result = {};
 
@@ -88,7 +81,7 @@ function canonicalizeExport(o) {
 		wellFormed = false;
 	}
 	if (!wellFormed) {
-		throw new Error('canonicalize: argument "o" is not a well-formed ZObject.');
+		throw new Error('canonicalize: argument "o" is not a well-formed ZObject:' + JSON.stringify(o) );
 	}
 
 	return canonicalize(normalized);

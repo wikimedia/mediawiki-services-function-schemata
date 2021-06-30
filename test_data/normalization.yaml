@@ -345,6 +345,45 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
 
+  - name: "mixed form: normal Z10 head of canonical reference"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1: Z111
+      Z10K2: []
+    expected:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z9
+        Z9K1: Z111
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+
+  - name: "mixed form: normal Z10 reference-shaped string"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: Z111
+      Z10K2: []
+    expected:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10
+      Z10K1:
+        Z1K1: Z6
+        Z6K1: Z111
+      Z10K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
 
   - name: two strings in list
     object:

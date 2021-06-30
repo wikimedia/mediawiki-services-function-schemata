@@ -457,6 +457,133 @@ test_objects:
       - "a string"
       - "another string"
 
+  - name: "canonicalize Z5 error wrapping Z6"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z5
+      Z5K1:
+        Z1K1: Z9
+        Z9K1: Z501
+      Z5K2:
+        Z1K1: Z6
+        Z6K1: "a string error message"
+    expected:
+      Z1K1: Z5
+      Z5K1: Z501
+      Z5K2: "a string error message"
+
+  - name: "canonicalize Z5 error wrapping mixed Z10"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z5
+      Z5K1:
+        Z1K1: Z9
+        Z9K1: Z501
+      Z5K2:
+        Z1K1: Z10
+        Z10K1: "a string error message"
+        Z10K2: []
+    expected:
+      Z1K1: Z5
+      Z5K1: Z501
+      Z5K2:
+        - "a string error message"
+
+  - name: "canonicalize Z5 error wrapping normal Z10"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z5
+      Z5K1:
+        Z1K1: Z9
+        Z9K1: Z501
+      Z5K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: "a list with different"
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1: Z6
+            Z6K1: "error messages"
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+    expected:
+      Z1K1: Z5
+      Z5K1: Z501
+      Z5K2:
+        - "a list with different"
+        - "error messages"
+
+  - name: "canonicalize Z5 error wrapping Z5 error"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z5
+      Z5K1:
+        Z1K1: Z9
+        Z9K1: Z501
+      Z5K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z5
+        Z5K1:
+          Z1K1: Z9
+          Z9K1: Z502
+        Z5K2:
+          Z1K1: Z6
+          Z6K1: "second error"
+    expected:
+      Z1K1: Z5
+      Z5K1: Z501
+      Z5K2:
+        Z1K1: Z5
+        Z5K1: Z502
+        Z5K2: "second error"
+
+  - name: "canonicalize Z5 error wrapping list of Z5 errors"
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z5
+      Z5K1:
+        Z1K1: Z9
+        Z9K1: Z501
+      Z5K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+        Z10K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z5
+          Z5K1:
+            Z1K1: Z9
+            Z9K1: Z502
+          Z5K2:
+            Z1K1: Z6
+            Z6K1: "second error"
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    expected:
+      Z1K1: Z5
+      Z5K1: Z501
+      Z5K2:
+      - Z1K1: Z5
+        Z5K1: Z502
+        Z5K2: "second error"
+
   throws:
   - name: string with wrong key
     object:
@@ -472,3 +599,10 @@ test_objects:
     object:
       Z1K1: Z9
       tuber: Z7
+
+  - name: normalized terminal zobject
+    obejct:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z6
+      Z6K1: "error"
