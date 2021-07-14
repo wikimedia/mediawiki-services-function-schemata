@@ -28,4 +28,17 @@ definitions:
             pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
             type: string
         type: object
-
+    Z10_of_Z6:
+      allOf:
+      - $ref: Z10#/definitions/objects/Z10
+      - oneOf:
+        - $ref: Z10#/definitions/objects/Z10_empty
+        - properties:
+            Z10K1:
+              $ref: Z3#/definitions/objects/Z6
+            Z10K2:
+              $ref: '#/definitions/objects/Z10_of_Z6'
+          required:
+          - Z10K1
+          - Z10K2
+          type: object
