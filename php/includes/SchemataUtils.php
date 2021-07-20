@@ -15,7 +15,7 @@ class SchemataUtils {
 	 * Joins an arbitrary number of path components via DIRECTORY_SEPARATOR.
 	 * @return string
 	 */
-	public static function joinPath() : string {
+	public static function joinPath(): string {
 		$components = [];
 		foreach ( func_get_args() as $component ) {
 			$component = rtrim( $component, DIRECTORY_SEPARATOR );
@@ -27,14 +27,14 @@ class SchemataUtils {
 	/**
 	 * @return string
 	 */
-	public static function dataDirectory() : string {
+	public static function dataDirectory(): string {
 		return self::joinPath( __DIR__, "..", "..", "data" );
 	}
 
 	/**
 	 * @return string
 	 */
-	public static function testDataDirectory() : string {
+	public static function testDataDirectory(): string {
 		return self::joinPath( __DIR__, "..", "..", "test_data" );
 	}
 

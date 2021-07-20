@@ -9,7 +9,7 @@
 	],
 	"scripts": {
 		"lint": "parallel-lint . --exclude vendor",
-		"phpcs": "phpcs -p -s",
+		"phpcs": "phpcs -p -s php",
 		"phpunit": "phpunit php/test",
 		"phan": "phan -p --allow-polyfill-parser --long-progress-bar",
 		"test": [
@@ -31,7 +31,7 @@
 		"symfony/yaml": "^5.2"
 	},
 	"require-dev": {
-		"mediawiki/mediawiki-codesniffer": "36.0.0",
+		"mediawiki/mediawiki-codesniffer": "37.0.0",
 		"mediawiki/mediawiki-phan-config": "0.10.6",
 		"mediawiki/minus-x": "1.1.1",
 		"php-parallel-lint/php-console-highlighter": "0.5.0",

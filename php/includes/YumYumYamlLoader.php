@@ -35,7 +35,7 @@ class YumYumYamlLoader implements ISchemaLoader {
 	 *
 	 * @param string $ZID ZID to create schema for
 	 */
-	private function populateCache( string $ZID ) : void {
+	private function populateCache( string $ZID ): void {
 		foreach ( $this->prefixToDirectory as $prefix => $directory ) {
 			$path = SchemataUtils::joinPath( $directory, $ZID . '.yaml' );
 			if ( file_exists( $path ) ) {
@@ -51,7 +51,7 @@ class YumYumYamlLoader implements ISchemaLoader {
 	/**
 	 * @inheritDoc
 	 */
-	public function loadSchema( string $ZID ) : Schema {
+	public function loadSchema( string $ZID ): Schema {
 		if ( !isset( $this->schemaCache[$ZID] ) ) {
 			$this->populateCache( $ZID );
 		}

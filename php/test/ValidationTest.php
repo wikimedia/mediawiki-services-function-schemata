@@ -14,7 +14,7 @@ abstract class ValidationTest extends TestCase {
 	 * @param ISchema $validator
 	 * @param mixed $testObjects
 	 */
-	protected function testValidation( ISchema $validator, $testObjects ) : void {
+	protected function testValidation( ISchema $validator, $testObjects ): void {
 		$successes = [];
 		if ( isset( $testObjects->success ) ) {
 			$successes = $testObjects->success;
