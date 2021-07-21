@@ -7,6 +7,7 @@ definitions:
       anyOf:
       - $ref: '#/definitions/objects/Z22_literal'
       - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
     Z22_literal:
       additionalProperties: false
       properties:

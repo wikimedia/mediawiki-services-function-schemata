@@ -15,6 +15,7 @@ definitions:
       anyOf:
       - $ref: '#/definitions/objects/Z86_literal'
       - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
     Z86_literal:
       additionalProperties: false
       properties:

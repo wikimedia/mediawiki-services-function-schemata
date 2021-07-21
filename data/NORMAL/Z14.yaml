@@ -7,15 +7,21 @@ definitions:
       anyOf:
       - $ref: '#/definitions/objects/Z14_literal'
       - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
     Z14_literal:
       additionalProperties: false
+      oneOf:
+      - required:
+        - Z14K2
+      - required:
+        - Z14K3
+      - required:
+        - Z14K4
       properties:
         Z14K1:
           $ref: Z8#/definitions/objects/Z8
         Z14K2:
-          oneOf:
-          - $ref: Z7#/definitions/objects/Z7
-          - $ref: Z18#/definitions/objects/Z18
+          $ref: Z7#/definitions/objects/Z7
         Z14K3:
           $ref: Z16#/definitions/objects/Z16
         Z14K4:
@@ -40,11 +46,4 @@ definitions:
       required:
       - Z14K1
       - Z1K1
-      oneOf:
-        - required:
-          - Z14K2
-        - required:
-          - Z14K3
-        - required:
-          - Z14K4
       type: object

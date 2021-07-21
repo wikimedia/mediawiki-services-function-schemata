@@ -1,20 +1,6 @@
 test_information:
   name: normalized Z22
-
 test_objects:
-  success:
-  - name: good pair with object
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z22
-      Z22K1:
-        Z1K1: Z6
-        Z6K1: left shoe
-      Z22K2:
-        Z1K1: Z6
-        Z6K1: left glove
-
   failure:
   - name: bad Z22 with malformed Z1K1
     object:
@@ -27,7 +13,6 @@ test_objects:
       Z22K2:
         Z1K1: Z6
         Z6K1: left glove
-
   - name: bad, deficient pair missing Z22K1
     object:
       Z1K1:
@@ -36,7 +21,6 @@ test_objects:
       Z22K2:
         Z1K1: Z6
         Z6K1: left glove
-
   - name: bad, deficient pair missing Z22K2
     object:
       Z1K1:
@@ -45,3 +29,27 @@ test_objects:
       Z22K1:
         Z1K1: Z6
         Z6K1: left shoe
+  success:
+  - name: good pair with object
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z22
+      Z22K1:
+        Z1K1: Z6
+        Z6K1: left shoe
+      Z22K2:
+        Z1K1: Z6
+        Z6K1: left glove
+  - name: can be a Z9
+    object:
+      Z1K1: Z9
+      Z9K1: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18

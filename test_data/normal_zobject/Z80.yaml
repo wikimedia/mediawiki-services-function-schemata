@@ -1,17 +1,6 @@
 test_information:
   name: normalized Z80
-
 test_objects:
-  success:
-  - name: good byte
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z80
-      Z80K1:
-        Z1K1: Z6
-        Z6K1: 3B
-
   failure:
   - name: bad byte, too long
     object:
@@ -21,7 +10,6 @@ test_objects:
       Z80K1:
         Z1K1: Z6
         Z6K1: 3A2F
-
   - name: bad byte, not an hex number
     object:
       Z1K1:
@@ -30,3 +18,24 @@ test_objects:
       Z80K1:
         Z1K1: Z6
         Z6K1: 3H
+  success:
+  - name: good byte
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z80
+      Z80K1:
+        Z1K1: Z6
+        Z6K1: 3B
+  - name: can be a Z9
+    object:
+      Z1K1: Z9
+      Z9K1: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18

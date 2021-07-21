@@ -3,10 +3,25 @@ $id: Z31
 $ref: '#/definitions/objects/Z31'
 definitions:
   objects:
+    Z10_of_Z31:
+      allOf:
+      - $ref: Z10#/definitions/objects/Z10
+      - oneOf:
+        - $ref: Z10#/definitions/objects/Z10_empty
+        - properties:
+            Z10K1:
+              $ref: Z31#/definitions/objects/Z31
+            Z10K2:
+              $ref: '#/definitions/objects/Z10_of_Z31'
+          required:
+          - Z10K1
+          - Z10K2
+          type: object
     Z31:
       anyOf:
       - $ref: '#/definitions/objects/Z31_literal'
       - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
     Z31_literal:
       additionalProperties: false
       properties:
@@ -30,23 +45,9 @@ definitions:
         Z31K1:
           $ref: Z60#/definitions/objects/Z60
         Z31K2:
-          $ref: 'Z6#/definitions/objects/Z10_of_Z6'
+          $ref: Z6#/definitions/objects/Z10_of_Z6
       required:
       - Z1K1
       - Z31K1
       - Z31K2
       type: object
-    Z10_of_Z31:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: Z31#/definitions/objects/Z31
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z31'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object

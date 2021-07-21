@@ -1,23 +1,33 @@
 test_information:
   name: normalized Z18
-
 test_objects:
-  success:
-  - name: good argument reference
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z18
-      Z18K1:
-        Z1K1: Z6
-        Z6K1: Z1234K1234
-
   failure:
   - name: bad argument reference (invalid Z18K1)
     object:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z18
-        Z18K1:
-          Z1K1: Z6
-          Z6K1: my argument reference
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: my argument reference
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18
+  success:
+  - name: good argument reference
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1234K1234
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18
+  - name: can be a Z9
+    object:
+      Z1K1: Z9
+      Z9K1: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18

@@ -3,31 +3,6 @@ $id: Z6
 $ref: '#/definitions/objects/Z6'
 definitions:
   objects:
-    Z6:
-      anyOf:
-      - $ref: '#/definitions/objects/Z6_literal'
-      - $ref: Z9#/definitions/objects/Z9
-    Z6_literal:
-      additionalProperties: false
-      properties:
-        Z1K1:
-          enum:
-          - Z6
-          type: string
-        Z6K1:
-          type: string
-      required:
-      - Z1K1
-      - Z6K1
-      type: object
-    Z6_ZnKn:
-      allOf:
-      - $ref: '#/definitions/objects/Z6'
-      - properties:
-          Z6K1:
-            pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
-            type: string
-        type: object
     Z10_of_Z6:
       allOf:
       - $ref: Z10#/definitions/objects/Z10
@@ -42,3 +17,29 @@ definitions:
           - Z10K1
           - Z10K2
           type: object
+    Z6:
+      anyOf:
+      - $ref: '#/definitions/objects/Z6_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z6_ZnKn:
+      allOf:
+      - $ref: '#/definitions/objects/Z6'
+      - properties:
+          Z6K1:
+            pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
+            type: string
+        type: object
+    Z6_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          enum:
+          - Z6
+          type: string
+        Z6K1:
+          type: string
+      required:
+      - Z1K1
+      - Z6K1
+      type: object

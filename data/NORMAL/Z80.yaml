@@ -3,10 +3,21 @@ $id: Z80
 $ref: '#/definitions/objects/Z80'
 definitions:
   objects:
+    Z6_byte:
+      allOf:
+      - $ref: Z6#/definitions/objects/Z6
+      - properties:
+          Z6K1:
+            pattern: ^[0-9a-fA-F]{2}$
+            type: string
+        required:
+        - Z6K1
+        type: object
     Z80:
       anyOf:
       - $ref: '#/definitions/objects/Z80_literal'
       - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
     Z80_literal:
       additionalProperties: false
       properties:
@@ -33,13 +44,3 @@ definitions:
       - Z1K1
       - Z80K1
       type: object
-    Z6_byte:
-      allOf:
-      - $ref: Z6#/definitions/objects/Z6
-      - properties:
-          Z6K1:
-            pattern: ^[0-9a-fA-F]{2}$
-            type: string
-        required:
-        - Z6K1
-        type: object
