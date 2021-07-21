@@ -13,7 +13,9 @@ definitions:
         Z14K1:
           $ref: Z8#/definitions/objects/Z8
         Z14K2:
-          $ref: Z7#/definitions/objects/Z7
+          oneOf:
+          - $ref: Z7#/definitions/objects/Z7
+          - $ref: Z18#/definitions/objects/Z18
         Z14K3:
           $ref: Z16#/definitions/objects/Z16
         Z14K4:
