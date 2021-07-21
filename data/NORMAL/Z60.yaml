@@ -29,6 +29,8 @@ definitions:
             type: object
         Z60K1:
           $ref: Z6#/definitions/objects/Z6
+        Z60K2:
+          $ref: Z6#/definitions/objects/Z10_of_Z6
       required:
       - Z1K1
       - Z60K1
