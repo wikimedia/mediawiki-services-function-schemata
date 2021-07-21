@@ -35,7 +35,7 @@ definitions:
         - $ref: Z10#/definitions/objects/Z10_empty
         - properties:
             Z10K1:
-              $ref: Z3#/definitions/objects/Z6
+              $ref: '#/definitions/objects/Z6'
             Z10K2:
               $ref: '#/definitions/objects/Z10_of_Z6'
           required:

@@ -42,6 +42,8 @@ definitions:
               - $ref: Z39#/definitions/objects/Z39
         Z2K3:
           $ref: Z12#/definitions/objects/Z12
+        Z2K4:
+          $ref: Z32#/definitions/objects/Z32
       required:
       - Z1K1
       - Z2K1

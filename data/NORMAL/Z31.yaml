@@ -43,7 +43,7 @@ definitions:
         - $ref: Z10#/definitions/objects/Z10_empty
         - properties:
             Z10K1:
-              $ref: Z3#/definitions/objects/Z31
+              $ref: Z31#/definitions/objects/Z31
             Z10K2:
               $ref: '#/definitions/objects/Z10_of_Z31'
           required:
