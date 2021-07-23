@@ -11,11 +11,11 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "Belarusian (Taraškievica orthography)"
+				"Z11K2": "Belarusian (Taraškievica orthography) (clash)"
 			},
 			{
 				"Z1K1": "Z11",
-				"Z11K1": "be-tarask",
+				"Z11K1": "Z1742",
 				"Z11K2": "беларуская (тарашкевіца)‎"
 			}
 		]
