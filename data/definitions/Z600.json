@@ -1,9 +1,9 @@
 {
 	"Z1K1": "Z2",
-	"Z2K1": "Z9002",
+	"Z2K1": "Z600",
 	"Z2K2": {
 		"Z1K1": "Z61",
-		"Z61K1": "javascript-node-es2016"
+		"Z61K1": "javascript"
 	},
 	"Z2K3": {
 		"Z1K1": "Z12",
@@ -11,7 +11,7 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "JavaScript (ES2016)"
+				"Z11K2": "JavaScript"
 			}
 		]
 	},
@@ -22,7 +22,8 @@
 				"Z1K1": "Z31",
 				"Z31K1": "Z1002",
 				"Z31K2": [
-					"ECMAScript 2016"
+					"JS",
+					"ECMAScript"
 				]
 			}
 		]

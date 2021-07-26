@@ -3,7 +3,7 @@
 	"Z2K1": "Z601",
 	"Z2K2": {
 		"Z1K1": "Z61",
-		"Z61K1": "javascript"
+		"Z61K1": "javascript-es5"
 	},
 	"Z2K3": {
 		"Z1K1": "Z12",
@@ -11,7 +11,20 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "JavaScript"
+				"Z11K2": "JavaScript ES5"
+			}
+		]
+	},
+	"Z2K4": {
+		"Z1K1": "Z32",
+		"Z32K1": [
+			{
+				"Z1K1": "Z31",
+				"Z31K1": "Z1002",
+				"Z31K2": [
+					"ECMAScript 5",
+					"JavaScript (ES5)"
+				]
 			}
 		]
 	}
