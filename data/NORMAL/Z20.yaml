@@ -29,16 +29,18 @@ definitions:
             - Z9K1
             type: object
         Z20K1:
-          $ref: Z7#/definitions/objects/Z7
-        Z20K2:
           allOf:
           - $ref: Z8#/definitions/objects/Z8
-          - properties:
-              Z8K2:
-                $ref: Z40#/definitions/objects/Z40
-            type: object
+          - not:
+              anyOf:
+              - $ref: Z8#/definitions/objects/Z8_literal
+        Z20K2:
+          $ref: Z7#/definitions/objects/Z7
+        Z20K3:
+          $ref: Z7#/definitions/objects/Z7
       required:
       - Z1K1
       - Z20K1
       - Z20K2
+      - Z20K3
       type: object
