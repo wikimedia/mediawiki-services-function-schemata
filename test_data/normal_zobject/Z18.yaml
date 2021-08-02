@@ -10,6 +10,10 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z18
+  - name: Z18 cannot be a Z9
+    object:
+      Z1K1: Z9
+      Z9K1: Z1000
   success:
   - name: good argument reference
     object:
@@ -19,10 +23,6 @@ test_objects:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z18
-  - name: can be a Z9
-    object:
-      Z1K1: Z9
-      Z9K1: Z1000
   - name: can be a Z18
     object:
       Z18K1:
