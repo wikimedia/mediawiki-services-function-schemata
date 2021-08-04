@@ -7,6 +7,7 @@ definitions:
       oneOf:
       - $ref: '#/definitions/objects/Z99_literal'
       - $ref: 'Z18#/definitions/objects/Z18'
+      - $ref: 'Z9#/definitions/objects/Z9'
     Z99_literal:
       additionalProperties: false
       properties:
