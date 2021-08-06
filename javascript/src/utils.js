@@ -2,6 +2,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const yaml = require('yaml');
 
 function is_string(s) {
@@ -153,6 +154,12 @@ function readYaml(fileName) {
 	return yaml.parse(text);
 }
 
+function dataDir(...pathComponents) {
+	return path.join(
+			path.dirname(path.dirname(path.dirname(__filename))),
+			'data', ...pathComponents);
+}
+
 const builtInTypes = new Set([
 	'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
 	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
@@ -172,17 +179,18 @@ module.exports = {
 	is_zid,
 	is_reference,
 	is_global_key,
+	dataDir,
 	deep_equal,
 	deep_copy,
 	isEmpty,
 	isUserDefined,
 	kid_from_global_key,
-    makeFalse,
-    makeResultEnvelope,
-    // Deprecated alias
-    makePair,
-    makeTrue,
-    makeUnit,
+	makeFalse,
+	makeResultEnvelope,
+	// Deprecated alias
+	makePair,
+	makeTrue,
+	makeUnit,
 	readYaml,
 	Z10ToArray,
 };

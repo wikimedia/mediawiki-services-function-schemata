@@ -44,7 +44,7 @@ QUnit.test('validation matches ajv\'s decision', (assert) => {
 	assert.false(schema.validate_(errayObject));
 });
 
-QUnit.test('errors is populated', (assert) => {
+QUnit.test('ValidationStatus.parserErrors is populated', (assert) => {
 	const schema = factory.parse({
 		type: 'object',
 		required: ['prop1'],
@@ -55,27 +55,35 @@ QUnit.test('errors is populated', (assert) => {
 		}
 	});
 
-	// No errors so far.
-	assert.deepEqual([], schema.errors);
-
 	// Unsuccessful validation populates errors.
-	assert.false(schema.validate({ prop1: ['erray'] }));
+	const statusInvalid = schema.validateStatus({ prop1: ['erray'] })
+
+	assert.false(statusInvalid.isValid());
 	assert.deepEqual(
+		statusInvalid.getParserErrors(),
 		[
 			{
-				keyword: 'type',
-				dataPath: '/prop1',
-				schemaPath: '#/properties/prop1/type',
-				params: {
-					type: 'string'
+				"instancePath": "/prop1",
+				"schemaPath": "#/properties/prop1/type",
+				"keyword": "type",
+				"params": {
+					"type": "string"
 				},
-				message: 'should be string'
+				"message": "must be string",
+				"schema": "string",
+				"parentSchema": {
+					"type": "string"
+				},
+				"data": [
+					"erray"
+				]
 			}
 		],
-		schema.errors
 	);
 
 	// Unsuccessful validation populates errors.
-	assert.true(schema.validate({ prop1: 'string' }));
-	assert.deepEqual([], schema.errors);
+	const statusValid = schema.validateStatus({ prop1: 'string' });
+
+	assert.true(statusValid.isValid());
+	assert.deepEqual([], statusValid.getParserErrors());
 });

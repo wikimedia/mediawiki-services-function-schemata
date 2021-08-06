@@ -4,6 +4,7 @@ const Ajv = require('ajv').default;
 const fs = require('fs');
 const path = require('path');
 const { readYaml, Z10ToArray } = require('./utils.js');
+const { ValidationStatus } = require('./validationStatus.js');
 
 class Schema {
 	constructor(validate) {
@@ -21,12 +22,22 @@ class Schema {
 	 */
 	validate(maybeValid) {
 		const result = this.validate_(maybeValid);
-		if (result) {
-			this.errors = [];
-			return true;
-		}
-		this.errors = this.validate_.errors;
-		return false;
+		return Boolean(result);
+	}
+
+	/**
+	 * Try to validate a JSON object against the internal JSON schema validator.
+	 * The results are used to instantiate a ValidationStatus object that is
+	 * returned.
+	 * Using this method over ''validate'' is preferred.
+	 * TODO (T282820): Replace validate with validateStatus and change all related code.
+	 *
+	 * @param {Object} maybeValid a JSON object
+	 * @return {ValidationStatus} a validation status instance
+	 */
+	validateStatus(maybeValid) {
+		const result = this.validate_(maybeValid);
+		return new ValidationStatus(this.validate_, result);
 	}
 }
 
@@ -58,7 +69,7 @@ class SchemaFactory {
 
 	constructor(ajv = null) {
 		if (ajv === null) {
-			ajv = new Ajv({ allowMatchingProperties: true });
+			ajv = new Ajv({ allowMatchingProperties: true, verbose: true });
 		}
 		this.ajv_ = ajv;
 	}
@@ -70,7 +81,7 @@ class SchemaFactory {
 	 */
 	static CANONICAL() {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
-		const ajv = new Ajv({ allowMatchingProperties: true });
+		const ajv = new Ajv({ allowMatchingProperties: true, verbose: true });
 		const fileName = dataDir('CANONICAL', 'canonical_zobject.yaml');
 		ajv.addSchema(readYaml(fileName), 'Z1');
 		return new SchemaFactory(ajv);
@@ -85,7 +96,7 @@ class SchemaFactory {
 	 */
 	static FUNCTION_CALL() {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
-		const ajv = new Ajv({ allowMatchingProperties: true });
+		const ajv = new Ajv({ allowMatchingProperties: true, verbose: true });
 		const fileName = dataDir('function_call', 'Z7.yaml');
 		ajv.addSchema(readYaml(fileName), 'Z7');
 		return new SchemaFactory(ajv);
@@ -98,7 +109,7 @@ class SchemaFactory {
 	 */
 	static NORMAL() {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
-		const ajv = new Ajv({ allowMatchingProperties: true });
+		const ajv = new Ajv({ allowMatchingProperties: true, verbose: true });
 		const directory = dataDir('NORMAL');
 		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?(_backend)?)|(GENERIC))\.yaml/;
 

@@ -1,5 +1,21 @@
 'use strict';
 
+/**
+ * Traverses a ZObject calling the provided callback function for every
+ * <key, value> pair. This a depth-first procedure.
+ *
+ * @param {Object} zobject
+ * @param {Function} callback
+ */
+function traverse(zobject, callback) {
+	if (zobject !== null && typeof zobject === 'object') {
+		Object.entries(zobject).forEach(([key, value]) => {
+			callback(key, value);
+			traverse(value, callback);
+		})
+	}
+}
+
 function testValidation(baseName, validator, testObjects) {
 	// Serialized function calls subsumed in the "success" block should validate
 	// successfully.
@@ -8,7 +24,9 @@ function testValidation(baseName, validator, testObjects) {
 		const testObject = successes[i];
 		const name = baseName + ': ' + testObject.name;
 		QUnit.test(name, (assert) => {
-			assert.true(validator.validate(testObject.object));
+			const status = validator.validateStatus(testObject.object);
+
+			assert.true(status.isValid());
 		});
 	}
 
@@ -18,9 +36,47 @@ function testValidation(baseName, validator, testObjects) {
 		const testObject = failures[i];
 		const name = baseName + ': ' + testObject.name;
 		QUnit.test(name, (assert) => {
-			assert.false(validator.validate(testObject.object));
+			const status = validator.validateStatus(testObject.object);
+
+			assert.false(status.isValid());
 		});
 	}
+}
+
+/**
+ * Runs a set of tests on the validation Z5s of a ZObject.
+ *
+ * @param {string} baseName the test set name as defined in the .yaml
+ * @param {Ajv} validator the validator to be used for the ZObjects
+ * @param {Object} testObjects the .yaml object containing test definitions
+ */
+function testZ5(baseName, validator, testObjects) {
+	const failures = testObjects.failure || [];
+
+	// failures.slice(13, 14).forEach((testObject) => {
+	failures.forEach((testObject) => {
+		const name = baseName + ': ' + testObject.name;
+		const status = validator.validateStatus(testObject.object);
+
+		QUnit.test(name, (assert) => {
+			assert.false(status.isValid());
+			assert.ok(status.getZ5());
+
+			const errorCodes = new Set(testObject.errors);
+			// specific errors expected in JavaScript
+			if (testObject.js_errors) {
+				errorCodes.add(...testObject.js_errors)
+			}
+
+			traverse(status.getZ5(), (key, value) => {
+				if (key === "Z5K1" && errorCodes.has(value)) {
+					errorCodes.delete(value);
+				}
+			});
+
+			assert.equal(errorCodes.size, 0);
+		});
+	});
 }
 
 /**
@@ -47,4 +103,4 @@ function test(baseName, fn, testObjects) {
 	});
 }
 
-module.exports = { test, testValidation };
+module.exports = { test, testValidation, testZ5 };
