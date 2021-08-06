@@ -48,7 +48,7 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "Equals"
+				"Z11K2": "String equality"
 			}
 		]
 	},
@@ -59,7 +59,7 @@
 				"Z1K1": "Z31",
 				"Z31K1": "Z1002",
 				"Z31K2": [
-					"String equality"
+					"Equals"
 				]
 			}
 		]
