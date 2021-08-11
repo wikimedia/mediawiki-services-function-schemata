@@ -29,6 +29,8 @@ definitions:
       patternProperties:
         ^Z[1-9]\d*(K[1-9]\d*)?$:
           $ref: '#/definitions/objects/Z1_literal'
+        ^K[1-9]\d*$:
+          $ref: '#/definitions/objects/Z1_literal'
       required:
       - Z1K1
       type: object
