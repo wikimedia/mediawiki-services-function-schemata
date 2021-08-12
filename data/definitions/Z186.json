@@ -14,7 +14,7 @@
 						{
 							"Z1K1": "Z11",
 							"Z11K1": "Z1002",
-							"Z11K2": "character"
+							"Z11K2": "code point"
 						}
 					]
 				}
@@ -33,7 +33,7 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "Validate character"
+				"Z11K2": "Validate code point"
 			}
 		]
 	}
