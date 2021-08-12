@@ -1,4 +1,4 @@
-# Z86/Character (Z4/Type)
+# Z86/Code point (Z4/Type)
 $id: Z86
 $ref: '#/definitions/objects/Z86'
 definitions:
