@@ -45,6 +45,40 @@ function deep_copy(o) {
 	return JSON.parse(JSON.stringify(o));
 }
 
+// TODO(T285433): Return Z21 instead of Z23.
+// TODO(T289301): This should read its outputs from a configuration file.
+function Unit(canonical = false) {
+    if (canonical) {
+        return 'Z23';
+    }
+	return { Z1K1: 'Z9', Z9K1: 'Z23' };
+}
+
+/**
+ * Creates a Z22 containing goodResult and BadResult.
+ *
+ * @param {Object} goodResult Z22K1 of resulting Z22
+ * @param {Object} badResult Z22K2 of resulting Z22
+ * @param {Boolean} canonical whether output should be in canonical form
+ * @return {Object} a Z22
+ */
+function makePair(goodResult = null, badResult = null, canonical = false) {
+    let Z1K1;
+    if (canonical) {
+        Z1K1 = 'Z22';
+    } else {
+        Z1K1 = {
+            Z1K1: 'Z9',
+            Z9K1: 'Z22'
+        };
+    }
+    return {
+        Z1K1: Z1K1,
+        Z22K1: goodResult === null ? Unit(canonical) : goodResult,
+        Z22K2: badResult === null ? Unit(canonical) : badResult
+    };
+}
+
 /**
  * Determines whether an already-validated Z10 is empty. Because the Z10 has
  * already been validated, it is sufficient to check for the presence of Z10K1.
@@ -96,6 +130,7 @@ function readYaml(fileName) {
 }
 
 module.exports = {
+	arrayToZ10,
 	is_string,
 	is_array,
 	is_object,
@@ -103,11 +138,12 @@ module.exports = {
 	is_zid,
 	is_reference,
 	is_global_key,
-	kid_from_global_key,
 	deep_equal,
 	deep_copy,
 	isEmpty,
-	Z10ToArray,
-	arrayToZ10,
+	kid_from_global_key,
+    makePair,
 	readYaml,
+    Unit,
+	Z10ToArray,
 };
