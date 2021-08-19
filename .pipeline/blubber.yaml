@@ -1,5 +1,5 @@
 version: v4
-base: docker-registry.wikimedia.org/buster-nodejs10-slim
+base: docker-registry.wikimedia.org/nodejs12-slim
 lives:
   in: /srv/service
 
@@ -13,8 +13,8 @@ variants:
       destination: .
 
   build-js:
-    base: docker-registry.wikimedia.org/buster-nodejs10-devel
-    apt: { packages: [git, build-essential, python-pkgconfig] }
+    base: docker-registry.wikimedia.org/nodejs12-devel
+    apt: { packages: [git, build-essential, python, pkg-config] }
     node:
       requirements:
       - package.json
