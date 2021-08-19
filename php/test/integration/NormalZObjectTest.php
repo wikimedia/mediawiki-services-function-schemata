@@ -21,7 +21,7 @@ final class NormalZObjectTest extends ValidationTest {
 
 	public function provideZIDs() {
 		return [
-			[ "Z1" ], [ "Z2" ], [ "Z10" ], [ "Z22" ], [ "Z39" ], [ "Z40" ], [ "Z86" ]
+			[ "Z1" ], [ "Z2" ], [ "Z7_backend" ], [ "Z10" ], [ "Z22" ], [ "Z39" ], [ "Z40" ], [ "Z86" ]
 		];
 	}
 }

@@ -2,7 +2,6 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { error } = require('./error.js');
 const { is_string, is_array, is_reference, Z10ToArray } = require('./utils.js'); // eslint-disable-line camelcase
 const { SchemaFactory } = require('./schema');
 const normalize = require('./normalize.js');
