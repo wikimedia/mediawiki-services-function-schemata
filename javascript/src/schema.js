@@ -3,7 +3,7 @@
 const Ajv = require('ajv').default;
 const fs = require('fs');
 const path = require('path');
-const { readYaml } = require('./utils.js');
+const { readYaml, Z10ToArray } = require('./utils.js');
 
 class Schema {
 	constructor(validate) {
@@ -34,6 +34,24 @@ function dataDir(...pathComponents) {
 	return path.join(
 			path.dirname(path.dirname(path.dirname(__filename))),
 			'data', ...pathComponents);
+}
+
+// TODO(T290695): Support canonical version of this, too.
+function defaultZ1K1For( type ) {
+    return {
+        'allOf': [
+            { '$ref': 'Z9#/definitions/objects/Z9' },
+            {
+                'type': 'object',
+                'additionalProperties': false,
+                'properties': {
+                    'Z1K1': { 'enum': [ 'Z9' ], 'type': 'string' },
+                    'Z9K1': { 'enum': [ type ], 'type': 'string' },
+                },
+                'required': [ 'Z1K1', 'Z9K1' ]
+            }
+        ]
+    };
 }
 
 class SchemaFactory {
@@ -114,15 +132,11 @@ class SchemaFactory {
 	}
 
 	/**
-	 * Create a schema for the desired type by consulting supportedSchemata.
-	 * supportedSchemata maps readable, conventional names to objects containing
-	 * the relevant OpenAPI specs. A schema for normalized Z10s, for example,
-	 * can be created as easily as
+	 * Create a schema for the desired native type. A schema for normalized
+     * Z10s, for example, can be created as easily as
 	 *
 	 *  const factory = SchemaFactory.NORMAL();
 	 *  const Z10Schema = factory.create("Z10");
-	 *
-	 * TODO: Update the above as this API metamorphoses.
 	 *
 	 * @param {string} schemaName the name of a supported schema
 	 * @return {Schema} a fully-initialized Schema or null if unsupported
@@ -142,6 +156,66 @@ class SchemaFactory {
 		}
 		return new Schema(validate);
 	}
+
+
+	/**
+	 * Create a schema for a user-defined type. The Z4 corresponding to the
+     * type must be provided.
+     *
+     * Currently only works for normal form.
+     *
+     * TODO: Make it work for canonical forms, too.
+     *
+     * Usage:
+	 *
+     *  // Z4 is a Z4 corresponding to a user-defined type
+	 *  const factory = SchemaFactory.NORMAL();
+	 *  const Z10001Schema = factory.createUserDefined(Z4);
+	 *
+	 * @param {Object} Z4 the descriptor for a user-defined type
+	 * @return {Schema} a fully-initialized Schema
+	 */
+    createUserDefined(Z4) {
+        const normalize = require('./normalize.js');
+        // Generate a JSON Schema spec for the type.
+        Z4 = normalize( Z4 );
+        const userDefinedSchema = {};
+        const type = Z4.Z4K1.Z9K1;
+        userDefinedSchema[ '$id' ] = type;
+        userDefinedSchema[ '$ref' ] = '#/definitions/objects/' + type;
+        const objects = {};
+        userDefinedSchema[ 'definitions' ] = {
+            'objects': objects
+        };
+        const literalType = type + '_literal';
+        objects[ type ] = {
+            'anyOf': [
+                { '$ref': '#/definitions/objects/' + literalType },
+                { '$ref': 'Z9#/definitions/objects/Z9' },
+                { '$ref': 'Z18#/definitions/objects/Z18' },
+            ]
+        };
+        const literal = {
+            'type': 'object',
+            'additionalProperties': false,
+        };
+        objects[ literalType ] = literal;
+        const properties = { 'Z1K1': defaultZ1K1For( type ) };
+        literal[ 'properties' ] = properties;
+        const required = [];
+        literal[ 'required' ] = required;
+        const Z3s = Z10ToArray( Z4.Z4K2 );
+        for ( const Z3 of Z3s ) {
+            const propertyName = Z3.Z3K2.Z6K1;
+            const propertyType = Z3.Z3K1.Z9K1;
+            properties[ propertyName ] = {
+                '$ref': propertyType + '#/definitions/objects/' + propertyType
+            };
+            required.push( propertyName );
+        }
+        this.ajv_.addSchema( userDefinedSchema );
+        return this.create( type );
+    };
 
 }
 

@@ -1,0 +1,100 @@
+test_information:
+  name: normal Z14
+test_Z4:
+  Z1K1: Z4
+  Z4K1: Z10001
+  Z4K2:
+  - Z1K1: Z3
+    Z3K1: Z6
+    Z3K2: Z10001K1
+  - Z1K1: Z3
+    Z3K1: Z10001
+    Z3K2: Z10001K2
+test_objects:
+  failure:
+  - name: no Z10001K1
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10001
+      Z10001K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10001
+        Z10001K1:
+          Z1K1: Z6
+          Z6K1: 'not Z10001'
+        Z10001K2:
+          Z1K1: Z9
+          Z9K1: Z10002
+  - name: Z10001K2.Z10001K1 of wrong type
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10001
+      Z10001K1:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10
+      Z10001K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10001
+        Z10001K1:
+          Z1K1: Z6
+          Z6K1: 'not Z10001'
+        Z10001K2:
+          Z1K1: Z9
+          Z9K1: Z10002
+  - name: extra Z10001K3
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10001
+      Z10001K1:
+        Z1K1: Z6
+        Z6K1: 'nyat Z10001'
+      Z10001K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10001
+        Z10001K1:
+          Z1K1: Z6
+          Z6K1: 'not Z10001'
+        Z10001K2:
+          Z1K1: Z9
+          Z9K1: Z10002
+      Z10001K3:
+        Z1K1: Z6
+        Z6K1: 'I matter; I am here, too.'
+  success:
+  - name: good Z10001
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z10001
+      Z10001K1:
+        Z1K1: Z6
+        Z6K1: 'nyat Z10001'
+      Z10001K2:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10001
+        Z10001K1:
+          Z1K1: Z6
+          Z6K1: 'not Z10001'
+        Z10001K2:
+          Z1K1: Z9
+          Z9K1: Z10002
+  - name: can be a Z9
+    object:
+      Z1K1: Z9
+      Z9K1: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18

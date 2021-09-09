@@ -149,6 +149,16 @@ function readYaml(fileName) {
 	return yaml.parse(text);
 }
 
+const builtInTypes = new Set([
+    'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
+    'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
+    'Z60', 'Z61', 'Z7', 'Z7_backend', 'Z8', 'Z80', 'Z86', 'Z9', 'Z99'
+]);
+
+function isUserDefined( ZID ) {
+    return !builtInTypes.has( ZID );
+}
+
 module.exports = {
 	arrayToZ10,
 	is_string,
@@ -161,6 +171,7 @@ module.exports = {
 	deep_equal,
 	deep_copy,
 	isEmpty,
+  isUserDefined,
 	kid_from_global_key,
     makeFalse,
     makePair,
