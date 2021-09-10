@@ -1,0 +1,13 @@
+test_information:
+  name: canonical Z6
+test_objects:
+  failure:
+  - name: looks like a reference
+    object: Z13
+  success:
+  - name: good string
+    object: real good, just very good
+  - name: ZnKn
+    object:
+      Z1K1: Z6
+      Z6K1: Z10K10

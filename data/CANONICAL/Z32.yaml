@@ -1,0 +1,25 @@
+# Z32/MultiLingualStringSet (Z4/Type)
+$id: Z32
+$ref: '#/definitions/objects/Z32'
+definitions:
+  objects:
+    Z32:
+      anyOf:
+      - $ref: '#/definitions/objects/Z32_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z32_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z32
+            type: string
+        Z32K1:
+          $ref: Z31#/definitions/objects/Z10_of_Z31
+      required:
+      - Z1K1
+      - Z32K1
+      type: object

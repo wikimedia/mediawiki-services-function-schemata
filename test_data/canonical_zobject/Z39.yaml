@@ -1,0 +1,24 @@
+test_information:
+  name: normalized Z39
+test_objects:
+  failure:
+  - name: bad Z39 with incorrect Z1K1
+    object:
+      Z1K1: Z3
+      Z39K1: absolutely anything
+  - name: bad, deficient reference missing Z39K1
+    object:
+      Z1K1: Z39
+  success:
+  - name: good reference
+    object:
+      Z1K1: Z39
+      Z39K1: any string?
+  - name: can be a Z9
+    object: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1: Z18

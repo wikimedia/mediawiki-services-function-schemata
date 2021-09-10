@@ -1,0 +1,30 @@
+# Z80/Byte (Z4/Type)
+$id: Z80
+$ref: '#/definitions/objects/Z80'
+definitions:
+  objects:
+    Z6_byte:
+      allOf:
+      - $ref: Z6#/definitions/objects/Z6
+      - pattern: ^[0-9a-fA-F]{2}$
+        type: string
+    Z80:
+      anyOf:
+      - $ref: '#/definitions/objects/Z80_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z80_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z80
+            type: string
+        Z80K1:
+          $ref: '#/definitions/objects/Z6_byte'
+      required:
+      - Z1K1
+      - Z80K1
+      type: object

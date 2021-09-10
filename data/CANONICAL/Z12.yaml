@@ -1,0 +1,31 @@
+# Z12/Multilingual text (Z4/Type)
+$id: Z12
+$ref: '#/definitions/objects/Z12'
+definitions:
+  objects:
+    Z10_of_Z11:
+      allOf:
+      - $ref: Z10#/definitions/objects/Z10
+      - items:
+          $ref: Z11#/definitions/objects/Z11
+        type: array
+    Z12:
+      anyOf:
+      - $ref: '#/definitions/objects/Z12_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z12_literal:
+      additionalProperties: false
+      properties:
+        Z12K1:
+          $ref: '#/definitions/objects/Z10_of_Z11'
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z12
+            type: string
+      required:
+      - Z12K1
+      - Z1K1
+      type: object

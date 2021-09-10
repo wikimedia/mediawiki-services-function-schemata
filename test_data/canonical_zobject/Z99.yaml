@@ -1,0 +1,24 @@
+test_information:
+  name: normalized Z99
+test_objects:
+  success:
+  - name: Z99 of a Z1
+    object:
+      Z1K1: Z99
+      Z99K1: y
+  - name: Z99 of non Z1 object
+    object:
+      Z1K1: Z99
+      Z99K1:
+        a: Z1
+        is: not
+        object: that
+        some: random
+  - name: can be a Z9
+    object: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1: Z18

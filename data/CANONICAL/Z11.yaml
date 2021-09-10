@@ -1,0 +1,28 @@
+# Z11/Monolingual text (Z4/Type)
+$id: Z11
+$ref: '#/definitions/objects/Z11'
+definitions:
+  objects:
+    Z11:
+      anyOf:
+      - $ref: '#/definitions/objects/Z11_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z11_literal:
+      additionalProperties: false
+      properties:
+        Z11K1:
+          $ref: Z60#/definitions/objects/Z60
+        Z11K2:
+          $ref: Z6#/definitions/objects/Z6
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z11
+            type: string
+      required:
+      - Z11K1
+      - Z11K2
+      - Z1K1
+      type: object

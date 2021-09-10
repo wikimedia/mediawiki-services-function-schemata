@@ -1,0 +1,17 @@
+# Z7/Function call (Z4/Type)
+$id: Z7
+$ref: '#/definitions/objects/Z7'
+definitions:
+  objects:
+    Z7:
+      anyOf:
+      - $ref: '#/definitions/objects/Z7_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z7_literal:
+      allOf:
+      - $ref: 'Z7_backend#/definitions/objects/Z7_backend'
+      - type: object
+        properties:
+          Z7K2:
+            not: {}
