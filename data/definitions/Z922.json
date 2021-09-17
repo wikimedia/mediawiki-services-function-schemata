@@ -18,7 +18,7 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "Built-in implementation of Second element of pair"
+				"Z11K2": "Built-in implementation of Get second element of a Typed pair"
 			}
 		]
 	}
