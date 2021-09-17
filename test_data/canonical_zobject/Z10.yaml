@@ -1,0 +1,28 @@
+test_information:
+  name: normal Z10
+test_objects:
+  failure:
+  - name: not an array
+    object:
+      Z1K1: Z10
+      Z10K1: hello
+      Z10K2:
+        Z1K1: Z10
+  success:
+  - name: good, empty Z10
+    object: []
+  - name: good, full Z10
+    object:
+    - air on the z string
+  - name: good, fuller Z10
+    object:
+    - air on the z string
+    - symphony in z
+  - name: can be a Z9
+    object: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1: Z18

@@ -1,0 +1,51 @@
+# Z6/String (Z4/Type)
+$id: Z6
+$ref: '#/definitions/objects/Z6'
+definitions:
+  objects:
+    Z10_of_Z6:
+      allOf:
+      - $ref: Z10#/definitions/objects/Z10
+      - type: array
+        items:
+          $ref: Z6#/definitions/objects/Z6
+    Z6:
+      anyOf:
+      - $ref: '#/definitions/objects/Z6_literal'
+      - $ref: Z18#/definitions/objects/Z18
+    Z6_ZnKn:
+      allOf:
+      - $ref: '#/definitions/objects/Z6_explicit'
+      - type: object
+        Z6K1:
+          oneOf:
+          - pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
+            type: string
+          - pattern: ^K[1-9]\d*$
+            type: string
+    Z6_literal:
+      anyOf:
+      - $ref: '#/definitions/objects/Z6_string'
+      - $ref: '#/definitions/objects/Z6_explicit'
+    Z6_string:
+      allOf:
+      - type: string
+      - not:
+          anyOf:
+          - pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
+          - pattern: ^K[1-9]\d*$
+    Z6_explicit:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z6
+            type: string
+        Z6K1:
+          type: string
+      required:
+      - Z1K1
+      - Z6K1
+      type: object

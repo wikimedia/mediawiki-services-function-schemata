@@ -1,0 +1,34 @@
+# Z31/MonoLingualStringSet (Z4/Type)
+$id: Z31
+$ref: '#/definitions/objects/Z31'
+definitions:
+  objects:
+    Z10_of_Z31:
+      allOf:
+      - $ref: Z10#/definitions/objects/Z10
+      - items:
+          $ref: Z31#/definitions/objects/Z31
+        type: array
+    Z31:
+      anyOf:
+      - $ref: '#/definitions/objects/Z31_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z31_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z31
+            type: string
+        Z31K1:
+          $ref: Z60#/definitions/objects/Z60
+        Z31K2:
+          $ref: Z6#/definitions/objects/Z10_of_Z6
+      required:
+      - Z1K1
+      - Z31K1
+      - Z31K2
+      type: object

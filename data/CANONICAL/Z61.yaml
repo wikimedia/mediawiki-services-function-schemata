@@ -1,0 +1,30 @@
+# Z61/Programming language (Z4/Type)
+$id: Z61
+$ref: '#/definitions/objects/Z61'
+definitions:
+  objects:
+    Z61:
+      anyOf:
+      - $ref: '#/definitions/objects/Z61_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z61_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          allOf:
+          - $ref: Z9#/definitions/objects/Z9
+          - enum:
+            - Z61
+            type: string
+        Z61K1:
+          $ref: '#/definitions/objects/Z6_prog_lang'
+      required:
+      - Z1K1
+      - Z61K1
+      type: object
+    Z6_prog_lang:
+      allOf:
+      - $ref: Z6#/definitions/objects/Z6
+      - pattern: ^[a-zA-Z\d][a-zA-Z\d-]+[a-zA-Z\d]$
+        type: string

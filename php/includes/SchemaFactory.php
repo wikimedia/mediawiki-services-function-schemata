@@ -40,6 +40,21 @@ class SchemaFactory {
 	}
 
 	/**
+	 * Creates a SchemaFactory for canonical-form ZObjects.
+	 *
+	 * @param string|null $loader Which loader to use
+	 * @return SchemaFactory
+	 */
+	public static function getCanonicalFormFactory( $loader = null ): SchemaFactory {
+		if ( $loader == null ) {
+			$loader = new YumYumYamlLoader();
+		}
+		$canonicalDirectory = SchemataUtils::joinPath( SchemataUtils::dataDirectory(), 'CANONICAL' );
+		$loader->registerPath( $canonicalDirectory, 'CANONICAL' );
+		return new SchemaFactory( $loader );
+	}
+
+	/**
 	 * Creates a SchemaFactory for parsing standalone schemata (no external refs).
 	 *
 	 * @return SchemaFactory

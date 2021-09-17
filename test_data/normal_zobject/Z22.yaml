@@ -13,7 +13,7 @@ test_objects:
       Z22K2:
         Z1K1: Z6
         Z6K1: left glove
-  - name: bad, deficient pair missing Z22K1
+  - name: bad, deficient evaluation result missing Z22K1
     object:
       Z1K1:
         Z1K1: Z9
@@ -21,7 +21,7 @@ test_objects:
       Z22K2:
         Z1K1: Z6
         Z6K1: left glove
-  - name: bad, deficient pair missing Z22K2
+  - name: bad, deficient evaluation result missing Z22K2
     object:
       Z1K1:
         Z1K1: Z9
@@ -30,7 +30,7 @@ test_objects:
         Z1K1: Z6
         Z6K1: left shoe
   success:
-  - name: good pair with object
+  - name: good evaluation result with object
     object:
       Z1K1:
         Z1K1: Z9

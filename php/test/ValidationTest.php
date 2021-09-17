@@ -21,7 +21,12 @@ abstract class ValidationTest extends TestCase {
 		}
 
 		foreach ( $successes as $testObject ) {
-			$this->assertTrue( $validator->validate( $testObject->object ) );
+			$result = $validator->validate( $testObject->object );
+			$message = $testObject->name;
+			if ( !$result ) {
+				$message .= var_export( $validator->errors, true );
+			}
+			$this->assertTrue( $result, $message );
 		}
 
 		$failures = [];
@@ -30,7 +35,9 @@ abstract class ValidationTest extends TestCase {
 		}
 
 		foreach ( $failures as $testObject ) {
-			$this->assertFalse( $validator->validate( $testObject->object ) );
+			$this->assertFalse(
+				$validator->validate( $testObject->object ),
+				$testObject->name );
 		}
 	}
 }

@@ -1,0 +1,33 @@
+test_information:
+  name: normalized Z86
+test_objects:
+  failure:
+  - name: bad code point, too long
+    object:
+      Z1K1: Z86
+      Z86K1: 'no'
+  - name: bad code point, much combined
+    object:
+      Z1K1: Z86
+      Z86K1: "u\u0300\u0334\u0316"
+  - name: metal band
+    object:
+      Z1K1: Z86
+      Z86K1: "y\u20DB"
+  success:
+  - name: good simple code point
+    object:
+      Z1K1: Z86
+      Z86K1: y
+  - name: good combined code point
+    object:
+      Z1K1: Z86
+      Z86K1: "\U0001F3FF"
+  - name: can be a Z9
+    object: Z1000
+  - name: can be a Z18
+    object:
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: Z1000K1
+      Z1K1: Z18
