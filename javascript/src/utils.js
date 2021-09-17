@@ -82,7 +82,7 @@ function makeFalse() {
  * @param {Boolean} canonical whether output should be in canonical form
  * @return {Object} a Z22
  */
-function makePair(goodResult = null, badResult = null, canonical = false) {
+function makeResultEnvelope(goodResult = null, badResult = null, canonical = false) {
     let Z1K1;
     if (canonical) {
         Z1K1 = 'Z22';
@@ -97,6 +97,10 @@ function makePair(goodResult = null, badResult = null, canonical = false) {
         Z22K1: goodResult === null ? makeUnit(canonical) : goodResult,
         Z22K2: badResult === null ? makeUnit(canonical) : badResult
     };
+}
+
+function makePair(goodResult = null, badResult = null, canonical = false) {
+	return makeResultEnvelope( goodResult, badResult, canonical );
 }
 
 /**
@@ -174,6 +178,8 @@ module.exports = {
   isUserDefined,
 	kid_from_global_key,
     makeFalse,
+    makeResultEnvelope,
+    // Deprecated alias
     makePair,
     makeTrue,
     makeUnit,
