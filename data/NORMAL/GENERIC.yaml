@@ -1,0 +1,30 @@
+# GENERIC Type
+$id: GENERIC
+$ref: '#/definitions/objects/GENERIC'
+definitions:
+  objects:
+    GENERIC:
+      anyOf:
+      - $ref: '#/definitions/objects/GENERIC_literal'
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    GENERIC_literal:
+      additionalProperties: false
+      properties:
+        Z1K1:
+          anyOf:
+          - $ref: Z7#/definitions/objects/Z7
+          - allOf:
+            - $ref: Z7#/definitions/objects/Z7_literal
+            - properties:
+                Z7K1:
+                  anyOf:
+                  - $ref: Z8#/definitions/objects/Z8
+                  - allOf:
+                    - $ref: Z8#/definitions/objects/Z8_literal
+                    - properties:
+                        Z8K2:
+                          $ref: 'Z4#/definitions/objects/Z1_to_Z4'
+      patternProperties:
+        K[1-9]\d*$:
+          $ref: 'Z1#/definitions/objects/Z1_literal'
