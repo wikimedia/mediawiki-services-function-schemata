@@ -104,7 +104,7 @@ class SchemaFactory {
 
 		for (const fileName of fs.readdirSync(directory)) {
 			if (fileName.match(fileRegex) === null) {
-				console.log('Who\'s that? ' + fileName);
+				console.error("Schema not found: '" + fileName + "'");
 				continue;
 			}
 			const fullFile = path.join(directory, fileName);
