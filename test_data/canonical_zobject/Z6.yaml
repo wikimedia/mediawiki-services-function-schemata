@@ -7,7 +7,9 @@ test_objects:
   success:
   - name: good string
     object: real good, just very good
-  - name: ZnKn
+  - name: explicit ZnKn
     object:
       Z1K1: Z6
       Z6K1: Z10K10
+  - name: lazyZnKn
+    object: Z10K10
