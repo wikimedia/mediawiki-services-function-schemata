@@ -3,26 +3,76 @@
 const Ajv = require('ajv').default;
 const fs = require('fs');
 const path = require('path');
-const { readYaml, Z10ToArray } = require('./utils.js');
+const { isUserDefined, readYaml, Z10ToArray } = require('./utils.js');
 const { ValidationStatus } = require('./validationStatus.js');
+    
+let Z6Validator, Z7Validator, Z9Validator, Z18Validator;
 
-class Schema {
-	constructor(validate) {
-		this.validate_ = validate;
-		this.errors = [];
-	}
+function initializeValidators() {
+    const defaultFactory = SchemaFactory.NORMAL();
+    Z6Validator = defaultFactory.create('Z6');
+    Z7Validator = defaultFactory.create('Z7');
+    Z9Validator = defaultFactory.create('Z9');
+    Z18Validator = defaultFactory.create('Z18');
+}
+
+// TODO: Migrate is(String|Reference|FunctionCall) to utils. Somehow avoid
+// incurring circular import problem in the process.
+
+/**
+ * Determines whether argument is a Z6 or Z9. These two types' Z1K1s are
+ * strings instead of Z9s, so some checks below need to special-case their
+ * logic.
+ *
+ * @param {Object} Z1 a ZObject
+ * @return {bool} true if Z1 validates as either Z6 or Z7
+ */
+function validatesAsString(Z1) {
+    // TODO: Prohibit Z18s.
+    return Z6Validator.validate(Z1);
+}
+
+/**
+ * Determines whether argument is a Z9.
+ *
+ * @param {Object} Z1 a ZObject
+ * @return {bool} true if Z1 validates as Z9
+ */
+function validatesAsReference(Z1) {
+    return Z9Validator.validate(Z1);
+}
+
+/**
+ * Validates a ZObject against the Function Call schema.
+ *
+  @param {Object} Z1 object to be validated
+ * @return {bool} whether Z1 can validated as a Function Call
+ */
+function validatesAsFunctionCall(Z1) {
+    return (Z7Validator.validate(Z1) &&
+        !(Z9Validator.validate(Z1)) &&
+        !(Z18Validator.validate(Z1)));
+}
+
+class BaseSchema {
 
 	/**
-	 * Try to validate a JSON object against the internal JSON schema validator.
-	 * Set internal errors array after each validation: if validation succeeds,
-	 * errors will be empty; if not, it will be populated.
+	 * Validate a JSON object using validateStatus method; return only whether
+     * the result was valid without surfacing errors.
 	 *
 	 * @param {Object} maybeValid a JSON object
 	 * @return {bool} whether the object is valid
 	 */
 	validate(maybeValid) {
-		const result = this.validate_(maybeValid);
-		return Boolean(result);
+        return this.validateStatus(maybeValid).isValid();
+	}
+}
+
+class Schema extends BaseSchema {
+	constructor(validate) {
+        super();
+		this.validate_ = validate;
+		this.errors = [];
 	}
 
 	/**
@@ -36,9 +86,52 @@ class Schema {
 	 * @return {ValidationStatus} a validation status instance
 	 */
 	validateStatus(maybeValid) {
+        // TODO: Ensure this is atomic--concurrent calls to validate could
+        // cause race conditions.
 		const result = this.validate_(maybeValid);
 		return new ValidationStatus(this.validate_, result);
 	}
+}
+
+class GenericSchema extends BaseSchema {
+    constructor(keyMap) {
+        super();
+        this.updateKeyMap(keyMap);
+    }
+
+    updateKeyMap(keyMap) {
+        this.keyMap_ = keyMap;
+    }
+
+
+	/**
+	 * Try to validate a JSON object against the internal validators. For each
+     * key in maybeValid, the corresponding value will be validated against the
+     * appropriate validator in this.keyMap_.
+	 * The results are used to instantiate a ValidationStatus object that is
+	 * returned.
+	 * Using this method over ''validate'' is preferred.
+	 * TODO (T282820): Replace validate with validateStatus and change all related code.
+	 *
+	 * @param {Object} maybeValid a JSON object
+	 * @return {ValidationStatus} a validation status instance
+	 */
+    validateStatus(maybeValid) {
+        // TODO: Check for stray keys; allow non-local keys for e.g. Z10?
+        for ( const key of this.keyMap_.keys() ) {
+            // TODO: How to signal optional keys?
+            if ( maybeValid[ key ] === undefined ) {
+                continue;
+            }
+            const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
+            if ( !howsIt.isValid() ) {
+                // TODO: Somehow include key.
+                // TODO: Consider conjunction of all errors?
+                return howsIt;
+            }
+        }
+        return new ValidationStatus(null, true);
+    }
 }
 
 function dataDir(...pathComponents) {
@@ -47,22 +140,49 @@ function dataDir(...pathComponents) {
 			'data', ...pathComponents);
 }
 
-// TODO(T290695): Support canonical version of this, too.
-function defaultZ1K1For( type ) {
-	return {
-		'allOf': [
-			{ '$ref': 'Z9#/definitions/objects/Z9' },
-			{
-				'type': 'object',
-				'additionalProperties': false,
-				'properties': {
-					'Z1K1': { 'enum': [ 'Z9' ], 'type': 'string' },
-					'Z9K1': { 'enum': [ type ], 'type': 'string' },
-				},
-				'required': [ 'Z1K1', 'Z9K1' ]
-			}
-		]
-	};
+function identityOfFunction( Z8 ) {
+    if ( validatesAsReference( Z8 ) ) {
+        return Z8.Z9K1;
+    } else {
+        // Presumably a full-on Z8.
+        return Z8.Z8K5.Z9K1;
+    }
+}
+
+function identityOfType( Z4 ) {
+    if ( validatesAsReference( Z4 ) ) {
+        return Z4.Z9K1;
+    } else {
+        // A regular, fleshed-out Z4, one hopes.
+        return Z4.Z4K1.Z9K1;
+    }
+}
+
+/**
+ * Generate a unique identifier for a Z7/Function Call that returns a Z4/Type.
+ *
+ * @param { Object } genericZ7 Z7 that produces a Z4
+ * @return { string } a unique key containing the identity of Z7K1 and the type arguments
+ */
+function keyForGeneric( genericZ7 ) {
+    const normalize = require('./normalize.js');
+    // TODO: Handle fully-dereferenced Z7K1 and fully-dereferenced Z4 arguments.
+    const Z7 = normalize( genericZ7 );
+    const result = [ identityOfFunction( Z7.Z7K1 ) ];
+    const argumentKeys = [];
+    for ( const key of Object.keys( Z7 ) ) {
+        if ( new Set([ 'Z1K1', 'Z7K1' ]).has( key ) ) {
+            continue;
+        }
+        argumentKeys.push( key );
+    }
+    argumentKeys.sort();
+    for ( const key of argumentKeys ) {
+        result.push( identityOfType( Z7[ key ] ) );
+    }
+    // TODO: This sucks; why doesn't JS have an immutable container type that
+    // can be used as a map key?????
+    return result.join(',');
 }
 
 class SchemaFactory {
@@ -162,12 +282,39 @@ class SchemaFactory {
 			type = 'Z40';
 		}
 		const validate = this.ajv_.getSchema(type);
-		if (validate === null) {
+        // console.log("creating schema; validate is", validate);
+		if (validate === null || validate === undefined) {
 			return null;
 		}
 		return new Schema(validate);
 	}
 
+    /**
+     * Create a Map[ key -> BaseSchema] for a given Z4. Resultant Map indicates
+     * against which validators to test the elements of a ZObject with the
+     * corresponding keys.
+     *
+     * @param { Object } Z4 a Z4/Type
+     * @param { Map } typeCache a mapping from type keys (see keyForGeneric) to BaseSchemata
+     * @return { Map } mapping from type keys to BaseSchemata
+     */
+    keyMapForUserDefined( Z4, typeCache ) {
+        const keyMap = new Map();
+        const Z3s = Z10ToArray( Z4.Z4K2 );
+        for ( const Z3 of Z3s ) {
+            const propertyName = Z3.Z3K2.Z6K1;
+            const propertyType = Z3.Z3K1;
+            let subValidator;
+            if ( validatesAsReference( propertyType ) ) {
+                subValidator = this.create( propertyType.Z9K1 );
+            } else {
+                const key = keyForGeneric( propertyType );
+                subValidator = typeCache.get( key );
+            }
+            keyMap.set( propertyName, subValidator );
+        }
+        return keyMap;
+    }
 
 	/**
 	 * Create a schema for a user-defined type. The Z4 corresponding to the
@@ -186,48 +333,29 @@ class SchemaFactory {
 	 * @param {Object} Z4 the descriptor for a user-defined type
 	 * @return {Schema} a fully-initialized Schema
 	 */
-	createUserDefined(Z4) {
+	createUserDefined(Z4s) {
+        const nUtil = require('util');
+        const typeCache = new Map();
 		const normalize = require('./normalize.js');
-		// Generate a JSON Schema spec for the type.
-		Z4 = normalize( Z4 );
-		const userDefinedSchema = {};
-		const type = Z4.Z4K1.Z9K1;
-		userDefinedSchema[ '$id' ] = type;
-		userDefinedSchema[ '$ref' ] = '#/definitions/objects/' + type;
-		const objects = {};
-		userDefinedSchema[ 'definitions' ] = {
-			'objects': objects
-		};
-		const literalType = type + '_literal';
-		objects[ type ] = {
-			'anyOf': [
-				{ '$ref': '#/definitions/objects/' + literalType },
-				{ '$ref': 'Z9#/definitions/objects/Z9' },
-				{ '$ref': 'Z18#/definitions/objects/Z18' },
-			]
-		};
-		const literal = {
-			'type': 'object',
-			'additionalProperties': false,
-		};
-		objects[ literalType ] = literal;
-		const properties = { 'Z1K1': defaultZ1K1For( type ) };
-		literal[ 'properties' ] = properties;
-		const required = [];
-		literal[ 'required' ] = required;
-		const Z3s = Z10ToArray( Z4.Z4K2 );
-		for ( const Z3 of Z3s ) {
-			const propertyName = Z3.Z3K2.Z6K1;
-			const propertyType = Z3.Z3K1.Z9K1;
-			properties[ propertyName ] = {
-				'$ref': propertyType + '#/definitions/objects/' + propertyType
-			};
-			required.push( propertyName );
-		}
-		this.ajv_.addSchema( userDefinedSchema );
-		return this.create( type );
-	};
+        const normalZ4s = Z4s.map( normalize );
+        for ( const Z4 of normalZ4s ) {
+            if ( validatesAsFunctionCall( Z4.Z4K1 ) ) {
+                const nUtil = require('util');
+                const key = keyForGeneric(Z4.Z4K1);
+                typeCache.set( key, new GenericSchema(new Map()) );
+            }
+        }
+        for ( const Z4 of normalZ4s ) {
+            if ( validatesAsFunctionCall( Z4.Z4K1 ) ) {
+                const key = keyForGeneric(Z4.Z4K1);
+                typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
+            }
+        }
+        return typeCache;
+	}
 
 }
 
-module.exports = { SchemaFactory };
+initializeValidators();
+
+module.exports = { keyForGeneric, SchemaFactory, validatesAsString, validatesAsReference, validatesAsFunctionCall };

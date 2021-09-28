@@ -20,6 +20,7 @@ definitions:
     Z4:
       anyOf:
       - $ref: '#/definitions/objects/Z4_literal'
+      - $ref: 'Z7#/definitions/objects/Z7'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
     Z1_to_Z4:

@@ -1,6 +1,6 @@
 'use strict';
 
-const { SchemaFactory } = require('../../../src/schema.js');
+const { keyForGeneric, SchemaFactory } = require('../../../src/schema.js');
 
 QUnit.module('schema.js');
 
@@ -86,4 +86,33 @@ QUnit.test('ValidationStatus.parserErrors is populated', (assert) => {
 
 	assert.true(statusValid.isValid());
 	assert.deepEqual([], statusValid.getParserErrors());
+});
+
+QUnit.test('keyForGeneric with Z7K1 & Z4s as references', (assert) => {
+    const Z7 = {
+        Z1K1: 'Z7',
+        Z7K1: 'Z4200',
+        Z4200K1: 'Z14',
+        Z4200K2: 'Z17'
+    };
+    assert.deepEqual( 'Z4200,Z14,Z17', keyForGeneric( Z7 ) );
+});
+
+QUnit.test('keyForGeneric with Z7K1 & Z4s as reified types', (assert) => {
+    const Z7 = {
+        Z1K1: 'Z7',
+        Z7K1: {
+            Z1K1: 'Z8',
+            Z8K5: 'Z4200'
+        },
+        Z4200K1: {
+            Z1K1: 'Z4',
+            Z4K1: 'Z14'
+        },
+        Z4200K2: {
+            Z1K1: 'Z4',
+            Z4K1: 'Z17'
+        }
+    };
+    assert.deepEqual( 'Z4200,Z14,Z17', keyForGeneric( Z7 ) );
 });

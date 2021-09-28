@@ -20,6 +20,7 @@ function test(ZID) {
 test('GENERIC');
 test('Z1');
 test('Z2');
+test('Z4');
 test('Z7');
 test('Z7_backend');
 test('Z10');
