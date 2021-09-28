@@ -13,16 +13,22 @@ definitions:
       anyOf:
       - $ref: '#/definitions/objects/Z6_literal'
       - $ref: Z18#/definitions/objects/Z18
+    Z6_Key_Pattern:
+      oneOf:
+      - pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
+        type: string
+      - pattern: ^K[1-9]\d*$
+        type: string
     Z6_ZnKn:
-      allOf:
-      - $ref: '#/definitions/objects/Z6_explicit'
-      - type: object
-        Z6K1:
-          oneOf:
-          - pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
-            type: string
-          - pattern: ^K[1-9]\d*$
-            type: string
+      oneOf:
+      - allOf:
+        - $ref: '#/definitions/objects/Z6_explicit'
+        - type: object
+          Z6K1:
+            $ref: '#/definitions/objects/Z6_Key_Pattern'
+      - allOf:
+        - $ref: '#/definitions/objects/Z6_string'
+        - $ref: '#/definitions/objects/Z6_Key_Pattern'
     Z6_literal:
       anyOf:
       - $ref: '#/definitions/objects/Z6_string'
@@ -31,9 +37,7 @@ definitions:
       allOf:
       - type: string
       - not:
-          anyOf:
-          - pattern: ^Z[1-9]\d*(K[1-9]\d*)?$
-          - pattern: ^K[1-9]\d*$
+          pattern: ^Z[1-9]\d*$
     Z6_explicit:
       additionalProperties: false
       properties:
