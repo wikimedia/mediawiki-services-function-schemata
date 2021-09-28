@@ -17,6 +17,7 @@ function test(ZID) {
 	testValidation(info.name, normalValidator, testDescriptor.test_objects);
 }
 
+test('GENERIC');
 test('Z1');
 test('Z2');
 test('Z7');

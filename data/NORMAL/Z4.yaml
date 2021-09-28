@@ -22,6 +22,39 @@ definitions:
       - $ref: '#/definitions/objects/Z4_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
+    Z1_to_Z4:
+      oneOf:
+      - allOf:
+        - $ref: Z9#/definitions/objects/Z9
+        - additionalProperties: false
+          properties:
+            Z1K1:
+              enum:
+              - Z9
+              type: string
+            Z9K1:
+              enum:
+              - Z4
+              type: string
+      - allOf:
+        - $ref: '#/definitions/objects/Z4_literal'
+        - properties:
+            Z4K1:
+              properties:
+                Z9K1:
+                  type: string
+                  enum:
+                  - 'Z4'
+      - allOf:
+        - $ref: 'Z7#/definitions/objects/Z7_literal'
+        - properties:
+            Z7K1:
+              properties:
+                Z8K2:
+                  type: string
+                  enum:
+                  - 'Z4'
+                  - 'Z1'
     Z4_literal:
       additionalProperties: false
       properties:

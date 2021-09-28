@@ -48,7 +48,7 @@ function canonicalError(codes, args) {
  */
 function normalError(codes, args) {
 	const argsZ6 = args.map((el) =>
-		typeof el === 'string' ? { Z1K1: 'Z6', Z6K1: el } : el
+		typeof el === 'string' ? { Z1K1 : 'Z6', Z6K1 : el } : el
 	);
 
 	return {

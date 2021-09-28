@@ -48,9 +48,9 @@ function deep_copy(o) {
 // TODO(T285433): Return Z21 instead of Z23.
 // TODO(T289301): This should read its outputs from a configuration file.
 function makeUnit(canonical = false) {
-    if (canonical) {
-        return 'Z23';
-    }
+	if (canonical) {
+		return 'Z23';
+	}
 	return { Z1K1: 'Z9', Z9K1: 'Z23' };
 }
 
@@ -61,7 +61,7 @@ function makeUnit(canonical = false) {
  * @return {Object} a reference to Z41 (true)
  */
 function makeTrue() {
-    return { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } };
+	return { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } };
 }
 
 /**
@@ -71,7 +71,7 @@ function makeTrue() {
  * @return {Object} a reference to Z42 (false)
  */
 function makeFalse() {
-    return { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z42' } };
+	return { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z42' } };
 }
 
 /**
@@ -154,13 +154,13 @@ function readYaml(fileName) {
 }
 
 const builtInTypes = new Set([
-    'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
-    'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
-    'Z60', 'Z61', 'Z7', 'Z7_backend', 'Z8', 'Z80', 'Z86', 'Z9', 'Z99'
+	'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
+	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
+	'Z60', 'Z61', 'Z7', 'Z7_backend', 'Z8', 'Z80', 'Z86', 'Z9', 'Z99'
 ]);
 
 function isUserDefined( ZID ) {
-    return !builtInTypes.has( ZID );
+	return !builtInTypes.has( ZID );
 }
 
 module.exports = {
@@ -175,7 +175,7 @@ module.exports = {
 	deep_equal,
 	deep_copy,
 	isEmpty,
-  isUserDefined,
+	isUserDefined,
 	kid_from_global_key,
     makeFalse,
     makeResultEnvelope,
