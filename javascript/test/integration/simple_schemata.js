@@ -8,7 +8,7 @@ const { testValidation } = require('../util.js');
 
 QUnit.module('simple_schemata');
 
-const directory_ = path.join('..', 'test_data', 'simple_schemata');
+const directory_ = path.join('test_data', 'simple_schemata');
 
 // Every .yaml file in directory_ contains a validator schema and objects which
 // should (or should not) validate against that schema.

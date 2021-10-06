@@ -1,8 +1,9 @@
-const { readYaml, dataDir, deep_equal } = require('./utils.js');
+const { readYaml, dataDir } = require('./utils.js');
 
 class ErrorFormatter {
 
-	static _errorDescriptors = null;
+	// FIXME: This is a syntax error (and isn't necessary?)
+	// static _errorDescriptors = null;
 
 	/**
 	 * Read and parse the yaml file with the error type descriptors

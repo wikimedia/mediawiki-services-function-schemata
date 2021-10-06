@@ -11,7 +11,7 @@ QUnit.module('function_call');
 // TODO: Collapse this test into normal/canonical tests.
 const factory = SchemaFactory.FUNCTION_CALL();
 const validator_ = factory.create('Z7');
-const testDirectory_ = path.join('..', 'test_data', 'function_call');
+const testDirectory_ = path.join('test_data', 'function_call');
 
 // Every .yaml file in testDirectory_ contains serialized function calls.
 fs.readdirSync(testDirectory_).forEach((file) => {

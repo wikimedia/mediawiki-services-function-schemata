@@ -1,0 +1,18 @@
+{
+        "root": true,
+        "extends": [
+                "wikimedia/server"
+        ],
+        "rules": {
+        },
+        "overrides": [
+                {
+                        "files": "**/*.json",
+                        "extends": "wikimedia/json",
+                        "rules": {
+                                "eol-last": "off",
+                                "indent": "off"
+                        }
+                }
+        ]
+}

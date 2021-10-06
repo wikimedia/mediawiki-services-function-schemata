@@ -3,12 +3,13 @@
 const Ajv = require('ajv').default;
 const fs = require('fs');
 const path = require('path');
-const { isUserDefined, readYaml, Z10ToArray } = require('./utils.js');
+const { readYaml, Z10ToArray } = require('./utils.js');
 const { ValidationStatus } = require('./validationStatus.js');
 
 let Z6Validator, Z7Validator, Z9Validator, Z18Validator;
 
 function initializeValidators() {
+	// eslint-disable-next-line no-use-before-define
     const defaultFactory = SchemaFactory.NORMAL();
     Z6Validator = defaultFactory.create('Z6');
     Z7Validator = defaultFactory.create('Z7');
@@ -25,7 +26,7 @@ function initializeValidators() {
  * logic.
  *
  * @param {Object} Z1 a ZObject
- * @return {bool} true if Z1 validates as either Z6 or Z7
+ * @return {boolean} true if Z1 validates as either Z6 or Z7
  */
 function validatesAsString(Z1) {
     // TODO: Prohibit Z18s.
@@ -58,7 +59,7 @@ class BaseSchema {
 
 	/**
 	 * Validate a JSON object using validateStatus method; return only whether
-     * the result was valid without surfacing errors.
+	 * the result was valid without surfacing errors.
 	 *
 	 * @param {Object} maybeValid a JSON object
 	 * @return {bool} whether the object is valid
@@ -106,11 +107,14 @@ class GenericSchema extends BaseSchema {
 
 	/**
 	 * Try to validate a JSON object against the internal validators. For each
-     * key in maybeValid, the corresponding value will be validated against the
-     * appropriate validator in this.keyMap_.
+	 * key in maybeValid, the corresponding value will be validated against the
+	 * appropriate validator in this.keyMap_.
+	 *
 	 * The results are used to instantiate a ValidationStatus object that is
 	 * returned.
+	 *
 	 * Using this method over ''validate'' is preferred.
+	 *
 	 * TODO (T282820): Replace validate with validateStatus and change all related code.
 	 *
 	 * @param {Object} maybeValid a JSON object
@@ -338,7 +342,7 @@ class SchemaFactory {
     }
 
 	/**
-	 * Create a schema for a user-defined type. The Z4 corresponding to the
+	 * Create a schema for given user-defined type. The Z4 corresponding to the
 	 * type must be provided.
 	 *
 	 * Currently only works for normal form.
@@ -351,17 +355,15 @@ class SchemaFactory {
 	 *  const factory = SchemaFactory.NORMAL();
 	 *  const Z10001Schema = factory.createUserDefined(Z4);
 	 *
-	 * @param {Object} Z4 the descriptor for a user-defined type
+	 * @param {Object} Z4s the descriptor for the user-defined types
 	 * @return {Schema} a fully-initialized Schema
 	 */
-	createUserDefined(Z4s) {
-        const nUtil = require('util');
+	createUserDefined( Z4s ) {
         const typeCache = new Map();
 		const normalize = require('./normalize.js');
         const normalZ4s = Z4s.map( normalize );
         for ( const Z4 of normalZ4s ) {
             if ( validatesAsFunctionCall( Z4.Z4K1 ) ) {
-                const nUtil = require('util');
                 const key = keyForGeneric(Z4.Z4K1);
                 typeCache.set( key, new GenericSchema(new Map()) );
             }

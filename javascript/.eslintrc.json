@@ -1,12 +1,8 @@
 {
-  "env": {
-    "node": true,
-    "qunit": true
-  },
   "extends": [
-    "wikimedia/server"
+    "../.eslintrc.json",
+    "wikimedia/qunit"
   ],
-  "plugins": ["jsdoc"],
   "rules": {
     "array-bracket-spacing": "off",
     "camelcase": [
@@ -15,19 +11,33 @@
         "properties": "never"
       }
     ],
+    "arrow-parens": "off",
+    "comma-dangle": ["error", "only-multiline"],
     "computed-property-spacing": "off",
+    "dot-notation": "off",
     "indent": ["off", 4],
+    "jsdoc/check-tag-names": "off",
+    "jsdoc/check-types": "off",
     "jsdoc/no-undefined-types": "off",
+    "jsdoc/require-returns": "off",
+    "key-spacing": "off",
+    "keyword-spacing": "off",
+    "max-len": "off",
+    "no-extra-semi": "off",
+    "no-fallthrough": "off",
+    "no-mixed-spaces-and-tabs": "off",
     "no-multi-spaces": "off",
+    "no-multiple-empty-lines": "off",
+    "no-restricted-properties": "off",
     "no-shadow": "off",
     "no-underscore-dangle": "off",
-    "no-unused-vars": [
-      "error",
-      {
-        "args": "none"
-      }
-    ],
-    "space-in-parens": ["error", "never"],
-    "comma-dangle": ["error", "only-multiline"]
+    "no-unused-vars": [ "error", { "args": "none" } ],
+    "operator-linebreak": "off",
+    "prefer-const": "off",
+    "quote-props": "off",
+    "quotes": "off",
+    "semi": "off",
+    "space-in-parens": "off",
+    "strict": "off"
   }
 }

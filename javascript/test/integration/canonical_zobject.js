@@ -11,7 +11,7 @@ const factory = SchemaFactory.CANONICAL();
 
 function test(ZID) {
 	const canonicalValidator = factory.create(ZID);
-	const canonicalFile = path.join('..', 'test_data', 'canonical_zobject', ZID + '.yaml');
+	const canonicalFile = path.join('test_data', 'canonical_zobject', ZID + '.yaml');
 	const testDescriptor = readYaml(canonicalFile);
 	const info = testDescriptor.test_information;
 	testValidation(info.name, canonicalValidator, testDescriptor.test_objects);

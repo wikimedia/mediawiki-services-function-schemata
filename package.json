@@ -4,11 +4,11 @@
   "description": "",
   "main": "schema.js",
   "directories": {
-    "test": "test"
+    "test": "javascript/test"
   },
   "scripts": {
-    "lint": "eslint --cache --max-warnings 0 --ext .js,.json",
-    "test": "npm run lint && qunit"
+    "lint": "eslint --cache --max-warnings 0 --ext .js,.json .",
+    "test": "npm run lint && qunit javascript/"
   },
   "author": "",
   "license": "MIT",
