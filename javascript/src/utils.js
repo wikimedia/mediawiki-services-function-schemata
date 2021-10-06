@@ -80,7 +80,7 @@ function makeFalse() {
  *
  * @param {Object} goodResult Z22K1 of resulting Z22
  * @param {Object} badResult Z22K2 of resulting Z22
- * @param {Boolean} canonical whether output should be in canonical form
+ * @param {boolean} canonical whether output should be in canonical form
  * @return {Object} a Z22
  */
 function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
@@ -109,7 +109,7 @@ function makePair( goodResult = null, badResult = null, canonical = false ) {
  * already been validated, it is sufficient to check for the presence of Z10K1.
  *
  * @param {Object} Z10 a Z10 List
- * @return {bool} whether Z10 is empty
+ * @return {boolean} whether Z10 is empty
  */
 function isEmpty( Z10 ) {
 	return Z10.Z10K1 === undefined;

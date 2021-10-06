@@ -10,7 +10,7 @@ class ErrorFormatter {
 	/**
 	 * Read and parse the yaml file with the error type descriptors
 	 *
-	 * @returns {Array}
+	 * @return {Array}
 	 */
 	static get errorDescriptors() {
 		if ( !this._errorDescriptors ) {
@@ -27,17 +27,19 @@ class ErrorFormatter {
 	 * ZErrorTypes (Z50).
 	 *
 	 * @param {Array} errors
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	static createRootZError( errors ) {
 		const Z5s = [];
 		// descriptors found for parser errors
 		const descriptors = [];
 
-		for ( let error of errors ) {
+		for ( const error of errors ) {
 			const descriptor = this.matchDescriptor( error );
 			// Ajv returns duplicates, so we need to check for them and ignore
-			const isDuplicate = descriptors.find( ( d ) => d.path === error.instancePath && d.descriptor === descriptor );
+			const isDuplicate = descriptors.find(
+				( d ) => d.path === error.instancePath && d.descriptor === descriptor
+			);
 
 			if ( descriptor && !isDuplicate ) {
 				descriptors.push( { path: error.instancePath, descriptor } );
@@ -65,7 +67,7 @@ class ErrorFormatter {
 	 * returns the root object of the tree.
 	 *
 	 * @param {Array} Z5s
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	static buildErrorTree( Z5s ) {
 		const root = {
@@ -74,8 +76,10 @@ class ErrorFormatter {
 			errors: []
 		};
 
-		for ( let [ parserError, Z5 ] of Z5s ) {
+		for ( const [ parserError, Z5 ] of Z5s ) {
 			// only ZnKn are considered as part of the path
+			// FIXME: We don't have ES2020 available
+			// eslint-disable-next-line no-restricted-properties
 			const path = [ ...parserError.instancePath.matchAll( /\bZ\d+K\d+\b/g ) ].map( ( m ) => m[ 0 ] );
 
 			// no path means it's a root error
@@ -108,13 +112,13 @@ class ErrorFormatter {
 	 * wellformed/Z526.
 	 *
 	 * @param {Object} root
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	static getZObjectFromErrorTree( root ) {
 		const children = Object.values( root.children );
 
 		const childrenErrors = [];
-		for ( let child of children ) {
+		for ( const child of children ) {
 			childrenErrors.push( this.getZObjectFromErrorTree( child ) );
 		}
 		childrenErrors.push( ...root.errors );
@@ -133,7 +137,7 @@ class ErrorFormatter {
 	 *
 	 * @param {string} key
 	 * @param {Object} Z5
-	 * @returns
+	 * @return {Object}
 	 */
 	static createZKeyError( key, Z5 ) {
 		return {
@@ -154,7 +158,7 @@ class ErrorFormatter {
 	 * Create a ZError (Z5) of the type "Not wellformed" (Z502)
 	 *
 	 * @param {Object} Z5
-	 * @returns
+	 * @return {Object}
 	 */
 	static createValidationZError( Z5 ) {
 		return {
@@ -172,7 +176,7 @@ class ErrorFormatter {
 	 * Create a ZError (Z5) of the type "Multiple errors" (Z509)
 	 *
 	 * @param {*} array
-	 * @returns
+	 * @return {Object|null}
 	 */
 	static createZErrorList( array ) {
 		return {
@@ -188,7 +192,7 @@ class ErrorFormatter {
 	 * function returns null.
 	 *
 	 * @param {Object} err
-	 * @returns
+	 * @return {Object|null}
 	 */
 	static matchDescriptor( err ) {
 		const candidates = this.errorDescriptors[ err.keyword ];
@@ -199,7 +203,8 @@ class ErrorFormatter {
 					case 'type':
 						return this.matchTypeDescriptor( descriptor, err );
 					case 'required':
-						return !descriptor.keywordArgs.missing || descriptor.keywordArgs.missing === err.params.missingProperty;
+						return !descriptor.keywordArgs.missing ||
+							descriptor.keywordArgs.missing === err.params.missingProperty;
 					case 'additionalProperties':
 						return true;
 					default: return false;
@@ -216,7 +221,7 @@ class ErrorFormatter {
 	 *
 	 * @param {Object} descriptor
 	 * @param {Object} err
-	 * @returns
+	 * @return {boolean}
 	 */
 	static matchTypeDescriptor( descriptor, err ) {
 		// if dataPointer is specified but not found in the actual data path
@@ -248,7 +253,7 @@ class ErrorFormatter {
 	 *
 	 * @param {string} errorType
 	 * @param {Object} err
-	 * @returns
+	 * @return {Object}
 	 */
 	static createZErrorInstance( errorType, err ) {
 		let Z5K2;
@@ -266,12 +271,14 @@ class ErrorFormatter {
 						Z99K1: err.data
 					}
 				};
+				break;
 
 			case 'Z524':
 				Z5K2 = {
 					Z1K1: 'Z524',
 					Z524K1: err.data
 				};
+				break;
 
 			case 'Z525':
 				Z5K2 = {
@@ -282,6 +289,7 @@ class ErrorFormatter {
 						Z6K1: 'todo'
 					}
 				};
+				break;
 
 			default: Z5K2 = this.createErrorQuote( errorType, err );
 		}
@@ -298,7 +306,7 @@ class ErrorFormatter {
 	 *
 	 * @param {string} zid
 	 * @param {Object} err
-	 * @returns
+	 * @return {Object}
 	 */
 	static createErrorQuote( zid, err ) {
 		return {

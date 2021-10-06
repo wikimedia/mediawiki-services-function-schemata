@@ -37,7 +37,7 @@ function validatesAsString( Z1 ) {
  * Determines whether argument is a Z9.
  *
  * @param {Object} Z1 a ZObject
- * @return {bool} true if Z1 validates as Z9
+ * @return {boolean} true if Z1 validates as Z9
  */
 function validatesAsReference( Z1 ) {
 	return Z9Validator.validate( Z1 );
@@ -47,7 +47,7 @@ function validatesAsReference( Z1 ) {
  * Validates a ZObject against the Function Call schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {bool} whether Z1 can validated as a Function Call
+ * @return {boolean} whether Z1 can validated as a Function Call
  */
 function validatesAsFunctionCall( Z1 ) {
 	return ( Z7Validator.validate( Z1 ) &&
@@ -62,7 +62,7 @@ class BaseSchema {
 	 * the result was valid without surfacing errors.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {bool} whether the object is valid
+	 * @return {boolean} whether the object is valid
 	 */
 	validate( maybeValid ) {
 		return this.validateStatus( maybeValid ).isValid();
@@ -380,4 +380,10 @@ class SchemaFactory {
 
 initializeValidators();
 
-module.exports = { keyForGeneric, SchemaFactory, validatesAsString, validatesAsReference, validatesAsFunctionCall };
+module.exports = {
+	keyForGeneric,
+	SchemaFactory,
+	validatesAsString,
+	validatesAsReference,
+	validatesAsFunctionCall
+};

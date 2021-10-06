@@ -4,6 +4,13 @@
 		"wikimedia/server"
 	],
 	"rules": {
+		"camelcase": [
+			"error",
+			{
+				"properties": "never"
+			}
+		],
+		"no-underscore-dangle": "off"
 	},
 	"overrides": [
 		{
