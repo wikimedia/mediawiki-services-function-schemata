@@ -1,4 +1,6 @@
-const { readYaml, dataDir } = require('./utils.js');
+'use strict';
+
+const { readYaml, dataDir } = require( './utils.js' );
 
 class ErrorFormatter {
 
@@ -11,9 +13,9 @@ class ErrorFormatter {
 	 * @returns {Array}
 	 */
 	static get errorDescriptors() {
-		if (!this._errorDescriptors) {
-			const descriptorPath = dataDir('errors', 'error_types.yaml');
-			this._errorDescriptors = readYaml(descriptorPath)['patterns']['keywords'];
+		if ( !this._errorDescriptors ) {
+			const descriptorPath = dataDir( 'errors', 'error_types.yaml' );
+			this._errorDescriptors = readYaml( descriptorPath ).patterns.keywords;
 		}
 
 		return this._errorDescriptors;
@@ -27,32 +29,32 @@ class ErrorFormatter {
 	 * @param {Array} errors
 	 * @returns {Object}
 	 */
-	static createRootZError(errors) {
+	static createRootZError( errors ) {
 		const Z5s = [];
 		// descriptors found for parser errors
 		const descriptors = [];
 
-		for (let error of errors) {
-			const descriptor = this.matchDescriptor(error);
+		for ( let error of errors ) {
+			const descriptor = this.matchDescriptor( error );
 			// Ajv returns duplicates, so we need to check for them and ignore
-			const isDuplicate = descriptors.find(d => d.path === error.instancePath && d.descriptor === descriptor);
+			const isDuplicate = descriptors.find( ( d ) => d.path === error.instancePath && d.descriptor === descriptor );
 
-			if (descriptor && !isDuplicate) {
-				descriptors.push({ path: error.instancePath, descriptor });
+			if ( descriptor && !isDuplicate ) {
+				descriptors.push( { path: error.instancePath, descriptor } );
 
-				Z5s.push([
+				Z5s.push( [
 					error,
-					this.createZErrorInstance(descriptor.errorType, error),
-				]);
+					this.createZErrorInstance( descriptor.errorType, error )
+				] );
 			}
 		}
 
-		const errorTree = this.buildErrorTree(Z5s);
+		const errorTree = this.buildErrorTree( Z5s );
 
-		if (errorTree.children.length === 0 && errorTree.errors.length === 0) {
+		if ( errorTree.children.length === 0 && errorTree.errors.length === 0 ) {
 			return null;
 		} else {
-			return this.getZObjectFromErrorTree(errorTree);
+			return this.getZObjectFromErrorTree( errorTree );
 		}
 	}
 
@@ -65,37 +67,37 @@ class ErrorFormatter {
 	 * @param {Array} Z5s
 	 * @returns {Object}
 	 */
-	static buildErrorTree(Z5s) {
+	static buildErrorTree( Z5s ) {
 		const root = {
 			key: 'root',
 			children: {},
 			errors: []
-		}
+		};
 
-		for(let [parserError, Z5] of Z5s) {
+		for ( let [ parserError, Z5 ] of Z5s ) {
 			// only ZnKn are considered as part of the path
-			const path = [...parserError.instancePath.matchAll(/\bZ\d+K\d+\b/g)].map(m => m[0]);
+			const path = [ ...parserError.instancePath.matchAll( /\bZ\d+K\d+\b/g ) ].map( ( m ) => m[ 0 ] );
 
 			// no path means it's a root error
-			if (path.length === 0) {
-				root.errors.push(Z5);
+			if ( path.length === 0 ) {
+				root.errors.push( Z5 );
 			} else {
 				// find the leaf node based on the path creating intermediary nodes if required
-				const leaf = path.reduce((node, key) => {
-					if (!node.children[key]) {
-						node.children[key] = {
+				const leaf = path.reduce( ( node, key ) => {
+					if ( !node.children[ key ] ) {
+						node.children[ key ] = {
 							key,
 							children: {},
-							errors: [],
-						}
+							errors: []
+						};
 					}
 
-					return node.children[key];
-				}, root);
+					return node.children[ key ];
+				}, root );
 
-				leaf.errors.push(Z5);
+				leaf.errors.push( Z5 );
 			}
- 		}
+		}
 
 		return root;
 	}
@@ -108,22 +110,22 @@ class ErrorFormatter {
 	 * @param {Object} root
 	 * @returns {Object}
 	 */
-	static getZObjectFromErrorTree(root) {
-		const children = Object.values(root.children)
+	static getZObjectFromErrorTree( root ) {
+		const children = Object.values( root.children );
 
 		const childrenErrors = [];
-		for (let child of children) {
-			childrenErrors.push(this.getZObjectFromErrorTree(child))
+		for ( let child of children ) {
+			childrenErrors.push( this.getZObjectFromErrorTree( child ) );
 		}
-		childrenErrors.push(...root.errors);
+		childrenErrors.push( ...root.errors );
 
-		const aggregatedZ5 = childrenErrors.length === 1
-			? childrenErrors[0]
-			: this.createZErrorList(childrenErrors)
+		const aggregatedZ5 = childrenErrors.length === 1 ?
+			childrenErrors[ 0 ] :
+			this.createZErrorList( childrenErrors );
 
-		return root.key === 'root'
-			? this.createValidationZError(aggregatedZ5)
-			: this.createZKeyError(root.key, aggregatedZ5);
+		return root.key === 'root' ?
+			this.createValidationZError( aggregatedZ5 ) :
+			this.createZKeyError( root.key, aggregatedZ5 );
 	}
 
 	/**
@@ -133,19 +135,19 @@ class ErrorFormatter {
 	 * @param {Object} Z5
 	 * @returns
 	 */
-	static createZKeyError(key, Z5) {
+	static createZKeyError( key, Z5 ) {
 		return {
-			Z1K1: "Z5",
-			Z5K1: "Z526",
+			Z1K1: 'Z5',
+			Z5K1: 'Z526',
 			Z5K2: {
-				Z1K1: "Z526",
+				Z1K1: 'Z526',
 				Z526K1: {
-					Z1K1: "Z39",
-					Z39K1: key,
+					Z1K1: 'Z39',
+					Z39K1: key
 				},
-				Z526K2: Z5,
+				Z526K2: Z5
 			}
-		}
+		};
 	}
 
 	/**
@@ -154,16 +156,16 @@ class ErrorFormatter {
 	 * @param {Object} Z5
 	 * @returns
 	 */
-	static createValidationZError(Z5) {
+	static createValidationZError( Z5 ) {
 		return {
-			Z1K1: "Z5",
-			Z5K1: "Z502",
+			Z1K1: 'Z5',
+			Z5K1: 'Z502',
 			Z5K2: {
-				Z1K1: "Z502",
+				Z1K1: 'Z502',
 				Z502K1: Z5.Z5K1,
-				Z502K2: Z5,
+				Z502K2: Z5
 			}
-		}
+		};
 	}
 
 	/**
@@ -172,12 +174,12 @@ class ErrorFormatter {
 	 * @param {*} array
 	 * @returns
 	 */
-	static createZErrorList(array) {
+	static createZErrorList( array ) {
 		return {
-			Z1K1: "Z5",
-			Z5K1: "Z509",
+			Z1K1: 'Z5',
+			Z5K1: 'Z509',
 			Z5K2: array
-		}
+		};
 	}
 
 	/**
@@ -188,21 +190,21 @@ class ErrorFormatter {
 	 * @param {Object} err
 	 * @returns
 	 */
-	static matchDescriptor(err) {
-		const candidates = this.errorDescriptors[err.keyword];
+	static matchDescriptor( err ) {
+		const candidates = this.errorDescriptors[ err.keyword ];
 
-		if (candidates) {
-			return candidates.find((descriptor) => {
-				switch (err.keyword) {
+		if ( candidates ) {
+			return candidates.find( ( descriptor ) => {
+				switch ( err.keyword ) {
 					case 'type':
-						return this.matchTypeDescriptor(descriptor, err);
+						return this.matchTypeDescriptor( descriptor, err );
 					case 'required':
 						return !descriptor.keywordArgs.missing || descriptor.keywordArgs.missing === err.params.missingProperty;
 					case 'additionalProperties':
 						return true;
 					default: return false;
 				}
-			});
+			} );
 		}
 
 		return null;
@@ -216,29 +218,29 @@ class ErrorFormatter {
 	 * @param {Object} err
 	 * @returns
 	 */
-	static matchTypeDescriptor(descriptor, err) {
+	static matchTypeDescriptor( descriptor, err ) {
 		// if dataPointer is specified but not found in the actual data path
-		if (descriptor.dataPointer.length > 0
-			&& !err.instancePath.endsWith(descriptor.dataPointer[0])) {
+		if ( descriptor.dataPointer.length > 0 &&
+			!err.instancePath.endsWith( descriptor.dataPointer[ 0 ] ) ) {
 			return false;
 		}
 
-		if (descriptor.keywordArgs.used) {
+		if ( descriptor.keywordArgs.used ) {
 			const dataType = typeof err.data;
 			let expandedType;
 
-			if (Array.isArray(err.data)) {
-				expandedType = "array";
-			} else if (err.data === null) {
-				expandedType = "null";
+			if ( Array.isArray( err.data ) ) {
+				expandedType = 'array';
+			} else if ( err.data === null ) {
+				expandedType = 'null';
 			} else {
-				expandedType = dataType
+				expandedType = dataType;
 			}
 
-			return descriptor.keywordArgs.used.indexOf(expandedType) > -1;
+			return descriptor.keywordArgs.used.indexOf( expandedType ) > -1;
 		}
 
-		return descriptor.keywordArgs.expected === err.params.type
+		return descriptor.keywordArgs.expected === err.params.type;
 	}
 
 	/**
@@ -248,47 +250,47 @@ class ErrorFormatter {
 	 * @param {Object} err
 	 * @returns
 	 */
-	static createZErrorInstance(errorType, err) {
+	static createZErrorInstance( errorType, err ) {
 		let Z5K2;
 
-		switch(errorType) {
-			case "Z511":
+		switch ( errorType ) {
+			case 'Z511':
 				Z5K2 = {
-					Z1K1: "Z511",
+					Z1K1: 'Z511',
 					Z511K1: {
-						Z1K1: "Z39",
+						Z1K1: 'Z39',
 						Z39K1: err.params.missingProperty
 					},
 					Z511K2: {
-						Z1K1: "Z99",
-						Z99K1: err.data,
+						Z1K1: 'Z99',
+						Z99K1: err.data
 					}
-				}
+				};
 
-			case "Z524":
+			case 'Z524':
 				Z5K2 = {
-					Z1K1: "Z524",
-					Z524K1: err.data,
-				}
+					Z1K1: 'Z524',
+					Z524K1: err.data
+				};
 
-			case "Z525":
+			case 'Z525':
 				Z5K2 = {
-					Z1K1: "Z525",
+					Z1K1: 'Z525',
 					Z525K1: {
-						Z1K1: "Z6",
+						Z1K1: 'Z6',
 						// TODO: check invalid properties to build Z6k1
-						Z6K1: "todo"
+						Z6K1: 'todo'
 					}
-				}
+				};
 
-			default: Z5K2 = this.createErrorQuote(errorType, err);
+			default: Z5K2 = this.createErrorQuote( errorType, err );
 		}
 
 		return {
-			Z1K1: "Z5",
+			Z1K1: 'Z5',
 			Z5K1: errorType,
-			Z5K2: Z5K2,
-		}
+			Z5K2: Z5K2
+		};
 	}
 
 	/**
@@ -298,14 +300,14 @@ class ErrorFormatter {
 	 * @param {Object} err
 	 * @returns
 	 */
-	static createErrorQuote(zid, err) {
+	static createErrorQuote( zid, err ) {
 		return {
 			Z1K1: zid,
-			[zid + "K1"]: {
-				Z1K1: "Z99",
+			[ zid + 'K1' ]: {
+				Z1K1: 'Z99',
 				Z99K1: err.data
 			}
-		}
+		};
 	}
 
 }

@@ -1,32 +1,32 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const { SchemaFactory } = require('../../src/schema.js');
-const { readYaml } = require('../../src/utils.js');
-const { testValidation } = require('../util.js');
+const fs = require( 'fs' );
+const path = require( 'path' );
+const { SchemaFactory } = require( '../../src/schema.js' );
+const { readYaml } = require( '../../src/utils.js' );
+const { testValidation } = require( '../util.js' );
 
-QUnit.module('simple_schemata');
+QUnit.module( 'simple_schemata' );
 
-const directory_ = path.join('test_data', 'simple_schemata');
+const directory_ = path.join( 'test_data', 'simple_schemata' );
 
 // Every .yaml file in directory_ contains a validator schema and objects which
 // should (or should not) validate against that schema.
-fs.readdirSync(directory_).forEach((file) => {
-	const fileName = path.join(directory_, file);
-	const testDescriptor = readYaml(fileName);
+fs.readdirSync( directory_ ).forEach( ( file ) => {
+	const fileName = path.join( directory_, file );
+	const testDescriptor = readYaml( fileName );
 	const info = testDescriptor.test_information;
 	const factory = new SchemaFactory();
-	const validator = factory.parse(testDescriptor.test_schema.validator);
+	const validator = factory.parse( testDescriptor.test_schema.validator );
 
-	if (info.parse_error) {
+	if ( info.parse_error ) {
 		// When parse_error is true, the schema itself is degenerate, so parse()
 		// should return null.
-		QUnit.test(info.name, (assert) => {
-			assert.deepEqual(null, validator);
-		});
+		QUnit.test( info.name, ( assert ) => {
+			assert.deepEqual( null, validator );
+		} );
 	} else {
 		// Validator was parsed successfully; test validation of objects.
-		testValidation(info.name, validator, testDescriptor.test_objects);
+		testValidation( info.name, validator, testDescriptor.test_objects );
 	}
-});
+} );
