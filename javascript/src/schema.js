@@ -166,7 +166,6 @@ function identityOfType( Z4 ) {
  */
 function keyForGeneric( genericZ7 ) {
     const normalize = require('./normalize.js');
-    // TODO: Handle fully-dereferenced Z7K1 and fully-dereferenced Z4 arguments.
     const Z7 = normalize( genericZ7 );
     const result = [ identityOfFunction( Z7.Z7K1 ) ];
     const argumentKeys = [];
