@@ -80,15 +80,18 @@ class SchemaFactory {
 	 * TODO: Assert that this->loader is not null.
 	 *
 	 * @param string $ZID
-	 * @return ISchema
+	 * @return ISchema|null
 	 */
-	public function create( $ZID ): ISchema {
+	public function create( $ZID ) {
 		if ( $ZID == "Z13" ) {
 			$ZID = "Z10";
 		} elseif ( $ZID == "Z41" || $ZID == "Z42" ) {
 			$ZID = "Z10";
 		}
 		$schema = $this->loader->loadSchema( $ZID );
+		if ( $schema == null ) {
+			return null;
+		}
 		$validator = new \Opis\JsonSchema\Validator();
 		$validator->setLoader( $this->loader );
 		return new ISchema( $schema, $validator );

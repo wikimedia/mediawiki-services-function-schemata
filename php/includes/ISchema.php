@@ -10,7 +10,7 @@
 namespace Mediawiki\Services\Wikilambda\FunctionSchemata;
 
 use Opis\JsonSchema\Schema;
-use Opis\JsonSchema\ValidationError;
+use Opis\JsonSchema\ValidationResult;
 use Opis\JsonSchema\Validator;
 
 class ISchema {
@@ -25,31 +25,24 @@ class ISchema {
 	private $validator;
 
 	/**
-	 * @var ValidationError[]
-	 */
-	public $errors;
-
-	/**
 	 * @param Schema $schema
 	 * @param Validator $validator
 	 */
 	public function __construct( Schema $schema, Validator $validator ) {
 		$this->schema = $schema;
 		$this->validator = $validator;
-		$this->errors = [];
 	}
 
 	/**
 	 * @param mixed $maybeValid JSON array-like object to validate
-	 * @return bool
+	 * @param int $maxErrors
+	 * @return ValidationResult
 	 */
-	public function validate( $maybeValid ): bool {
-		$result = $this->validator->schemaValidation( $maybeValid, $this->schema );
-		if ( $result->isValid() ) {
-			$this->errors = [];
-			return true;
-		}
-		$this->errors = $result->getErrors();
-		return false;
+	public function validate( $maybeValid, $maxErrors = 1 ): ValidationResult {
+		return $this->validator->schemaValidation(
+			$maybeValid,
+			$this->schema,
+			$maxErrors
+		);
 	}
 }

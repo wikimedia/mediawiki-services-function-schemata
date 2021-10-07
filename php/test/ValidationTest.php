@@ -11,6 +11,9 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class ValidationTest extends TestCase {
 	/**
+	 * Helper function to test success and failure on the validation
+	 * of ZObjects.
+	 *
 	 * @param ISchema $validator
 	 * @param mixed $testObjects
 	 */
@@ -21,12 +24,12 @@ abstract class ValidationTest extends TestCase {
 		}
 
 		foreach ( $successes as $testObject ) {
-			$result = $validator->validate( $testObject->object );
+			$status = $validator->validate( $testObject->object );
 			$message = $testObject->name;
-			if ( !$result ) {
+			if ( !$status->isValid() ) {
 				$message .= var_export( $validator->errors, true );
 			}
-			$this->assertTrue( $result, $message );
+			$this->assertTrue( $status->isValid(), $message );
 		}
 
 		$failures = [];
@@ -35,8 +38,9 @@ abstract class ValidationTest extends TestCase {
 		}
 
 		foreach ( $failures as $testObject ) {
+			$status = $validator->validate( $testObject->object );
 			$this->assertFalse(
-				$validator->validate( $testObject->object ),
+				$status->isValid(),
 				$testObject->name );
 		}
 	}

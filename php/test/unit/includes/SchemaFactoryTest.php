@@ -20,6 +20,14 @@ final class SchemaFactoryTest extends TestCase {
 			$this->equalTo( "NORMAL" )
 		);
 		$factory = SchemaFactory::getNormalFormFactory( $mockLoader );
+		$this->assertInstanceOf( SchemaFactory::class, $factory );
+	}
+
+	/**
+	 * @covers Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaFactory::getNormalFormFactory
+	 */
+	public function testSchema(): void {
+		$factory = SchemaFactory::getNormalFormFactory();
 		$schema = $factory->create( "Z10" );
 		$this->assertInstanceOf( ISchema::class, $schema );
 	}

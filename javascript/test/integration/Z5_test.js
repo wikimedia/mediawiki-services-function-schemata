@@ -11,7 +11,7 @@ const factory = SchemaFactory.NORMAL();
 
 function test(ZID) {
 	const normalValidator = factory.create(ZID);
-	const normalFile = path.join('..', 'test_data', 'errors', ZID + '.yaml');
+	const normalFile = path.join('..', 'test_data', 'errors', 'normal_' + ZID + '.yaml');
 	const testDescriptor = readYaml(normalFile);
 	const info = testDescriptor.test_information;
 	testZ5(info.name, normalValidator, testDescriptor.test_objects);

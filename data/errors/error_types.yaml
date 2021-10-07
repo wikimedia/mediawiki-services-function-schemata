@@ -98,3 +98,11 @@ patterns:
         dataPointer: []
         keywordArgs:
           schema: false
+
+    not:
+      - errorType: Z553
+        name: "Disallowed root object"
+        keyword: not
+        dataPointer:
+          - Z2K2
+        keywordArgs: []

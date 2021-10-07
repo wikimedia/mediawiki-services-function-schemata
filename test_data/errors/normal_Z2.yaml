@@ -6,6 +6,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z533
       object:
         Z1K1:
@@ -29,6 +30,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z533
       object:
         Z1K1:
@@ -52,6 +54,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z533
       object:
         Z1K1:
@@ -74,6 +77,7 @@ test_objects:
     - name: "Z532: Z6 without a Z6K1"
       errors:
         - Z502
+      php_errors:
         - Z532
       object:
         Z1K1:
@@ -96,6 +100,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z536
       object:
         Z1K1:
@@ -145,6 +150,7 @@ test_objects:
     - name: "Z523: Missing type Z1K1"
       errors:
         - Z502
+      php_errors:
         - Z523
       object:
         Z2K1:
@@ -164,6 +170,7 @@ test_objects:
     - name: "Z513: resolved object without Z2K2"
       errors:
         - Z502
+      php_errors:
         - Z513
       object:
         Z1K1:
@@ -184,6 +191,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z521
       object:
         Z1K1:
@@ -205,6 +213,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z521
       object:
         Z1K1:
@@ -226,6 +235,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z521
       object:
         Z1K1:
@@ -247,6 +257,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z521
       object:
         Z1K1:
@@ -268,6 +279,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z533
       object:
         Z1K1:
@@ -291,6 +303,7 @@ test_objects:
       errors:
         - Z502
         - Z526
+      php_errors:
         - Z525
       object:
         Z1K1:

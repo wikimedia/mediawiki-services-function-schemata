@@ -51,7 +51,7 @@ class YumYumYamlLoader implements ISchemaLoader {
 	/**
 	 * @inheritDoc
 	 */
-	public function loadSchema( string $ZID ): Schema {
+	public function loadSchema( string $ZID ) {
 		if ( !isset( $this->schemaCache[$ZID] ) ) {
 			$this->populateCache( $ZID );
 		}
