@@ -9,13 +9,13 @@
 
 namespace Mediawiki\Services\Wikilambda\FunctionSchemata;
 
-use Opis\JsonSchema\Schema;
+use Opis\JsonSchema\ISchema;
 use Opis\JsonSchema\ValidationResult;
 use Opis\JsonSchema\Validator;
 
 class SchemaWrapper {
 	/**
-	 * @var Schema
+	 * @var ISchema
 	 */
 	private $schema;
 
@@ -25,10 +25,10 @@ class SchemaWrapper {
 	private $validator;
 
 	/**
-	 * @param Schema $schema
+	 * @param ISchema $schema
 	 * @param Validator $validator
 	 */
-	public function __construct( Schema $schema, Validator $validator ) {
+	public function __construct( ISchema $schema, Validator $validator ) {
 		$this->schema = $schema;
 		$this->validator = $validator;
 	}
