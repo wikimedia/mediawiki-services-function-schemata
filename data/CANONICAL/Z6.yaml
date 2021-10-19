@@ -24,8 +24,9 @@ definitions:
       - allOf:
         - $ref: '#/definitions/objects/Z6_explicit'
         - type: object
-          Z6K1:
-            $ref: '#/definitions/objects/Z6_Key_Pattern'
+        - properties:
+            Z6K1:
+              $ref: '#/definitions/objects/Z6_Key_Pattern'
       - allOf:
         - $ref: '#/definitions/objects/Z6_string'
         - $ref: '#/definitions/objects/Z6_Key_Pattern'

@@ -1,5 +1,5 @@
 test_information:
-  name: canonicalized ZObject
+  name: mixed ZObject
 
 test_objects:
   success:
@@ -9,14 +9,14 @@ test_objects:
   - name: good array
     object:
     - a string
-    - Z1K1: a ZObject
+    - Z1K1: Z2
     - - a nested array
 
   - name: good record
     object:
-      Z1K1: this is required
+      Z1K1: Z2
       Z2K1:
-        Z1K1: this is required
+        Z1K1: Z2
         K7: this is optional
 
   failure:

@@ -80,7 +80,7 @@ function canonicalizeExport(o) {
 		wellFormed = false;
 	}
 	if (!wellFormed) {
-		throw new Error('canonicalize: argument "o" is not a well-formed ZObject: ' + JSON.stringify(o) );
+		throw new Error('canonicalize: argument is not a well-formed normal ZObject: ' + JSON.stringify(o) );
 	}
 
 	return canonicalize(normalized);

@@ -1,0 +1,29 @@
+$id: Z1
+$ref: "#/definitions/objects/mixed_zobject"
+definitions:
+  objects:
+    mixed_zobject:
+      oneOf:
+      - $ref: "#/definitions/objects/mixed_array"
+      - $ref: "#/definitions/objects/mixed_string"
+      - $ref: "#/definitions/objects/mixed_record"
+
+    mixed_string:
+      type: string
+
+    mixed_array:
+      type: array
+      items:
+        $ref: "#/definitions/objects/mixed_zobject"
+
+    mixed_record:
+      type: object
+      required:
+      - Z1K1
+      properties:
+        Z1K1:
+          $ref: "#/definitions/objects/mixed_zobject"
+      patternProperties:
+        "^(Z[1-9][0-9]*)?K[1-9][0-9]*$":
+          $ref: "#/definitions/objects/mixed_zobject"
+      additionalProperties: false

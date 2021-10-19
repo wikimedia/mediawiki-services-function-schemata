@@ -6,10 +6,10 @@ const { error } = require('./error.js');
 const { is_string, is_reference, is_array, arrayToZ10 } = require('./utils.js'); // eslint-disable-line camelcase
 const { SchemaFactory } = require('./schema');
 
-const canonicalFactory = SchemaFactory.CANONICAL();
+const mixedFactory = SchemaFactory.MIXED();
 // Canonical form syntax is a superset of normal form syntax, so this validator
 // captures mixed forms.
-const mixedZ1Validator = canonicalFactory.create('Z1');
+const mixedZ1Validator = mixedFactory.create('Z1');
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
 function normalize(o) {
@@ -63,7 +63,7 @@ function normalize(o) {
  */
 function normalizeExport(o) {
 	if (!mixedZ1Validator.validate(o)) {
-		throw new Error('normalize: argument "o" is not a well-formed ZObject.');
+		throw new Error('normalize: argument is not a well-formed canonical ZObject.' + JSON.stringify(o) );
 	}
 
 	return normalize(o);

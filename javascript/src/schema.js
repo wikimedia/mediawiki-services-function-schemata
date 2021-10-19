@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { isUserDefined, readYaml, Z10ToArray } = require('./utils.js');
 const { ValidationStatus } = require('./validationStatus.js');
-    
+
 let Z6Validator, Z7Validator, Z9Validator, Z18Validator;
 
 function initializeValidators() {
@@ -201,8 +201,30 @@ class SchemaFactory {
 	static CANONICAL() {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
 		const ajv = new Ajv({ allowMatchingProperties: true, verbose: true });
-		const fileName = dataDir('CANONICAL', 'canonical_zobject.yaml');
-		ajv.addSchema(readYaml(fileName), 'Z1');
+		const directory = dataDir('CANONICAL');
+		const fileRegex = /(Z[1-9]\d*(K[1-9]\d*)?(_backend)?)\.yaml/;
+
+		for (const fileName of fs.readdirSync(directory)) {
+			if (fileName.match(fileRegex) === null) {
+				console.error("Schema not found: '" + fileName + "'");
+				continue;
+			}
+			const fullFile = path.join(directory, fileName);
+			ajv.addSchema(readYaml(fullFile));
+		}
+		return new SchemaFactory(ajv);
+
+	}
+
+	/**
+	 * Initializes a SchemaFactory for mixed form Z1.
+	 *
+	 * @return {SchemaFactory} factory with lonely mixed form schema
+	 */
+	static MIXED() {
+		const ajv = new Ajv({ allowMatchingProperties: true, verbose: true });
+		const directory = dataDir('MIXED');
+		ajv.addSchema(readYaml(path.join(directory, 'Z1.yaml')));
 		return new SchemaFactory(ajv);
 	}
 
