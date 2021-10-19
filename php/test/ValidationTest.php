@@ -2,7 +2,7 @@
 
 namespace Mediawiki\Services\Wikilambda\FunctionSchemata\Tests;
 
-use Mediawiki\Services\Wikilambda\FunctionSchemata\ISchema;
+use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,10 +14,10 @@ abstract class ValidationTest extends TestCase {
 	 * Helper function to test success and failure on the validation
 	 * of ZObjects.
 	 *
-	 * @param ISchema $validator
+	 * @param SchemaWrapper $validator
 	 * @param mixed $testObjects
 	 */
-	protected function testValidation( ISchema $validator, $testObjects ): void {
+	protected function testValidation( SchemaWrapper $validator, $testObjects ): void {
 		$successes = [];
 		if ( isset( $testObjects->success ) ) {
 			$successes = $testObjects->success;

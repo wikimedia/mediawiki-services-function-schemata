@@ -2,19 +2,19 @@
 
 namespace Mediawiki\Services\Wikilambda\FunctionSchemata\Tests;
 
-use Mediawiki\Services\Wikilambda\FunctionSchemata\ISchema;
 use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaFactory;
 use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils;
+use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaWrapper;
 
 final class SimpleSchemataTest extends ValidationTest {
 
 	/**
 	 * @coversNothing
 	 * @dataProvider provideValidSchemata
-	 * @param ISchema $validator
+	 * @param SchemaWrapper $validator
 	 * @param stdClass $testObjects
 	 */
-	public function testSimpleSchemata( ISchema $validator, $testObjects ): void {
+	public function testSimpleSchemata( SchemaWrapper $validator, $testObjects ): void {
 		$this->testValidation( $validator, $testObjects );
 	}
 
@@ -34,7 +34,7 @@ final class SimpleSchemataTest extends ValidationTest {
 	/**
 	 * @coversNothing
 	 * @dataProvider provideParseFailures
-	 * @param ISchema $validator
+	 * @param SchemaWrapper $validator
 	 */
 	public function testParseFailures( $validator ): void {
 		$this->markTestSkipped( 'Not yet working.' );

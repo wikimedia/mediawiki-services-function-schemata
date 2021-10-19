@@ -65,22 +65,22 @@ class SchemaFactory {
 
 	/**
 	 * @param mixed $schemaSpec
-	 * @return ISchema
+	 * @return SchemaWrapper
 	 */
 	public function parse( $schemaSpec ) {
 		$validator = new \Opis\JsonSchema\Validator();
 		$jsonEncoded = json_encode( $schemaSpec );
 		$schema = Schema::fromJsonString( $jsonEncoded );
-		return new ISchema( $schema, $validator );
+		return new SchemaWrapper( $schema, $validator );
 	}
 
 	/**
-	 * Creates an ISchema that validates the normalized form of the provided
+	 * Creates a SchemaWrapper that validates the normalized form of the provided
 	 * type.
 	 * TODO: Assert that this->loader is not null.
 	 *
 	 * @param string $ZID
-	 * @return ISchema|null
+	 * @return SchemaWrapper|null
 	 */
 	public function create( $ZID ) {
 		if ( $ZID == "Z13" ) {
@@ -94,6 +94,6 @@ class SchemaFactory {
 		}
 		$validator = new \Opis\JsonSchema\Validator();
 		$validator->setLoader( $this->loader );
-		return new ISchema( $schema, $validator );
+		return new SchemaWrapper( $schema, $validator );
 	}
 }

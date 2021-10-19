@@ -2,9 +2,9 @@
 
 namespace Mediawiki\Services\Wikilambda\FunctionSchemata\Tests;
 
-use Mediawiki\Services\Wikilambda\FunctionSchemata\ISchema;
 use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaFactory;
 use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemataUtils;
+use Mediawiki\Services\Wikilambda\FunctionSchemata\SchemaWrapper;
 use Mediawiki\Services\Wikilambda\FunctionSchemata\YumYumYamlLoader;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
@@ -29,7 +29,7 @@ final class SchemaFactoryTest extends TestCase {
 	public function testSchema(): void {
 		$factory = SchemaFactory::getNormalFormFactory();
 		$schema = $factory->create( "Z10" );
-		$this->assertInstanceOf( ISchema::class, $schema );
+		$this->assertInstanceOf( SchemaWrapper::class, $schema );
 	}
 
 	/**
@@ -44,6 +44,6 @@ final class SchemaFactoryTest extends TestCase {
 		EOYAML;
 		*/
 		$schema = $factory->parse( Yaml::parse( $yamlContents ) );
-		$this->assertInstanceOf( ISchema::class, $schema );
+		$this->assertInstanceOf( SchemaWrapper::class, $schema );
 	}
 }

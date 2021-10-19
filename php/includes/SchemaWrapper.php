@@ -1,6 +1,6 @@
 <?php
 /**
- * WikiLambda interface for schema validator
+ * WikiLambda class wrapping a schema validator
  *
  * @file
  * @copyright 2020–2021 WikiLambda team
@@ -13,7 +13,7 @@ use Opis\JsonSchema\Schema;
 use Opis\JsonSchema\ValidationResult;
 use Opis\JsonSchema\Validator;
 
-class ISchema {
+class SchemaWrapper {
 	/**
 	 * @var Schema
 	 */
