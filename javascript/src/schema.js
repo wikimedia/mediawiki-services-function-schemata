@@ -349,7 +349,7 @@ class SchemaFactory {
 	 *
 	 *  // Z4 is a Z4 corresponding to a user-defined type
 	 *  const factory = SchemaFactory.NORMAL();
-	 *  const Z10001Schema = factory.createUserDefined(Z4);
+	 *  const Z10001Schema = factory.createUserDefined([Z4]);
 	 *
 	 * @param {Object} Z4 the descriptor for a user-defined type
 	 * @return {Schema} a fully-initialized Schema
