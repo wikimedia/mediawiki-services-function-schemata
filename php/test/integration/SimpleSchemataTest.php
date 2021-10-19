@@ -12,7 +12,7 @@ final class SimpleSchemataTest extends ValidationTest {
 	 * @coversNothing
 	 * @dataProvider provideValidSchemata
 	 * @param SchemaWrapper $validator
-	 * @param stdClass $testObjects
+	 * @param \stdClass $testObjects
 	 */
 	public function testSimpleSchemata( SchemaWrapper $validator, $testObjects ): void {
 		$this->testValidation( $validator, $testObjects );
@@ -39,7 +39,7 @@ final class SimpleSchemataTest extends ValidationTest {
 	public function testParseFailures( $validator ): void {
 		$this->markTestSkipped( 'Not yet working.' );
 
-		$this->assertIsNull( $validator );
+		// $this->assertIsNull( $validator );
 	}
 
 	public function provideParseFailures() {

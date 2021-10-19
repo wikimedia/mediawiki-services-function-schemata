@@ -27,6 +27,7 @@ abstract class ValidationTest extends TestCase {
 			$status = $validator->validate( $testObject->object );
 			$message = $testObject->name;
 			if ( !$status->isValid() ) {
+				// @phan-suppress-next-line PhanUndeclaredProperty We're bypassing the public API
 				$message .= var_export( $validator->errors, true );
 			}
 			$this->assertTrue( $status->isValid(), $message );

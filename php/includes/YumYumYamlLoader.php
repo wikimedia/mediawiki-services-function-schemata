@@ -20,7 +20,7 @@ class YumYumYamlLoader implements ISchemaLoader {
 	protected $prefixToDirectory = [];
 
 	/**
-	 * @var Schema[]
+	 * @var (Schema|string)[]
 	 */
 	protected $schemaCache = [];
 

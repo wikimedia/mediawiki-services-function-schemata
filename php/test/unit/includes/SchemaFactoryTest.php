@@ -19,6 +19,7 @@ final class SchemaFactoryTest extends TestCase {
 			$this->equalTo( SchemataUtils::joinPath( SchemataUtils::dataDirectory(), "NORMAL" ) ),
 			$this->equalTo( "NORMAL" )
 		);
+		'@phan-var YumYumYamlLoader $mockLoader';
 		$factory = SchemaFactory::getNormalFormFactory( $mockLoader );
 		$this->assertInstanceOf( SchemaFactory::class, $factory );
 	}

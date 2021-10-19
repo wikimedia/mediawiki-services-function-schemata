@@ -9,7 +9,9 @@
 
 namespace Mediawiki\Services\Wikilambda\FunctionSchemata;
 
+use Opis\JsonSchema\ISchemaLoader;
 use Opis\JsonSchema\Schema;
+use Opis\JsonSchema\Validator;
 
 class SchemaFactory {
 	/**
@@ -18,7 +20,7 @@ class SchemaFactory {
 	private $loader;
 
 	/**
-	 * @param string|null $loader Which loader to use
+	 * @param ISchemaLoader|null $loader Which loader to use
 	 */
 	private function __construct( $loader = null ) {
 		$this->loader = $loader;
@@ -27,7 +29,7 @@ class SchemaFactory {
 	/**
 	 * Creates a SchemaFactory for normal-form ZObjects.
 	 *
-	 * @param string|null $loader Which loader to use
+	 * @param ISchemaLoader|null $loader Which loader to use
 	 * @return SchemaFactory
 	 */
 	public static function getNormalFormFactory( $loader = null ): SchemaFactory {
@@ -68,7 +70,7 @@ class SchemaFactory {
 	 * @return SchemaWrapper
 	 */
 	public function parse( $schemaSpec ) {
-		$validator = new \Opis\JsonSchema\Validator();
+		$validator = new Validator();
 		$jsonEncoded = json_encode( $schemaSpec );
 		$schema = Schema::fromJsonString( $jsonEncoded );
 		return new SchemaWrapper( $schema, $validator );
@@ -92,7 +94,7 @@ class SchemaFactory {
 		if ( $schema == null ) {
 			return null;
 		}
-		$validator = new \Opis\JsonSchema\Validator();
+		$validator = new Validator();
 		$validator->setLoader( $this->loader );
 		return new SchemaWrapper( $schema, $validator );
 	}
