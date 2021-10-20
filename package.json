@@ -6,6 +6,7 @@
 	},
 	"scripts": {
 		"lint": "eslint --cache --max-warnings 0 --ext .js,.json .",
+		"lint:fix": "eslint --fix .",
 		"test": "npm run lint && qunit javascript/"
 	},
 	"license": "MIT",

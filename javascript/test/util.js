@@ -16,6 +16,26 @@ function traverse( zobject, callback ) {
 	}
 }
 
+/**
+ * Traverses a Z5/Error object searching for all of the suberror codes in the
+ * tree. Returns a set of the codes that were not found.
+ *
+ * @param {Object} Z5 the Z5/Error
+ * @param {Array} codes array of error codes to be searched
+ * @return {Set} a set of missing error codes
+ */
+function getMissingZ5( Z5, codes ) {
+	const notFound = new Set( codes );
+
+	traverse( Z5, ( key, value ) => {
+		if ( key === 'Z5K1' && notFound.has( value ) ) {
+			notFound.delete( value );
+		}
+	} );
+
+	return notFound;
+}
+
 function testValidation( baseName, validator, testObjects ) {
 	// Serialized function calls subsumed in the "success" block should validate
 	// successfully.
@@ -80,7 +100,8 @@ function testZ5( baseName, validator, testObjects ) {
 }
 
 /**
- * Runs a set of tests for the given function.
+ * Runs a set of tests for the given function. The function is expected to
+ * return a result envelope where error must be a ZObject.
  *
  * @param {string} baseName the test set name as defined in the .yaml
  * @param {Function} fn the function that will be tested
@@ -90,17 +111,30 @@ function test( baseName, fn, testObjects ) {
 	const successes = testObjects.success || [];
 	successes.forEach( ( testObject ) => {
 		QUnit.test( `${baseName}: ${testObject.name}`, ( assert ) => {
-			assert.deepEqual( fn( testObject.object ), testObject.expected );
+			const envelope = fn( testObject.object );
+			const data = envelope.Z22K1;
+			const error = envelope.Z22K2;
+
+			assert.deepEqual( error, { Z1K1: 'Z9', Z9K1: 'Z23' } );
+			assert.deepEqual( data, testObject.expected );
 		} );
 	} );
 
 	const errors = testObjects.throws || [];
 	errors.forEach( ( testObject ) => {
 		QUnit.test( `${baseName}: ${testObject.name}`, ( assert ) => {
-			// TODO: we could have a RegExp as argumento to "throws" for a error message match
-			assert.throws( () => fn( testObject.object ) );
+			const envelope = fn( testObject.object );
+			const data = envelope.Z22K1;
+			const error = envelope.Z22K2;
+
+			assert.deepEqual( data, { Z1K1: 'Z9', Z9K1: 'Z23' } );
+			assert.equal( error.Z1K1, 'Z5' );
+
+			const notFound = getMissingZ5( error, testObject.errors );
+
+			assert.equal( notFound.size, 0 );
 		} );
 	} );
 }
 
-module.exports = { test, testValidation, testZ5 };
+module.exports = { test, testValidation, testZ5, getMissingZ5 };

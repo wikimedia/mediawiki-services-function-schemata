@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { is_string, is_reference, is_array, arrayToZ10 } = require( './utils.js' ); // eslint-disable-line camelcase
+const { is_string, is_reference, is_array, arrayToZ10, makeResultEnvelope } = require( './utils.js' ); // eslint-disable-line camelcase
 const { SchemaFactory } = require( './schema' );
 
 const mixedFactory = SchemaFactory.MIXED();
@@ -55,18 +55,20 @@ function normalize( o ) {
 }
 
 /**
- * Normalizes a canonical ZObject.
+ * Normalizes a canonical ZObject. Returns the normalized ZObject or a
+ * Z5/Error in a Z22/Pair.
  *
  * @param {Object} o a ZObject
- * @return {Object} the normalized ZObject
- * @throws {Error} throws if argument "o" is not in canonical form
+ * @return {Object} a Z22
  */
 function normalizeExport( o ) {
-	if ( !mixedZ1Validator.validate( o ) ) {
-		throw new Error( 'normalize: argument is not a well-formed canonical ZObject.' + JSON.stringify( o ) );
-	}
+	const status = mixedZ1Validator.validateStatus( o );
 
-	return normalize( o );
+	if ( status.isValid() ) {
+		return makeResultEnvelope( normalize( o ), null );
+	} else {
+		return makeResultEnvelope( null, status.getZ5() );
+	}
 }
 
 module.exports = normalizeExport;

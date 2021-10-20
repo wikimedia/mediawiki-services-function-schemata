@@ -589,16 +589,24 @@ test_objects:
     object:
       Z1K1: Z6
       Z6K2: Z
+    errors:
+      - Z502
+      - Z532
 
   - name: malformed normalized reference
     object:
       Z1K1: Z9
       Z9K1: tuber
+    errors:
+      - Z502
 
   - name: malformed key
     object:
       Z1K1: Z9
       tuber: Z7
+    errors:
+      - Z502
+      - Z525
 
   - name: normalized terminal zobject
     obejct:
@@ -606,3 +614,5 @@ test_objects:
         Z1K1: Z9
         Z9K1: Z6
       Z6K1: "error"
+    errors:
+      - Z502

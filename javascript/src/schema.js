@@ -169,7 +169,14 @@ function identityOfType( Z4 ) {
  */
 function keyForGeneric( genericZ7 ) {
 	const normalize = require( './normalize.js' );
-	const Z7 = normalize( genericZ7 );
+	const normalized = normalize( genericZ7 );
+	const Z7 = normalized.Z22K1;
+
+	// TODO: use an actual validator and have validation errors in normal form (T294175)
+	if ( normalized.Z22K2.Z1K1 === 'Z5' ) {
+		throw new Error( 'Failed to normalized generic Z7: ' + JSON.stringify( genericZ7 ) );
+	}
+
 	const result = [ identityOfFunction( Z7.Z7K1 ) ];
 	const argumentKeys = [];
 	for ( const key of Object.keys( Z7 ) ) {
@@ -360,7 +367,16 @@ class SchemaFactory {
 	createUserDefined( Z4s ) {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
-		const normalZ4s = Z4s.map( normalize );
+		const normalized = Z4s.map( ( Z4 ) => normalize( Z4 ) );
+
+		// TODO: use an actual validator and have validation errors in normal form (T294175)
+		const errorIndex = normalized.map( ( o ) => o.Z22K2.Z1K1 === 'Z5' );
+		if ( errorIndex > -1 ) {
+			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
+		}
+
+		const normalZ4s = Z4s.map( ( Z4 ) => normalize( Z4 ).Z22K1 );
+
 		for ( const Z4 of normalZ4s ) {
 			if ( validatesAsFunctionCall( Z4.Z4K1 ) ) {
 				const key = keyForGeneric( Z4.Z4K1 );

@@ -2,7 +2,7 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { is_string, is_array, is_reference, Z10ToArray } = require( './utils.js' ); // eslint-disable-line camelcase
+const { is_string, is_array, is_reference, Z10ToArray, makeResultEnvelope } = require( './utils.js' ); // eslint-disable-line camelcase
 const { SchemaFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 
@@ -62,28 +62,28 @@ function canonicalize( o ) {
 }
 
 /**
- * Canonicalizes a normalized ZObject.
+ * Canonicalizes a normalized ZObject. Returns either the canonicalized
+ * ZObject or a Z5/Error.
  *
  * @param {Object} o a ZObject
- * @return {Object} the canonical ZObject
- * @throws {Error} throws if argument "o" is not in normal form
+ * @return {Array} an array of [data, error]
  */
 function canonicalizeExport( o ) {
-	let wellFormed = true;
-	let normalized;
-	try {
-		normalized = normalize( o );
-	} catch ( e ) {
-		wellFormed = false;
-	}
-	if ( !normalZ1Validator.validate( normalized ) ) {
-		wellFormed = false;
-	}
-	if ( !wellFormed ) {
-		throw new Error( 'canonicalize: argument is not a well-formed normal ZObject: ' + JSON.stringify( o ) );
+	const normalized = normalize( o );
+
+	// TODO: use an actual validator and have validation errors in normal form (T294175)
+	if ( normalized.Z22K2.Z1K1 === 'Z5' ) {
+		// forward the error that happened in preliminary normalization
+		return normalized;
 	}
 
-	return canonicalize( normalized );
+	const status = normalZ1Validator.validateStatus( normalized );
+
+	if ( status.isValid() ) {
+		return makeResultEnvelope( canonicalize( normalized.Z22K1 ), null );
+	} else {
+		return makeResultEnvelope( null, status.getZ5() );
+	}
 }
 
 module.exports = canonicalizeExport;

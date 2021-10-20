@@ -584,3 +584,6 @@ test_objects:
     object:
       Z1K1: Z9
       tuber: Z7
+    errors:
+      - Z502
+      - Z525
