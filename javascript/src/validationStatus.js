@@ -1,13 +1,15 @@
-const ErrorFormater = require('./errorFormatter');
+'use strict';
+
+const ErrorFormater = require( './errorFormatter' );
 
 class ValidationStatus {
 
-	constructor(validator, result) {
-		this._isValid = Boolean(result);
+	constructor( validator, result ) {
+		this._isValid = Boolean( result );
 
-		if (!this._isValid) {
+		if ( !this._isValid ) {
 			this.parserErrors = validator.errors;
-			this.Z5 = ErrorFormater.createRootZError(this.parserErrors);
+			this.Z5 = ErrorFormater.createRootZError( this.parserErrors );
 		} else {
 			this.parserErrors = [];
 			this.Z5 = null;
@@ -27,12 +29,12 @@ class ValidationStatus {
 	}
 
 	toString() {
-		return JSON.stringify({
+		return JSON.stringify( {
 			isValid: this._isValid,
-			zError: this.Z5,
-		})
+			zError: this.Z5
+		} );
 	}
 
 }
 
-module.exports = { ValidationStatus }
+module.exports = { ValidationStatus };

@@ -1,22 +1,22 @@
 'use strict';
 
-function innerError(codes, args, normalized = false) {
+function innerError( codes, args, normalized = false ) {
 	const z1k1 = normalized ?
-		{ Z1K1: 'Z9', Z9K1: codes[0] } :
-		codes[0];
+		{ Z1K1: 'Z9', Z9K1: codes[ 0 ] } :
+		codes[ 0 ];
 
-	if (codes.length === 1) {
+	if ( codes.length === 1 ) {
 		const errorObject = {
 			Z1K1: z1k1
 		};
-		for (let i = 0; i < args.length; i++) {
-			errorObject[ codes + 'K' + (i + 1).toString() ] = args[ i ];
+		for ( let i = 0; i < args.length; i++ ) {
+			errorObject[ codes + 'K' + ( i + 1 ).toString() ] = args[ i ];
 		}
 		return errorObject;
 	} else {
 		return {
 			Z1K1: z1k1,
-			[ codes[ 0 ] + 'K1' ]: innerError(codes.slice(1), args)
+			[ codes[ 0 ] + 'K1' ]: innerError( codes.slice( 1 ), args )
 		};
 	}
 }
@@ -30,10 +30,10 @@ function innerError(codes, args, normalized = false) {
  * @param {Array} args The arguments of the last error in 'codes'
  * @return {Object}
  */
-function canonicalError(codes, args) {
+function canonicalError( codes, args ) {
 	return {
 		Z1K1: 'Z5',
-		Z5K1: innerError(codes, args)
+		Z5K1: innerError( codes, args )
 	};
 }
 
@@ -46,9 +46,9 @@ function canonicalError(codes, args) {
  * @param {Array} args The arguments of the last error in 'codes'
  * @return {Object}
  */
-function normalError(codes, args) {
-	const argsZ6 = args.map((el) =>
-		typeof el === 'string' ? { Z1K1 : 'Z6', Z6K1 : el } : el
+function normalError( codes, args ) {
+	const argsZ6 = args.map( ( el ) =>
+		typeof el === 'string' ? { Z1K1: 'Z6', Z6K1: el } : el
 	);
 
 	return {
@@ -56,7 +56,7 @@ function normalError(codes, args) {
 			Z1K1: 'Z9',
 			Z9K1: 'Z5'
 		},
-		Z5K1: innerError(codes, argsZ6, true)
+		Z5K1: innerError( codes, argsZ6, true )
 	};
 }
 
@@ -105,7 +105,7 @@ const error = {
 	invalid_json: 'Z548',
 	invalid_zreference: 'Z549',
 	unknown_zreference: 'Z550',
-	key_type_mismatch: 'Z551',
+	key_type_mismatch: 'Z551'
 };
 
 module.exports = {
