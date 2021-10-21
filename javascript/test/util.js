@@ -47,7 +47,7 @@ function testValidation( baseName, validator, testObjects ) {
  * Runs a set of tests on the validation Z5s of a ZObject.
  *
  * @param {string} baseName the test set name as defined in the .yaml
- * @param {Ajv} validator the validator to be used for the ZObjects
+ * @param {Object} validator the Ajv validator to be used for the ZObjects
  * @param {Object} testObjects the .yaml object containing test definitions
  */
 function testZ5( baseName, validator, testObjects ) {

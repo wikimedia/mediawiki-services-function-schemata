@@ -1,0 +1,12 @@
+{
+	"extends": [
+		"../../.eslintrc.json",
+		"wikimedia/qunit"
+	],
+	"overrides": [
+		{
+			"files": "**/*.json",
+			"extends": "wikimedia/json"
+		}
+	]
+}
