@@ -22,7 +22,7 @@ function testDataWellformedness( ZID, object ) {
 
 fs.readdirSync( dataPath ).forEach( ( file ) => {
 	const ZID = file.split( '.' )[ 0 ];
-	const fileRegex = /(Z[1-9]\d*(K[1-9]\d*)?(_backend)?)\.yaml/;
+	const fileRegex = /(Z[1-9]\d*)\.json/;
 
 	if ( file.match( fileRegex ) === null ) {
 		return;
