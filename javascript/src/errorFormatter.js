@@ -242,7 +242,7 @@ class ErrorFormatter {
 				expandedType = dataType;
 			}
 
-			return descriptor.keywordArgs.used.indexOf( expandedType ) > -1;
+			return descriptor.keywordArgs.used.includes( expandedType );
 		}
 
 		return descriptor.keywordArgs.expected === err.params.type;
