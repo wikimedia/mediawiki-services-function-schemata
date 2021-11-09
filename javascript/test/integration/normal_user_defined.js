@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require( 'path' );
-const { keyForGeneric, SchemaFactory } = require( '../../src/schema.js' );
+const { SchemaFactory, TypeKeyFactory } = require( '../../src/schema.js' );
 const { readYaml } = require( '../../src/utils.js' );
 const { testValidation } = require( '../util.js' );
 
@@ -15,7 +15,7 @@ function test( ZID ) {
 	const testDescriptor = readYaml( normalFile );
 	const testZ4 = normalize( testDescriptor.test_Z4 ).Z22K1;
 	const normalValidatorMap = factory.createUserDefined( [ testZ4 ] );
-	const genericKey = keyForGeneric( testZ4.Z4K1 );
+	const genericKey = TypeKeyFactory.create( testZ4 ).asString();
 	const normalValidator = normalValidatorMap.get( genericKey );
 	const info = testDescriptor.test_information;
 	testValidation( info.name, normalValidator, testDescriptor.test_objects );

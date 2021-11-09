@@ -13,7 +13,7 @@ definitions:
       properties:
         Z1K1:
           anyOf:
-          - $ref: Z7#/definitions/objects/Z7
+          - $ref: Z4#/definitions/objects/Z4_literal
           - allOf:
             - $ref: Z7#/definitions/objects/Z7_literal
             - properties:

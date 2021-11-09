@@ -3,22 +3,34 @@
 const Ajv = require( 'ajv' ).default;
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { readYaml, Z10ToArray } = require( './utils.js' );
+const { isString, isUserDefined, readYaml, Z10ToArray } = require( './utils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 
-let Z6Validator, Z7Validator, Z9Validator, Z18Validator;
+let Z4Validator, Z6Validator, Z7Validator, Z8Validator, Z9Validator, Z18Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
 	const defaultFactory = SchemaFactory.NORMAL();
+	Z4Validator = defaultFactory.create( 'Z4' );
 	Z6Validator = defaultFactory.create( 'Z6' );
 	Z7Validator = defaultFactory.create( 'Z7' );
+	Z8Validator = defaultFactory.create( 'Z8' );
 	Z9Validator = defaultFactory.create( 'Z9' );
 	Z18Validator = defaultFactory.create( 'Z18' );
 }
 
-// TODO: Migrate is(String|Reference|FunctionCall) to utils. Somehow avoid
+// TODO: Migrate validatesAs* functions to utils. Somehow avoid
 // incurring circular import problem in the process.
+
+/**
+ * Determines whether argument is a Z4.
+ *
+ * @param {Object} Z1 a ZObject
+ * @return {boolean} true if Z1 validates as Z4
+ */
+function validatesAsType( Z1 ) {
+	return Z4Validator.validate( Z1 ) && !( Z7Validator.validate( Z1 ) );
+}
 
 /**
  * Determines whether argument is a Z6 or Z9. These two types' Z1K1s are
@@ -31,6 +43,18 @@ function initializeValidators() {
 function validatesAsString( Z1 ) {
 	// TODO: Prohibit Z18s.
 	return Z6Validator.validate( Z1 );
+}
+
+/**
+ * Determines whether argument is a Z8.
+ *
+ * @param {Object} Z1 a ZObject
+ * @return {boolean} true if Z1 validates as Z8
+ */
+function validatesAsFunction( Z1 ) {
+	return ( Z8Validator.validate( Z1 ) &&
+		!( Z9Validator.validate( Z1 ) ) &&
+		!( Z18Validator.validate( Z1 ) ) );
 }
 
 /**
@@ -53,6 +77,214 @@ function validatesAsFunctionCall( Z1 ) {
 	return ( Z7Validator.validate( Z1 ) &&
 		!( Z9Validator.validate( Z1 ) ) &&
 		!( Z18Validator.validate( Z1 ) ) );
+}
+
+/**
+ * Finds the identity of a type. This might be a Function Call (in the case of
+ * a generic type), a Reference (in the case of a builtin), or the Z4 itself
+ * (in the case of a user-defined type).
+ *
+ * @param {Object} Z4 a Type
+ * @return {Object|null} the Z4's identity
+ */
+function findIdentity( Z4 ) {
+	if ( validatesAsFunctionCall( Z4 ) || validatesAsReference( Z4 ) ) {
+		return Z4;
+	}
+	if ( validatesAsType( Z4 ) ) {
+		const identity = findIdentity( Z4.Z4K1 );
+		if ( validatesAsReference( identity ) && isUserDefined( identity.Z9K1 ) ) {
+			return Z4;
+		}
+		return identity;
+	}
+	const nUtil = require( 'util' );
+	console.log( 'Z4 was', nUtil.inspect( Z4, { depth: null } ) );
+	throw new Error( `Could not find the identity of ${Z4}` );
+}
+
+/**
+ * Finds the ZID associated with a type's identity. This might be the ZID of
+ * the Function (if identity is a Function Call) or the ZID of a built-in type.
+ *
+ * @param {Object} Z4 a Type's identity
+ * @return {Object|null} the associated ZID
+ */
+function getZID( Z4 ) {
+	if ( validatesAsFunction( Z4 ) ) {
+		return getZID( Z4.Z8K5 );
+	}
+	if ( validatesAsReference( Z4 ) ) {
+		return Z4.Z9K1;
+	}
+	if ( validatesAsFunctionCall( Z4 ) ) {
+		return getZID( Z4.Z7K1 );
+	}
+	if ( validatesAsType( Z4 ) ) {
+		return getZID( Z4.Z4K1 );
+	}
+	if ( isString( Z4 ) ) {
+		// If Z4 is a string, original object was a Z6 or a Z9.
+		return Z4;
+	}
+	// I guess this wasn't a very good ZObject.
+	throw new Error( `Could not determine type for ${Z4}` );
+}
+
+class SimpleTypeKey {
+	constructor( ZID ) {
+		this.ZID_ = ZID;
+	}
+
+	/**
+	 * String representation containing the type's ZID.
+	 *
+	 * @return {string} ZID of builtin type
+	 */
+	asString() {
+		return this.ZID_;
+	}
+}
+
+class GenericTypeKey {
+	constructor( ZID ) {
+		this.ZID_ = ZID;
+		this.children_ = [];
+	}
+
+	addChild( typeKey ) {
+		this.children_.push( typeKey );
+	}
+
+	/**
+	 * String representation containing the identity of the original Z7K1 and
+	 * the keys of all of the type arguments.
+	 *
+	 * TODO(T295373): This assumes that generics will only be parameterized by types.
+	 *
+	 * @return {string} contains identity of Function and of its arguments
+	 */
+	asString() {
+		const subKeys = [];
+		for ( const child of this.children_ ) {
+			subKeys.push( child.asString() );
+		}
+		return this.ZID_ + '[' + subKeys.join( ',' ) + ']';
+	}
+}
+
+class UserDefinedTypeKey extends GenericTypeKey {
+	constructor() {
+		super( '' );
+	}
+
+	addChild( typeKey ) {
+		this.children_.push( typeKey );
+	}
+
+	/**
+	 * String representation containing the keys of all of the members of the
+	 * Z4.
+	 *
+	 * @return {string} containing identity of type's members
+	 */
+	asString() {
+		const subKeys = [];
+		for ( const child of this.children_ ) {
+			subKeys.push( child.asString() );
+		}
+		return '<' + subKeys.join( ',' ) + '>';
+	}
+}
+
+class TypeKeyFactory {
+
+	/**
+	 * Generate a unique identifier for a Z4/Type.
+	 *
+	 * If the type is built-in, its unique identifier will simply be its ZID.
+	 *
+	 * If the type is ultimately defined by a generic Z8/Function, the unique
+	 * identifier will consist of the ZID of the Function, followed by the unique
+	 * idenifiers of its arguments (enclosed in brackets, comma-separated), e.g.
+	 *
+	 * TODO(T292260): Change the ZIDs.
+	 *  {
+	 *      Z1K1: Z7,
+	 *      Z7K1: Z831,
+	 *      Z831K1: Z6,
+	 *      Z831K2: Z40
+	 *  }
+	 *  ( a.k.a. Pair( String, Boolean ) )
+	 *
+	 * produces a key like
+	 *
+	 *  "Z831[Z6,Z40]"
+	 *
+	 * If the type is user-defined, the unique identifier will be the unique
+	 * identifiers of the type's attributes (enclosed in angle brackets, comma-
+	 * separated), e.g.
+	 *
+	 *  {
+	 *      ...
+	 *      Z4K2: [
+	 *          { Z3K1: K1, Z3K2: Z40 },
+	 *          { Z3K1: K2, Z3K2: Z6 },
+	 *          { Z3K1: K3, Z3K2: Z86 }
+	 *      ]
+	 * }
+	 *
+	 * produces a key like
+	 *
+	 *  "<Z40,Z6,Z86>"
+	 *
+	 * @param { Object } Z4 a type (may be a Z7, a Z4, or a Z9)
+	 * @return { Object } SimpleTypeKey, GenericTypeKey, or UserDefinedTypeKey
+	 */
+	static create( Z4 ) {
+		const normalize = require( './normalize.js' );
+		const normalized = normalize( Z4 ).Z22K1;
+		const identity = findIdentity( normalized );
+		const ZID = getZID( identity );
+		// Built-in type.
+		if ( validatesAsReference( identity ) ) {
+			return new SimpleTypeKey( ZID );
+		}
+
+		// User-defined and generic types both have children!
+		let key = null;
+		const children = [];
+		if ( validatesAsType( identity ) ) {
+			// User-defined type.
+			key = new UserDefinedTypeKey();
+			for ( const Z3 of Z10ToArray( identity.Z4K2 ) ) {
+				children.push( TypeKeyFactory.create( Z3.Z3K1 ) );
+			}
+		} else if ( validatesAsFunctionCall( identity ) ) {
+			// Generic type.
+			key = new GenericTypeKey( ZID );
+			const argumentKeys = [];
+			const skipTheseKeys = new Set( [ 'Z1K1', 'Z7K1' ] );
+			for ( const argumentKey of Object.keys( identity ) ) {
+				if ( skipTheseKeys.has( argumentKey ) ) {
+					continue;
+				}
+				argumentKeys.push( argumentKey );
+			}
+			argumentKeys.sort();
+			for ( const argumentKey of argumentKeys ) {
+				children.push( TypeKeyFactory.create( identity[ argumentKey ] ) );
+			}
+		} else {
+			throw new Error( `Invalid identity for type: ${identity}` );
+		}
+
+		for ( const child of children ) {
+			key.addChild( child );
+		}
+		return key;
+	}
+
 }
 
 class BaseSchema {
@@ -101,6 +333,7 @@ class GenericSchema extends BaseSchema {
 	}
 
 	updateKeyMap( keyMap ) {
+		console.log( 'keyMap is', keyMap );
 		this.keyMap_ = keyMap;
 	}
 
@@ -126,10 +359,12 @@ class GenericSchema extends BaseSchema {
 			if ( maybeValid[ key ] === undefined ) {
 				continue;
 			}
+			console.log( 'validating maybeValid', maybeValid, 'at key', key, 'with', this.keyMap_.get( key ) );
 			const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
 			if ( !howsIt.isValid() ) {
 				// TODO: Somehow include key.
 				// TODO: Consider conjunction of all errors?
+				console.log( 'maybeValid[key] is', maybeValid[ key ] );
 				return howsIt;
 			}
 		}
@@ -141,57 +376,6 @@ function dataDir( ...pathComponents ) {
 	return path.join(
 		path.dirname( path.dirname( path.dirname( __filename ) ) ),
 		'data', ...pathComponents );
-}
-
-function identityOfFunction( Z8 ) {
-	if ( validatesAsReference( Z8 ) ) {
-		return Z8.Z9K1;
-	} else {
-		// Presumably a full-on Z8.
-		return Z8.Z8K5.Z9K1;
-	}
-}
-
-function identityOfType( Z4 ) {
-	if ( validatesAsReference( Z4 ) ) {
-		return Z4.Z9K1;
-	} else {
-		// A regular, fleshed-out Z4, one hopes.
-		return Z4.Z4K1.Z9K1;
-	}
-}
-
-/**
- * Generate a unique identifier for a Z7/Function Call that returns a Z4/Type.
- *
- * @param { Object } genericZ7 Z7 that produces a Z4
- * @return { string } a unique key containing the identity of Z7K1 and the type arguments
- */
-function keyForGeneric( genericZ7 ) {
-	const normalize = require( './normalize.js' );
-	const normalized = normalize( genericZ7 );
-	const Z7 = normalized.Z22K1;
-
-	// TODO: use an actual validator and have validation errors in normal form (T294175)
-	if ( normalized.Z22K2.Z1K1 === 'Z5' ) {
-		throw new Error( 'Failed to normalized generic Z7: ' + JSON.stringify( genericZ7 ) );
-	}
-
-	const result = [ identityOfFunction( Z7.Z7K1 ) ];
-	const argumentKeys = [];
-	for ( const key of Object.keys( Z7 ) ) {
-		if ( new Set( [ 'Z1K1', 'Z7K1' ] ).has( key ) ) {
-			continue;
-		}
-		argumentKeys.push( key );
-	}
-	argumentKeys.sort();
-	for ( const key of argumentKeys ) {
-		result.push( identityOfType( Z7[ key ] ) );
-	}
-	// TODO: This sucks; why doesn't JS have an immutable container type that
-	// can be used as a map key?????
-	return result.join( ',' );
 }
 
 class SchemaFactory {
@@ -287,7 +471,7 @@ class SchemaFactory {
 			const validate = this.ajv_.compile( schema );
 			return new Schema( validate );
 		} catch ( err ) {
-			console.log( 'Could not parse schema:' );
+			console.log( 'Could not parse schema' );
 			console.log( err.message );
 			return null;
 		}
@@ -313,7 +497,6 @@ class SchemaFactory {
 			type = 'Z40';
 		}
 		const validate = this.ajv_.getSchema( type );
-		// console.log("creating schema; validate is", validate);
 		if ( validate === null || validate === undefined ) {
 			return null;
 		}
@@ -326,7 +509,7 @@ class SchemaFactory {
 	 * corresponding keys.
 	 *
 	 * @param { Object } Z4 a Z4/Type
-	 * @param { Map } typeCache a mapping from type keys (see keyForGeneric) to BaseSchemata
+	 * @param { Map } typeCache a mapping from type keys (see TypeKeyFactory.create) to BaseSchemata
 	 * @return { Map } mapping from type keys to BaseSchemata
 	 */
 	keyMapForUserDefined( Z4, typeCache ) {
@@ -335,11 +518,15 @@ class SchemaFactory {
 		for ( const Z3 of Z3s ) {
 			const propertyName = Z3.Z3K2.Z6K1;
 			const propertyType = Z3.Z3K1;
+			const identity = findIdentity( propertyType );
 			let subValidator;
 			if ( validatesAsReference( propertyType ) ) {
 				subValidator = this.create( propertyType.Z9K1 );
 			} else {
-				const key = keyForGeneric( propertyType );
+				const key = TypeKeyFactory.create( propertyType ).asString();
+				if ( !( typeCache.has( key ) ) ) {
+					typeCache.set( key, this.createUserDefined( [ identity ] )[ key ] );
+				}
 				subValidator = typeCache.get( key );
 			}
 			keyMap.set( propertyName, subValidator );
@@ -378,14 +565,14 @@ class SchemaFactory {
 		const normalZ4s = Z4s.map( ( Z4 ) => normalize( Z4 ).Z22K1 );
 
 		for ( const Z4 of normalZ4s ) {
-			if ( validatesAsFunctionCall( Z4.Z4K1 ) ) {
-				const key = keyForGeneric( Z4.Z4K1 );
+			if ( validatesAsFunctionCall( findIdentity( Z4 ) ) ) {
+				const key = TypeKeyFactory.create( Z4 ).asString();
 				typeCache.set( key, new GenericSchema( new Map() ) );
 			}
 		}
 		for ( const Z4 of normalZ4s ) {
-			if ( validatesAsFunctionCall( Z4.Z4K1 ) ) {
-				const key = keyForGeneric( Z4.Z4K1 );
+			if ( validatesAsFunctionCall( findIdentity( Z4 ) ) ) {
+				const key = TypeKeyFactory.create( Z4 ).asString();
 				typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
 			}
 		}
@@ -397,8 +584,8 @@ class SchemaFactory {
 initializeValidators();
 
 module.exports = {
-	keyForGeneric,
 	SchemaFactory,
+	TypeKeyFactory,
 	validatesAsString,
 	validatesAsReference,
 	validatesAsFunctionCall

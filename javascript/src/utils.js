@@ -5,7 +5,7 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 const yaml = require( 'yaml' );
 
-function is_string( s ) {
+function isString( s ) {
 	return typeof s === 'string' || s instanceof String;
 }
 
@@ -172,7 +172,7 @@ function isUserDefined( ZID ) {
 
 module.exports = {
 	arrayToZ10,
-	is_string,
+	isString,
 	is_array,
 	is_object,
 	is_key,

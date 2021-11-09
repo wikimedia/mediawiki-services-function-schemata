@@ -1,6 +1,6 @@
 'use strict';
 
-const { keyForGeneric, SchemaFactory } = require( '../../../src/schema.js' );
+const { SchemaFactory, TypeKeyFactory } = require( '../../../src/schema.js' );
 
 QUnit.module( 'schema.js' );
 
@@ -88,31 +88,86 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
 	assert.deepEqual( [], statusValid.getParserErrors() );
 } );
 
-QUnit.test( 'keyForGeneric with Z7K1 & Z4s as references', ( assert ) => {
+QUnit.test( 'TypeKeyFactory with Z7K1 & Z4s as references', ( assert ) => {
 	const Z7 = {
 		Z1K1: 'Z7',
 		Z7K1: 'Z4200',
 		Z4200K1: 'Z14',
 		Z4200K2: 'Z17'
 	};
-	assert.deepEqual( 'Z4200,Z14,Z17', keyForGeneric( Z7 ) );
+	assert.deepEqual( 'Z4200[Z14,Z17]', TypeKeyFactory.create( Z7 ).asString() );
 } );
 
-QUnit.test( 'keyForGeneric with Z7K1 & Z4s as reified types', ( assert ) => {
-	const Z7 = {
-		Z1K1: 'Z7',
-		Z7K1: {
-			Z1K1: 'Z8',
-			Z8K5: 'Z4200'
+QUnit.test( 'TypeKeyFactory with Z7K1 & Z4s as reified types', ( assert ) => {
+	const Z4 = {
+		Z1K1: 'Z4',
+		Z4K1: {
+			Z1K1: 'Z7',
+			Z7K1: 'Z4200',
+			Z4200K1: {
+				Z1K1: 'Z4',
+				Z4K1: 'Z14',
+				Z4K2: [],
+				Z4K3: 'Z1000'
+			},
+			Z4200K2: {
+				Z1K1: 'Z4',
+				Z4K1: 'Z17',
+				Z4K2: [],
+				Z4K3: 'Z1000'
+			}
 		},
-		Z4200K1: {
-			Z1K1: 'Z4',
-			Z4K1: 'Z14'
-		},
-		Z4200K2: {
-			Z1K1: 'Z4',
-			Z4K1: 'Z17'
+		Z4K2: [],
+		Z4K3: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( 'Z4200,Z14,Z17', keyForGeneric( Z7 ) );
+	assert.deepEqual( 'Z4200[Z14,Z17]', TypeKeyFactory.create( Z4 ).asString() );
+} );
+
+QUnit.test( 'TypeKeyFactory with user-defined type', ( assert ) => {
+	const Z4 = {
+		Z1K1: 'Z4',
+		Z4K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1000'
+		},
+		Z4K2: [
+			{
+				Z1K1: 'Z3',
+				Z3K1: 'Z6',
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'K1'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			},
+			{
+				Z1K1: 'Z3',
+				Z3K1: {
+					Z1K1: 'Z7',
+					Z7K1: 'Z931',
+					Z931K1: 'Z6',
+					Z931K2: 'Z12'
+				},
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'K2'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			}
+		],
+		Z4K3: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1001'
+		}
+	};
+	assert.deepEqual( '<Z6,Z931[Z6,Z12]>', TypeKeyFactory.create( Z4 ).asString() );
 } );

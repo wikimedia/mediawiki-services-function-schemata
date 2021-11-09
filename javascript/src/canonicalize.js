@@ -2,7 +2,7 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { is_string, is_array, is_reference, Z10ToArray, makeResultEnvelope } = require( './utils.js' ); // eslint-disable-line camelcase
+const { isString, is_array, is_reference, Z10ToArray, makeResultEnvelope } = require( './utils.js' ); // eslint-disable-line camelcase
 const { SchemaFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 
@@ -21,7 +21,7 @@ function canonicalizeObject( o ) {
 		o.Z9K1 = canonicalize( o.Z9K1 );
 
 		// return as string if Z9K1 is a valid reference string
-		if ( is_string( o.Z9K1 ) && is_reference( o.Z9K1 ) ) {
+		if ( isString( o.Z9K1 ) && is_reference( o.Z9K1 ) ) {
 			return o.Z9K1;
 		}
 	}
@@ -30,7 +30,7 @@ function canonicalizeObject( o ) {
 		o.Z6K1 = canonicalize( o.Z6K1 );
 
 		// return as string if Z6/String doesn't need to be escaped, i.e., is not in Zxxxx format
-		if ( is_string( o.Z6K1 ) && !is_reference( o.Z6K1 ) ) {
+		if ( isString( o.Z6K1 ) && !is_reference( o.Z6K1 ) ) {
 			return o.Z6K1;
 		}
 	}
@@ -50,7 +50,7 @@ function canonicalizeObject( o ) {
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
 function canonicalize( o ) {
-	if ( is_string( o ) ) {
+	if ( isString( o ) ) {
 		return o;
 	}
 
