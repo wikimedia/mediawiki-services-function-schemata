@@ -407,7 +407,6 @@ class SchemaFactory {
 			ajv.addSchema( readYaml( fullFile ) );
 		}
 		return new SchemaFactory( ajv );
-
 	}
 
 	/**
@@ -496,8 +495,16 @@ class SchemaFactory {
 		if ( schemaName === 'Z41' || schemaName === 'Z42' ) {
 			type = 'Z40';
 		}
-		const validate = this.ajv_.getSchema( type );
+		let validate = null;
+		try {
+			validate = this.ajv_.getSchema( type );
+		} catch ( err ) {
+			console.log( 'Could not find schema', schemaName );
+			console.log( err.message );
+			return null;
+		}
 		if ( validate === null || validate === undefined ) {
+			console.log( 'Could not find schema', schemaName );
 			return null;
 		}
 		return new Schema( validate );

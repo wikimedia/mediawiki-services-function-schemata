@@ -170,6 +170,19 @@ function isUserDefined( ZID ) {
 	return !builtInTypes.has( ZID );
 }
 
+function inferType( object ) {
+	if ( isString( object ) ) {
+		if ( is_reference( object ) ) {
+			return 'Z9';
+		}
+		return 'Z6';
+	}
+	if ( is_array( object ) ) {
+		return 'Z10';
+	}
+	return object.Z1K1;
+}
+
 module.exports = {
 	arrayToZ10,
 	isString,
@@ -182,6 +195,7 @@ module.exports = {
 	dataDir,
 	deep_equal,
 	deep_copy,
+	inferType,
 	isEmpty,
 	isUserDefined,
 	kid_from_global_key,
