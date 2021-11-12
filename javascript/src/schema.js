@@ -98,8 +98,6 @@ function findIdentity( Z4 ) {
 		}
 		return identity;
 	}
-	const nUtil = require( 'util' );
-	console.log( 'Z4 was', nUtil.inspect( Z4, { depth: null } ) );
 	throw new Error( `Could not find the identity of ${Z4}` );
 }
 
@@ -333,7 +331,6 @@ class GenericSchema extends BaseSchema {
 	}
 
 	updateKeyMap( keyMap ) {
-		console.log( 'keyMap is', keyMap );
 		this.keyMap_ = keyMap;
 	}
 
@@ -359,12 +356,10 @@ class GenericSchema extends BaseSchema {
 			if ( maybeValid[ key ] === undefined ) {
 				continue;
 			}
-			console.log( 'validating maybeValid', maybeValid, 'at key', key, 'with', this.keyMap_.get( key ) );
 			const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
 			if ( !howsIt.isValid() ) {
 				// TODO: Somehow include key.
 				// TODO: Consider conjunction of all errors?
-				console.log( 'maybeValid[key] is', maybeValid[ key ] );
 				return howsIt;
 			}
 		}
@@ -520,12 +515,12 @@ class SchemaFactory {
 			const propertyType = Z3.Z3K1;
 			const identity = findIdentity( propertyType );
 			let subValidator;
-			if ( validatesAsReference( propertyType ) ) {
+			if ( validatesAsReference( identity ) ) {
 				subValidator = this.create( propertyType.Z9K1 );
 			} else {
 				const key = TypeKeyFactory.create( propertyType ).asString();
 				if ( !( typeCache.has( key ) ) ) {
-					typeCache.set( key, this.createUserDefined( [ identity ] )[ key ] );
+					typeCache.set( key, this.createUserDefined( [ propertyType ] ).get( key ) );
 				}
 				subValidator = typeCache.get( key );
 			}
