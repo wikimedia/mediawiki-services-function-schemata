@@ -71,8 +71,8 @@ function canonicalize( o ) {
 function canonicalizeExport( o ) {
 	const normalized = normalize( o );
 
-	// TODO: use an actual validator and have validation errors in normal form (T294175)
-	if ( normalized.Z22K2.Z1K1 === 'Z5' ) {
+	// TODO: use an actual validator and have validation errors in normal form (T295677)
+	if ( normalized.Z22K2.Z1K1.Z9K1 === 'Z5' ) {
 		// forward the error that happened in preliminary normalization
 		return normalized;
 	}

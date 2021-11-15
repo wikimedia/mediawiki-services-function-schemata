@@ -1,11 +1,9 @@
 'use strict';
 
-const { readYaml, dataDir } = require( './utils.js' );
+// const normalize = require( './normalize.js' );
+const { arrayToZ10, dataDir, readYaml, wrapInZ6, wrapInZ9 } = require( './utils.js' );
 
 class ErrorFormatter {
-
-	// FIXME: This is a syntax error (and isn't necessary?)
-	// static _errorDescriptors = null;
 
 	/**
 	 * Read and parse the yaml file with the error type descriptors
@@ -78,12 +76,10 @@ class ErrorFormatter {
 
 		for ( const [ parserError, Z5 ] of Z5s ) {
 			// only ZnKn are considered as part of the path
-			// FIXME: We don't have ES2020 available
-			// eslint-disable-next-line no-restricted-properties
-			const path = [ ...parserError.instancePath.matchAll( /\bZ\d+K\d+\b/g ) ].map( ( m ) => m[ 0 ] );
+			const path = parserError.instancePath.match( /\bZ\d+K\d+\b/g );
 
 			// no path means it's a root error
-			if ( path.length === 0 ) {
+			if ( !path || path.length === 0 ) {
 				root.errors.push( Z5 );
 			} else {
 				// find the leaf node based on the path creating intermediary nodes if required
@@ -141,13 +137,13 @@ class ErrorFormatter {
 	 */
 	static createZKeyError( key, Z5 ) {
 		return {
-			Z1K1: 'Z5',
-			Z5K1: 'Z526',
+			Z1K1: wrapInZ9( 'Z5' ),
+			Z5K1: wrapInZ9( 'Z526' ),
 			Z5K2: {
-				Z1K1: 'Z526',
+				Z1K1: wrapInZ9( 'Z526' ),
 				Z526K1: {
-					Z1K1: 'Z39',
-					Z39K1: key
+					Z1K1: wrapInZ9( 'Z39' ),
+					Z39K1: wrapInZ9( key )
 				},
 				Z526K2: Z5
 			}
@@ -162,10 +158,10 @@ class ErrorFormatter {
 	 */
 	static createValidationZError( Z5 ) {
 		return {
-			Z1K1: 'Z5',
-			Z5K1: 'Z502',
+			Z1K1: wrapInZ9( 'Z5' ),
+			Z5K1: wrapInZ9( 'Z502' ),
 			Z5K2: {
-				Z1K1: 'Z502',
+				Z1K1: wrapInZ9( 'Z502' ),
 				Z502K1: Z5.Z5K1,
 				Z502K2: Z5
 			}
@@ -180,9 +176,9 @@ class ErrorFormatter {
 	 */
 	static createZErrorList( array ) {
 		return {
-			Z1K1: 'Z5',
-			Z5K1: 'Z509',
-			Z5K2: array
+			Z1K1: wrapInZ9( 'Z5' ),
+			Z5K1: wrapInZ9( 'Z509' ),
+			Z5K2: arrayToZ10( array )
 		};
 	}
 
@@ -261,13 +257,13 @@ class ErrorFormatter {
 		switch ( errorType ) {
 			case 'Z511':
 				Z5K2 = {
-					Z1K1: 'Z511',
+					Z1K1: wrapInZ9( 'Z511' ),
 					Z511K1: {
-						Z1K1: 'Z39',
-						Z39K1: err.params.missingProperty
+						Z1K1: wrapInZ9( 'Z39' ),
+						Z39K1: wrapInZ6( err.params.missingProperty )
 					},
 					Z511K2: {
-						Z1K1: 'Z99',
+						Z1K1: wrapInZ9( 'Z99' ),
 						Z99K1: err.data
 					}
 				};
@@ -275,19 +271,16 @@ class ErrorFormatter {
 
 			case 'Z524':
 				Z5K2 = {
-					Z1K1: 'Z524',
-					Z524K1: err.data
+					Z1K1: wrapInZ9( 'Z524' ),
+					Z524K1: wrapInZ6( err.data )
 				};
 				break;
 
 			case 'Z525':
 				Z5K2 = {
-					Z1K1: 'Z525',
-					Z525K1: {
-						Z1K1: 'Z6',
-						// TODO: check invalid properties to build Z6k1
-						Z6K1: 'todo'
-					}
+					Z1K1: wrapInZ9( 'Z525' ),
+					// TODO: check invalid properties to build Z6k1
+					Z525K1: wrapInZ6( 'todo' )
 				};
 				break;
 
@@ -295,8 +288,8 @@ class ErrorFormatter {
 		}
 
 		return {
-			Z1K1: 'Z5',
-			Z5K1: errorType,
+			Z1K1: wrapInZ9( 'Z5' ),
+			Z5K1: wrapInZ9( errorType ),
 			Z5K2: Z5K2
 		};
 	}
@@ -310,14 +303,13 @@ class ErrorFormatter {
 	 */
 	static createErrorQuote( zid, err ) {
 		return {
-			Z1K1: zid,
+			Z1K1: wrapInZ9( zid ),
 			[ zid + 'K1' ]: {
-				Z1K1: 'Z99',
+				Z1K1: wrapInZ9( 'Z99' ),
 				Z99K1: err.data
 			}
 		};
 	}
-
 }
 
 module.exports = ErrorFormatter;

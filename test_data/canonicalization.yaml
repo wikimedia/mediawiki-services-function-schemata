@@ -609,7 +609,7 @@ test_objects:
       - Z525
 
   - name: normalized terminal zobject
-    obejct:
+    object:
       Z1K1:
         Z1K1: Z9
         Z9K1: Z6

@@ -558,8 +558,8 @@ class SchemaFactory {
 		const normalize = require( './normalize.js' );
 		const normalized = Z4s.map( ( Z4 ) => normalize( Z4 ) );
 
-		// TODO: use an actual validator and have validation errors in normal form (T294175)
-		const errorIndex = normalized.map( ( o ) => o.Z22K2.Z1K1 === 'Z5' );
+		// TODO: use an actual validator and have validation errors in normal form (T295677)
+		const errorIndex = normalized.map( ( o ) => o.Z22K2.Z1K1.Z9K1 === 'Z5' );
 		if ( errorIndex > -1 ) {
 			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
 		}

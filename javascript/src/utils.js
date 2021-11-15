@@ -183,6 +183,20 @@ function inferType( object ) {
 	return object.Z1K1;
 }
 
+function wrapInZ6( zid ) {
+	return {
+		Z1K1: 'Z6',
+		Z6K1: zid
+	};
+}
+
+function wrapInZ9( zid ) {
+	return {
+		Z1K1: 'Z9',
+		Z9K1: zid
+	};
+}
+
 module.exports = {
 	arrayToZ10,
 	isString,
@@ -206,5 +220,7 @@ module.exports = {
 	makeTrue,
 	makeUnit,
 	readYaml,
+	wrapInZ6,
+	wrapInZ9,
 	Z10ToArray
 };

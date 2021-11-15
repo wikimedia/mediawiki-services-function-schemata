@@ -28,7 +28,7 @@ function getMissingZ5( Z5, codes ) {
 	const notFound = new Set( codes );
 
 	traverse( Z5, ( key, value ) => {
-		if ( key === 'Z5K1' && notFound.has( value ) ) {
+		if ( key === 'Z9K1' && notFound.has( value ) ) {
 			notFound.delete( value );
 		}
 	} );
@@ -89,7 +89,7 @@ function testZ5( baseName, validator, testObjects ) {
 			}
 
 			traverse( status.getZ5(), ( key, value ) => {
-				if ( key === 'Z5K1' && errorCodes.has( value ) ) {
+				if ( key === 'Z9K1' && errorCodes.has( value ) ) {
 					errorCodes.delete( value );
 				}
 			} );
@@ -128,7 +128,7 @@ function test( baseName, fn, testObjects ) {
 			const error = envelope.Z22K2;
 
 			assert.deepEqual( data, { Z1K1: 'Z9', Z9K1: 'Z23' } );
-			assert.equal( error.Z1K1, 'Z5' );
+			assert.deepEqual( error.Z1K1, { Z1K1: 'Z9', Z9K1: 'Z5' } );
 
 			const notFound = getMissingZ5( error, testObject.errors );
 
