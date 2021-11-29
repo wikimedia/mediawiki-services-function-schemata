@@ -8,6 +8,7 @@ const normalize = require( './normalize.js' );
 
 const normalFactory = SchemaFactory.NORMAL();
 const normalZ1Validator = normalFactory.create( 'Z1' );
+const Z5Validator = normalFactory.create( 'Z5_literal' );
 const Z6Validator = normalFactory.create( 'Z6' );
 const Z9Validator = normalFactory.create( 'Z9' );
 const Z10Validator = normalFactory.create( 'Z10' );
@@ -71,8 +72,7 @@ function canonicalize( o ) {
 function canonicalizeExport( o ) {
 	const normalized = normalize( o );
 
-	// TODO: use an actual validator and have validation errors in normal form (T295677)
-	if ( normalized.Z22K2.Z1K1.Z9K1 === 'Z5' ) {
+	if ( Z5Validator.validateStatus( normalized.Z22K2 ).isValid() ) {
 		// forward the error that happened in preliminary normalization
 		return normalized;
 	}
