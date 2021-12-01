@@ -5,6 +5,7 @@ const fs = require( 'fs' );
 const path = require( 'path' );
 const { isString, isUserDefined, readYaml, Z10ToArray } = require( './utils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
+const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
 let Z4Validator, Z6Validator, Z7Validator, Z8Validator, Z9Validator, Z18Validator;
 
@@ -98,7 +99,8 @@ function findIdentity( Z4 ) {
 		}
 		return identity;
 	}
-	throw new Error( `Could not find the identity of ${Z4}` );
+	// I guess this wasn't a type.
+	return null;
 }
 
 /**
@@ -108,30 +110,34 @@ function findIdentity( Z4 ) {
  * @param {Object} Z4 a Type's identity
  * @return {Object|null} the associated ZID
  */
-function getZID( Z4 ) {
+function getZIDForType( Z4 ) {
 	if ( validatesAsFunction( Z4 ) ) {
-		return getZID( Z4.Z8K5 );
+		return getZIDForType( Z4.Z8K5 );
 	}
 	if ( validatesAsReference( Z4 ) ) {
 		return Z4.Z9K1;
 	}
 	if ( validatesAsFunctionCall( Z4 ) ) {
-		return getZID( Z4.Z7K1 );
+		return getZIDForType( Z4.Z7K1 );
 	}
 	if ( validatesAsType( Z4 ) ) {
-		return getZID( Z4.Z4K1 );
+		return getZIDForType( Z4.Z4K1 );
 	}
 	if ( isString( Z4 ) ) {
 		// If Z4 is a string, original object was a Z6 or a Z9.
 		return Z4;
 	}
-	// I guess this wasn't a very good ZObject.
-	throw new Error( `Could not determine type for ${Z4}` );
+	// I guess this wasn't a type.
+	return null;
 }
 
 class SimpleTypeKey {
 	constructor( ZID ) {
 		this.ZID_ = ZID;
+	}
+
+	static create( ZID ) {
+		return new SimpleTypeKey( ZID );
 	}
 
 	/**
@@ -144,14 +150,71 @@ class SimpleTypeKey {
 	}
 }
 
-class GenericTypeKey {
-	constructor( ZID ) {
-		this.ZID_ = ZID;
-		this.children_ = [];
+class ZObjectKey {
+	constructor( typeKey, childKeys ) {
+		this.typeKey_ = typeKey;
+		this.childKeys_ = childKeys;
+		this.string_ = null;
 	}
 
-	addChild( typeKey ) {
-		this.children_.push( typeKey );
+	static create( ZObject ) {
+		const children = new Map();
+		let typeKey;
+		for ( const objectKey of Object.keys( ZObject ) ) {
+			const value = ZObject[ objectKey ];
+			let subKey;
+			if ( isString( value ) ) {
+				subKey = SimpleTypeKey.create( value );
+			} else {
+				// eslint-disable-next-line no-use-before-define
+				subKey = ZObjectKeyFactory.create( ZObject[ objectKey ] );
+			}
+			if ( objectKey === 'Z1K1' ) {
+				typeKey = subKey;
+			} else {
+				children.set( objectKey, subKey );
+			}
+		}
+		return new ZObjectKey( typeKey, children );
+	}
+
+	asString() {
+		if ( this.string_ === null ) {
+			const childObject = {};
+			for ( const entry of this.childKeys_.entries() ) {
+				const key = entry[ 0 ];
+				const value = entry[ 1 ].asString();
+				childObject[ key ] = value;
+			}
+			this.string_ = this.typeKey_.asString() + stableStringify( childObject );
+		}
+		return this.string_;
+	}
+}
+
+class GenericTypeKey {
+	constructor( ZID, children ) {
+		this.ZID_ = ZID;
+		this.children_ = children;
+		this.string_ = null;
+	}
+
+	static create( ZID, identity ) {
+		const argumentKeys = [];
+		const skipTheseKeys = new Set( [ 'Z1K1', 'Z7K1' ] );
+		for ( const argumentKey of Object.keys( identity ) ) {
+			if ( skipTheseKeys.has( argumentKey ) ) {
+				continue;
+			}
+			argumentKeys.push( argumentKey );
+		}
+		argumentKeys.sort();
+		const children = [];
+		for ( const argumentKey of argumentKeys ) {
+			// eslint-disable-next-line no-use-before-define
+			children.push( ZObjectKeyFactory.create( identity[ argumentKey ] ) );
+		}
+		return new GenericTypeKey( ZID, children );
 	}
 
 	/**
@@ -163,21 +226,29 @@ class GenericTypeKey {
 	 * @return {string} contains identity of Function and of its arguments
 	 */
 	asString() {
-		const subKeys = [];
-		for ( const child of this.children_ ) {
-			subKeys.push( child.asString() );
+		if ( this.string_ === null ) {
+			const subKeys = [];
+			for ( const child of this.children_ ) {
+				subKeys.push( child.asString() );
+			}
+			this.string_ = this.ZID_ + '(' + subKeys.join( ',' ) + ')';
 		}
-		return this.ZID_ + '[' + subKeys.join( ',' ) + ']';
+		return this.string_;
 	}
 }
 
 class UserDefinedTypeKey extends GenericTypeKey {
-	constructor() {
-		super( '' );
+	constructor( children ) {
+		super( '', children );
 	}
 
-	addChild( typeKey ) {
-		this.children_.push( typeKey );
+	static create( identity ) {
+		const children = [];
+		for ( const Z3 of Z10ToArray( identity.Z4K2 ) ) {
+			// eslint-disable-next-line no-use-before-define
+			children.push( ZObjectKeyFactory.create( Z3.Z3K1 ) );
+		}
+		return new UserDefinedTypeKey( children );
 	}
 
 	/**
@@ -187,24 +258,27 @@ class UserDefinedTypeKey extends GenericTypeKey {
 	 * @return {string} containing identity of type's members
 	 */
 	asString() {
-		const subKeys = [];
-		for ( const child of this.children_ ) {
-			subKeys.push( child.asString() );
+		if ( this.string_ === null ) {
+			const subKeys = [];
+			for ( const child of this.children_ ) {
+				subKeys.push( child.asString() );
+			}
+			this.string_ = '<' + subKeys.join( ',' ) + '>';
 		}
-		return '<' + subKeys.join( ',' ) + '>';
+		return this.string_;
 	}
 }
 
-class TypeKeyFactory {
+class ZObjectKeyFactory {
 
 	/**
-	 * Generate a unique identifier for a Z4/Type.
+	 * Generate a unique identifier for a Z4/Type (or any ZObject).
 	 *
 	 * If the type is built-in, its unique identifier will simply be its ZID.
 	 *
 	 * If the type is ultimately defined by a generic Z8/Function, the unique
 	 * identifier will consist of the ZID of the Function, followed by the unique
-	 * idenifiers of its arguments (enclosed in brackets, comma-separated), e.g.
+	 * idenifiers of its arguments (enclosed in parentheses, comma-separated), e.g.
 	 *
 	 *  {
 	 *      Z1K1: Z7,
@@ -216,7 +290,7 @@ class TypeKeyFactory {
 	 *
 	 * produces a key like
 	 *
-	 *  "Z831[Z6,Z40]"
+	 *  "Z831(Z6,Z40)"
 	 *
 	 * If the type is user-defined, the unique identifier will be the unique
 	 * identifiers of the type's attributes (enclosed in angle brackets, comma-
@@ -235,51 +309,39 @@ class TypeKeyFactory {
 	 *
 	 *  "<Z40,Z6,Z86>"
 	 *
-	 * @param { Object } Z4 a type (may be a Z7, a Z4, or a Z9)
-	 * @return { Object } SimpleTypeKey, GenericTypeKey, or UserDefinedTypeKey
+	 * Otherwise, if the object is not a type, the unique identifier will be
+	 * the unique identifier of the object's type specification (Z1K1), then
+	 * a stable string representation of JSON corresponding to the remaining
+	 * key-value pairs in the object (enclosed by braces). So the unique
+	 * identifier of a ZString (Z6) corresponding to "vittles" will look like
+	 *
+	 *  "Z6{Z6K1:vittles}"
+	 *
+	 * @param { Object } ZObject a ZObject
+	 * @return { Object } (Simple|Generic|UserDefined)TypeKey or ZObjectKey
 	 */
-	static create( Z4 ) {
+	static create( ZObject ) {
 		const normalize = require( './normalize.js' );
-		const normalized = normalize( Z4 ).Z22K1;
+		const normalized = normalize( ZObject ).Z22K1;
+		// FIX BEFORE SUBMITTING: return here on error.
 		const identity = findIdentity( normalized );
-		const ZID = getZID( identity );
-		// Built-in type.
-		if ( validatesAsReference( identity ) ) {
-			return new SimpleTypeKey( ZID );
+		if ( identity === null ) {
+			// ZObject isn't a type, so create a ZObjectKey.
+			return ZObjectKey.create( ZObject );
 		}
-
-		// User-defined and generic types both have children!
-		let key = null;
-		const children = [];
-		if ( validatesAsType( identity ) ) {
+		const ZID = getZIDForType( identity );
+		if ( validatesAsReference( identity ) ) {
+			// Built-in type.
+			return SimpleTypeKey.create( ZID );
+		} else if ( validatesAsType( identity ) ) {
 			// User-defined type.
-			key = new UserDefinedTypeKey();
-			for ( const Z3 of Z10ToArray( identity.Z4K2 ) ) {
-				children.push( TypeKeyFactory.create( Z3.Z3K1 ) );
-			}
+			return UserDefinedTypeKey.create( identity );
 		} else if ( validatesAsFunctionCall( identity ) ) {
 			// Generic type.
-			key = new GenericTypeKey( ZID );
-			const argumentKeys = [];
-			const skipTheseKeys = new Set( [ 'Z1K1', 'Z7K1' ] );
-			for ( const argumentKey of Object.keys( identity ) ) {
-				if ( skipTheseKeys.has( argumentKey ) ) {
-					continue;
-				}
-				argumentKeys.push( argumentKey );
-			}
-			argumentKeys.sort();
-			for ( const argumentKey of argumentKeys ) {
-				children.push( TypeKeyFactory.create( identity[ argumentKey ] ) );
-			}
+			return GenericTypeKey.create( ZID, identity );
 		} else {
 			throw new Error( `Invalid identity for type: ${identity}` );
 		}
-
-		for ( const child of children ) {
-			key.addChild( child );
-		}
-		return key;
 	}
 
 }
@@ -510,7 +572,7 @@ class SchemaFactory {
 	 * corresponding keys.
 	 *
 	 * @param { Object } Z4 a Z4/Type
-	 * @param { Map } typeCache a mapping from type keys (see TypeKeyFactory.create) to BaseSchemata
+	 * @param { Map } typeCache mapping from typekeys (see ZObjectKeyFactory.create) to BaseSchemata
 	 * @return { Map } mapping from type keys to BaseSchemata
 	 */
 	keyMapForUserDefined( Z4, typeCache ) {
@@ -524,7 +586,7 @@ class SchemaFactory {
 			if ( validatesAsReference( identity ) ) {
 				subValidator = this.create( propertyType.Z9K1 );
 			} else {
-				const key = TypeKeyFactory.create( propertyType ).asString();
+				const key = ZObjectKeyFactory.create( propertyType ).asString();
 				if ( !( typeCache.has( key ) ) ) {
 					typeCache.set( key, this.createUserDefined( [ propertyType ] ).get( key ) );
 				}
@@ -567,13 +629,13 @@ class SchemaFactory {
 
 		for ( const Z4 of normalZ4s ) {
 			if ( validatesAsFunctionCall( findIdentity( Z4 ) ) ) {
-				const key = TypeKeyFactory.create( Z4 ).asString();
+				const key = ZObjectKeyFactory.create( Z4 ).asString();
 				typeCache.set( key, new GenericSchema( new Map() ) );
 			}
 		}
 		for ( const Z4 of normalZ4s ) {
 			if ( validatesAsFunctionCall( findIdentity( Z4 ) ) ) {
-				const key = TypeKeyFactory.create( Z4 ).asString();
+				const key = ZObjectKeyFactory.create( Z4 ).asString();
 				typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
 			}
 		}
@@ -586,8 +648,8 @@ initializeValidators();
 
 module.exports = {
 	SchemaFactory,
-	TypeKeyFactory,
 	validatesAsString,
 	validatesAsReference,
-	validatesAsFunctionCall
+	validatesAsFunctionCall,
+	ZObjectKeyFactory
 };
