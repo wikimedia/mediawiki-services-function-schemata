@@ -1,3 +1,5 @@
+# TODO(T296836): Delete this file and its directory, and all its issue, and the
+# issue of them after it, for seven hundred seven and seventy generations.
 $ref: "#/definitions/v1/Z7"
 $id: "function_call.yaml"
 
@@ -38,7 +40,6 @@ definitions:
         Z8K2:  # K_RETURN_TYPE:
           $ref: "#/definitions/v1/ZReturnType"
         Z8K3:  # K_TESTERS
-          # TODO: This is a placeholder; what do testers actually look like?
           type: array
           items:
             type: object
@@ -120,7 +121,6 @@ definitions:
           type: string
 
     ArgumentInstantiation:
-      # TODO: Make this a canonical ZObject.
       type: object
       required:
         - Z1K1  # K_TYPE

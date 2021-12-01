@@ -19,7 +19,7 @@ function initializeValidators() {
 	Z18Validator = defaultFactory.create( 'Z18' );
 }
 
-// TODO: Migrate validatesAs* functions to utils. Somehow avoid
+// TODO(T296659): Migrate validatesAs* functions to utils. Somehow avoid
 // incurring circular import problem in the process.
 
 /**
@@ -41,7 +41,7 @@ function validatesAsType( Z1 ) {
  * @return {boolean} true if Z1 validates as either Z6 or Z7
  */
 function validatesAsString( Z1 ) {
-	// TODO: Prohibit Z18s.
+	// TODO(T296659): Validate as Z6_literal, avoiding possibility of Z18s.
 	return Z6Validator.validate( Z1 );
 }
 
@@ -206,7 +206,6 @@ class TypeKeyFactory {
 	 * identifier will consist of the ZID of the Function, followed by the unique
 	 * idenifiers of its arguments (enclosed in brackets, comma-separated), e.g.
 	 *
-	 * TODO(T292260): Change the ZIDs.
 	 *  {
 	 *      Z1K1: Z7,
 	 *      Z7K1: Z831,
@@ -317,7 +316,7 @@ class Schema extends BaseSchema {
 	 * @return {ValidationStatus} a validation status instance
 	 */
 	validateStatus( maybeValid ) {
-		// TODO: Ensure this is atomic--concurrent calls to validate could
+		// TODO(T296841): Ensure this is atomic--concurrent calls to validate could
 		// cause race conditions.
 		const result = this.validate_( maybeValid );
 		return new ValidationStatus( this.validate_, result );
@@ -350,7 +349,7 @@ class GenericSchema extends BaseSchema {
 	 * @return {ValidationStatus} a validation status instance
 	 */
 	validateStatus( maybeValid ) {
-		// TODO: Check for stray keys; allow non-local keys for e.g. Z10?
+		// TODO(T296842): Check for stray keys; allow non-local keys for e.g. Z10?
 		for ( const key of this.keyMap_.keys() ) {
 			// TODO: How to signal optional keys?
 			if ( maybeValid[ key ] === undefined ) {
@@ -358,8 +357,8 @@ class GenericSchema extends BaseSchema {
 			}
 			const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
 			if ( !howsIt.isValid() ) {
-				// TODO: Somehow include key.
-				// TODO: Consider conjunction of all errors?
+				// TODO(T296842): Somehow include key.
+				// TODO(T296842): Consider conjunction of all errors?
 				return howsIt;
 			}
 		}
@@ -419,7 +418,7 @@ class SchemaFactory {
 	/**
 	 * Initializes a SchemaFactory for function calls.
 	 *
-	 * TODO: Remove this; Z7s can be normal or canonical like anything else.
+	 * TODO(T296836): Remove this; Z7s can be normal or canonical like anything else.
 	 *
 	 * @return {SchemaFactory} factory with lonely function call schema
 	 */
@@ -483,7 +482,7 @@ class SchemaFactory {
 	 */
 	create( schemaName ) {
 		let type = schemaName;
-		// TODO: Remove these special cases once references work properly.
+		// TODO(T292787): Remove these special cases once references work properly.
 		if ( schemaName === 'Z13' ) {
 			type = 'Z10';
 		}
@@ -542,7 +541,7 @@ class SchemaFactory {
 	 *
 	 * Currently only works for normal form.
 	 *
-	 * TODO: Make it work for canonical forms, too.
+	 * TODO(T296843): Maybe make this work for canonical forms, too.
 	 *
 	 * Usage:
 	 *
@@ -558,7 +557,7 @@ class SchemaFactory {
 		const normalize = require( './normalize.js' );
 		const normalized = Z4s.map( ( Z4 ) => normalize( Z4 ) );
 
-		// TODO: use an actual validator and have validation errors in normal form (T295677)
+		// TODO(T294175): use an actual validator and have validation errors in normal form
 		const errorIndex = normalized.map( ( o ) => o.Z22K2.Z1K1.Z9K1 === 'Z5' );
 		if ( errorIndex > -1 ) {
 			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );

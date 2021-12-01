@@ -8,7 +8,7 @@ const { testValidation } = require( '../util.js' );
 
 QUnit.module( 'function_call' );
 
-// TODO: Collapse this test into normal/canonical tests.
+// TODO(T296836): Delete this test and accompanying data files.
 const factory = SchemaFactory.FUNCTION_CALL();
 const validator_ = factory.create( 'Z7' );
 const testDirectory_ = path.join( 'test_data', 'function_call' );
