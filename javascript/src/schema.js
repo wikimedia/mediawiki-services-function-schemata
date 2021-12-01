@@ -490,15 +490,15 @@ class SchemaFactory {
 			type = 'Z40';
 		}
 		let validate = null;
+		let message = null;
 		try {
 			validate = this.ajv_.getSchema( type );
 		} catch ( err ) {
-			console.log( 'Could not find schema', schemaName );
-			console.log( err.message );
-			return null;
+			message = err.message;
+			validate = null;
 		}
 		if ( validate === null || validate === undefined ) {
-			console.log( 'Could not find schema', schemaName );
+			console.error( 'Could not find schema', schemaName, message );
 			return null;
 		}
 		return new Schema( validate );
