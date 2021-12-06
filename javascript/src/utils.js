@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 'use strict';
 
 const fs = require( 'fs' );
@@ -9,40 +8,40 @@ function isString( s ) {
 	return typeof s === 'string' || s instanceof String;
 }
 
-function is_array( a ) {
+function isArray( a ) {
 	return Array.isArray( a );
 }
 
-function is_object( o ) {
-	return !is_array( o ) && typeof o === 'object' && o !== null;
+function isObject( o ) {
+	return !isArray( o ) && typeof o === 'object' && o !== null;
 }
 
-function is_key( k ) {
+function isKey( k ) {
 	return k.match( /^(Z[1-9]\d*)?K[1-9]\d*$/ ) !== null;
 }
 
-function is_zid( k ) {
+function isZid( k ) {
 	return k.match( /^Z[1-9]\d*$/ ) !== null;
 }
 
-function is_reference( z ) {
+function isReference( z ) {
 	return z.match( /^[A-Z][1-9]\d*$/ ) !== null;
 }
 
-function is_global_key( k ) {
+function isGlobalKey( k ) {
 	return k.match( /^Z[1-9]\d*K[1-9]\d*$/ ) !== null;
 }
 
-function kid_from_global_key( k ) {
+function kidFromGlobalKey( k ) {
 	return k.match( /^Z[1-9]\d*(K[1-9]\d*)$/ )[ 1 ];
 }
 
-function deep_equal( o1, o2 ) {
+function deepEqual( o1, o2 ) {
 	// TODO: use something more robust
 	return JSON.stringify( o1 ) === JSON.stringify( o2 );
 }
 
-function deep_copy( o ) {
+function deepCopy( o ) {
 	return JSON.parse( JSON.stringify( o ) );
 }
 
@@ -172,12 +171,12 @@ function isUserDefined( ZID ) {
 
 function inferType( object ) {
 	if ( isString( object ) ) {
-		if ( is_reference( object ) ) {
+		if ( isReference( object ) ) {
 			return 'Z9';
 		}
 		return 'Z6';
 	}
-	if ( is_array( object ) ) {
+	if ( isArray( object ) ) {
 		return 'Z10';
 	}
 	return object.Z1K1;
@@ -200,19 +199,19 @@ function wrapInZ9( zid ) {
 module.exports = {
 	arrayToZ10,
 	isString,
-	is_array,
-	is_object,
-	is_key,
-	is_zid,
-	is_reference,
-	is_global_key,
+	isArray,
+	isObject,
+	isKey,
+	isZid,
+	isReference,
+	isGlobalKey,
 	dataDir,
-	deep_equal,
-	deep_copy,
+	deepEqual,
+	deepCopy,
 	inferType,
 	isEmpty,
 	isUserDefined,
-	kid_from_global_key,
+	kidFromGlobalKey,
 	makeFalse,
 	makeResultEnvelope,
 	// Deprecated alias

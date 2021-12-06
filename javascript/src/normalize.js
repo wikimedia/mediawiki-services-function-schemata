@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { isString, is_reference, is_array, arrayToZ10, makeResultEnvelope } = require( './utils.js' ); // eslint-disable-line camelcase
+const { isString, isReference, isArray, arrayToZ10, makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
 const mixedFactory = SchemaFactory.MIXED();
@@ -15,14 +15,14 @@ const mixedZ1Validator = mixedFactory.create( 'Z1' );
 function normalize( o ) {
 	if ( isString( o ) ) {
 		// TODO: should be revisited when we dedice on a good way to distinguish Z9 from Z6
-		if ( is_reference( o ) ) {
+		if ( isReference( o ) ) {
 			return { Z1K1: 'Z9', Z9K1: o };
 		} else {
 			return { Z1K1: 'Z6', Z6K1: o };
 		}
 	}
 
-	if ( is_array( o ) ) {
+	if ( isArray( o ) ) {
 		return arrayToZ10( o.map( normalize ) );
 	}
 
