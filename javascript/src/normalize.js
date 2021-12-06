@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { isString, isReference, isArray, arrayToZ10, makeResultEnvelope } = require( './utils.js' );
+const { isString, isReference, isArray, arrayToZ10, convertArrayToZList, makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
 const mixedFactory = SchemaFactory.MIXED();
@@ -12,7 +12,8 @@ const mixedFactory = SchemaFactory.MIXED();
 const mixedZ1Validator = mixedFactory.create( 'Z1' );
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-function normalize( o ) {
+function normalize( o, generically = false ) {
+	const partialNormalize = ( ZObject ) => normalize( ZObject, generically );
 	if ( isString( o ) ) {
 		// TODO: should be revisited when we dedice on a good way to distinguish Z9 from Z6
 		if ( isReference( o ) ) {
@@ -23,7 +24,13 @@ function normalize( o ) {
 	}
 
 	if ( isArray( o ) ) {
-		return arrayToZ10( o.map( normalize ) );
+		let arrayFunction;
+		if ( generically ) {
+			arrayFunction = convertArrayToZList;
+		} else {
+			arrayFunction = arrayToZ10;
+		}
+		return arrayFunction( o.map( partialNormalize ) );
 	}
 
 	if ( o.Z1K1 === 'Z5' &&
@@ -47,9 +54,9 @@ function normalize( o ) {
 			continue;
 		}
 		if ( keys[ i ] === 'Z10K1' && !keys.includes( 'Z10K2' ) ) {
-			result.Z10K2 = normalize( [] );
+			result.Z10K2 = partialNormalize( [] );
 		}
-		result[ keys[ i ] ] = normalize( o[ keys[ i ] ] );
+		result[ keys[ i ] ] = partialNormalize( o[ keys[ i ] ] );
 	}
 	return result;
 }

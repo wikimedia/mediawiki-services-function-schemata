@@ -3,7 +3,7 @@
 const Ajv = require( 'ajv' ).default;
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { isString, isUserDefined, readYaml, Z10ToArray } = require( './utils.js' );
+const { isString, isUserDefined, readYaml, convertZListToArray } = require( './utils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
@@ -244,7 +244,7 @@ class UserDefinedTypeKey extends GenericTypeKey {
 
 	static create( identity ) {
 		const children = [];
-		for ( const Z3 of Z10ToArray( identity.Z4K2 ) ) {
+		for ( const Z3 of convertZListToArray( identity.Z4K2 ) ) {
 			// eslint-disable-next-line no-use-before-define
 			children.push( ZObjectKeyFactory.create( Z3.Z3K1 ) );
 		}
@@ -322,12 +322,13 @@ class ZObjectKeyFactory {
 	 */
 	static create( ZObject ) {
 		const normalize = require( './normalize.js' );
-		const normalized = normalize( ZObject ).Z22K1;
+		const normalizedEnvelope = normalize( ZObject );
 		// FIX BEFORE SUBMITTING: return here on error.
+		const normalized = normalizedEnvelope.Z22K1;
 		const identity = findIdentity( normalized );
 		if ( identity === null ) {
 			// ZObject isn't a type, so create a ZObjectKey.
-			return ZObjectKey.create( ZObject );
+			return ZObjectKey.create( normalized );
 		}
 		const ZID = getZIDForType( identity );
 		if ( validatesAsReference( identity ) ) {
@@ -577,7 +578,7 @@ class SchemaFactory {
 	 */
 	keyMapForUserDefined( Z4, typeCache ) {
 		const keyMap = new Map();
-		const Z3s = Z10ToArray( Z4.Z4K2 );
+		const Z3s = convertZListToArray( Z4.Z4K2 );
 		for ( const Z3 of Z3s ) {
 			const propertyName = Z3.Z3K2.Z6K1;
 			const propertyType = Z3.Z3K1;

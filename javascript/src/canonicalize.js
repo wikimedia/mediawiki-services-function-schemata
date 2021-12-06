@@ -2,8 +2,8 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { isString, isArray, isReference, Z10ToArray, makeResultEnvelope } = require( './utils.js' );
-const { SchemaFactory } = require( './schema' );
+const { isString, isArray, isReference, convertZListToArray, makeResultEnvelope } = require( './utils.js' );
+const { SchemaFactory, ZObjectKeyFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 
 const normalFactory = SchemaFactory.NORMAL();
@@ -35,8 +35,10 @@ function canonicalizeObject( o ) {
 		}
 	}
 
-	if ( Z10Validator.validate( o ) ) {
-		return Z10ToArray( o ).map( canonicalize );
+	const listKeyRegex = /^Z881(.*)$/;
+	const typeKey = ZObjectKeyFactory.create( o.Z1K1 ).asString();
+	if ( Z10Validator.validate( o ) || typeKey.match( listKeyRegex ) ) {
+		return convertZListToArray( o ).map( canonicalize );
 	}
 
 	const keys = Object.keys( o );
