@@ -3,7 +3,7 @@
 const path = require( 'path' );
 const { SchemaFactory } = require( '../../src/schema.js' );
 const { readYaml } = require( '../../src/utils.js' );
-const { testZ5 } = require( '../util.js' );
+const { testZ5 } = require( '../testUtils.js' );
 
 QUnit.module( 'Z5' );
 
