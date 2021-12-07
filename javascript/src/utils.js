@@ -156,6 +156,11 @@ function convertZListToArray( ZList ) {
 	return result;
 }
 
+// TODO(T292788): Remove this alias after eliminating Z10s.
+function Z10ToArray( Z10 ) {
+	return convertZListToArray( Z10 );
+}
+
 /**
  * Turns a JS array into a Typed List.
  *
@@ -165,7 +170,7 @@ function convertZListToArray( ZList ) {
  * @param {Object} tailType list type
  * @return {Object} a Typed List corresponding to the input array
  */
-function arrayToZListInternal( array, headKey, tailKey, tailType ) {
+function convertArrayToZListInternal( array, headKey, tailKey, tailType ) {
 	function createTail() {
 		return { Z1K1: tailType };
 	}
@@ -196,7 +201,7 @@ function arrayToZ10( array, canonical = false ) {
 			Z9K1: 'Z10'
 		};
 	}
-	return arrayToZListInternal( array, 'Z10K1', 'Z10K2', Z1K1 );
+	return convertArrayToZListInternal( array, 'Z10K1', 'Z10K2', Z1K1 );
 }
 
 /**
@@ -239,7 +244,7 @@ function convertArrayToZList( array, canonical = false ) {
 		Z7K1: Z7K1,
 		Z88K1: headType
 	};
-	return arrayToZListInternal( array, 'K1', 'K2', listType );
+	return convertArrayToZListInternal( array, 'K1', 'K2', listType );
 }
 
 function readYaml( fileName ) {
@@ -294,6 +299,8 @@ module.exports = {
 	arrayToZ10,
 	convertArrayToZList,
 	convertZListToArray,
+	// Deprecated alias
+	Z10ToArray,
 	isString,
 	isArray,
 	isObject,

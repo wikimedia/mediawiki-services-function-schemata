@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { isString, isReference, isArray, arrayToZ10, convertArrayToZList, makeResultEnvelope } = require( './utils.js' );
+const { arrayToZ10, convertArrayToZList, isArray, isReference, isString, makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
 const mixedFactory = SchemaFactory.MIXED();

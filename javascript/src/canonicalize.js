@@ -2,7 +2,7 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { isString, isArray, isReference, convertZListToArray, makeResultEnvelope } = require( './utils.js' );
+const { convertZListToArray, isArray, isReference, isString, makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory, ZObjectKeyFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 
