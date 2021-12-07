@@ -7,17 +7,18 @@ const { isString, isUserDefined, readYaml, convertZListToArray } = require( './u
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
-let Z4Validator, Z6Validator, Z7Validator, Z8Validator, Z9Validator, Z18Validator;
+let Z4Validator, Z5Validator, Z6Validator, Z7Validator, Z8Validator, Z9Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
 	const defaultFactory = SchemaFactory.NORMAL();
-	Z4Validator = defaultFactory.create( 'Z4' );
-	Z6Validator = defaultFactory.create( 'Z6' );
-	Z7Validator = defaultFactory.create( 'Z7' );
-	Z8Validator = defaultFactory.create( 'Z8' );
-	Z9Validator = defaultFactory.create( 'Z9' );
-	Z18Validator = defaultFactory.create( 'Z18' );
+
+	Z4Validator = defaultFactory.create( 'Z4_literal' );
+	Z5Validator = defaultFactory.create( 'Z5_literal' );
+	Z6Validator = defaultFactory.create( 'Z6_literal' );
+	Z7Validator = defaultFactory.create( 'Z7_backend_literal' );
+	Z8Validator = defaultFactory.create( 'Z8_literal' );
+	Z9Validator = defaultFactory.create( 'Z9_literal' );
 }
 
 // TODO(T296659): Migrate validatesAs* functions to utils. Somehow avoid
@@ -30,7 +31,7 @@ function initializeValidators() {
  * @return {boolean} true if Z1 validates as Z4
  */
 function validatesAsType( Z1 ) {
-	return Z4Validator.validate( Z1 ) && !( Z7Validator.validate( Z1 ) );
+	return Z4Validator.validate( Z1 );
 }
 
 /**
@@ -42,7 +43,6 @@ function validatesAsType( Z1 ) {
  * @return {boolean} true if Z1 validates as either Z6 or Z7
  */
 function validatesAsString( Z1 ) {
-	// TODO(T296659): Validate as Z6_literal, avoiding possibility of Z18s.
 	return Z6Validator.validate( Z1 );
 }
 
@@ -53,9 +53,7 @@ function validatesAsString( Z1 ) {
  * @return {boolean} true if Z1 validates as Z8
  */
 function validatesAsFunction( Z1 ) {
-	return ( Z8Validator.validate( Z1 ) &&
-		!( Z9Validator.validate( Z1 ) ) &&
-		!( Z18Validator.validate( Z1 ) ) );
+	return Z8Validator.validate( Z1 );
 }
 
 /**
@@ -75,9 +73,7 @@ function validatesAsReference( Z1 ) {
  * @return {boolean} whether Z1 can validated as a Function Call
  */
 function validatesAsFunctionCall( Z1 ) {
-	return ( Z7Validator.validate( Z1 ) &&
-		!( Z9Validator.validate( Z1 ) ) &&
-		!( Z18Validator.validate( Z1 ) ) );
+	return Z7Validator.validate( Z1 );
 }
 
 /**
@@ -510,7 +506,20 @@ class SchemaFactory {
 				continue;
 			}
 			const fullFile = path.join( directory, fileName );
-			ajv.addSchema( readYaml( fullFile ) );
+			const schema = readYaml( fullFile );
+			ajv.addSchema( schema );
+
+			// Add literal schema too
+			const id = schema.$id + '_literal';
+			// Checks whether a literal definition exists
+			if ( schema.definitions.objects[ id ] ) {
+				const literal = {
+					$id: id,
+					$ref: schema.$ref + '_literal',
+					definitions: schema.definitions
+				};
+				ajv.addSchema( literal );
+			}
 		}
 		return new SchemaFactory( ajv );
 	}
@@ -620,8 +629,7 @@ class SchemaFactory {
 		const normalize = require( './normalize.js' );
 		const normalized = Z4s.map( ( Z4 ) => normalize( Z4 ) );
 
-		// TODO(T294175): use an actual validator and have validation errors in normal form
-		const errorIndex = normalized.map( ( o ) => o.Z22K2.Z1K1.Z9K1 === 'Z5' );
+		const errorIndex = normalized.map( ( o ) => Z5Validator.validateStatus( o ).isValid() );
 		if ( errorIndex > -1 ) {
 			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
 		}
