@@ -99,6 +99,13 @@ function makeResultEnvelope( goodResult = null, badResult = null, canonical = fa
 	};
 }
 
+/**
+ * @deprecated Use makeResultEnvelope()
+ * @param {Object} goodResult Z22K1 of resulting Z22
+ * @param {Object} badResult Z22K2 of resulting Z22
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a Z22
+ */
 function makePair( goodResult = null, badResult = null, canonical = false ) {
 	return makeResultEnvelope( goodResult, badResult, canonical );
 }
@@ -132,8 +139,17 @@ function getTail( ZList ) {
  * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
  * @return {boolean} whether ZList is empty
  */
-function isEmpty( ZList ) {
+function isEmptyZList( ZList ) {
 	return getHead( ZList ) === undefined;
+}
+
+/**
+ * @deprecated Use isEmptyZList()
+ * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
+ * @return {boolean} whether ZList is empty
+ */
+function isEmpty( ZList ) {
+	return isEmptyZList( ZList );
 }
 
 /**
@@ -147,7 +163,7 @@ function convertZListToArray( ZList ) {
 	let tail = ZList;
 	const result = [];
 	while ( true ) {
-		if ( isEmpty( tail ) ) {
+		if ( isEmptyZList( tail ) ) {
 			break;
 		}
 		result.push( getHead( tail ) );
@@ -156,7 +172,13 @@ function convertZListToArray( ZList ) {
 	return result;
 }
 
-// TODO(T292788): Remove this alias after eliminating Z10s.
+/**
+ * TODO(T292788): Remove this alias after eliminating Z10s.
+ *
+ * @deprecated Use convertZListToArray()
+ * @param {Object} Z10 a generic typed list (Z881) or a Z10 (deprecated)
+ * @return {Array} an array consisting of all elements of ZList
+ */
 function Z10ToArray( Z10 ) {
 	return convertZListToArray( Z10 );
 }
@@ -312,6 +334,8 @@ module.exports = {
 	deepEqual,
 	deepCopy,
 	inferType,
+	isEmptyZList,
+	// Deprecated alias
 	isEmpty,
 	isUserDefined,
 	kidFromGlobalKey,
