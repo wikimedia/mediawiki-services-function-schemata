@@ -2,7 +2,7 @@
 
 const path = require( 'path' );
 const { SchemaFactory } = require( '../../src/schema.js' );
-const { readYaml } = require( '../../src/utils.js' );
+const { readYaml } = require( '../../src/fileUtils.js' );
 const { testValidation } = require( '../testUtils.js' );
 
 QUnit.module( 'CANONICAL' );

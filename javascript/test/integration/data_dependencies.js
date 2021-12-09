@@ -2,7 +2,7 @@
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { dataDir } = require( '../../src/utils.js' );
+const { dataDir } = require( '../../src/fileUtils.js' );
 
 QUnit.module( 'data_dependencies' );
 

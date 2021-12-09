@@ -3,7 +3,8 @@
 const fs = require( 'fs' );
 const path = require( 'path' );
 const { SchemaFactory } = require( '../../src/schema.js' );
-const { dataDir, inferType } = require( '../../src/utils.js' );
+const { inferType } = require( '../../src/utils.js' );
+const { dataDir } = require( '../../src/fileUtils.js' );
 
 QUnit.module( 'data_definitions' );
 

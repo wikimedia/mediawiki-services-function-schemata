@@ -1,7 +1,8 @@
 'use strict';
 
 // const normalize = require( './normalize.js' );
-const { arrayToZ10, dataDir, readYaml, wrapInZ6, wrapInZ9 } = require( './utils.js' );
+const { arrayToZ10, wrapInZ6, wrapInZ9 } = require( './utils.js' );
+const { dataDir, readYaml } = require( './fileUtils.js' );
 
 class ErrorFormatter {
 

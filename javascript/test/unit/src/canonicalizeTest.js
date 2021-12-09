@@ -2,8 +2,8 @@
 
 const path = require( 'path' );
 
-const canonicalize = require( '../../../src/canonicalize' );
-const { readYaml } = require( '../../../src/utils' );
+const canonicalize = require( '../../../src/canonicalize.js' );
+const { readYaml } = require( '../../../src/fileUtils.js' );
 const { test } = require( '../../testUtils.js' );
 
 QUnit.module( 'canonicalization' );

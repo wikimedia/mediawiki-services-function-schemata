@@ -1,8 +1,7 @@
 'use strict';
 
-const fs = require( 'fs' );
-const path = require( 'path' );
-const yaml = require( 'yaml' );
+// NOTE: This file is used in a MediaWiki context as well, and so MUST parse as a
+// stand-alone JS file without use of require()
 
 function isString( s ) {
 	return typeof s === 'string' || s instanceof String;
@@ -269,17 +268,6 @@ function convertArrayToZList( array, canonical = false ) {
 	return convertArrayToZListInternal( array, 'K1', 'K2', listType );
 }
 
-function readYaml( fileName ) {
-	const text = fs.readFileSync( fileName, { encoding: 'utf8' } );
-	return yaml.parse( text );
-}
-
-function dataDir( ...pathComponents ) {
-	return path.join(
-		path.dirname( path.dirname( path.dirname( __filename ) ) ),
-		'data', ...pathComponents );
-}
-
 const builtInTypes = new Set( [
 	'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
 	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
@@ -330,7 +318,6 @@ module.exports = {
 	isZid,
 	isReference,
 	isGlobalKey,
-	dataDir,
 	deepEqual,
 	deepCopy,
 	inferType,
@@ -345,7 +332,6 @@ module.exports = {
 	makePair,
 	makeTrue,
 	makeUnit,
-	readYaml,
 	wrapInZ6,
 	wrapInZ9
 };

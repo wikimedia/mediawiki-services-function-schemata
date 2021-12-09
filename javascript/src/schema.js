@@ -3,7 +3,8 @@
 const Ajv = require( 'ajv' ).default;
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { isString, isUserDefined, readYaml, convertZListToArray } = require( './utils.js' );
+const { isString, isUserDefined, convertZListToArray } = require( './utils.js' );
+const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 

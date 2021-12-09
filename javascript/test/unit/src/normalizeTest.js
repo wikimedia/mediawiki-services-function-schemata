@@ -2,8 +2,8 @@
 
 const path = require( 'path' );
 
-const normalize = require( '../../../src/normalize' );
-const { readYaml } = require( '../../../src/utils' );
+const normalize = require( '../../../src/normalize.js' );
+const { readYaml } = require( '../../../src/fileUtils.js' );
 const { test } = require( '../../testUtils.js' );
 
 QUnit.module( 'normalization' );
