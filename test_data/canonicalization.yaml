@@ -584,6 +584,18 @@ test_objects:
         Z5K1: Z502
         Z5K2: "second error"
 
+  - name: argument declaration
+    object:
+      Z1K1:
+        Z1K1: Z9
+        Z9K1: Z18
+      Z18K1:
+        Z1K1: Z6
+        Z6K1: "Z10000K1"
+    expected:
+      Z1K1: Z18
+      Z18K1: "Z10000K1"
+
   throws:
   - name: string with wrong key
     object:

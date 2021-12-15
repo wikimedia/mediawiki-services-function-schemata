@@ -12,6 +12,7 @@ const Z5Validator = normalFactory.create( 'Z5_literal' );
 const Z6Validator = normalFactory.create( 'Z6' );
 const Z9Validator = normalFactory.create( 'Z9' );
 const Z10Validator = normalFactory.create( 'Z10' );
+const Z18Validator = normalFactory.create( 'Z18' );
 
 function canonicalizeArray( a ) {
 	return a.map( canonicalize );
@@ -27,7 +28,10 @@ function canonicalizeObject( o ) {
 		}
 	}
 
-	if ( Z6Validator.validate( o ) ) {
+	// T295850 Explicitly ignore if the object is an argument declaration (Z18)
+	const isArgDeclaration = Z18Validator.validate( o );
+
+	if ( Z6Validator.validate( o ) && !isArgDeclaration ) {
 		o.Z6K1 = canonicalize( o.Z6K1 );
 
 		// return as string if Z6/String doesn't need to be escaped, i.e., is not in Zxxxx format
@@ -38,7 +42,7 @@ function canonicalizeObject( o ) {
 
 	const listKeyRegex = /^Z881(.*)$/;
 	const typeKey = ZObjectKeyFactory.create( o.Z1K1 ).asString();
-	if ( Z10Validator.validate( o ) || typeKey.match( listKeyRegex ) ) {
+	if ( ( Z10Validator.validate( o ) || typeKey.match( listKeyRegex ) ) && !isArgDeclaration ) {
 		return convertZListToArray( o ).map( canonicalize );
 	}
 
