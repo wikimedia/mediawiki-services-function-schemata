@@ -197,3 +197,93 @@ QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( ass
 	};
 	assert.deepEqual( 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)', ZObjectKeyFactory.create( Z1 ).asString() );
 } );
+
+QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', ( assert ) => {
+	const key = ZObjectKeyFactory.create( {
+		Z1K1: 'Z6',
+		Z6K1: 'Smörgåsbord'
+	} );
+	assert.deepEqual( 'ZObjectKey', key.type() );
+} );
+
+QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', ( assert ) => {
+	const Z1 = {
+		Z1K1: 'Z4',
+		Z4K1: {
+			Z1K1: 'Z7',
+			Z7K1: 'Z4200',
+			Z4200K1: {
+				Z1K1: 'Z6',
+				Z6K1: 'Smörgåsbord'
+			},
+			Z4200K2: {
+				Z1K1: 'Z4',
+				Z4K1: 'Z17',
+				Z4K2: [],
+				Z4K3: 'Z1000'
+			}
+		},
+		Z4K2: [],
+		Z4K3: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1001'
+		}
+	};
+	const key = ZObjectKeyFactory.create( Z1 );
+	assert.deepEqual( 'GenericTypeKey', key.type() );
+} );
+
+QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', ( assert ) => {
+	const Z4 = {
+		Z1K1: 'Z4',
+		Z4K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1000'
+		},
+		Z4K2: [
+			{
+				Z1K1: 'Z3',
+				Z3K1: 'Z6',
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'K1'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			},
+			{
+				Z1K1: 'Z3',
+				Z3K1: {
+					Z1K1: 'Z7',
+					Z7K1: 'Z931',
+					Z931K1: 'Z6',
+					Z931K2: 'Z12'
+				},
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'K2'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			}
+		],
+		Z4K3: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1001'
+		}
+	};
+	const key = ZObjectKeyFactory.create( Z4 );
+	assert.deepEqual( 'UserDefinedTypeKey', key.type() );
+} );
+
+QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', ( assert ) => {
+	const key = ZObjectKeyFactory.create( {
+		Z1K1: 'Z9',
+		Z9K1: 'Z9'
+	} );
+	assert.deepEqual( 'SimpleTypeKey', key.type() );
+} );

@@ -145,6 +145,10 @@ class SimpleTypeKey {
 	asString() {
 		return this.ZID_;
 	}
+
+	type() {
+		return 'SimpleTypeKey';
+	}
 }
 
 class ZObjectKey {
@@ -186,6 +190,10 @@ class ZObjectKey {
 			this.string_ = this.typeKey_.asString() + stableStringify( childObject );
 		}
 		return this.string_;
+	}
+
+	type() {
+		return 'ZObjectKey';
 	}
 }
 
@@ -232,6 +240,10 @@ class GenericTypeKey {
 		}
 		return this.string_;
 	}
+
+	type() {
+		return 'GenericTypeKey';
+	}
 }
 
 class UserDefinedTypeKey extends GenericTypeKey {
@@ -263,6 +275,10 @@ class UserDefinedTypeKey extends GenericTypeKey {
 			this.string_ = '<' + subKeys.join( ',' ) + '>';
 		}
 		return this.string_;
+	}
+
+	type() {
+		return 'UserDefinedTypeKey';
 	}
 }
 
