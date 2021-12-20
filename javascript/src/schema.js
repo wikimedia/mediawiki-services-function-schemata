@@ -654,16 +654,12 @@ class SchemaFactory {
 		const normalZ4s = Z4s.map( ( Z4 ) => normalize( Z4 ).Z22K1 );
 
 		for ( const Z4 of normalZ4s ) {
-			if ( validatesAsFunctionCall( findIdentity( Z4 ) ) ) {
-				const key = ZObjectKeyFactory.create( Z4 ).asString();
-				typeCache.set( key, new GenericSchema( new Map() ) );
-			}
+			const key = ZObjectKeyFactory.create( Z4 ).asString();
+			typeCache.set( key, new GenericSchema( new Map() ) );
 		}
 		for ( const Z4 of normalZ4s ) {
-			if ( validatesAsFunctionCall( findIdentity( Z4 ) ) ) {
-				const key = ZObjectKeyFactory.create( Z4 ).asString();
-				typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
-			}
+			const key = ZObjectKeyFactory.create( Z4 ).asString();
+			typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
 		}
 		return typeCache;
 	}
