@@ -263,7 +263,7 @@ function convertArrayToZList( array, canonical = false ) {
 	const listType = {
 		Z1K1: Z1K1,
 		Z7K1: Z7K1,
-		Z88K1: headType
+		Z881K1: headType
 	};
 	return convertArrayToZListInternal( array, 'K1', 'K2', listType );
 }

@@ -10,7 +10,7 @@ QUnit.test( 'convertArrayToZList with empty array, canonical', ( assert ) => {
 		Z1K1: {
 			Z1K1: 'Z7',
 			Z7K1: 'Z881',
-			Z88K1: 'Z1'
+			Z881K1: 'Z1'
 		}
 	};
 	assert.deepEqual( expected, convertArrayToZList( array, /* canonical= */true ) );
@@ -28,7 +28,7 @@ QUnit.test( 'convertArrayToZList with empty array', ( assert ) => {
 				Z1K1: 'Z9',
 				Z9K1: 'Z881'
 			},
-			Z88K1: {
+			Z881K1: {
 				Z1K1: 'Z9',
 				Z9K1: 'Z1'
 			}
@@ -63,7 +63,7 @@ QUnit.test( 'convertArrayToZList with multiple types', ( assert ) => {
 			Z1K1: 'Z9',
 			Z9K1: 'Z881'
 		},
-		Z88K1: {
+		Z881K1: {
 			Z1K1: 'Z9',
 			Z9K1: 'Z1'
 		}
@@ -102,7 +102,7 @@ QUnit.test( 'convertArrayToZList with single type', ( assert ) => {
 			Z1K1: 'Z9',
 			Z9K1: 'Z881'
 		},
-		Z88K1: {
+		Z881K1: {
 			Z1K1: 'Z9',
 			Z9K1: 'Z6'
 		}
@@ -183,7 +183,7 @@ QUnit.test( 'convertZListToArray with Typed List', ( assert ) => {
 			Z1K1: 'Z9',
 			Z9K1: 'Z881'
 		},
-		Z88K1: {
+		Z881K1: {
 			Z1K1: 'Z9',
 			Z9K1: 'Z6'
 		}
