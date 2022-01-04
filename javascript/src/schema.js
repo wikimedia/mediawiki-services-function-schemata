@@ -492,21 +492,6 @@ class SchemaFactory {
 	}
 
 	/**
-	 * Initializes a SchemaFactory for function calls.
-	 *
-	 * TODO(T296836): Remove this; Z7s can be normal or canonical like anything else.
-	 *
-	 * @return {SchemaFactory} factory with lonely function call schema
-	 */
-	static FUNCTION_CALL() {
-		// Add all schemata for normal ZObjects to ajv's parsing context.
-		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
-		const fileName = dataDir( 'function_call', 'Z7.yaml' );
-		ajv.addSchema( readYaml( fileName ), 'Z7' );
-		return new SchemaFactory( ajv );
-	}
-
-	/**
 	 * Initializes a SchemaFactory linking schemata for normal-form ZObjects.
 	 *
 	 * @return {SchemaFactory} factory with all normal-form schemata included
