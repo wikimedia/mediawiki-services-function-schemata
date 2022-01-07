@@ -320,6 +320,8 @@ module.exports = {
 	isGlobalKey,
 	deepEqual,
 	deepCopy,
+	getHead,
+	getTail,
 	inferType,
 	isEmptyZList,
 	// Deprecated alias
