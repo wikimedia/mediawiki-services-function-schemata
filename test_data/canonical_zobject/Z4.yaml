@@ -14,6 +14,16 @@ test_objects:
       Z4K2:
       - swears****
       Z4K3: Z1000
+  - name: bad Z4 with generic list of Z6s
+    object:
+      Z1K1: Z4
+      Z4K1: Z1000
+      Z4K2:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1: Z881
+          Z881K1: Z6
+      Z4K3: Z1000
   success:
   - name: good Z4 (Z4K1 is a Z4)
     object:
@@ -36,4 +46,14 @@ test_objects:
         Z1K1: Z7
         Z7K1: Z1000
       Z4K2: []
+      Z4K3: Z1000
+  - name: good Z4 with generic list of Z3s
+    object:
+      Z1K1: Z4
+      Z4K1: Z1000
+      Z4K2:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1: Z881
+          Z881K1: Z3
       Z4K3: Z1000

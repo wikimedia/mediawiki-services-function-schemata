@@ -4,11 +4,20 @@ $ref: '#/definitions/objects/Z4'
 definitions:
   objects:
     Z10_of_Z3:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
+      $ref: Z10#/definitions/objects/Z10
+      oneOf:
       - items:
           $ref: Z3#/definitions/objects/Z3
         type: array
+      - $ref: Z10#/definitions/objects/Z10_generic
+        type: object
+        properties:
+          Z1K1:
+            type: object
+            properties:
+              Z881K1:
+                enum:
+                - Z3
     Z4:
       anyOf:
       - $ref: '#/definitions/objects/Z4_literal'
