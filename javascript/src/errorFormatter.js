@@ -1,8 +1,8 @@
 'use strict';
 
-// const normalize = require( './normalize.js' );
-const { arrayToZ10, wrapInZ6, wrapInZ9 } = require( './utils.js' );
+const { arrayToZ10, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
 const { dataDir, readYaml } = require( './fileUtils.js' );
+const errorTypes = require( './error.js' );
 
 class ErrorFormatter {
 
@@ -137,18 +137,13 @@ class ErrorFormatter {
 	 * @return {Object}
 	 */
 	static createZKeyError( key, Z5 ) {
-		return {
-			Z1K1: wrapInZ9( 'Z5' ),
-			Z5K1: wrapInZ9( 'Z526' ),
-			Z5K2: {
-				Z1K1: wrapInZ9( 'Z526' ),
-				Z526K1: {
-					Z1K1: wrapInZ9( 'Z39' ),
-					Z39K1: wrapInZ9( key )
-				},
-				Z526K2: Z5
+		return this.createZErrorInstance(
+			errorTypes.error.not_wellformed_value,
+			{
+				key: key,
+				value: Z5
 			}
-		};
+		);
 	}
 
 	/**
@@ -158,15 +153,13 @@ class ErrorFormatter {
 	 * @return {Object}
 	 */
 	static createValidationZError( Z5 ) {
-		return {
-			Z1K1: wrapInZ9( 'Z5' ),
-			Z5K1: wrapInZ9( 'Z502' ),
-			Z5K2: {
-				Z1K1: wrapInZ9( 'Z502' ),
-				Z502K1: Z5.Z5K1,
-				Z502K2: Z5
+		return this.createZErrorInstance(
+			errorTypes.error.not_wellformed,
+			{
+				subtype: Z5.Z5K1,
+				value: Z5
 			}
-		};
+		);
 	}
 
 	/**
@@ -176,11 +169,12 @@ class ErrorFormatter {
 	 * @return {Object|null}
 	 */
 	static createZErrorList( array ) {
-		return {
-			Z1K1: wrapInZ9( 'Z5' ),
-			Z5K1: wrapInZ9( 'Z509' ),
-			Z5K2: arrayToZ10( array )
-		};
+		return this.createZErrorInstance(
+			errorTypes.error.list_of_errors,
+			{
+				list: arrayToZ10( array )
+			}
+		);
 	}
 
 	/**
@@ -246,6 +240,30 @@ class ErrorFormatter {
 	}
 
 	/**
+	 * Creates an instance of a generic error given its errorType and an array
+	 * with the values of its keys.
+	 *
+	 * @param {string} errorType
+	 * @param {Object} errorKeys
+	 * @return {Object}
+	 */
+	static createGenericError( errorType, errorKeys ) {
+		const genericError = {
+			Z1K1: {
+				Z1K1: wrapInZ9( 'Z7' ),
+				Z7K1: wrapInZ9( 'Z885' ),
+				Z885K1: wrapInZ9( errorType )
+			}
+		};
+
+		for ( let index = 0; index < errorKeys.length; index++ ) {
+			genericError[ `K${index + 1}` ] = errorKeys[ index ];
+		}
+
+		return genericError;
+	}
+
+	/**
 	 * Create a ZError (Z5) of a given ZErrorType
 	 *
 	 * @param {string} errorType
@@ -253,64 +271,79 @@ class ErrorFormatter {
 	 * @return {Object}
 	 */
 	static createZErrorInstance( errorType, err ) {
-		let Z5K2;
+		const errorKeys = [];
 
 		switch ( errorType ) {
-			case 'Z511':
-				Z5K2 = {
-					Z1K1: wrapInZ9( 'Z511' ),
-					Z511K1: {
-						Z1K1: wrapInZ9( 'Z39' ),
-						Z39K1: wrapInZ6( err.params.missingProperty )
-					},
-					Z511K2: {
-						Z1K1: wrapInZ9( 'Z99' ),
-						Z99K1: err.data
-					}
-				};
+			case errorTypes.error.not_wellformed:
+				errorKeys.push( err.subtype );
+				errorKeys.push( err.value );
 				break;
 
-			case 'Z524':
-				Z5K2 = {
-					Z1K1: wrapInZ9( 'Z524' ),
-					Z524K1: wrapInZ6( err.data )
-				};
+			case errorTypes.error.list_of_errors:
+				errorKeys.push( err.list );
 				break;
 
-			case 'Z525':
-				Z5K2 = {
-					Z1K1: wrapInZ9( 'Z525' ),
-					// TODO: check invalid properties to build Z6k1
-					Z525K1: wrapInZ6( 'todo' )
-				};
+			case errorTypes.error.key_not_found:
+				errorKeys.push( wrapInKeyReference( err.params.missingProperty ) );
+				errorKeys.push( wrapInQuote( err.data ) );
 				break;
 
-			default: Z5K2 = this.createErrorQuote( errorType, err );
+			case errorTypes.error.resolved_object_without_z2k2:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.zobject_must_not_be_number_or_boolean_or_null:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.missing_type:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.z1k1_must_not_be_string_or_array:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.invalid_key:
+				errorKeys.push( wrapInZ6( err.params.additionalProperty ) );
+				break;
+
+			case errorTypes.error.not_wellformed_value:
+				errorKeys.push( wrapInKeyReference( err.key ) );
+				errorKeys.push( err.value );
+				break;
+
+			case errorTypes.error.z6_without_z6k1:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.z6k1_must_be_string:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.z9_without_z9k1:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			case errorTypes.error.z9k1_must_be_string:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
+			default:
+				break;
 		}
 
+		// Create generic error instance with errorType->error
+		const genericError = this.createGenericError( errorType, errorKeys );
+
+		// Create error Z5
 		return {
 			Z1K1: wrapInZ9( 'Z5' ),
 			Z5K1: wrapInZ9( errorType ),
-			Z5K2: Z5K2
+			Z5K2: genericError
 		};
 	}
 
-	/**
-	 * Creates a generic quote/Z99 for a given error type and an Ajv error object
-	 *
-	 * @param {string} zid
-	 * @param {Object} err
-	 * @return {Object}
-	 */
-	static createErrorQuote( zid, err ) {
-		return {
-			Z1K1: wrapInZ9( zid ),
-			[ zid + 'K1' ]: {
-				Z1K1: wrapInZ9( 'Z99' ),
-				Z99K1: err.data
-			}
-		};
-	}
 }
 
 module.exports = ErrorFormatter;

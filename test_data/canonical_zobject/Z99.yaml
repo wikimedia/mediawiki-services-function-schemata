@@ -14,6 +14,24 @@ test_objects:
         is: not
         object: that
         some: random
+  - name: Z99 with number
+    object:
+      Z1K1: Z99
+      Z99K1: 3
+  - name: Z99 with boolean
+    object:
+      Z1K1: Z99
+      Z99K1: false
+  - name: Z99 with null
+    object:
+      Z1K1: Z99
+      Z99K1: null
+  - name: Z99 with array
+    object:
+      Z1K1: Z99
+      Z99K1:
+        - string one
+        - string two
   - name: can be a Z9
     object: Z1000
   - name: can be a Z18

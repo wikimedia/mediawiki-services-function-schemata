@@ -64,26 +64,30 @@ function testValidation( baseName, validator, testObjects ) {
 }
 
 /**
- * Runs a set of tests on the validation Z5s of a ZObject.
+ * Runs a set of tests on the errors detected during ZObject validation.
  *
  * @param {string} baseName the test set name as defined in the .yaml
  * @param {Object} validator the Ajv validator to be used for the ZObjects
  * @param {Object} testObjects the .yaml object containing test definitions
+ * @param {Object} errorValidator the Ajv validator for ZErrors (Z5)
  */
-function testZ5( baseName, validator, testObjects ) {
-	const failures = testObjects.failure || [];
+function testErrors( baseName, validator, testObjects, errorValidator ) {
 
-	// failures.slice(13, 14).forEach((testObject) => {
-	failures.forEach( ( testObject ) => {
+	// Every test object must return an error on validation.
+	// testObjects.slice(13, 14).forEach((testObject) => {
+	testObjects.forEach( ( testObject ) => {
 		const name = baseName + ': ' + testObject.name;
 		const status = validator.validateStatus( testObject.object );
 
-		QUnit.test( name, ( assert ) => {
+		// Check that validator is finding the correct error types
+		QUnit.test( `${name}: detection`, ( assert ) => {
 			assert.false( status.isValid() );
 			assert.ok( status.getZ5() );
 
+			// Errors detected with every parser (Ajv and Opis):
 			const errorCodes = new Set( testObject.errors );
-			// specific errors expected in JavaScript
+
+			// Errors detected only with javascript parser (Ajv):
 			if ( testObject.js_errors ) {
 				errorCodes.add( ...testObject.js_errors );
 			}
@@ -96,6 +100,13 @@ function testZ5( baseName, validator, testObjects ) {
 
 			assert.equal( errorCodes.size, 0 );
 		} );
+
+		// Check that the detected errors are valid Z5 objects
+		QUnit.test( `${name}: wellformedness`, ( assert ) => {
+			const errorStatus = errorValidator.validateStatus( status.getZ5() );
+			assert.true( errorStatus.isValid() );
+		} );
+
 	} );
 }
 
@@ -137,4 +148,4 @@ function test( baseName, fn, testObjects ) {
 	} );
 }
 
-module.exports = { test, testValidation, testZ5, getMissingZ5 };
+module.exports = { test, testValidation, testErrors, getMissingZ5 };

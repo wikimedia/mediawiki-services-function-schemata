@@ -29,7 +29,10 @@ definitions:
             - Z9K1
             type: object
         Z99K1:
-          type: object
+          anyOf:
+          - type: object
+          - not:
+              type: object
       required:
       - Z1K1
       - Z99K1

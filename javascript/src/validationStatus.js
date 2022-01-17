@@ -1,6 +1,6 @@
 'use strict';
 
-const ErrorFormater = require( './errorFormatter' );
+const ErrorFormatter = require( './errorFormatter' );
 
 class ValidationStatus {
 
@@ -9,7 +9,7 @@ class ValidationStatus {
 
 		if ( !this._isValid ) {
 			this.parserErrors = validator.errors;
-			this.Z5 = ErrorFormater.createRootZError( this.parserErrors );
+			this.Z5 = ErrorFormatter.createRootZError( this.parserErrors );
 		} else {
 			this.parserErrors = [];
 			this.Z5 = null;

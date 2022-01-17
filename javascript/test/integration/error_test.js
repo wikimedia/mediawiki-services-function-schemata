@@ -3,7 +3,7 @@
 const path = require( 'path' );
 const { SchemaFactory } = require( '../../src/schema.js' );
 const { readYaml } = require( '../../src/fileUtils.js' );
-const { testZ5 } = require( '../testUtils.js' );
+const { testErrors } = require( '../testUtils.js' );
 
 QUnit.module( 'Z5' );
 
@@ -11,10 +11,11 @@ const factory = SchemaFactory.NORMAL();
 
 function test( ZID ) {
 	const normalValidator = factory.create( ZID );
+	const errorValidator = factory.create( 'Z5' );
 	const normalFile = path.join( 'test_data', 'errors', 'normal_' + ZID + '.yaml' );
 	const testDescriptor = readYaml( normalFile );
 	const info = testDescriptor.test_information;
-	testZ5( info.name, normalValidator, testDescriptor.test_objects );
+	testErrors( info.name, normalValidator, testDescriptor.test_objects, errorValidator );
 }
 
 test( 'Z2' );

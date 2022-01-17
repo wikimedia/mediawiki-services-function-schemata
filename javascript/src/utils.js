@@ -274,6 +274,20 @@ function wrapInZ9( zid ) {
 	};
 }
 
+function wrapInKeyReference( key ) {
+	return {
+		Z1K1: wrapInZ9( 'Z39' ),
+		Z39K1: wrapInZ6( key )
+	};
+}
+
+function wrapInQuote( data ) {
+	return {
+		Z1K1: wrapInZ9( 'Z99' ),
+		Z99K1: data
+	};
+}
+
 module.exports = {
 	arrayToZ10,
 	convertArrayToZList,
@@ -297,6 +311,8 @@ module.exports = {
 	makeResultEnvelope,
 	makeTrue,
 	makeUnit,
+	wrapInKeyReference,
+	wrapInQuote,
 	wrapInZ6,
 	wrapInZ9
 };

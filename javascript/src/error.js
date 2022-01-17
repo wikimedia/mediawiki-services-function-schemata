@@ -69,6 +69,7 @@ const error = {
 	argument_type_mismatch: 'Z506', // expected type, actual type, arg
 	error_in_evaluation: 'Z507', // function call
 	competing_keys: 'Z508', // object
+	list_of_errors: 'Z509', // list of errors
 	nil: 'Z510', // -
 	key_not_found: 'Z511', // key reference, object
 	z9_error: 'Z512', // object
