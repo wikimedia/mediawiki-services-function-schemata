@@ -3,20 +3,6 @@ $id: Z4
 $ref: '#/definitions/objects/Z4'
 definitions:
   objects:
-    Z10_of_Z3:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: Z3#/definitions/objects/Z3
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z3'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object
     Z4:
       anyOf:
       - $ref: '#/definitions/objects/Z4_literal'
@@ -79,7 +65,7 @@ definitions:
         Z4K1:
           $ref: '#/definitions/objects/Z4'
         Z4K2:
-          $ref: '#/definitions/objects/Z10_of_Z3'
+          $ref: 'Z3#/definitions/objects/LIST_OF_Z3'
         Z4K3:
           $ref: Z8#/definitions/objects/Z8
       required:

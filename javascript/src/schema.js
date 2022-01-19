@@ -17,7 +17,7 @@ function initializeValidators() {
 	Z4Validator = defaultFactory.create( 'Z4_literal' );
 	Z5Validator = defaultFactory.create( 'Z5_literal' );
 	Z6Validator = defaultFactory.create( 'Z6_literal' );
-	Z7Validator = defaultFactory.create( 'Z7_backend_literal' );
+	Z7Validator = defaultFactory.create( 'Z7_literal' );
 	Z8Validator = defaultFactory.create( 'Z8_literal' );
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 }
@@ -515,7 +515,7 @@ class SchemaFactory {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
 		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
 		const directory = dataDir( 'NORMAL' );
-		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?(_backend)?)|(GENERIC))\.yaml/;
+		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?(_backend)?)|(GENERIC)|(LIST))\.yaml/;
 
 		for ( const fileName of fs.readdirSync( directory ) ) {
 			if ( fileName.match( fileRegex ) === null ) {

@@ -18,6 +18,7 @@ function test( ZID ) {
 }
 
 test( 'GENERIC' );
+test( 'LIST' );
 test( 'Z1' );
 test( 'Z2' );
 test( 'Z4' );

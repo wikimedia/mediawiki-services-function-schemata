@@ -3,20 +3,14 @@ $id: Z31
 $ref: '#/definitions/objects/Z31'
 definitions:
   objects:
-    Z10_of_Z31:
+    LIST_OF_Z31:
       allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: Z31#/definitions/objects/Z31
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z31'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object
+      - $ref: LIST#/definitions/objects/LIST
+      - patternProperties:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: '#/definitions/objects/Z31'
+          '.*K2':
+            $ref: '#/definitions/objects/LIST_OF_Z31'
     Z31:
       anyOf:
       - $ref: '#/definitions/objects/Z31_literal'
@@ -45,7 +39,7 @@ definitions:
         Z31K1:
           $ref: Z60#/definitions/objects/Z60
         Z31K2:
-          $ref: Z6#/definitions/objects/Z10_of_Z6
+          $ref: Z6#/definitions/objects/LIST_OF_Z6
       required:
       - Z1K1
       - Z31K1

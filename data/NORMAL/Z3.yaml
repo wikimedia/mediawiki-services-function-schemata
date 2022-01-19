@@ -3,6 +3,14 @@ $id: Z3
 $ref: '#/definitions/objects/Z3'
 definitions:
   objects:
+    LIST_OF_Z3:
+      allOf:
+      - $ref: LIST#/definitions/objects/LIST
+      - patternProperties:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: '#/definitions/objects/Z3'
+          '.*K2':
+            $ref: '#/definitions/objects/LIST_OF_Z3'
     Z3:
       anyOf:
       - $ref: '#/definitions/objects/Z3_literal'

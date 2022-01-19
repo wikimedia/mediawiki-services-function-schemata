@@ -3,48 +3,30 @@ $id: Z8
 $ref: '#/definitions/objects/Z8'
 definitions:
   objects:
-    Z10_of_Z14:
+    LIST_OF_Z14:
       allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: Z14#/definitions/objects/Z14
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z14'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object
-    Z10_of_Z17:
+      - $ref: LIST#/definitions/objects/LIST
+      - patternProperties:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: 'Z14#/definitions/objects/Z14'
+          '.*K2':
+            $ref: '#/definitions/objects/LIST_OF_Z14'
+    LIST_OF_Z17:
       allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: Z17#/definitions/objects/Z17
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z17'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object
-    Z10_of_Z20:
+      - $ref: LIST#/definitions/objects/LIST
+      - patternProperties:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: 'Z17#/definitions/objects/Z17'
+          '.*K2':
+            $ref: '#/definitions/objects/LIST_OF_Z17'
+    LIST_OF_Z20:
       allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: Z20#/definitions/objects/Z20
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z20'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object
+      - $ref: LIST#/definitions/objects/LIST
+      - patternProperties:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: 'Z20#/definitions/objects/Z20'
+          '.*K2':
+            $ref: '#/definitions/objects/LIST_OF_Z20'
     Z8:
       anyOf:
       - $ref: '#/definitions/objects/Z8_literal'
@@ -71,13 +53,13 @@ definitions:
             - Z9K1
             type: object
         Z8K1:
-          $ref: '#/definitions/objects/Z10_of_Z17'
+          $ref: '#/definitions/objects/LIST_OF_Z17'
         Z8K2:
           $ref: Z4#/definitions/objects/Z4
         Z8K3:
-          $ref: '#/definitions/objects/Z10_of_Z20'
+          $ref: '#/definitions/objects/LIST_OF_Z20'
         Z8K4:
-          $ref: '#/definitions/objects/Z10_of_Z14'
+          $ref: '#/definitions/objects/LIST_OF_Z14'
         Z8K5:
           $ref: '#/definitions/objects/Z8'
       required:

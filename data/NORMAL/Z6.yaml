@@ -3,20 +3,14 @@ $id: Z6
 $ref: '#/definitions/objects/Z6'
 definitions:
   objects:
-    Z10_of_Z6:
+    LIST_OF_Z6:
       allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - oneOf:
-        - $ref: Z10#/definitions/objects/Z10_empty
-        - properties:
-            Z10K1:
-              $ref: '#/definitions/objects/Z6'
-            Z10K2:
-              $ref: '#/definitions/objects/Z10_of_Z6'
-          required:
-          - Z10K1
-          - Z10K2
-          type: object
+      - $ref: LIST#/definitions/objects/LIST
+      - patternProperties:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: '#/definitions/objects/Z6'
+          '.*K2':
+            $ref: '#/definitions/objects/LIST_OF_Z6'
     Z6:
       anyOf:
       - $ref: '#/definitions/objects/Z6_literal'
