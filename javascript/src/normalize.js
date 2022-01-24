@@ -12,7 +12,7 @@ const mixedFactory = SchemaFactory.MIXED();
 const mixedZ1Validator = mixedFactory.create( 'Z1' );
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-function normalize( o, generically = false ) {
+function normalize( o, generically ) {
 	const partialNormalize = ( ZObject ) => normalize( ZObject, generically );
 	if ( isString( o ) ) {
 		// TODO: should be revisited when we dedice on a good way to distinguish Z9 from Z6
@@ -66,13 +66,14 @@ function normalize( o, generically = false ) {
  * Z5/Error in a Z22/Pair.
  *
  * @param {Object} o a ZObject
+ * @param {boolean} generically whether to produce generic lists (Z10s if false)
  * @return {Object} a Z22
  */
-function normalizeExport( o ) {
+function normalizeExport( o, generically = false ) {
 	const status = mixedZ1Validator.validateStatus( o );
 
 	if ( status.isValid() ) {
-		return makeResultEnvelope( normalize( o ), null );
+		return makeResultEnvelope( normalize( o, generically ), null );
 	} else {
 		return makeResultEnvelope( null, status.getZ5() );
 	}
