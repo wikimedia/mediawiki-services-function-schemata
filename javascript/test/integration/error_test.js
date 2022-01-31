@@ -9,13 +9,13 @@ QUnit.module( 'Z5' );
 
 const factory = SchemaFactory.NORMAL();
 
-function test( ZID ) {
+async function test( ZID ) {
 	const normalValidator = factory.create( ZID );
 	const errorValidator = factory.create( 'Z5' );
 	const normalFile = path.join( 'test_data', 'errors', 'normal_' + ZID + '.yaml' );
 	const testDescriptor = readYaml( normalFile );
 	const info = testDescriptor.test_information;
-	testErrors( info.name, normalValidator, testDescriptor.test_objects, errorValidator );
+	await testErrors( info.name, normalValidator, testDescriptor.test_objects, errorValidator );
 }
 
-test( 'Z2' );
+test( 'Z2' ).then();

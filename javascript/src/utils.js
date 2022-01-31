@@ -199,12 +199,12 @@ function arrayToZ10( array, canonical = false ) {
  * @param {boolean} canonical whether to output in canonical form
  * @return {Object} a Typed List corresponding to the input array
  */
-function convertArrayToZList( array, canonical = false ) {
+async function convertArrayToZList( array, canonical = false ) {
 	const { ZObjectKeyFactory } = require( './schema.js' );
 	let headType;
 	const Z1K1s = new Set();
 	for ( const element of array ) {
-		Z1K1s.add( ZObjectKeyFactory.create( element.Z1K1 ).asString() );
+		Z1K1s.add( ( await ZObjectKeyFactory.create( element.Z1K1 ) ).asString() );
 	}
 	if ( Z1K1s.size === 1 ) {
 		headType = array[ 0 ].Z1K1;

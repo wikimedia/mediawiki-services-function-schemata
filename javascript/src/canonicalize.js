@@ -14,13 +14,13 @@ const Z9Validator = normalFactory.create( 'Z9' );
 const Z10Validator = normalFactory.create( 'Z10' );
 const Z18Validator = normalFactory.create( 'Z18' );
 
-function canonicalizeArray( a ) {
-	return a.map( canonicalize );
+async function canonicalizeArray( a ) {
+	return await Promise.all( a.map( canonicalize ) );
 }
 
-function canonicalizeObject( o ) {
-	if ( Z9Validator.validate( o ) ) {
-		o.Z9K1 = canonicalize( o.Z9K1 );
+async function canonicalizeObject( o ) {
+	if ( await Z9Validator.validate( o ) ) {
+		o.Z9K1 = await canonicalize( o.Z9K1 );
 
 		// return as string if Z9K1 is a valid reference string
 		if ( isString( o.Z9K1 ) && isReference( o.Z9K1 ) ) {
@@ -29,10 +29,10 @@ function canonicalizeObject( o ) {
 	}
 
 	// T295850 Explicitly ignore if the object is an argument declaration (Z18)
-	const isArgDeclaration = Z18Validator.validate( o );
+	const isArgDeclaration = await Z18Validator.validate( o );
 
-	if ( Z6Validator.validate( o ) && !isArgDeclaration ) {
-		o.Z6K1 = canonicalize( o.Z6K1 );
+	if ( await Z6Validator.validate( o ) && !isArgDeclaration ) {
+		o.Z6K1 = await canonicalize( o.Z6K1 );
 
 		// return as string if Z6/String doesn't need to be escaped, i.e., is not in Zxxxx format
 		if ( isString( o.Z6K1 ) && !isReference( o.Z6K1 ) ) {
@@ -41,31 +41,33 @@ function canonicalizeObject( o ) {
 	}
 
 	const listKeyRegex = /^Z881(.*)$/;
-	const typeKey = ZObjectKeyFactory.create( o.Z1K1 ).asString();
-	if ( ( Z10Validator.validate( o ) || typeKey.match( listKeyRegex ) ) && !isArgDeclaration ) {
-		return convertZListToArray( o ).map( canonicalize );
+	const typeKey = ( await ZObjectKeyFactory.create( o.Z1K1 ) ).asString();
+	if (
+		( await Z10Validator.validate( o ) || typeKey.match( listKeyRegex ) ) &&
+        !isArgDeclaration ) {
+		return await Promise.all( convertZListToArray( o ).map( canonicalize ) );
 	}
 
 	const keys = Object.keys( o );
 	const result = {};
 
 	for ( let i = 0; i < keys.length; i++ ) {
-		result[ keys[ i ] ] = canonicalize( o[ keys[ i ] ] );
+		result[ keys[ i ] ] = await canonicalize( o[ keys[ i ] ] );
 	}
 	return result;
 }
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-function canonicalize( o ) {
+async function canonicalize( o ) {
 	if ( isString( o ) ) {
 		return o;
 	}
 
 	if ( isArray( o ) ) {
-		return canonicalizeArray( o );
+		return await canonicalizeArray( o );
 	}
 
-	return canonicalizeObject( o );
+	return await canonicalizeObject( o );
 }
 
 /**
@@ -75,18 +77,18 @@ function canonicalize( o ) {
  * @param {Object} o a ZObject
  * @return {Array} an array of [data, error]
  */
-function canonicalizeExport( o ) {
-	const normalized = normalize( o );
+async function canonicalizeExport( o ) {
+	const normalized = await normalize( o );
 
-	if ( Z5Validator.validateStatus( normalized.Z22K2 ).isValid() ) {
+	if ( ( await Z5Validator.validateStatus( normalized.Z22K2 ) ).isValid() ) {
 		// forward the error that happened in preliminary normalization
 		return normalized;
 	}
 
-	const status = normalZ1Validator.validateStatus( normalized );
+	const status = await normalZ1Validator.validateStatus( normalized );
 
 	if ( status.isValid() ) {
-		return makeResultEnvelope( canonicalize( normalized.Z22K1 ), null );
+		return makeResultEnvelope( await canonicalize( normalized.Z22K1 ), null );
 	} else {
 		return makeResultEnvelope( null, status.getZ5() );
 	}

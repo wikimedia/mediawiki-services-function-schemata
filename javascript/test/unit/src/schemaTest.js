@@ -23,7 +23,7 @@ QUnit.test( 'unsuccessul parse', ( assert ) => {
 	assert.deepEqual( null, schema );
 } );
 
-QUnit.test( 'validation matches ajv\'s decision', ( assert ) => {
+QUnit.test( 'validation matches ajv\'s decision', async ( assert ) => {
 	const schema = factory.parse( {
 		type: 'object',
 		required: [ 'prop1' ],
@@ -36,16 +36,16 @@ QUnit.test( 'validation matches ajv\'s decision', ( assert ) => {
 
 	// Successful validation; "validate_" is the underlying ajv validator.
 	const strongObject = { prop1: 'strong' };
-	assert.true( schema.validate( strongObject ) );
+	assert.true( await schema.validate( strongObject ) );
 	assert.true( schema.validate_( strongObject ) );
 
 	// Unsuccessful validation.
 	const errayObject = { prop1: [ 'erray' ] };
-	assert.false( schema.validate( errayObject ) );
+	assert.false( await schema.validate( errayObject ) );
 	assert.false( schema.validate_( errayObject ) );
 } );
 
-QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
+QUnit.test( 'ValidationStatus.parserErrors is populated', async ( assert ) => {
 	const schema = factory.parse( {
 		type: 'object',
 		required: [ 'prop1' ],
@@ -57,7 +57,7 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
 	} );
 
 	// Unsuccessful validation populates errors.
-	const statusInvalid = schema.validateStatus( { prop1: [ 'erray' ] } );
+	const statusInvalid = await schema.validateStatus( { prop1: [ 'erray' ] } );
 
 	assert.false( statusInvalid.isValid() );
 	assert.deepEqual(
@@ -83,13 +83,13 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
 	);
 
 	// Unsuccessful validation populates errors.
-	const statusValid = schema.validateStatus( { prop1: 'string' } );
+	const statusValid = await schema.validateStatus( { prop1: 'string' } );
 
 	assert.true( statusValid.isValid() );
 	assert.deepEqual( [], statusValid.getParserErrors() );
 } );
 
-QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
+QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
 	const canonicalZ4 = {
 		Z1K1: 'Z4',
 		Z4K1: 'Z10000',
@@ -143,8 +143,8 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 		],
 		Z4K3: 'Z1000'
 	};
-	const Z4 = normalize( canonicalZ4 ).Z22K1;
-	const schemaMap = SchemaFactory.NORMAL().createUserDefined( [ Z4 ] );
+	const Z4 = ( await normalize( canonicalZ4 ) ).Z22K1;
+	const schemaMap = await SchemaFactory.NORMAL().createUserDefined( [ Z4 ] );
 	// TODO (T298049): Why is the first entry here a ZObjectKey instead of a UserDefinedTypeKey?
 	assert.deepEqual( [
 		'Z4{"Z4K1":"Z10000","Z4K2":"Z10{\\"Z10K1\\":\\"Z3{\\\\\\"Z3K1\\\\\\":\\\\\\"Z6\\\\\\",\\\\\\"Z3K2\\\\\\":\\\\\\"Z6{\\\\\\\\\\\\\\"Z6K1\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"10000K1\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"Z3K3\\\\\\":\\\\\\"Z1212\\\\\\"}\\",\\"Z10K2\\":\\"Z10{\\\\\\"Z10K1\\\\\\":\\\\\\"Z3{\\\\\\\\\\\\\\"Z3K1\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Z931(Z6)\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"Z3K2\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Z6{\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"Z6K1\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"10000K2\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"}\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"Z3K3\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Z1212\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"Z10K2\\\\\\":\\\\\\"Z10{}\\\\\\"}\\"}","Z4K3":"Z1000"}',
@@ -152,17 +152,17 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 	], [ ...schemaMap.keys() ] );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', async ( assert ) => {
 	const Z7 = {
 		Z1K1: 'Z7',
 		Z7K1: 'Z4200',
 		Z4200K1: 'Z14',
 		Z4200K2: 'Z17'
 	};
-	assert.deepEqual( 'Z4200(Z14,Z17)', ZObjectKeyFactory.create( Z7 ).asString() );
+	assert.deepEqual( 'Z4200(Z14,Z17)', ( await ZObjectKeyFactory.create( Z7 ) ).asString() );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', async ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -187,10 +187,10 @@ QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', ( assert ) => 
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( 'Z4200(Z14,Z17)', ZObjectKeyFactory.create( Z4 ).asString() );
+	assert.deepEqual( 'Z4200(Z14,Z17)', ( await ZObjectKeyFactory.create( Z4 ) ).asString() );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with user-defined type', ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with user-defined type', async ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -233,10 +233,10 @@ QUnit.test( 'ZObjectKeyFactory with user-defined type', ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( '<Z6,Z931(Z6,Z12)>', ZObjectKeyFactory.create( Z4 ).asString() );
+	assert.deepEqual( '<Z6,Z931(Z6,Z12)>', ( await ZObjectKeyFactory.create( Z4 ) ).asString() );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', async ( assert ) => {
 	const Z1 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -259,18 +259,18 @@ QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( ass
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)', ZObjectKeyFactory.create( Z1 ).asString() );
+	assert.deepEqual( 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)', ( await ZObjectKeyFactory.create( Z1 ) ).asString() );
 } );
 
-QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', ( assert ) => {
-	const key = ZObjectKeyFactory.create( {
+QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', async ( assert ) => {
+	const key = await ZObjectKeyFactory.create( {
 		Z1K1: 'Z6',
 		Z6K1: 'Smörgåsbord'
 	} );
 	assert.deepEqual( 'ZObjectKey', key.type() );
 } );
 
-QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', ( assert ) => {
+QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', async ( assert ) => {
 	const Z1 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -293,11 +293,11 @@ QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	const key = ZObjectKeyFactory.create( Z1 );
+	const key = await ZObjectKeyFactory.create( Z1 );
 	assert.deepEqual( 'GenericTypeKey', key.type() );
 } );
 
-QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', ( assert ) => {
+QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', async ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -340,12 +340,12 @@ QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', ( assert ) => 
 			Z9K1: 'Z1001'
 		}
 	};
-	const key = ZObjectKeyFactory.create( Z4 );
+	const key = await ZObjectKeyFactory.create( Z4 );
 	assert.deepEqual( 'UserDefinedTypeKey', key.type() );
 } );
 
-QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', ( assert ) => {
-	const key = ZObjectKeyFactory.create( {
+QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', async ( assert ) => {
+	const key = await ZObjectKeyFactory.create( {
 		Z1K1: 'Z9',
 		Z9K1: 'Z9'
 	} );

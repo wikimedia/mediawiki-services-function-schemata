@@ -4,7 +4,7 @@ const { convertArrayToZList, arrayToZ10, convertZListToArray } = require( '../..
 
 QUnit.module( 'utils.js' );
 
-QUnit.test( 'convertArrayToZList with empty array, canonical', ( assert ) => {
+QUnit.test( 'convertArrayToZList with empty array, canonical', async ( assert ) => {
 	const array = [];
 	const expected = {
 		Z1K1: {
@@ -13,10 +13,10 @@ QUnit.test( 'convertArrayToZList with empty array, canonical', ( assert ) => {
 			Z881K1: 'Z1'
 		}
 	};
-	assert.deepEqual( expected, convertArrayToZList( array, /* canonical= */true ) );
+	assert.deepEqual( expected, await convertArrayToZList( array, /* canonical= */true ) );
 } );
 
-QUnit.test( 'convertArrayToZList with empty array', ( assert ) => {
+QUnit.test( 'convertArrayToZList with empty array', async ( assert ) => {
 	const array = [];
 	const expected = {
 		Z1K1: {
@@ -34,10 +34,10 @@ QUnit.test( 'convertArrayToZList with empty array', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertArrayToZList( array ) );
+	assert.deepEqual( expected, await convertArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertArrayToZList with multiple types', ( assert ) => {
+QUnit.test( 'convertArrayToZList with multiple types', async ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z6',
@@ -79,10 +79,10 @@ QUnit.test( 'convertArrayToZList with multiple types', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertArrayToZList( array ) );
+	assert.deepEqual( expected, await convertArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertArrayToZList with single type', ( assert ) => {
+QUnit.test( 'convertArrayToZList with single type', async ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z6',
@@ -118,7 +118,7 @@ QUnit.test( 'convertArrayToZList with single type', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertArrayToZList( array ) );
+	assert.deepEqual( expected, await convertArrayToZList( array ) );
 } );
 
 QUnit.test( 'arrayToZ10', ( assert ) => {

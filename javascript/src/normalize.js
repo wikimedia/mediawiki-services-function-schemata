@@ -12,8 +12,8 @@ const mixedFactory = SchemaFactory.MIXED();
 const mixedZ1Validator = mixedFactory.create( 'Z1' );
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-function normalize( o, generically ) {
-	const partialNormalize = ( ZObject ) => normalize( ZObject, generically );
+async function normalize( o, generically ) {
+	const partialNormalize = async ( ZObject ) => await normalize( ZObject, generically );
 	if ( isString( o ) ) {
 		if ( isReference( o ) ) {
 			return { Z1K1: 'Z9', Z9K1: o };
@@ -29,7 +29,7 @@ function normalize( o, generically ) {
 		} else {
 			arrayFunction = arrayToZ10;
 		}
-		return arrayFunction( o.map( partialNormalize ) );
+		return await arrayFunction( await Promise.all( o.map( partialNormalize ) ) );
 	}
 
 	if ( o.Z1K1 === 'Z5' &&
@@ -53,9 +53,9 @@ function normalize( o, generically ) {
 			continue;
 		}
 		if ( keys[ i ] === 'Z10K1' && !keys.includes( 'Z10K2' ) ) {
-			result.Z10K2 = partialNormalize( [] );
+			result.Z10K2 = await partialNormalize( [] );
 		}
-		result[ keys[ i ] ] = partialNormalize( o[ keys[ i ] ] );
+		result[ keys[ i ] ] = await partialNormalize( o[ keys[ i ] ] );
 	}
 	return result;
 }
@@ -68,11 +68,11 @@ function normalize( o, generically ) {
  * @param {boolean} generically whether to produce generic lists (Z10s if false)
  * @return {Object} a Z22
  */
-function normalizeExport( o, generically = false ) {
-	const status = mixedZ1Validator.validateStatus( o );
+async function normalizeExport( o, generically = false ) {
+	const status = await mixedZ1Validator.validateStatus( o );
 
 	if ( status.isValid() ) {
-		return makeResultEnvelope( normalize( o, generically ), null );
+		return makeResultEnvelope( await normalize( o, generically ), null );
 	} else {
 		return makeResultEnvelope( null, status.getZ5() );
 	}
