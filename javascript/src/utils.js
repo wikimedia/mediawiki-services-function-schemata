@@ -36,7 +36,7 @@ function kidFromGlobalKey( k ) {
 }
 
 function deepEqual( o1, o2 ) {
-	// TODO(T300650): use something more robust
+	// TODO (T300650): use something more robust
 	return JSON.stringify( o1 ) === JSON.stringify( o2 );
 }
 
@@ -44,8 +44,8 @@ function deepCopy( o ) {
 	return JSON.parse( JSON.stringify( o ) );
 }
 
-// TODO(T285433): Return Z21 instead of Z23.
-// TODO(T289301): This should read its outputs from a configuration file.
+// TODO (T285433): Return Z21 instead of Z23.
+// TODO (T289301): This should read its outputs from a configuration file.
 function makeUnit( canonical = false ) {
 	if ( canonical ) {
 		return 'Z23';
@@ -103,7 +103,7 @@ function makeResultEnvelope( goodResult = null, badResult = null, canonical = fa
  * @return {Object} the head list element, (Z10)?K1
  */
 function getHead( ZList ) {
-	// TODO(T292788): Remove support for Z10K1.
+	// TODO (T292788): Remove support for Z10K1.
 	return ZList.Z10K1 || ZList.K1;
 }
 
@@ -114,7 +114,7 @@ function getHead( ZList ) {
  * @return {Array} the tail list element, (Z10)?K2
  */
 function getTail( ZList ) {
-	// TODO(T292788): Remove support for Z10K1.
+	// TODO (T292788): Remove support for Z10K1.
 	return ZList.Z10K2 || ZList.K2;
 }
 
@@ -136,7 +136,7 @@ function isEmptyZList( ZList ) {
  * @return {Array} an array consisting of all elements of ZList
  */
 function convertZListToArray( ZList ) {
-	// TODO(T292788): Remove support for Z10K1.
+	// TODO (T292788): Remove support for Z10K1.
 	let tail = ZList;
 	const result = [];
 	while ( true ) {

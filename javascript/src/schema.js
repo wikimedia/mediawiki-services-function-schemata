@@ -22,7 +22,7 @@ function initializeValidators() {
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 }
 
-// TODO(T296659): Migrate validatesAs* functions to utils. Somehow avoid
+// TODO (T296659): Migrate validatesAs* functions to utils. Somehow avoid
 // incurring circular import problem in the process.
 
 /**
@@ -226,7 +226,7 @@ class GenericTypeKey {
 	 * String representation containing the identity of the original Z7K1 and
 	 * the keys of all of the type arguments.
 	 *
-	 * TODO(T295373): This assumes that generics will only be parameterized by types.
+	 * TODO (T295373): This assumes that generics will only be parameterized by types.
 	 *
 	 * @return {string} contains identity of Function and of its arguments
 	 */
@@ -392,7 +392,7 @@ class Schema extends BaseSchema {
 	 * @return {ValidationStatus} a validation status instance
 	 */
 	validateStatus( maybeValid ) {
-		// TODO(T296841): Ensure this is atomic--concurrent calls to validate could
+		// TODO (T296841): Ensure this is atomic--concurrent calls to validate could
 		// cause race conditions.
 		const result = this.validate_( maybeValid );
 		return new ValidationStatus( this.validate_, result );
@@ -425,16 +425,16 @@ class GenericSchema extends BaseSchema {
 	 * @return {ValidationStatus} a validation status instance
 	 */
 	validateStatus( maybeValid ) {
-		// TODO(T296842): Check for stray keys; allow non-local keys for e.g. Z10?
+		// TODO (T296842): Check for stray keys; allow non-local keys for e.g. Z10?
 		for ( const key of this.keyMap_.keys() ) {
-			// TODO(T290996): How to signal optional keys?
+			// TODO (T290996): How to signal optional keys?
 			if ( maybeValid[ key ] === undefined ) {
 				continue;
 			}
 			const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
 			if ( !howsIt.isValid() ) {
-				// TODO(T296842): Somehow include key.
-				// TODO(T296842): Consider conjunction of all errors?
+				// TODO (T296842): Somehow include key.
+				// TODO (T296842): Consider conjunction of all errors?
 				return howsIt;
 			}
 		}
@@ -556,7 +556,7 @@ class SchemaFactory {
 	 */
 	create( schemaName ) {
 		let type = schemaName;
-		// TODO(T292787): Remove these special cases once references work properly.
+		// TODO (T292787): Remove these special cases once references work properly.
 		if ( schemaName === 'Z13' ) {
 			type = 'Z10';
 		}
@@ -615,7 +615,7 @@ class SchemaFactory {
 	 *
 	 * Currently only works for normal form.
 	 *
-	 * TODO(T296843): Maybe make this work for canonical forms, too.
+	 * TODO (T296843): Maybe make this work for canonical forms, too.
 	 *
 	 * Usage:
 	 *
