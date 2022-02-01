@@ -36,7 +36,7 @@ function kidFromGlobalKey( k ) {
 }
 
 function deepEqual( o1, o2 ) {
-	// TODO: use something more robust
+	// TODO(T300650): use something more robust
 	return JSON.stringify( o1 ) === JSON.stringify( o2 );
 }
 
@@ -55,7 +55,6 @@ function makeUnit( canonical = false ) {
 
 /**
  * Z9 Reference to Z41 (true).
- * TODO: T282891
  *
  * @return {Object} a reference to Z41 (true)
  */
@@ -65,7 +64,6 @@ function makeTrue() {
 
 /**
  * Z9 Reference to Z42 (false).
- * TODO: T282891
  *
  * @return {Object} a reference to Z42 (false)
  */

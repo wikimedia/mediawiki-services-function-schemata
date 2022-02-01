@@ -15,7 +15,6 @@ const mixedZ1Validator = mixedFactory.create( 'Z1' );
 function normalize( o, generically ) {
 	const partialNormalize = ( ZObject ) => normalize( ZObject, generically );
 	if ( isString( o ) ) {
-		// TODO: should be revisited when we dedice on a good way to distinguish Z9 from Z6
 		if ( isReference( o ) ) {
 			return { Z1K1: 'Z9', Z9K1: o };
 		} else {

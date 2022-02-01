@@ -427,7 +427,7 @@ class GenericSchema extends BaseSchema {
 	validateStatus( maybeValid ) {
 		// TODO(T296842): Check for stray keys; allow non-local keys for e.g. Z10?
 		for ( const key of this.keyMap_.keys() ) {
-			// TODO: How to signal optional keys?
+			// TODO(T290996): How to signal optional keys?
 			if ( maybeValid[ key ] === undefined ) {
 				continue;
 			}
