@@ -1,6 +1,14 @@
 'use strict';
 
-const { SchemaFactory, ZObjectKeyFactory } = require( '../../../src/schema.js' );
+const {
+	SchemaFactory,
+	validatesAsZObject,
+	validatesAsType,
+	validatesAsString,
+	validatesAsFunctionCall,
+	validatesAsArgumentReference,
+	validatesAsUnit,
+	ZObjectKeyFactory } = require( '../../../src/schema.js' );
 const normalize = require( '../../../src/normalize.js' );
 
 QUnit.module( 'schema.js' );
@@ -16,7 +24,7 @@ QUnit.test( 'successful parse', ( assert ) => {
 	assert.notEqual( null, schema );
 } );
 
-QUnit.test( 'unsuccessul parse', ( assert ) => {
+QUnit.test( 'unsuccessful parse', ( assert ) => {
 	const schema = factory.parse( {
 		type: 'not supported'
 	} );
@@ -350,4 +358,91 @@ QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', async ( assert ) => {
 		Z9K1: 'Z9'
 	} );
 	assert.deepEqual( 'SimpleTypeKey', key.type() );
+} );
+
+QUnit.test( 'validatesAsZObject', async ( assert ) => {
+	const input = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1000'
+		},
+		Z1000K1: {
+			Z1K1: 'Z6',
+			Z6K1: 'air on the G Z6'
+		}
+	};
+	assert.true( ( await validatesAsZObject( input ) ).isValid() );
+} );
+
+QUnit.test( 'validatesAsType', async ( assert ) => {
+	const Z4 = {
+		Z1K1: 'Z4',
+		Z4K1: {
+			Z1K1: 'Z7',
+			Z7K1: 'Z4200',
+			Z4200K1: {
+				Z1K1: 'Z4',
+				Z4K1: 'Z14',
+				Z4K2: [],
+				Z4K3: 'Z1000'
+			},
+			Z4200K2: {
+				Z1K1: 'Z4',
+				Z4K1: 'Z17',
+				Z4K2: [],
+				Z4K3: 'Z1000'
+			}
+		},
+		Z4K2: [],
+		Z4K3: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z1001'
+		}
+	};
+	const normalizedZ4 = ( await normalize( Z4 ) ).Z22K1;
+	assert.true( ( await validatesAsType( normalizedZ4 ) ).isValid() );
+} );
+
+QUnit.test( 'validatesAsString', async ( assert ) => {
+	const input = {
+		Z1K1: 'Z6',
+		Z6K1: 'air on the G Z6'
+	};
+	assert.true( ( await validatesAsString( input ) ).isValid() );
+} );
+
+QUnit.test( 'validatesAsFunctionCall', async ( assert ) => {
+	const input = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z801'
+		}
+	};
+	assert.true( ( await validatesAsFunctionCall( input ) ).isValid() );
+} );
+
+QUnit.test( 'validatesAsArgumentReference', async ( assert ) => {
+	const input = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z18'
+		},
+		Z18K1: {
+			Z1K1: 'Z6',
+			Z6K1: 'Z801K1'
+		}
+	};
+	assert.true( ( await validatesAsArgumentReference( input ) ).isValid() );
+} );
+
+QUnit.test( 'validatesAsUnit', async ( assert ) => {
+	const input = {
+		Z1K1: 'Z9',
+		Z9K1: 'Z23'
+	};
+	assert.true( ( await validatesAsUnit( input ) ).isValid() );
 } );

@@ -9,31 +9,55 @@ const { ValidationStatus } = require( './validationStatus.js' );
 const { Mutex } = require( 'async-mutex' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
-let Z4Validator, Z5Validator, Z6Validator, Z7Validator, Z8Validator, Z9Validator;
+let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
+	Z8Validator, Z9Validator, Z18Validator, Z23Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
 	const defaultFactory = SchemaFactory.NORMAL();
 
+	Z1Validator = defaultFactory.create( 'Z1' );
 	Z4Validator = defaultFactory.create( 'Z4_literal' );
 	Z5Validator = defaultFactory.create( 'Z5_literal' );
 	Z6Validator = defaultFactory.create( 'Z6_literal' );
 	Z7Validator = defaultFactory.create( 'Z7_literal' );
 	Z8Validator = defaultFactory.create( 'Z8_literal' );
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
+	Z18Validator = defaultFactory.create( 'Z18_literal' );
+	Z23Validator = defaultFactory.create( 'Z23' );
 }
 
 // TODO (T296659): Migrate validatesAs* functions to utils. Somehow avoid
 // incurring circular import problem in the process.
 
 /**
+ * Determines whether argument is a valid ZObject.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {ValidationStatus} Status is only valid if Z1 validates as a Z1
+ */
+function validatesAsZObject( Z1 ) {
+	return Z1Validator.validateStatus( Z1 );
+}
+
+/**
  * Determines whether argument is a Z4.
  *
  * @param {Object} Z1 a ZObject
- * @return {boolean} true if Z1 validates as Z4
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z4
  */
 async function validatesAsType( Z1 ) {
-	return await Z4Validator.validate( Z1 );
+	return await Z4Validator.validateStatus( Z1 );
+}
+
+/**
+ * Determines whether argument is a Z5.
+ *
+ * @param {Object} Z1 a ZObject
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z5
+ */
+async function validatesAsError( Z1 ) {
+	return await Z5Validator.validateStatus( Z1 );
 }
 
 /**
@@ -42,30 +66,30 @@ async function validatesAsType( Z1 ) {
  * logic.
  *
  * @param {Object} Z1 a ZObject
- * @return {boolean} true if Z1 validates as either Z6 or Z7
+ * @return {ValidationStatus} Status is only valid if Z1 validates as either Z6 or Z7
  */
 async function validatesAsString( Z1 ) {
-	return await Z6Validator.validate( Z1 );
+	return await Z6Validator.validateStatus( Z1 );
 }
 
 /**
  * Determines whether argument is a Z8.
  *
  * @param {Object} Z1 a ZObject
- * @return {boolean} true if Z1 validates as Z8
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z8
  */
 async function validatesAsFunction( Z1 ) {
-	return await Z8Validator.validate( Z1 );
+	return await Z8Validator.validateStatus( Z1 );
 }
 
 /**
  * Determines whether argument is a Z9.
  *
  * @param {Object} Z1 a ZObject
- * @return {boolean} true if Z1 validates as Z9
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z9
  */
 async function validatesAsReference( Z1 ) {
-	return await Z9Validator.validate( Z1 );
+	return await Z9Validator.validateStatus( Z1 );
 }
 
 /**
@@ -75,7 +99,27 @@ async function validatesAsReference( Z1 ) {
  * @return {boolean} whether Z1 can validated as a Function Call
  */
 async function validatesAsFunctionCall( Z1 ) {
-	return await Z7Validator.validate( Z1 );
+	return await Z7Validator.validateStatus( Z1 );
+}
+
+/**
+ * Validates a ZObject against the Argument Reference schema.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {boolean} whether Z1 can validated as a Argument Reference
+ */
+async function validatesAsArgumentReference( Z1 ) {
+	return await Z18Validator.validateStatus( Z1 );
+}
+
+/**
+ * Validates a ZObject against the Unit schema.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {boolean} whether Z1 can validated as a Unit
+ */
+async function validatesAsUnit( Z1 ) {
+	return await Z23Validator.validateStatus( Z1 );
 }
 
 /**
@@ -87,12 +131,16 @@ async function validatesAsFunctionCall( Z1 ) {
  * @return {Object|null} the Z4's identity
  */
 async function findIdentity( Z4 ) {
-	if ( await validatesAsFunctionCall( Z4 ) || await validatesAsReference( Z4 ) ) {
+	if (
+		( await validatesAsFunctionCall( Z4 ) ).isValid() ||
+        ( await validatesAsReference( Z4 ) ).isValid() ) {
 		return Z4;
 	}
-	if ( await validatesAsType( Z4 ) ) {
+	if ( ( await validatesAsType( Z4 ) ).isValid() ) {
 		const identity = await findIdentity( Z4.Z4K1 );
-		if ( await validatesAsReference( identity ) && isUserDefined( identity.Z9K1 ) ) {
+		if (
+			( await validatesAsReference( identity ) ).isValid() &&
+            isUserDefined( identity.Z9K1 ) ) {
 			return Z4;
 		}
 		return identity;
@@ -109,16 +157,16 @@ async function findIdentity( Z4 ) {
  * @return {Object|null} the associated ZID
  */
 async function getZIDForType( Z4 ) {
-	if ( await validatesAsFunction( Z4 ) ) {
+	if ( ( await validatesAsFunction( Z4 ) ).isValid() ) {
 		return await getZIDForType( Z4.Z8K5 );
 	}
-	if ( await validatesAsReference( Z4 ) ) {
+	if ( ( await validatesAsReference( Z4 ) ).isValid() ) {
 		return Z4.Z9K1;
 	}
-	if ( await validatesAsFunctionCall( Z4 ) ) {
+	if ( ( await validatesAsFunctionCall( Z4 ) ).isValid() ) {
 		return await getZIDForType( Z4.Z7K1 );
 	}
-	if ( await validatesAsType( Z4 ) ) {
+	if ( ( await validatesAsType( Z4 ) ).isValid() ) {
 		return await getZIDForType( Z4.Z4K1 );
 	}
 	if ( isString( Z4 ) ) {
@@ -345,13 +393,13 @@ class ZObjectKeyFactory {
 			return ZObjectKey.create( normalized );
 		}
 		const ZID = await getZIDForType( identity );
-		if ( await validatesAsReference( identity ) ) {
+		if ( ( await validatesAsReference( identity ) ).isValid() ) {
 			// Built-in type.
 			return SimpleTypeKey.create( ZID );
-		} else if ( await validatesAsType( identity ) ) {
+		} else if ( ( await validatesAsType( identity ) ).isValid() ) {
 			// User-defined type.
 			return UserDefinedTypeKey.create( identity );
-		} else if ( await validatesAsFunctionCall( identity ) ) {
+		} else if ( ( await validatesAsFunctionCall( identity ) ).isValid() ) {
 			// Generic type.
 			return GenericTypeKey.create( ZID, identity );
 		} else {
@@ -596,7 +644,7 @@ class SchemaFactory {
 			const propertyType = Z3.Z3K1;
 			const identity = await findIdentity( propertyType );
 			let subValidator;
-			if ( await validatesAsReference( identity ) ) {
+			if ( ( await validatesAsReference( identity ) ).isValid() ) {
 				subValidator = this.create( propertyType.Z9K1 );
 			} else {
 				const key = ( await ZObjectKeyFactory.create( propertyType ) ).asString();
@@ -661,8 +709,14 @@ initializeValidators();
 
 module.exports = {
 	SchemaFactory,
+	validatesAsZObject,
+	validatesAsType,
+	validatesAsError,
 	validatesAsString,
-	validatesAsReference,
 	validatesAsFunctionCall,
+	validatesAsFunction,
+	validatesAsReference,
+	validatesAsArgumentReference,
+	validatesAsUnit,
 	ZObjectKeyFactory
 };
