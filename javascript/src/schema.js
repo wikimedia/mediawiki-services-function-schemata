@@ -556,7 +556,6 @@ class SchemaFactory {
 	 */
 	create( schemaName ) {
 		let type = schemaName;
-		// TODO (T292787): Remove these special cases once references work properly.
 		if ( schemaName === 'Z13' ) {
 			type = 'Z10';
 		}
