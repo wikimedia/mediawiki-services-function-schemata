@@ -5,11 +5,13 @@ definitions:
   objects:
     Z18:
       $ref: '#/definitions/objects/Z18_literal'
+    Z18K1:
+      $ref: Z6#/definitions/objects/Z6_ZnKn
     Z18_literal:
       additionalProperties: false
       properties:
         Z18K1:
-          $ref: Z6#/definitions/objects/Z6_ZnKn
+          $ref: '#/definitions/objects/Z18K1'
         Z1K1:
           allOf:
           - $ref: Z9#/definitions/objects/Z9

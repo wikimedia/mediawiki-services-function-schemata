@@ -5,6 +5,9 @@ definitions:
   objects:
     Z9:
       $ref: '#/definitions/objects/Z9_literal'
+    Z9K1:
+      pattern: ^Z[1-9]\d*$
+      type: string
     Z9_literal:
       additionalProperties: false
       properties:
@@ -13,8 +16,7 @@ definitions:
           - Z9
           type: string
         Z9K1:
-          pattern: ^Z[1-9]\d*$
-          type: string
+          $ref: '#/definitions/objects/Z9K1'
       required:
       - Z1K1
       - Z9K1

@@ -8,6 +8,10 @@ definitions:
       - $ref: '#/definitions/objects/Z60_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
+    Z60K1:
+      $ref: Z6#/definitions/objects/Z6
+    Z60K2:
+      $ref: Z6#/definitions/objects/LIST_OF_Z6
     Z60_literal:
       additionalProperties: false
       properties:
@@ -29,9 +33,9 @@ definitions:
             - Z9K1
             type: object
         Z60K1:
-          $ref: Z6#/definitions/objects/Z6
+          $ref: '#/definitions/objects/Z60K1'
         Z60K2:
-          $ref: Z6#/definitions/objects/LIST_OF_Z6
+          $ref: '#/definitions/objects/Z60K2'
       required:
       - Z1K1
       - Z60K1

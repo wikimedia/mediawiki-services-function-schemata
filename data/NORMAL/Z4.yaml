@@ -3,12 +3,6 @@ $id: Z4
 $ref: '#/definitions/objects/Z4'
 definitions:
   objects:
-    Z4:
-      anyOf:
-      - $ref: '#/definitions/objects/Z4_literal'
-      - $ref: 'Z7#/definitions/objects/Z7'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
     Z1_to_Z4:
       oneOf:
       - allOf:
@@ -29,19 +23,31 @@ definitions:
             Z4K1:
               properties:
                 Z9K1:
-                  type: string
                   enum:
-                  - 'Z4'
+                  - Z4
+                  type: string
       - allOf:
-        - $ref: 'Z7#/definitions/objects/Z7_literal'
+        - $ref: Z7#/definitions/objects/Z7_literal
         - properties:
             Z7K1:
               properties:
                 Z8K2:
-                  type: string
                   enum:
-                  - 'Z4'
-                  - 'Z1'
+                  - Z4
+                  - Z1
+                  type: string
+    Z4:
+      anyOf:
+      - $ref: '#/definitions/objects/Z4_literal'
+      - $ref: Z7#/definitions/objects/Z7
+      - $ref: Z9#/definitions/objects/Z9
+      - $ref: Z18#/definitions/objects/Z18
+    Z4K1:
+      $ref: '#/definitions/objects/Z4'
+    Z4K2:
+      $ref: Z3#/definitions/objects/LIST_OF_Z3
+    Z4K3:
+      $ref: Z8#/definitions/objects/Z8
     Z4_literal:
       additionalProperties: false
       properties:
@@ -63,11 +69,11 @@ definitions:
             - Z9K1
             type: object
         Z4K1:
-          $ref: '#/definitions/objects/Z4'
+          $ref: '#/definitions/objects/Z4K1'
         Z4K2:
-          $ref: 'Z3#/definitions/objects/LIST_OF_Z3'
+          $ref: '#/definitions/objects/Z4K2'
         Z4K3:
-          $ref: Z8#/definitions/objects/Z8
+          $ref: '#/definitions/objects/Z4K3'
       required:
       - Z1K1
       - Z4K1

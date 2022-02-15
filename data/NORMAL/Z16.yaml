@@ -8,13 +8,17 @@ definitions:
       - $ref: '#/definitions/objects/Z16_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
+    Z16K1:
+      $ref: Z61#/definitions/objects/Z61
+    Z16K2:
+      $ref: Z6#/definitions/objects/Z6
     Z16_literal:
       additionalProperties: false
       properties:
         Z16K1:
-          $ref: Z61#/definitions/objects/Z61
+          $ref: '#/definitions/objects/Z16K1'
         Z16K2:
-          $ref: Z6#/definitions/objects/Z6
+          $ref: '#/definitions/objects/Z16K2'
         Z1K1:
           allOf:
           - $ref: Z9#/definitions/objects/Z9
