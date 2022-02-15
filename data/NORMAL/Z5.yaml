@@ -8,6 +8,10 @@ definitions:
       - $ref: '#/definitions/objects/Z5_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
+    Z5K1:
+      $ref: Z50#/definitions/objects/Z50
+    Z5K2:
+      $ref: Z1#/definitions/objects/Z1
     Z5_literal:
       additionalProperties: false
       properties:
@@ -29,9 +33,9 @@ definitions:
             - Z9K1
             type: object
         Z5K1:
-          $ref: Z50#/definitions/objects/Z50
+          $ref: '#/definitions/objects/Z5K1'
         Z5K2:
-          $ref: Z1#/definitions/objects/Z1
+          $ref: '#/definitions/objects/Z5K2'
       required:
       - Z1K1
       - Z5K1

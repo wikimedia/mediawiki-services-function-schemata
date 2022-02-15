@@ -8,6 +8,8 @@ definitions:
       - $ref: '#/definitions/objects/Z61_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
+    Z61K1:
+      $ref: '#/definitions/objects/Z6_prog_lang'
     Z61_literal:
       additionalProperties: false
       properties:
@@ -29,7 +31,7 @@ definitions:
             - Z9K1
             type: object
         Z61K1:
-          $ref: '#/definitions/objects/Z6_prog_lang'
+          $ref: '#/definitions/objects/Z61K1'
       required:
       - Z1K1
       - Z61K1
