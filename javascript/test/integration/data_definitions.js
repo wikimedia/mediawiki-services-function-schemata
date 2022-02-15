@@ -9,6 +9,7 @@ const { dataDir } = require( '../../src/fileUtils.js' );
 QUnit.module( 'data_definitions' );
 
 const dataPath = dataDir( 'definitions' );
+const naturalLanguages = dataDir( 'definitions/naturalLanguages.json' );
 const badPersistent = path.join( 'test_data', 'bad_definitions', 'bad_persistent' );
 const badInner = path.join( 'test_data', 'bad_definitions', 'bad_inner' );
 
@@ -58,6 +59,44 @@ async function testForFilesInDirectory( directory, isValidZ2, isValidInner, desc
 	await Promise.all( promises );
 }
 
+async function testNaturalLanguagesParsing( directory, languages ) {
+	const languageMapping = {};
+	const allFiles = [];
+
+	for ( const file of fs.readdirSync( directory ) ) {
+		const ZID = file.split( '.' )[ 0 ];
+		const ZidNumber = parseInt( ZID.slice( 1 ) );
+		if ( ZidNumber > 1000 && ZidNumber < 2000 ) {
+			const jsonFile = fs.readFileSync( path.join( directory, file ), { encoding: 'utf8' } );
+			allFiles.push( JSON.parse( jsonFile ) );
+		}
+	}
+
+	for ( const index in allFiles ) {
+		const isoCodes = [];
+		const language = allFiles[ index ];
+
+		isoCodes.push( language.Z2K2.Z60K1 );
+		if ( 'Z60K2' in language.Z2K2 ) {
+			const aliases = language.Z2K2.Z60K2;
+			for ( const alias in aliases ) {
+				isoCodes.push( aliases[ alias ] );
+			}
+		}
+		const zid = language.Z2K1.Z6K1;
+
+		for ( const code in isoCodes ) {
+			languageMapping[ isoCodes[ code ] ] = zid;
+		}
+	}
+
+	const expected = JSON.parse( fs.readFileSync( languages, { encoding: 'utf8' } ) );
+
+	QUnit.test( 'validateLanguageParsing', async ( assert ) => {
+		assert.deepEqual( languageMapping, expected );
+	} );
+}
+
 // Test wellformedness of files in data/definitions directory
 {
 	testForFilesInDirectory( dataPath, true, true, 'ZObject is fully wellformed.' ).then();
@@ -71,4 +110,8 @@ async function testForFilesInDirectory( directory, isValidZ2, isValidInner, desc
 // Test failure of test files in test_data/bad_definitions/bad_inner directory
 {
 	testForFilesInDirectory( badInner, true, false, 'Inner ZObject is not wellformed.' ).then();
+}
+
+{
+	testNaturalLanguagesParsing( dataPath, naturalLanguages ).then();
 }
