@@ -6,13 +6,8 @@ definitions:
     Z99:
       oneOf:
       - $ref: '#/definitions/objects/Z99_literal'
-      - $ref: Z18#/definitions/objects/Z18
-      - $ref: Z9#/definitions/objects/Z9
-    Z99K1:
-      anyOf:
-      - type: object
-      - not:
-          type: object
+      - $ref: 'Z18#/definitions/objects/Z18'
+      - $ref: 'Z9#/definitions/objects/Z9'
     Z99_literal:
       additionalProperties: false
       properties:
@@ -34,7 +29,10 @@ definitions:
             - Z9K1
             type: object
         Z99K1:
-          $ref: '#/definitions/objects/Z99K1'
+          anyOf:
+          - type: object
+          - not:
+              type: object
       required:
       - Z1K1
       - Z99K1

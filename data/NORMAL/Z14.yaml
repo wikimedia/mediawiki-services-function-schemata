@@ -8,14 +8,6 @@ definitions:
       - $ref: '#/definitions/objects/Z14_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
-    Z14K1:
-      $ref: Z8#/definitions/objects/Z8
-    Z14K2:
-      $ref: Z1#/definitions/objects/Z1
-    Z14K3:
-      $ref: Z16#/definitions/objects/Z16
-    Z14K4:
-      $ref: Z6#/definitions/objects/Z6
     Z14_literal:
       additionalProperties: false
       oneOf:
@@ -27,13 +19,13 @@ definitions:
         - Z14K4
       properties:
         Z14K1:
-          $ref: '#/definitions/objects/Z14K1'
+          $ref: Z8#/definitions/objects/Z8
         Z14K2:
-          $ref: '#/definitions/objects/Z14K2'
+          $ref: Z1#/definitions/objects/Z1
         Z14K3:
-          $ref: '#/definitions/objects/Z14K3'
+          $ref: Z16#/definitions/objects/Z16
         Z14K4:
-          $ref: '#/definitions/objects/Z14K4'
+          $ref: Z6#/definitions/objects/Z6
         Z1K1:
           allOf:
           - $ref: Z9#/definitions/objects/Z9

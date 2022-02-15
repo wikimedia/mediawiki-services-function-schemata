@@ -10,8 +10,8 @@ definitions:
       - $ref: Z18#/definitions/objects/Z18
     Z7_literal:
       allOf:
-      - $ref: Z7_backend#/definitions/objects/Z7_backend_literal
-      - properties:
+      - $ref: 'Z7_backend#/definitions/objects/Z7_backend_literal'
+      - type: object
+        properties:
           Z7K2:
             not: {}
-        type: object

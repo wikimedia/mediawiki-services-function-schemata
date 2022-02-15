@@ -7,22 +7,20 @@ definitions:
       allOf:
       - $ref: LIST#/definitions/objects/LIST
       - patternProperties:
-          .*K2:
+          '^(Z(([2-9])|([1-9]\d+)))?K1$':  # Includes K1, Z.*K1; excludes Z1K1
+            $ref: 'Z11#/definitions/objects/Z11'
+          '.*K2':
             $ref: '#/definitions/objects/LIST_OF_Z11'
-          ^(Z(([2-9])|([1-9]\d+)))?K1$:  # Includes K1, Z.*K1; excludes Z1K1
-            $ref: Z11#/definitions/objects/Z11
     Z12:
       anyOf:
       - $ref: '#/definitions/objects/Z12_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
-    Z12K1:
-      $ref: '#/definitions/objects/LIST_OF_Z11'
     Z12_literal:
       additionalProperties: false
       properties:
         Z12K1:
-          $ref: '#/definitions/objects/Z12K1'
+          $ref: '#/definitions/objects/LIST_OF_Z11'
         Z1K1:
           allOf:
           - $ref: Z9#/definitions/objects/Z9

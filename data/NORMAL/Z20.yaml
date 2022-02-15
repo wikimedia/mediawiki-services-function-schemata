@@ -8,16 +8,6 @@ definitions:
       - $ref: '#/definitions/objects/Z20_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
-    Z20K1:
-      allOf:
-      - $ref: Z8#/definitions/objects/Z8
-      - not:
-          anyOf:
-          - $ref: Z8#/definitions/objects/Z8_literal
-    Z20K2:
-      $ref: Z7#/definitions/objects/Z7
-    Z20K3:
-      $ref: Z7#/definitions/objects/Z7
     Z20_literal:
       additionalProperties: false
       properties:
@@ -39,11 +29,15 @@ definitions:
             - Z9K1
             type: object
         Z20K1:
-          $ref: '#/definitions/objects/Z20K1'
+          allOf:
+          - $ref: Z8#/definitions/objects/Z8
+          - not:
+              anyOf:
+              - $ref: Z8#/definitions/objects/Z8_literal
         Z20K2:
-          $ref: '#/definitions/objects/Z20K2'
+          $ref: Z7#/definitions/objects/Z7
         Z20K3:
-          $ref: '#/definitions/objects/Z20K3'
+          $ref: Z7#/definitions/objects/Z7
       required:
       - Z1K1
       - Z20K1

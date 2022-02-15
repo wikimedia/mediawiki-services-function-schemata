@@ -16,8 +16,6 @@ definitions:
       - $ref: '#/definitions/objects/Z86_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
-    Z86K1:
-      $ref: '#/definitions/objects/Z6_length_1'
     Z86_literal:
       additionalProperties: false
       properties:
@@ -39,7 +37,7 @@ definitions:
             - Z9K1
             type: object
         Z86K1:
-          $ref: '#/definitions/objects/Z86K1'
+          $ref: '#/definitions/objects/Z6_length_1'
       required:
       - Z1K1
       - Z86K1
