@@ -411,6 +411,10 @@ class ZObjectKeyFactory {
 
 class BaseSchema {
 
+	constructor() {
+		this.keyMap_ = new Map();
+	}
+
 	/**
 	 * Validate a JSON object using validateStatus method; return only whether
 	 * the result was valid without surfacing errors.
@@ -421,13 +425,23 @@ class BaseSchema {
 	async validate( maybeValid ) {
 		return ( await this.validateStatus( maybeValid ) ).isValid();
 	}
+
+	subValidator( key ) {
+		console.log( 'this.keyMap_ is', this.keyMap_ );
+		return this.keyMap_.get( key );
+	}
 }
 
 class Schema extends BaseSchema {
-	constructor( validate ) {
+	constructor( validate, subValidators = null ) {
 		super();
 		this.validate_ = validate;
 		this.mutex_ = new Mutex();
+		if ( subValidators !== null ) {
+			for ( const key of subValidators.keys() ) {
+				this.keyMap_.set( key, new Schema( subValidators.get( key ) ) );
+			}
+		}
 	}
 
 	/**
@@ -613,9 +627,21 @@ class SchemaFactory {
 			type = 'Z40';
 		}
 		let validate = null;
+		const subValidators = new Map();
 		let message = null;
 		try {
 			validate = this.ajv_.getSchema( type );
+			let i = 1;
+			while ( true ) {
+				const key = `${type}K${i}`;
+				const reference = `${type}#/definitions/objects/${key}`;
+				const subValidator = this.ajv_.getSchema( reference );
+				if ( subValidator === undefined ) {
+					break;
+				}
+				subValidators.set( key, subValidator );
+				i += 1;
+			}
 		} catch ( err ) {
 			message = err.message;
 			validate = null;
@@ -624,7 +650,7 @@ class SchemaFactory {
 			console.error( 'Could not find schema', schemaName, message );
 			return null;
 		}
-		return new Schema( validate );
+		return new Schema( validate, subValidators );
 	}
 
 	/**

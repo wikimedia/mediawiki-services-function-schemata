@@ -8,6 +8,8 @@ definitions:
       - $ref: '#/definitions/objects/Z40_literal'
       - $ref: Z9#/definitions/objects/Z9
       - $ref: Z18#/definitions/objects/Z18
+    Z40K1:
+      $ref: '#/definitions/objects/Z9_for_Z40'
     Z40_literal:
       additionalProperties: false
       properties:
@@ -29,7 +31,7 @@ definitions:
             - Z9K1
             type: object
         Z40K1:
-          $ref: '#/definitions/objects/Z9_for_Z40'
+          $ref: '#/definitions/objects/Z40K1'
       required:
       - Z1K1
       type: object
