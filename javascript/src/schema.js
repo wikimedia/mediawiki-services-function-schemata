@@ -427,7 +427,6 @@ class BaseSchema {
 	}
 
 	subValidator( key ) {
-		console.log( 'this.keyMap_ is', this.keyMap_ );
 		return this.keyMap_.get( key );
 	}
 }
