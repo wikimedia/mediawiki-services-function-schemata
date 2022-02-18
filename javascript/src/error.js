@@ -77,6 +77,8 @@ const error = {
 	builtin_does_not_exist: 'Z514', // implementation
 	builtin_id_error: 'Z515', // implementation
 	argument_value_error: 'Z516', // key, bad value
+	return_type_mismatch: 'Z517', // expected type, actual type, returned value
+	object_type_mismatch: 'Z518', // expected type, object
 
 	zobject_must_not_be_number_or_boolean_or_null: 'Z521', // offending text (sub of Z502)
 	array_element_not_well_formed: 'Z522', // offending index in array, propagated error (sub of Z502)
