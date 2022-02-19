@@ -22,7 +22,7 @@ async function testDataWellformedness( ZID, object, isValidZ2, isValidInner, des
 	// Validate Z2
 	QUnit.test( name, async ( assert ) => {
 		const status = await validator.validateStatus( object );
-		assert.equal( status.isValid(), isValidZ2 );
+		assert.strictEqual( status.isValid(), isValidZ2 );
 	} );
 
 	// Validate inner ZObject if validator is available
@@ -33,7 +33,7 @@ async function testDataWellformedness( ZID, object, isValidZ2, isValidInner, des
 		const innerName = ZID + ' Inner ZObject: ' + description;
 		QUnit.test( innerName, async ( assert ) => {
 			const innerStatus = await innerValidator.validateStatus( innerObject );
-			assert.equal( innerStatus.isValid(), isValidInner );
+			assert.strictEqual( innerStatus.isValid(), isValidInner );
 		} );
 	} else {
 		// If the validator is not available, the test should not fail
