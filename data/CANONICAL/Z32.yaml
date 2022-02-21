@@ -18,7 +18,7 @@ definitions:
             - Z32
             type: string
         Z32K1:
-          $ref: Z31#/definitions/objects/Z10_of_Z31
+          $ref: Z31#/definitions/objects/LIST_of_Z31
       required:
       - Z1K1
       - Z32K1

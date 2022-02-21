@@ -3,12 +3,25 @@ $id: Z6
 $ref: '#/definitions/objects/Z6'
 definitions:
   objects:
-    Z10_of_Z6:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - type: array
-        items:
-          $ref: Z6#/definitions/objects/Z6
+    LIST_of_Z6:
+      $ref: LIST#/definitions/objects/LIST
+      oneOf:
+      - items:
+          $ref: '#/definitions/objects/Z6'
+        type: array
+      - $ref: LIST#/definitions/objects/LIST_generic
+        type: object
+        properties:
+          Z1K1:
+            type: object
+            properties:
+              Z881K1:
+                enum:
+                - Z6
+          K1:
+            $ref: '#/definitions/objects/Z6'
+          K2:
+            $ref: '#/definitions/objects/LIST_of_Z6'
     Z6:
       anyOf:
       - $ref: '#/definitions/objects/Z6_literal'

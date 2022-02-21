@@ -3,12 +3,6 @@ $id: Z50
 $ref: '#/definitions/objects/Z50'
 definitions:
   objects:
-    Z10_of_Z3:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - items:
-          $ref: Z3#/definitions/objects/Z3
-        type: array
     Z50:
       anyOf:
       - $ref: '#/definitions/objects/Z50_literal'
@@ -24,7 +18,7 @@ definitions:
             - Z50
             type: string
         Z50K1:
-          $ref: '#/definitions/objects/Z10_of_Z3'
+          $ref: Z3#/definitions/objects/LIST_of_Z3
       required:
       - Z1K1
       - Z50K1

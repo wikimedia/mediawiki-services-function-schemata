@@ -529,7 +529,7 @@ class SchemaFactory {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
 		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
 		const directory = dataDir( 'CANONICAL' );
-		const fileRegex = /(Z[1-9]\d*(K[1-9]\d*)?(_backend)?)\.yaml/;
+		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?(_backend)?)|(LIST))\.yaml/;
 
 		for ( const fileName of fs.readdirSync( directory ) ) {
 			if ( fileName.match( fileRegex ) === null ) {

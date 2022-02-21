@@ -3,12 +3,6 @@ $id: Z12
 $ref: '#/definitions/objects/Z12'
 definitions:
   objects:
-    Z10_of_Z11:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - items:
-          $ref: Z11#/definitions/objects/Z11
-        type: array
     Z12:
       anyOf:
       - $ref: '#/definitions/objects/Z12_literal'
@@ -18,7 +12,7 @@ definitions:
       additionalProperties: false
       properties:
         Z12K1:
-          $ref: '#/definitions/objects/Z10_of_Z11'
+          $ref: Z11#/definitions/objects/LIST_of_Z11
         Z1K1:
           allOf:
           - $ref: Z9#/definitions/objects/Z9

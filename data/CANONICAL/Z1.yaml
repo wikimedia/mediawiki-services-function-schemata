@@ -36,7 +36,7 @@ definitions:
       anyOf:
       - $ref: Z6#/definitions/objects/Z6
       - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z10#/definitions/objects/Z10
+      - $ref: LIST#/definitions/objects/LIST
     Z1_reference:
       allOf:
       - $ref: Z9#/definitions/objects/Z9

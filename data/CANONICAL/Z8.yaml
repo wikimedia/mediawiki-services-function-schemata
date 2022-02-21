@@ -3,24 +3,6 @@ $id: Z8
 $ref: '#/definitions/objects/Z8'
 definitions:
   objects:
-    Z10_of_Z14:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - items:
-          $ref: Z14#/definitions/objects/Z14
-        type: array
-    Z10_of_Z17:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - items:
-          $ref: Z17#/definitions/objects/Z17
-        type: array
-    Z10_of_Z20:
-      allOf:
-      - $ref: Z10#/definitions/objects/Z10
-      - items:
-          $ref: Z20#/definitions/objects/Z20
-        type: array
     Z8:
       anyOf:
       - $ref: '#/definitions/objects/Z8_literal'
@@ -36,13 +18,13 @@ definitions:
             - Z8
             type: string
         Z8K1:
-          $ref: '#/definitions/objects/Z10_of_Z17'
+          $ref: Z17#/definitions/objects/LIST_of_Z17
         Z8K2:
           $ref: Z4#/definitions/objects/Z4
         Z8K3:
-          $ref: '#/definitions/objects/Z10_of_Z20'
+          $ref: Z20#/definitions/objects/LIST_of_Z20
         Z8K4:
-          $ref: '#/definitions/objects/Z10_of_Z14'
+          $ref: Z14#/definitions/objects/LIST_of_Z14
         Z8K5:
           $ref: '#/definitions/objects/Z8'
       required:
