@@ -1,5 +1,5 @@
 test_information:
-  name: normal Z7 backend
+  name: canonical Z7 backend
 test_objects:
   failure:
   - name: bad Z7 (lacks Z7K1)

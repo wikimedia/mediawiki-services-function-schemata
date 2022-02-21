@@ -1,5 +1,5 @@
 test_information:
-  name: normalized ZObject
+  name: canonical ZObject
 test_objects:
   failure:
   - name: arbitrary ZObject

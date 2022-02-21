@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z22
+  name: canonical Z22
 test_objects:
   failure:
   - name: bad Z22 with malformed Z1K1

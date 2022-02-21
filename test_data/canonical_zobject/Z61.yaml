@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z61
+  name: canonical Z61
 test_objects:
   failure:
   - name: bad programming language (terminal dash)

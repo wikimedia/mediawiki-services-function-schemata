@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z86
+  name: canonical Z86
 test_objects:
   failure:
   - name: bad code point, too long

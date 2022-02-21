@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z18
+  name: canonical Z18
 test_objects:
   failure:
   - name: bad argument reference (invalid Z18K1)

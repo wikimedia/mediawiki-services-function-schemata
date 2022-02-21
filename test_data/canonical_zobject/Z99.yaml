@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z99
+  name: canonical Z99
 test_objects:
   success:
   - name: Z99 of a Z1

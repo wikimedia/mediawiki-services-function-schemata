@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z40
+  name: canonical Z40
 test_objects:
   failure:
   - name: literally nothing else is okay

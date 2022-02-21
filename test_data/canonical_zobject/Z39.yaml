@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z39
+  name: canonical Z39
 test_objects:
   failure:
   - name: bad Z39 with incorrect Z1K1

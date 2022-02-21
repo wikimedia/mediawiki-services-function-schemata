@@ -1,5 +1,5 @@
 test_information:
-  name: normal Z14
+  name: canonical Z14
 test_objects:
   failure:
   - name: bad Z14 (has Z14K2 AND Z14K3)

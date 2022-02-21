@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z17
+  name: canonical Z17
 test_objects:
   failure:
   - name: bad argument declaration (invalid Z17K2)

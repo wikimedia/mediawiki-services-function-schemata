@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z80
+  name: canonical Z80
 test_objects:
   failure:
   - name: bad byte, too long

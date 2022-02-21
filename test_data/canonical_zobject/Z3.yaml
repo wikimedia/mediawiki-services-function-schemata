@@ -1,5 +1,5 @@
 test_information:
-  name: normalized Z3
+  name: canonical Z3
 test_objects:
   success:
   - name: arbitrary Z3

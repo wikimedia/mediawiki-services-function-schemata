@@ -1,5 +1,5 @@
 test_information:
-  name: normal Z7
+  name: canonical Z7
 test_objects:
   failure:
   - name: bad Z7 (has Z7K2)
