@@ -24,7 +24,6 @@ test( 'Z3' ).then();
 test( 'Z4' ).then();
 test( 'Z6' ).then();
 test( 'Z7' ).then();
-test( 'Z7_backend' ).then();
 test( 'Z8' ).then();
 test( 'Z12' ).then();
 test( 'Z14' ).then();
