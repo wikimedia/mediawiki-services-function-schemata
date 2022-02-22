@@ -24,7 +24,7 @@ for ( const file of fs.readdirSync( directory_ ) ) {
 		// When parse_error is true, the schema itself is degenerate, so parse()
 		// should return null.
 		QUnit.test( info.name, ( assert ) => {
-			assert.deepEqual( null, validator );
+			assert.deepEqual( validator, null );
 		} );
 	} else {
 		// Validator was parsed successfully; test validation of objects.

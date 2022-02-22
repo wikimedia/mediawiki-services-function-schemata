@@ -82,7 +82,7 @@ async function testErrors( baseName, validator, testObjects, errorValidator ) {
 		// Check that validator is finding the correct error types
 		QUnit.test( `${name}: detection`, ( assert ) => {
 			assert.false( status.isValid() );
-			assert.ok( status.getZ5() );
+			assert.notStrictEqual( status.getZ5(), null );
 
 			// Errors detected with every parser (Ajv and Opis):
 			const errorCodes = new Set( testObject.errors );
@@ -98,7 +98,7 @@ async function testErrors( baseName, validator, testObjects, errorValidator ) {
 				}
 			} );
 
-			assert.equal( errorCodes.size, 0 );
+			assert.strictEqual( errorCodes.size, 0 );
 		} );
 
 		// Check that the detected errors are valid Z5 objects
@@ -143,7 +143,7 @@ async function test( baseName, fn, testObjects ) {
 
 			const notFound = getMissingZ5( error, testObject.errors );
 
-			assert.equal( notFound.size, 0 );
+			assert.strictEqual( notFound.size, 0 );
 		} );
 	} );
 }
