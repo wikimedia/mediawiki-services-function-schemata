@@ -66,7 +66,7 @@ const error = {
 	not_implemented_yet: 'Z503', // function name
 	zid_not_found: 'Z504', // zid
 	number_of_arguments_mismatch: 'Z505', // expected number, actual number, args
-	argument_type_mismatch: 'Z506', // expected type, actual type, arg
+	argument_type_mismatch: 'Z506', // expected type, actual type, arg, propagated error
 	error_in_evaluation: 'Z507', // function call
 	competing_keys: 'Z508', // object
 	list_of_errors: 'Z509', // list of errors
@@ -77,8 +77,8 @@ const error = {
 	builtin_does_not_exist: 'Z514', // implementation
 	builtin_id_error: 'Z515', // implementation
 	argument_value_error: 'Z516', // key, bad value
-	return_type_mismatch: 'Z517', // expected type, actual type, returned value
-	object_type_mismatch: 'Z518', // expected type, object
+	return_type_mismatch: 'Z517', // expected type, actual type, returned value, propagated error
+	object_type_mismatch: 'Z518', // expected type, object, propagated error
 
 	zobject_must_not_be_number_or_boolean_or_null: 'Z521', // offending text (sub of Z502)
 	array_element_not_well_formed: 'Z522', // offending index in array, propagated error (sub of Z502)
