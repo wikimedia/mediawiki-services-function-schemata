@@ -1,0 +1,45 @@
+{
+	"//": "For now, test the core of our repo. Later, this should also test the routes and possibly the lib directories.",
+	"include": [
+		"javascript/"
+	],
+	"//": "This file needs significant improvements to pass",
+	"exclude": [
+		"javascript/src/error.js"
+	],
+
+	"//": "Don't silently accept files with no tests at all.",
+	"all": true,
+
+	"//": "Put the reports where we expect them.",
+	"report-dir": "coverage/",
+
+	"//": "Report HTML (lcov), XML (clover), and a summary table in the terminal (text-summary).",
+	"reporter": [
+		"lcov",
+		"clover",
+		"text-summary"
+	],
+
+	"//": "Cache results between runs for developer happiness.",
+	"cache": true,
+
+	"//": "Enforce some level of code coverage per file.",
+	"per-file": "true",
+
+	"//": "Set our thresholds for what we require as a minimum; these should rise over time and eventually each be 100%.",
+	"functions": 68.0,
+	"branches": 69.0,
+	"statements": 79.0,
+	"lines": 79.0,
+
+	"//": "Set our 'watermarks' for what we consider to be OK to be 90% and good to be 95%.",
+	"watermarks": {
+		"functions": [90, 95],
+		"branches": [90, 95],
+		"statements": [90, 95],
+		"lines": [90, 95]
+	},
+
+	"check-coverage": true
+}
