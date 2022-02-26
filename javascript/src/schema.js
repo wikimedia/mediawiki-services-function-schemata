@@ -447,8 +447,6 @@ class Schema extends BaseSchema {
 	 * Try to validate a JSON object against the internal JSON schema validator.
 	 * The results are used to instantiate a ValidationStatus object that is
 	 * returned.
-	 * Using this method over ''validate'' is preferred.
-	 * TODO (T282820): Replace validate with validateStatus and change all related code.
 	 *
 	 * @param {Object} maybeValid a JSON object
 	 * @return {ValidationStatus} a validation status instance
@@ -479,10 +477,6 @@ class GenericSchema extends BaseSchema {
 	 *
 	 * The results are used to instantiate a ValidationStatus object that is
 	 * returned.
-	 *
-	 * Using this method over ''validate'' is preferred.
-	 *
-	 * TODO (T282820): Replace validate with validateStatus and change all related code.
 	 *
 	 * @param {Object} maybeValid a JSON object
 	 * @return {ValidationStatus} a validation status instance
