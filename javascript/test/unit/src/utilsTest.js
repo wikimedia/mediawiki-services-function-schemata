@@ -128,18 +128,15 @@ QUnit.test( 'arrayToZ10', ( assert ) => {
 			Z6K1: 'stank'
 		}
 	];
-	const listZ1K1 = {
-		Z1K1: 'Z9',
-		Z9K1: 'Z10'
-	};
-	const expected = {
-		Z1K1: listZ1K1,
-		Z10K1: array[ 0 ],
-		Z10K2: {
-			Z1K1: listZ1K1
-		}
-	};
-	assert.deepEqual( expected, arrayToZ10( array ) );
+	const listZ1K1 = { Z1K1: 'Z9', Z9K1: 'Z10' };
+	assert.deepEqual(
+		arrayToZ10( array ),
+		{ Z1K1: listZ1K1, Z10K1: array[ 0 ], Z10K2: { Z1K1: listZ1K1 } }
+	);
+	assert.deepEqual(
+		arrayToZ10( array, true ),
+		{ Z1K1: 'Z10', Z10K1: array[ 0 ], Z10K2: { Z1K1: 'Z10' } }
+	);
 } );
 
 QUnit.test( 'convertZListToArray with Z10', ( assert ) => {
