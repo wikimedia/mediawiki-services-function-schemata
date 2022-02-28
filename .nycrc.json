@@ -24,10 +24,10 @@
 	"per-file": "true",
 
 	"//": "Set our thresholds for what we require as a minimum; these should rise over time and eventually each be 100%.",
-	"functions": 68.0,
-	"branches": 69.0,
-	"statements": 79.0,
-	"lines": 79.0,
+	"functions": 75.0,
+	"branches": 75.0,
+	"statements": 80.0,
+	"lines": 80.0,
 
 	"//": "Set our 'watermarks' for what we consider to be OK to be 90% and good to be 95%.",
 	"watermarks": {

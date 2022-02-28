@@ -1,6 +1,6 @@
 'use strict';
 
-const { convertArrayToZList, arrayToZ10, convertZListToArray } = require( '../../../src/utils.js' );
+const { isKey, isZid, isGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -200,4 +200,51 @@ QUnit.test( 'convertZListToArray with Typed List', ( assert ) => {
 		}
 	};
 	assert.deepEqual( expected, convertZListToArray( ZList ) );
+} );
+
+QUnit.test( 'isZid', async ( assert ) => {
+	const testValues = [
+		{ value: '', isKey: false, isZid: false, isGlobalKey: false, message: 'Empty string' },
+
+		{ value: 'Z1', isKey: false, isZid: true, isGlobalKey: false, message: 'Trivial ZID' },
+		{ value: 'Z123', isKey: false, isZid: true, isGlobalKey: false, message: 'Simple ZID' },
+		{ value: 'Z01', isKey: false, isZid: false, isGlobalKey: false, message: 'Zero-padded ZID' },
+		{ value: 'Z1234567890', isKey: false, isZid: true, isGlobalKey: false, message: 'Long ZID' },
+		{ value: ' \tZ1  \n ', isKey: false, isZid: false, isGlobalKey: false, message: 'Whitespace-beset ZID' },
+		{ value: 'Z', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial ZID' },
+
+		{ value: 'Z1K1', isKey: true, isZid: false, isGlobalKey: true, message: 'Trivial global key' },
+		{ value: 'Z123K1', isKey: true, isZid: false, isGlobalKey: true, message: 'Simple global key' },
+		{ value: 'Z1234567890K1234567890', isKey: true, isZid: false, isGlobalKey: true, message: 'Long global key' },
+		{ value: 'Z01K1', isKey: false, isZid: false, isGlobalKey: false, message: 'Zero-padded global key' },
+		{ value: ' \tZ1K1  \n ', isKey: false, isZid: false, isGlobalKey: false, message: 'Whitespace-beset global key' },
+		{ value: 'ZK1', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial ZID global key' },
+		{ value: 'Z1K', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial key global key' },
+
+		{ value: 'K1', isKey: true, isZid: false, isGlobalKey: false, message: 'Trivial local key' },
+		{ value: 'K123', isKey: true, isZid: false, isGlobalKey: false, message: 'Simple local key' },
+		{ value: 'K1234567890', isKey: true, isZid: false, isGlobalKey: false, message: 'Long local key' },
+		{ value: 'K01', isKey: false, isZid: false, isGlobalKey: false, message: 'Zero-padded local key' },
+		{ value: ' \tK1  \n ', isKey: false, isZid: false, isGlobalKey: false, message: 'Whitespace-beset local key' },
+		{ value: 'K', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial local key' }
+	];
+
+	testValues.forEach( ( testRun ) => {
+		assert.strictEqual( isKey( testRun.value ), testRun.isKey, testRun.message + ': isKey' );
+		assert.strictEqual( isZid( testRun.value ), testRun.isZid, testRun.message + ': isZid' );
+		assert.strictEqual( isGlobalKey( testRun.value ), testRun.isGlobalKey, testRun.message + ': isGlobalKey' );
+	} );
+} );
+
+QUnit.test( 'make* functions', async ( assert ) => {
+	assert.deepEqual( makeTrue(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } } );
+	assert.deepEqual( makeFalse(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z42' } } );
+
+	assert.deepEqual( makeUnit(), { Z1K1: 'Z9', Z9K1: 'Z23' } );
+	assert.deepEqual( makeUnit( false ), { Z1K1: 'Z9', Z9K1: 'Z23' } );
+	assert.deepEqual( makeUnit( true ), 'Z23' );
+
+	assert.deepEqual( makeResultEnvelope( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z23', Z22K2: 'Z23' } );
+	assert.deepEqual( makeResultEnvelope( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z23' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z23' } } );
+	assert.deepEqual( makeResultEnvelope( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z23' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z23' } } );
 } );
