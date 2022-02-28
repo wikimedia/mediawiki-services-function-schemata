@@ -3,10 +3,6 @@
 	"include": [
 		"javascript/"
 	],
-	"//": "This file needs significant improvements to pass",
-	"exclude": [
-		"javascript/src/error.js"
-	],
 
 	"//": "Don't silently accept files with no tests at all.",
 	"all": true,
