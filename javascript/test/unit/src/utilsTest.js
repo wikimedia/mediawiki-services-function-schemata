@@ -1,6 +1,6 @@
 'use strict';
 
-const { isKey, isZid, isGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray } = require( '../../../src/utils.js' );
+const { isKey, isZid, isGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -247,4 +247,12 @@ QUnit.test( 'make* functions', async ( assert ) => {
 	assert.deepEqual( makeResultEnvelope( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z23', Z22K2: 'Z23' } );
 	assert.deepEqual( makeResultEnvelope( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z23' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z23' } } );
 	assert.deepEqual( makeResultEnvelope( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z23' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z23' } } );
+} );
+
+QUnit.test( 'inferType', async ( assert ) => {
+	assert.deepEqual( inferType( '' ), 'Z6' );
+	assert.deepEqual( inferType( 'Z' ), 'Z6' );
+	assert.deepEqual( inferType( 'Z0' ), 'Z6' );
+	assert.deepEqual( inferType( 'Z1K1' ), 'Z6' );
+	assert.deepEqual( inferType( 'Z1' ), 'Z9' );
 } );
