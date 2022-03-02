@@ -1,8 +1,30 @@
 'use strict';
 
-const { isKey, isZid, isGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
+const { isString, isArray, isObject, isKey, isZid, isGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
+
+QUnit.test( 'is*', async ( assert ) => {
+	assert.strictEqual( isString(), false );
+	assert.strictEqual( isArray(), false );
+	assert.strictEqual( isObject(), false );
+
+	assert.strictEqual( isString( null ), false );
+	assert.strictEqual( isArray( null ), false );
+	assert.strictEqual( isObject( null ), false );
+
+	assert.strictEqual( isString( '' ), true );
+	assert.strictEqual( isArray( '' ), false );
+	assert.strictEqual( isObject( '' ), false );
+
+	assert.strictEqual( isString( [] ), false );
+	assert.strictEqual( isArray( [] ), true );
+	assert.strictEqual( isObject( [] ), false );
+
+	assert.strictEqual( isString( {} ), false );
+	assert.strictEqual( isArray( {} ), false );
+	assert.strictEqual( isObject( {} ), true );
+} );
 
 QUnit.test( 'convertArrayToZList with empty array, canonical', async ( assert ) => {
 	const array = [];
