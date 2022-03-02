@@ -4,6 +4,7 @@ const {
 	SchemaFactory,
 	validatesAsZObject,
 	validatesAsType,
+	validatesAsError,
 	validatesAsString,
 	validatesAsFunctionCall,
 	validatesAsArgumentReference,
@@ -469,6 +470,12 @@ QUnit.test( 'validatesAsType', async ( assert ) => {
 	};
 	const normalizedZ4 = ( await normalize( Z4 ) ).Z22K1;
 	assert.true( ( await validatesAsType( normalizedZ4 ) ).isValid() );
+} );
+
+QUnit.test( 'validatesAsError', async ( assert ) => {
+	const Z5 = { Z1K1: 'Z5', Z5K1: 'Z500', Z5K2: { Z1K1: { Z1K1: 'Z7', Z7K1: 'Z885', Z885K1: 'Z500' }, Z500K1: 'Basic data' } };
+	const normalizedZ5 = ( await normalize( Z5 ) ).Z22K1;
+	assert.true( ( await validatesAsError( normalizedZ5 ) ).isValid() );
 } );
 
 QUnit.test( 'validatesAsString', async ( assert ) => {
