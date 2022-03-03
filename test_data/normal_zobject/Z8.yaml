@@ -1,0 +1,689 @@
+test_information:
+  name: normal Z8
+test_objects:
+  failure:
+    - name: bad function (missing return type)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: bad function (missing identity)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+    - name: bad function (wrong typed list of args)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z6
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: bad function (wrong typed list of testers)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z6
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: bad function (wrong typed list of implementations)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z6
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: bad function (typed list of args with wrong element)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z17
+            Z17K1:
+              Z1K1: Z6
+              Z6K1: wrong argument declaration
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: bad function (typed list of testers with wrong element)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z20
+            Z20K1:
+              Z1K1: Z6
+              Z6K1: wrong tester
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: bad function (typed list of implmentations with wrong element)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z14
+            Z14K1:
+              Z1K1: Z6
+              Z6K1: wrong implementation
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+  success:
+    - name: good function (empty Z10s)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+        Z8K4:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: good function (non-empty Z10s)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z17
+            Z17K1:
+              Z1K1: Z9
+              Z9K1: Z6
+            Z17K2:
+              Z1K1: Z6
+              Z6K1: Z1000K1
+            Z17K3:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z12
+              Z12K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z20
+            Z20K1:
+              Z1K1: Z9
+              Z9K1: Z1000
+            Z20K2:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z1001
+            Z20K3:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z1002
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+        Z8K4:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z14
+            Z14K1:
+              Z1K1: Z9
+              Z9K1: Z1000
+            Z14K4:
+              Z1K1: Z6
+              Z6K1: builtin
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: good function (empty typed lists)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000
+    - name: good function (non-empty typed lists)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z8
+        Z8K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z17
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z17
+            Z17K1:
+              Z1K1: Z9
+              Z9K1: Z6
+            Z17K2:
+              Z1K1: Z6
+              Z6K1: Z1000K1
+            Z17K3:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z12
+              Z12K1:
+                Z1K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z11
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z17
+        Z8K2:
+          Z1K1: Z9
+          Z9K1: Z6
+        Z8K3:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z20
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z20
+            Z20K1:
+              Z1K1: Z9
+              Z9K1: Z1000
+            Z20K2:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z1001
+            Z20K3:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z1002
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z20
+        Z8K4:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z14
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z14
+            Z14K1:
+              Z1K1: Z9
+              Z9K1: Z1000
+            Z14K4:
+              Z1K1: Z6
+              Z6K1: builtin
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z14
+        Z8K5:
+          Z1K1: Z9
+          Z9K1: Z1000

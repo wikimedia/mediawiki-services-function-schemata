@@ -4,13 +4,27 @@ $ref: "#/definitions/objects/Z3"
 definitions:
   objects:
     LIST_OF_Z3:
-      allOf:
-        - $ref: LIST#/definitions/objects/LIST
-        - patternProperties:
-            .*K2:
-              $ref: "#/definitions/objects/LIST_OF_Z3"
-            ^(Z(([2-9])|([1-9]\d+)))?K1$: # Includes K1, Z.*K1; excludes Z1K1
-              $ref: "#/definitions/objects/Z3"
+      $ref: LIST#/definitions/objects/LIST
+      anyOf:
+        - $ref: Z10#/definitions/objects/Z10
+        - $ref: LIST#/definitions/objects/LIST_generic
+          type: object
+          properties:
+            Z1K1:
+              type: object
+              properties:
+                Z881K1:
+                  type: object
+                  properties:
+                    Z9K1:
+                      enum:
+                        - Z3
+                        - Z1
+      patternProperties:
+        .*K2:
+          $ref: "#/definitions/objects/LIST_OF_Z3"
+        ^(Z(([2-9])|([1-9]\d+)))?K1$:
+          $ref: "#/definitions/objects/Z3"
     Z3:
       anyOf:
         - $ref: "#/definitions/objects/Z3_literal"

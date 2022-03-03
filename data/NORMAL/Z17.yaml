@@ -3,6 +3,28 @@ $id: Z17
 $ref: "#/definitions/objects/Z17"
 definitions:
   objects:
+    LIST_OF_Z17:
+      $ref: LIST#/definitions/objects/LIST
+      anyOf:
+        - $ref: Z10#/definitions/objects/Z10
+        - $ref: LIST#/definitions/objects/LIST_generic
+          type: object
+          properties:
+            Z1K1:
+              type: object
+              properties:
+                Z881K1:
+                  type: object
+                  properties:
+                    Z9K1:
+                      enum:
+                        - Z17
+                        - Z1
+      patternProperties:
+        .*K2:
+          $ref: "#/definitions/objects/LIST_OF_Z17"
+        ^(Z(([2-9])|([1-9]\d+)))?K1$: # Includes K1, Z.*K1; excludes Z1K1
+          $ref: Z17#/definitions/objects/Z17
     Z17:
       anyOf:
         - $ref: "#/definitions/objects/Z17_literal"
