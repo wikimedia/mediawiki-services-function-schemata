@@ -10,12 +10,16 @@
 	"//": "Put the reports where we expect them.",
 	"report-dir": "coverage/",
 
-	"//": "Report HTML (lcov), XML (clover), and a summary table in the terminal (text-summary).",
+	"//": "Report HTML (lcov), XML (clover), and a listing (text) and summary table (text-summary) in the terminal.",
 	"reporter": [
 		"lcov",
 		"clover",
+		"text",
 		"text-summary"
 	],
+
+	"//": "Don't list the files which are 100% for everything in the terminal (but still shown in lcov and clover).",
+	"skip-full": true,
 
 	"//": "Cache results between runs for developer happiness.",
 	"cache": true,
