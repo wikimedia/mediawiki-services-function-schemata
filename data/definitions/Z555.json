@@ -17,7 +17,7 @@
 						{
 							"Z1K1": "Z11",
 							"Z11K1": "Z1002",
-							"Z11K2": "zid"
+							"Z11K2": "ZID"
 						}
 					]
 				}
@@ -45,7 +45,7 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "unmatching zid and page title"
+				"Z11K2": "Unmatching ZID and page title"
 			}
 		]
 	}
