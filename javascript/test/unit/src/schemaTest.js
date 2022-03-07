@@ -96,6 +96,10 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', async ( assert ) => {
 
 	assert.true( statusValid.isValid() );
 	assert.deepEqual( [], statusValid.getParserErrors() );
+
+	// Also test the toString() method; sorry if this test is fragile, future devs!
+	assert.strictEqual( statusInvalid.toString(), '{"isValid":false,"zError":{"Z1K1":{"Z1K1":"Z9","Z9K1":"Z5"},"Z5K1":{"Z1K1":"Z9","Z9K1":"Z502"},"Z5K2":{"Z1K1":{"Z1K1":{"Z1K1":"Z9","Z9K1":"Z7"},"Z7K1":{"Z1K1":"Z9","Z9K1":"Z885"},"Z885K1":{"Z1K1":"Z9","Z9K1":"Z502"}},"Z502K1":{"Z1K1":"Z9","Z9K1":"Z509"},"Z502K2":{"Z1K1":{"Z1K1":"Z9","Z9K1":"Z5"},"Z5K1":{"Z1K1":"Z9","Z9K1":"Z509"},"Z5K2":{"Z1K1":{"Z1K1":{"Z1K1":"Z9","Z9K1":"Z7"},"Z7K1":{"Z1K1":"Z9","Z9K1":"Z885"},"Z885K1":{"Z1K1":"Z9","Z9K1":"Z509"}},"Z509K1":{"Z1K1":{"Z1K1":{"Z1K1":"Z9","Z9K1":"Z7"},"Z7K1":{"Z1K1":"Z9","Z9K1":"Z881"},"Z881K1":{"Z1K1":"Z9","Z9K1":"Z5"}}}}}}}}' );
+	assert.strictEqual( statusValid.toString(), '{"isValid":true,"zError":null}' );
 } );
 
 QUnit.test( 'subValidator for built-in schema', async ( assert ) => {
