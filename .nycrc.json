@@ -29,9 +29,9 @@
 
 	"//": "Set our thresholds for what we require as a minimum; these should rise over time and eventually each be 100%.",
 	"functions": 75.0,
-	"branches": 80.0,
-	"statements": 80.0,
-	"lines": 80.0,
+	"branches": 82.0,
+	"statements": 90.0,
+	"lines": 90.0,
 
 	"//": "Set our 'watermarks' for what we consider to be OK to be 90% and good to be 95%.",
 	"watermarks": {

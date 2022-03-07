@@ -1,6 +1,6 @@
 'use strict';
 
-const { isString, isArray, isObject, isKey, isZid, isGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
+const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -274,4 +274,18 @@ QUnit.test( 'inferType', async ( assert ) => {
 	assert.deepEqual( inferType( 'Z0' ), 'Z6' );
 	assert.deepEqual( inferType( 'Z1K1' ), 'Z6' );
 	assert.deepEqual( inferType( 'Z1' ), 'Z9' );
+	assert.deepEqual( inferType( [ 'Z1' ] ), 'Z10' );
+	assert.deepEqual( inferType( { Z1K1: 'Z1' } ), 'Z1' );
+} );
+
+QUnit.test( 'kidFromGlobalKey', async ( assert ) => {
+	assert.strictEqual( kidFromGlobalKey( 'Z1K1' ), 'K1' );
+	assert.strictEqual( kidFromGlobalKey( 'Z1K123' ), 'K123' );
+	assert.strictEqual( kidFromGlobalKey( 'Z1K1234567890' ), 'K1234567890' );
+	assert.strictEqual( kidFromGlobalKey( 'Z123K1' ), 'K1' );
+	assert.strictEqual( kidFromGlobalKey( 'Z123K123' ), 'K123' );
+	assert.strictEqual( kidFromGlobalKey( 'Z123K1234567890' ), 'K1234567890' );
+	assert.strictEqual( kidFromGlobalKey( 'Z1234567890K1' ), 'K1' );
+	assert.strictEqual( kidFromGlobalKey( 'Z1234567890K123' ), 'K123' );
+	assert.strictEqual( kidFromGlobalKey( 'Z1234567890K1234567890' ), 'K1234567890' );
 } );
