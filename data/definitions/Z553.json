@@ -17,7 +17,7 @@
 						{
 							"Z1K1": "Z11",
 							"Z11K1": "Z1002",
-							"Z11K2": "disallowed zobject"
+							"Z11K2": "root zobject"
 						}
 					]
 				}
@@ -30,7 +30,7 @@
 			{
 				"Z1K1": "Z11",
 				"Z11K1": "Z1002",
-				"Z11K2": "disallowed root type"
+				"Z11K2": "Disallowed root type"
 			}
 		]
 	}
