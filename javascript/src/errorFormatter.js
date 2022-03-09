@@ -1,6 +1,6 @@
 'use strict';
 
-const { arrayToZ10, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
+const { arrayToZ10, isString, isZid, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
 const { dataDir, readYaml } = require( './fileUtils.js' );
 const errorTypes = require( './error.js' );
 
@@ -257,7 +257,9 @@ class ErrorFormatter {
 		};
 
 		for ( let index = 0; index < errorKeys.length; index++ ) {
-			genericError[ `K${index + 1}` ] = errorKeys[ index ];
+			if ( errorKeys[ index ] ) {
+				genericError[ `${errorType}K${index + 1}` ] = errorKeys[ index ];
+			}
 		}
 
 		return genericError;
@@ -269,9 +271,14 @@ class ErrorFormatter {
 	 * @param {string} errorType
 	 * @param {Object} err
 	 * @return {Object}
+	 * @throws Will throw an error if the error type is not valid
 	 */
 	static createZErrorInstance( errorType, err ) {
 		const errorKeys = [];
+
+		if ( !isString( errorType ) || !isZid( errorType ) ) {
+			throw new Error( `Invalid error type: ${errorType}` );
+		}
 
 		switch ( errorType ) {
 			case errorTypes.error.not_wellformed:
@@ -330,6 +337,10 @@ class ErrorFormatter {
 				break;
 
 			default:
+				// Unknown error, we will create it if we can
+				for ( const value in err ) {
+					errorKeys.push( err[ value ] );
+				}
 				break;
 		}
 
