@@ -1,5 +1,5 @@
 test_information:
-  name: "reference schema"
+  name: reference schema
   parse_error: false
 
 test_schema:
@@ -19,15 +19,14 @@ test_schema:
 
 test_objects:
   success:
-    - name: "happy reference"
+    - name: happy reference
       object:
-        prop1: "vote if you want"
+        prop1: vote if you want
 
   failure:
-    - name: "referenced object does not pass"
+    - name: referenced object does not pass
       object:
-        prop2: "vote about it all you like"
+        prop2: vote about it all you like
 
-    - name: "referenced object was never an object in the first place!"
-      object: "prep"
-
+    - name: referenced object was never an object in the first place!
+      object: prep

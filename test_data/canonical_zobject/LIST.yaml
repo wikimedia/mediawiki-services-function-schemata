@@ -2,58 +2,58 @@ test_information:
   name: canonical lists
 test_objects:
   failure:
-  - name: not an array
-    object:
-      Z1K1: Z10
-      Z10K1: hello
-      Z10K2:
+    - name: not an array
+      object:
         Z1K1: Z10
-  - name: not a generic list
-    object:
-      Z1K1:
-        Z1K1: Z7
-        Z7K1: Z90000
+        Z10K1: hello
+        Z10K2:
+          Z1K1: Z10
+    - name: not a generic list
+      object:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1: Z90000
   success:
-  - name: good, empty Z10
-    object: []
-  - name: good, full Z10
-    object:
-    - air on the z string
-  - name: good, fuller Z10
-    object:
-    - air on the z string
-    - symphony in z
-  - name: can be a Z9
-    object: Z1000
-  - name: can be a Z18
-    object:
-      Z18K1:
-        Z1K1: Z6
-        Z6K1: Z1000K1
-      Z1K1: Z18
-  - name: generic empty list
-    object:
-      Z1K1:
-        Z1K1: Z7
-        Z7K1: Z881
-        Z881K1: Z6
-  - name: generic list with one element
-    object:
-      Z1K1:
-        Z1K1: Z7
-        Z7K1: Z881
-        Z881K1: Z6
-      K1: one element
-  - name: generic list with two elements
-    object:
-      Z1K1:
-        Z1K1: Z7
-        Z7K1: Z881
-        Z881K1: Z6
-      K1: first element
-      K2:
+    - name: good, empty Z10
+      object: []
+    - name: good, full Z10
+      object:
+        - air on the z string
+    - name: good, fuller Z10
+      object:
+        - air on the z string
+        - symphony in z
+    - name: can be a Z9
+      object: Z1000
+    - name: can be a Z18
+      object:
+        Z18K1:
+          Z1K1: Z6
+          Z6K1: Z1000K1
+        Z1K1: Z18
+    - name: generic empty list
+      object:
         Z1K1:
           Z1K1: Z7
           Z7K1: Z881
           Z881K1: Z6
-        K1: second element
+    - name: generic list with one element
+      object:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1: Z881
+          Z881K1: Z6
+        K1: one element
+    - name: generic list with two elements
+      object:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1: Z881
+          Z881K1: Z6
+        K1: first element
+        K2:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
+          K1: second element

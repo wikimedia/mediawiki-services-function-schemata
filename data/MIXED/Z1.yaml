@@ -4,9 +4,9 @@ definitions:
   objects:
     mixed_zobject:
       oneOf:
-      - $ref: "#/definitions/objects/mixed_array"
-      - $ref: "#/definitions/objects/mixed_string"
-      - $ref: "#/definitions/objects/mixed_record"
+        - $ref: "#/definitions/objects/mixed_array"
+        - $ref: "#/definitions/objects/mixed_string"
+        - $ref: "#/definitions/objects/mixed_record"
 
     mixed_string:
       type: string
@@ -19,7 +19,7 @@ definitions:
     mixed_record:
       type: object
       required:
-      - Z1K1
+        - Z1K1
       properties:
         Z1K1:
           $ref: "#/definitions/objects/mixed_zobject"

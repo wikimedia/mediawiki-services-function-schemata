@@ -1,5 +1,5 @@
 test_information:
-  name: "complex object schema"
+  name: complex object schema
   parse_error: false
 
 test_schema:
@@ -28,17 +28,16 @@ test_schema:
             quod:
               type: string
 
-
 test_objects:
   success:
-    - name: "happy object"
+    - name: happy object
       object:
         in:
-          - quod: "nova corpora"
-          - quod: "mutatas formas"
-        animus: "fert dicere"
+          - quod: nova corpora
+          - quod: mutatas formas
+        animus: fert dicere
 
   failure:
-    - name: "sad object"
+    - name: sad object
       object:
-        animus: "adspirate"
+        animus: adspirate

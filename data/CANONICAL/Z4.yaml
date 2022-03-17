@@ -1,32 +1,32 @@
 # Z4/Type (Z4/Type)
 $id: Z4
-$ref: '#/definitions/objects/Z4'
+$ref: "#/definitions/objects/Z4"
 definitions:
   objects:
     Z4:
       anyOf:
-      - $ref: '#/definitions/objects/Z4_literal'
-      - $ref: 'Z7#/definitions/objects/Z7'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z4_literal"
+        - $ref: "Z7#/definitions/objects/Z7"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z4_literal:
       additionalProperties: false
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z4
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z4
+              type: string
         Z4K1:
-          $ref: '#/definitions/objects/Z4'
+          $ref: "#/definitions/objects/Z4"
         Z4K2:
           $ref: Z3#/definitions/objects/LIST_of_Z3
         Z4K3:
           $ref: Z8#/definitions/objects/Z8
       required:
-      - Z1K1
-      - Z4K1
-      - Z4K2
-      - Z4K3
+        - Z1K1
+        - Z4K1
+        - Z4K2
+        - Z4K3
       type: object

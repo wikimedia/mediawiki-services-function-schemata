@@ -1,13 +1,13 @@
 # Z7/Function call (Z4/Type)
 $id: Z7
-$ref: '#/definitions/objects/Z7'
+$ref: "#/definitions/objects/Z7"
 definitions:
   objects:
     Z7:
       anyOf:
-      - $ref: '#/definitions/objects/Z7_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z7_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z7K1:
       $ref: Z8#/definitions/objects/Z8
     Z7_literal:
@@ -21,26 +21,26 @@ definitions:
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - additionalProperties: false
-            properties:
-              Z1K1:
-                enum:
-                - Z9
-                type: string
-              Z9K1:
-                enum:
-                - Z7
-                type: string
-            required:
-            - Z1K1
-            - Z9K1
-            type: object
+            - $ref: Z9#/definitions/objects/Z9
+            - additionalProperties: false
+              properties:
+                Z1K1:
+                  enum:
+                    - Z9
+                  type: string
+                Z9K1:
+                  enum:
+                    - Z7
+                  type: string
+              required:
+                - Z1K1
+                - Z9K1
+              type: object
         Z7K1:
-          $ref: '#/definitions/objects/Z7K1'
+          $ref: "#/definitions/objects/Z7K1"
         Z7K2:
           not: {}
       required:
-      - Z1K1
-      - Z7K1
+        - Z1K1
+        - Z7K1
       type: object

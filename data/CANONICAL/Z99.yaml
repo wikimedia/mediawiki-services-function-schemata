@@ -1,28 +1,28 @@
 # Z99/Quote (Z4/Type)
 $id: Z99
-$ref: '#/definitions/objects/Z99'
+$ref: "#/definitions/objects/Z99"
 definitions:
   objects:
     Z99:
       oneOf:
-      - $ref: '#/definitions/objects/Z99_literal'
-      - $ref: Z18#/definitions/objects/Z18
-      - $ref: Z9#/definitions/objects/Z9
+        - $ref: "#/definitions/objects/Z99_literal"
+        - $ref: Z18#/definitions/objects/Z18
+        - $ref: Z9#/definitions/objects/Z9
     Z99_literal:
       additionalProperties: false
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z99
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z99
+              type: string
         Z99K1:
           anyOf:
-          - type: object
-          - not:
-              type: object
+            - type: object
+            - not:
+                type: object
       required:
-      - Z1K1
-      - Z99K1
+        - Z1K1
+        - Z99K1
       type: object

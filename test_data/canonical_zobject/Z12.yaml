@@ -2,66 +2,41 @@ test_information:
   name: canonical Z12
 test_objects:
   failure:
-  - name: bad multilingual string
-    object:
-      Z1K1: Z12
-      Z12K1:
-        - string
-  - name: bad multilingual string (wrongly typed list)
-    object:
-      Z1K1: Z12
-      Z12K1:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z6
+    - name: bad multilingual string
+      object:
+        Z1K1: Z12
+        Z12K1:
+          - string
+    - name: bad multilingual string (wrongly typed list)
+      object:
+        Z1K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
   success:
-  - name: good multilingual string (array of Z11s)
-    object:
-      Z1K1: Z12
-      Z12K1:
-      - Z1K1: Z11
-        Z11K1:
-          Z1K1: Z60
-          Z60K1: en
-        Z11K2: english text
-  - name: good multilingual string (empty typed list of Z11s)
-    object:
-      Z1K1: Z12
-      Z12K1:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z11
-  - name: good multilingual string (typed list of Z11s)
-    object:
-      Z1K1: Z12
-      Z12K1:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z11
-        K1:
-          Z1K1: Z11
-          Z11K1:
-            Z1K1: Z60
-            Z60K1: en
-          Z11K2: english text
-  - name: good multilingual string (typed list with two Z11s)
-    object:
-      Z1K1: Z12
-      Z12K1:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z11
-        K1:
-          Z1K1: Z11
-          Z11K1:
-            Z1K1: Z60
-            Z60K1: en
-          Z11K2: english text
-        K2:
+    - name: good multilingual string (array of Z11s)
+      object:
+        Z1K1: Z12
+        Z12K1:
+          - Z1K1: Z11
+            Z11K1:
+              Z1K1: Z60
+              Z60K1: en
+            Z11K2: english text
+    - name: good multilingual string (empty typed list of Z11s)
+      object:
+        Z1K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z11
+    - name: good multilingual string (typed list of Z11s)
+      object:
+        Z1K1: Z12
+        Z12K1:
           Z1K1:
             Z1K1: Z7
             Z7K1: Z881
@@ -70,5 +45,30 @@ test_objects:
             Z1K1: Z11
             Z11K1:
               Z1K1: Z60
-              Z60K1: es
-            Z11K2: texto en español
+              Z60K1: en
+            Z11K2: english text
+    - name: good multilingual string (typed list with two Z11s)
+      object:
+        Z1K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z11
+          K1:
+            Z1K1: Z11
+            Z11K1:
+              Z1K1: Z60
+              Z60K1: en
+            Z11K2: english text
+          K2:
+            Z1K1:
+              Z1K1: Z7
+              Z7K1: Z881
+              Z881K1: Z11
+            K1:
+              Z1K1: Z11
+              Z11K1:
+                Z1K1: Z60
+                Z60K1: es
+              Z11K2: texto en español

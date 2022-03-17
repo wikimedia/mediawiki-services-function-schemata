@@ -7,88 +7,88 @@ test_Z4:
     Z7K1: Z882
     Z882K1: Z6
   Z4K2:
-  - Z1K1: Z3
-    Z3K1: Z6
-    Z3K2:
-      Z1K1: Z6
-      Z6K1: K1
-    Z3K3:
-      Z1K1: Z12
-      Z12K1: []
-  - Z1K1: Z3
-    Z3K1:
-      Z1K1: Z7
-      Z7K1: Z882
-      Z882K1: Z6
-    Z3K2:
-      Z1K1: Z6
-      Z6K1: K2
-    Z3K3:
-      Z1K1: Z12
-      Z12K1: []
+    - Z1K1: Z3
+      Z3K1: Z6
+      Z3K2:
+        Z1K1: Z6
+        Z6K1: K1
+      Z3K3:
+        Z1K1: Z12
+        Z12K1: []
+    - Z1K1: Z3
+      Z3K1:
+        Z1K1: Z7
+        Z7K1: Z882
+        Z882K1: Z6
+      Z3K2:
+        Z1K1: Z6
+        Z6K1: K2
+      Z3K3:
+        Z1K1: Z12
+        Z12K1: []
   Z4K3: Z110
 test_objects:
   failure:
-  - name: no K1
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z10001
-      K2:
+    - name: no K1
+      object:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10001
-        K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z7
-          Z7K1:
-            Z1K1: Z9
-            Z9K1: Z1000
         K2:
           Z1K1:
             Z1K1: Z9
-            Z9K1: Z10002
-  - name: K2.K1 of wrong type
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z10001
-      K1:
-        Z1K1: Z6
-        Z6K1: 'nyat Z10001'
-      K2:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10001
-        K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z7
-          Z7K1:
-            Z1K1: Z9
-            Z9K1: Z1000
-        K2:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10002
-  success:
-  - name: good Z10001
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z10001
-      K1:
-        Z1K1: Z6
-        Z6K1: 'nyat Z10001'
-      K2:
+            Z9K1: Z10001
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z1000
+          K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10002
+    - name: K2.K1 of wrong type
+      object:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10001
         K1:
           Z1K1: Z6
-          Z6K1: 'not Z10001'
+          Z6K1: nyat Z10001
         K2:
           Z1K1:
             Z1K1: Z9
-            Z9K1: Z10002
+            Z9K1: Z10001
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z1000
+          K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10002
+  success:
+    - name: good Z10001
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z10001
+        K1:
+          Z1K1: Z6
+          Z6K1: nyat Z10001
+        K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10001
+          K1:
+            Z1K1: Z6
+            Z6K1: not Z10001
+          K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10002

@@ -1,41 +1,41 @@
 # Z14/Implementation (Z4/Type)
 $id: Z14
-$ref: '#/definitions/objects/Z14'
+$ref: "#/definitions/objects/Z14"
 definitions:
   objects:
     LIST_of_Z14:
       $ref: LIST#/definitions/objects/LIST
       oneOf:
-      - items:
-          $ref: '#/definitions/objects/Z14'
-        type: array
-      - $ref: LIST#/definitions/objects/LIST_generic
-        type: object
-        properties:
-          Z1K1:
-            type: object
-            properties:
-              Z881K1:
-                enum:
-                - Z14
-          K1:
-            $ref: '#/definitions/objects/Z14'
-          K2:
-            $ref: '#/definitions/objects/LIST_of_Z14'
+        - items:
+            $ref: "#/definitions/objects/Z14"
+          type: array
+        - $ref: LIST#/definitions/objects/LIST_generic
+          type: object
+          properties:
+            Z1K1:
+              type: object
+              properties:
+                Z881K1:
+                  enum:
+                    - Z14
+            K1:
+              $ref: "#/definitions/objects/Z14"
+            K2:
+              $ref: "#/definitions/objects/LIST_of_Z14"
     Z14:
       anyOf:
-      - $ref: '#/definitions/objects/Z14_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z14_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z14_literal:
       additionalProperties: false
       oneOf:
-      - required:
-        - Z14K2
-      - required:
-        - Z14K3
-      - required:
-        - Z14K4
+        - required:
+            - Z14K2
+        - required:
+            - Z14K3
+        - required:
+            - Z14K4
       properties:
         Z14K1:
           $ref: Z8#/definitions/objects/Z8
@@ -47,11 +47,11 @@ definitions:
           $ref: Z6#/definitions/objects/Z6
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z14
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z14
+              type: string
       required:
-      - Z14K1
-      - Z1K1
+        - Z14K1
+        - Z1K1
       type: object

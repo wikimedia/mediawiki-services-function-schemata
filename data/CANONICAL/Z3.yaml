@@ -1,41 +1,41 @@
 # Z3/Key (Z4/Type)
 $id: Z3
-$ref: '#/definitions/objects/Z3'
+$ref: "#/definitions/objects/Z3"
 definitions:
   objects:
     LIST_of_Z3:
       $ref: LIST#/definitions/objects/LIST
       oneOf:
-      - items:
-          $ref: '#/definitions/objects/Z3'
-        type: array
-      - $ref: LIST#/definitions/objects/LIST_generic
-        type: object
-        properties:
-          Z1K1:
-            type: object
-            properties:
-              Z881K1:
-                enum:
-                - Z3
-          K1:
-            $ref: '#/definitions/objects/Z3'
-          K2:
-            $ref: '#/definitions/objects/LIST_of_Z3'
+        - items:
+            $ref: "#/definitions/objects/Z3"
+          type: array
+        - $ref: LIST#/definitions/objects/LIST_generic
+          type: object
+          properties:
+            Z1K1:
+              type: object
+              properties:
+                Z881K1:
+                  enum:
+                    - Z3
+            K1:
+              $ref: "#/definitions/objects/Z3"
+            K2:
+              $ref: "#/definitions/objects/LIST_of_Z3"
     Z3:
       anyOf:
-      - $ref: '#/definitions/objects/Z3_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z3_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z3_literal:
       additionalProperties: false
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z3
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z3
+              type: string
         Z3K1:
           $ref: Z4#/definitions/objects/Z4
         Z3K2:
@@ -43,8 +43,8 @@ definitions:
         Z3K3:
           $ref: Z12#/definitions/objects/Z12
       required:
-      - Z1K1
-      - Z3K1
-      - Z3K2
-      - Z3K3
+        - Z1K1
+        - Z3K1
+        - Z3K2
+        - Z3K3
       type: object

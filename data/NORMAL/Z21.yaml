@@ -1,33 +1,33 @@
 # Z21/Unit (Z4/Type)
 $id: Z21
-$ref: '#/definitions/objects/Z21'
+$ref: "#/definitions/objects/Z21"
 definitions:
   objects:
     Z21:
       anyOf:
-      - $ref: '#/definitions/objects/Z21_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z21_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z21_literal:
       additionalProperties: false
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - additionalProperties: false
-            properties:
-              Z1K1:
-                enum:
-                - Z9
-                type: string
-              Z9K1:
-                enum:
-                - Z21
-                type: string
-            required:
-            - Z1K1
-            - Z9K1
-            type: object
+            - $ref: Z9#/definitions/objects/Z9
+            - additionalProperties: false
+              properties:
+                Z1K1:
+                  enum:
+                    - Z9
+                  type: string
+                Z9K1:
+                  enum:
+                    - Z21
+                  type: string
+              required:
+                - Z1K1
+                - Z9K1
+              type: object
       required:
-      - Z1K1
+        - Z1K1
       type: object
