@@ -47,7 +47,7 @@ test_objects:
         Z2K1:
           Z1K1: Z6
           Z6K1: Z222
-        Z2K2: "correct value" 
+        Z2K2: correct value
         Z2K3:
           Z1K1: Z12
           Z12K1: []
@@ -171,7 +171,7 @@ test_objects:
         Z2K3:
           Z1K1: Z12
           Z12K1: []
-    - name: "One invalid key"
+    - name: One invalid key
       errors:
         - Z502
         - Z526
@@ -240,4 +240,3 @@ test_objects:
 #        Z2K3:
 #          Z1K1: Z12
 #          Z12K1: []
-

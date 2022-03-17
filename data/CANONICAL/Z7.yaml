@@ -1,13 +1,13 @@
 # Z7/Function call (Z4/Type)
 $id: Z7
-$ref: '#/definitions/objects/Z7'
+$ref: "#/definitions/objects/Z7"
 definitions:
   objects:
     Z7:
       anyOf:
-      - $ref: '#/definitions/objects/Z7_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z7_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z7_literal:
       additionalProperties: false
       patternProperties:
@@ -16,15 +16,15 @@ definitions:
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z7
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z7
+              type: string
         Z7K1:
           $ref: Z8#/definitions/objects/Z8
         Z7K2:
           not: {}
       required:
-      - Z1K1
-      - Z7K1
+        - Z1K1
+        - Z7K1
       type: object

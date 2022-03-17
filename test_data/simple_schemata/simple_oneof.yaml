@@ -1,5 +1,5 @@
 test_information:
-  name: "array schema"
+  name: array schema
   parse_error: false
 
 test_schema:
@@ -23,21 +23,21 @@ test_schema:
 
 test_objects:
   success:
-    - name: "happy oneof only fails first validator"
+    - name: happy oneof only fails first validator
       object:
         stop1:
-          - "circe"
-        stop2: "calypso"
+          - circe
+        stop2: calypso
 
-    - name: "happy oneof only fails second validator"
+    - name: happy oneof only fails second validator
       object:
-        stop1: "hades"
-        stop2: "aeolia"
+        stop1: hades
+        stop2: aeolia
 
   failure:
     - name: "we really gave you a shot, man, and you didn't pass any validators"
       object:
         stop1:
-          - "lotus-eaters"
+          - lotus-eaters
         stop2:
-          - "cyclops"
+          - cyclops

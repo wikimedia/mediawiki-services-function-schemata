@@ -1,5 +1,5 @@
 test_information:
-  name: "string schema"
+  name: string schema
   parse_error: false
 
 test_schema:
@@ -10,18 +10,18 @@ test_schema:
 
 test_objects:
   success:
-    - name: "regular parasol"
-      object: "parasol"
+    - name: regular parasol
+      object: parasol
 
   failure:
-    - name: "string is actually an array"
+    - name: string is actually an array
       object:
-        - "parasol"
+        - parasol
 
-    - name: "string is actually an object"
+    - name: string is actually an object
       object:
-        property: "parasol"
+        property: parasol
 
-    - name: "string is not one of the enumerated values"
+    - name: string is not one of the enumerated values
       object:
-        property: "umbrella"
+        property: umbrella

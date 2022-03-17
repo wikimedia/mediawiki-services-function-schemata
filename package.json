@@ -5,7 +5,7 @@
 		"test": "javascript/test"
 	},
 	"scripts": {
-		"lint": "eslint --cache --max-warnings 0 --ext .js,.json .",
+		"lint": "eslint --cache --max-warnings 0 .",
 		"lint:fix": "eslint --fix .",
 		"test": "npm run lint && PREQ_CONNECT_TIMEOUT=15 nyc qunit javascript/",
 		"test:nolint": "PREQ_CONNECT_TIMEOUT=15 nyc qunit javascript/"

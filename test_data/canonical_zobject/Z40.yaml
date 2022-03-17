@@ -2,24 +2,24 @@ test_information:
   name: canonical Z40
 test_objects:
   failure:
-  - name: literally nothing else is okay
-    object:
-      Z1K1: Z40
-      Z40K1: Z43
+    - name: literally nothing else is okay
+      object:
+        Z1K1: Z40
+        Z40K1: Z43
   success:
-  - name: truth
-    object:
-      Z1K1: Z40
-      Z40K1: Z41
-  - name: mendacity
-    object:
-      Z1K1: Z40
-      Z40K1: Z42
-  - name: can be a Z9
-    object: Z1000
-  - name: can be a Z18
-    object:
-      Z18K1:
-        Z1K1: Z6
-        Z6K1: Z1000K1
-      Z1K1: Z18
+    - name: truth
+      object:
+        Z1K1: Z40
+        Z40K1: Z41
+    - name: mendacity
+      object:
+        Z1K1: Z40
+        Z40K1: Z42
+    - name: can be a Z9
+      object: Z1000
+    - name: can be a Z18
+      object:
+        Z18K1:
+          Z1K1: Z6
+          Z6K1: Z1000K1
+        Z1K1: Z18

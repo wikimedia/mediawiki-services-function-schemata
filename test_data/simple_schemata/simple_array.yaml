@@ -1,5 +1,5 @@
 test_information:
-  name: "array schema"
+  name: array schema
   parse_error: false
 
 test_schema:
@@ -12,20 +12,24 @@ test_schema:
 
 test_objects:
   success:
-    - name: "happy arrays"
+    - name: happy arrays
       object:
-        - ["list", "vector"]
+        - [ list, vector ]
 
   failure:
-    - name: "shallow array"
+    - name: shallow array
       object:
-        - "materialistic"
+        - materialistic
 
-    - name: "very deep array"
+    - name: very deep array
       object:
-        - - - "navel"
-          - - "gazing"
+        -
+          -
+            - navel
+          -
+            - gazing
 
-    - name: "wrong item type"
+    - name: wrong item type
       object:
-        - - mismatched: "type"
+        -
+          - mismatched: type

@@ -1,45 +1,45 @@
 # Z1/Object (Z4/Type)
 $id: Z1
-$ref: '#/definitions/objects/Z1'
+$ref: "#/definitions/objects/Z1"
 definitions:
   objects:
     Z1:
       anyOf:
-      - $ref: '#/definitions/objects/Z1_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z1_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z1_literal:
       anyOf:
-      - $ref: '#/definitions/objects/Z1_terminal'
-      - $ref: '#/definitions/objects/Z1_nonterminal'
-      # Z99/Quote should be allowed at any level of the tree
-      - $ref: Z99#/definitions/objects/Z99
+        - $ref: "#/definitions/objects/Z1_terminal"
+        - $ref: "#/definitions/objects/Z1_nonterminal"
+        # Z99/Quote should be allowed at any level of the tree
+        - $ref: Z99#/definitions/objects/Z99
     Z1_nonterminal:
       additionalProperties: false
       properties:
         Z1K1:
           allOf:
-          - $ref: Z4#/definitions/objects/Z4
-          # Z23/Nothing can be referenced, but never instantiated
-          # Z1/Object of type Z1/Object is invalid
-          - not:
-              oneOf:
-                - $ref: Z23#/definitions/objects/Z23
-                - $ref: '#/definitions/objects/Z1_reference'
+            - $ref: Z4#/definitions/objects/Z4
+            # Z23/Nothing can be referenced, but never instantiated
+            # Z1/Object of type Z1/Object is invalid
+            - not:
+                oneOf:
+                  - $ref: Z23#/definitions/objects/Z23
+                  - $ref: "#/definitions/objects/Z1_reference"
       patternProperties:
         ^(Z[1-9]\d*)?K[1-9]\d*$:
-          $ref: '#/definitions/objects/Z1_literal'
+          $ref: "#/definitions/objects/Z1_literal"
       required:
-      - Z1K1
+        - Z1K1
       type: object
     Z1_terminal:
       anyOf:
-      - $ref: Z6#/definitions/objects/Z6
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: LIST#/definitions/objects/LIST
+        - $ref: Z6#/definitions/objects/Z6
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: LIST#/definitions/objects/LIST
     Z1_reference:
       allOf:
-      - $ref: Z9#/definitions/objects/Z9
-      - enum:
-        - Z1
-        type: string
+        - $ref: Z9#/definitions/objects/Z9
+        - enum:
+            - Z1
+          type: string

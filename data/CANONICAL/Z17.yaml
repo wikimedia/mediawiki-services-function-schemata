@@ -1,32 +1,32 @@
 # Z17/Argument declaration (Z4/Type)
 $id: Z17
-$ref: '#/definitions/objects/Z17'
+$ref: "#/definitions/objects/Z17"
 definitions:
   objects:
     LIST_of_Z17:
       $ref: LIST#/definitions/objects/LIST
       oneOf:
-      - items:
-          $ref: '#/definitions/objects/Z17'
-        type: array
-      - $ref: LIST#/definitions/objects/LIST_generic
-        type: object
-        properties:
-          Z1K1:
-            type: object
-            properties:
-              Z881K1:
-                enum:
-                - Z17
-          K1:
-            $ref: '#/definitions/objects/Z17'
-          K2:
-            $ref: '#/definitions/objects/LIST_of_Z17'
+        - items:
+            $ref: "#/definitions/objects/Z17"
+          type: array
+        - $ref: LIST#/definitions/objects/LIST_generic
+          type: object
+          properties:
+            Z1K1:
+              type: object
+              properties:
+                Z881K1:
+                  enum:
+                    - Z17
+            K1:
+              $ref: "#/definitions/objects/Z17"
+            K2:
+              $ref: "#/definitions/objects/LIST_of_Z17"
     Z17:
       anyOf:
-      - $ref: '#/definitions/objects/Z17_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z17_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z17_literal:
       additionalProperties: false
       properties:
@@ -38,13 +38,13 @@ definitions:
           $ref: Z12#/definitions/objects/Z12
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z17
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z17
+              type: string
       required:
-      - Z17K1
-      - Z17K2
-      - Z17K3
-      - Z1K1
+        - Z17K1
+        - Z17K2
+        - Z17K3
+        - Z1K1
       type: object

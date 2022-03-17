@@ -2,31 +2,17 @@ test_information:
   name: normal list (Z10 or generic)
 test_objects:
   failure:
-  - name: bad Z1K1 (is not type)
-    object:
-      Z1K1:
+    - name: bad Z1K1 (is not type)
+      object:
         Z1K1:
-          Z1K1: Z9
-          Z9K1: Z3
-        Z3K1:
-          Z1K1: Z9
-          Z9K1: Z1000
-  - name: generic can't do global keys
-    object:
-      Z1K1:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z7
-        Z7K1:
-          Z1K1: Z9
-          Z9K1: Z881
-        Z881K1:
-          Z1K1: Z9
-          Z9K1: Z1
-      Z10K1:
-        Z1K1: Z6
-        Z6K1: first element
-      Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z3
+          Z3K1:
+            Z1K1: Z9
+            Z9K1: Z1000
+    - name: generic can't do global keys
+      object:
         Z1K1:
           Z1K1:
             Z1K1: Z9
@@ -37,35 +23,35 @@ test_objects:
           Z881K1:
             Z1K1: Z9
             Z9K1: Z1
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: first element
+        Z10K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
   success:
-  - name: can be a Z10
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z10
-      Z10K1:
-        Z1K1: Z6
-        Z6K1: first element
-      Z10K2:
+    - name: can be a Z10
+      object:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10
-  - name: can be a typed list
-    object:
-      Z1K1:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z7
-        Z7K1:
-          Z1K1: Z9
-          Z9K1: Z881
-        Z881K1:
-          Z1K1: Z9
-          Z9K1: Z1
-      K1:
-        Z1K1: Z6
-        Z6K1: first element
-      K2:
+        Z10K1:
+          Z1K1: Z6
+          Z6K1: first element
+        Z10K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+    - name: can be a typed list
+      object:
         Z1K1:
           Z1K1:
             Z1K1: Z9
@@ -76,3 +62,17 @@ test_objects:
           Z881K1:
             Z1K1: Z9
             Z9K1: Z1
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1

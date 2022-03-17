@@ -1,5 +1,5 @@
 test_information:
-  name: "bad object schema"
+  name: bad object schema
   parse_error: true
 
 test_schema:

@@ -1,5 +1,5 @@
 test_information:
-  name: "validation errors for normalized Z2"
+  name: validation errors for normalized Z2
   description: "caution! these tests are extremely lax and only check if the specified ZError is found, but passes if any other errors are found as well"
 test_objects:
   - name: "Z533: Z6K1 must be a string"
@@ -299,7 +299,7 @@ test_objects:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z10
-  - name: "One invalid key"
+  - name: One invalid key
     errors:
       - Z502
       - Z526

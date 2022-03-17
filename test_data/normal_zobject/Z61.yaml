@@ -2,40 +2,40 @@ test_information:
   name: normalized Z61
 test_objects:
   failure:
-  - name: bad programming language (terminal dash)
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z61
-      Z61K1:
-        Z1K1: Z6
-        Z6K1: python-
-  - name: bad programming language (spaces and other unsupported symbols)
-    object:
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z61
-      Z61K1:
-        Z1K1: Z6
-        Z6K1: there's no bad programming language :)
+    - name: bad programming language (terminal dash)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z61
+        Z61K1:
+          Z1K1: Z6
+          Z6K1: python-
+    - name: bad programming language (spaces and other unsupported symbols)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z61
+        Z61K1:
+          Z1K1: Z6
+          Z6K1: there's no bad programming language :)
   success:
-  - name: good programming language
-    object:
-      Z1K1:
+    - name: good programming language
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z61
+        Z61K1:
+          Z1K1: Z6
+          Z6K1: python-3
+    - name: can be a Z9
+      object:
         Z1K1: Z9
-        Z9K1: Z61
-      Z61K1:
-        Z1K1: Z6
-        Z6K1: python-3
-  - name: can be a Z9
-    object:
-      Z1K1: Z9
-      Z9K1: Z1000
-  - name: can be a Z18
-    object:
-      Z18K1:
-        Z1K1: Z6
-        Z6K1: Z1000K1
-      Z1K1:
-        Z1K1: Z9
-        Z9K1: Z18
+        Z9K1: Z1000
+    - name: can be a Z18
+      object:
+        Z18K1:
+          Z1K1: Z6
+          Z6K1: Z1000K1
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z18

@@ -2,30 +2,30 @@ test_information:
   name: canonical Z17
 test_objects:
   failure:
-  - name: bad argument declaration (invalid Z17K2)
-    object:
-      Z17K1: Z6
-      Z17K2: my argument declaration
-      Z17K3:
-        Z12K1: []
-        Z1K1: Z12
-      Z1K1: Z17
+    - name: bad argument declaration (invalid Z17K2)
+      object:
+        Z17K1: Z6
+        Z17K2: my argument declaration
+        Z17K3:
+          Z12K1: []
+          Z1K1: Z12
+        Z1K1: Z17
   success:
-  - name: good argument declaration
-    object:
-      Z17K1: Z6
-      Z17K2:
-        Z1K1: Z6
-        Z6K1: Z1234K1234
-      Z17K3:
-        Z12K1: []
-        Z1K1: Z12
-      Z1K1: Z17
-  - name: can be a Z9
-    object: Z1000
-  - name: can be a Z18
-    object:
-      Z18K1:
-        Z1K1: Z6
-        Z6K1: Z1000K1
-      Z1K1: Z18
+    - name: good argument declaration
+      object:
+        Z17K1: Z6
+        Z17K2:
+          Z1K1: Z6
+          Z6K1: Z1234K1234
+        Z17K3:
+          Z12K1: []
+          Z1K1: Z12
+        Z1K1: Z17
+    - name: can be a Z9
+      object: Z1000
+    - name: can be a Z18
+      object:
+        Z18K1:
+          Z1K1: Z6
+          Z6K1: Z1000K1
+        Z1K1: Z18

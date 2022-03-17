@@ -2,14 +2,14 @@ test_information:
   name: canonical Z6
 test_objects:
   failure:
-  - name: looks like a reference
-    object: Z13
+    - name: looks like a reference
+      object: Z13
   success:
-  - name: good string
-    object: real good, just very good
-  - name: explicit ZnKn
-    object:
-      Z1K1: Z6
-      Z6K1: Z10K10
-  - name: lazyZnKn
-    object: Z10K10
+    - name: good string
+      object: real good, just very good
+    - name: explicit ZnKn
+      object:
+        Z1K1: Z6
+        Z6K1: Z10K10
+    - name: lazyZnKn
+      object: Z10K10

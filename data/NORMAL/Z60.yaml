@@ -1,13 +1,13 @@
 # Z60/Language (Z4/Type)
 $id: Z60
-$ref: '#/definitions/objects/Z60'
+$ref: "#/definitions/objects/Z60"
 definitions:
   objects:
     Z60:
       anyOf:
-      - $ref: '#/definitions/objects/Z60_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z60_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z60K1:
       $ref: Z6#/definitions/objects/Z6
     Z60K2:
@@ -17,26 +17,26 @@ definitions:
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - additionalProperties: false
-            properties:
-              Z1K1:
-                enum:
-                - Z9
-                type: string
-              Z9K1:
-                enum:
-                - Z60
-                type: string
-            required:
-            - Z1K1
-            - Z9K1
-            type: object
+            - $ref: Z9#/definitions/objects/Z9
+            - additionalProperties: false
+              properties:
+                Z1K1:
+                  enum:
+                    - Z9
+                  type: string
+                Z9K1:
+                  enum:
+                    - Z60
+                  type: string
+              required:
+                - Z1K1
+                - Z9K1
+              type: object
         Z60K1:
-          $ref: '#/definitions/objects/Z60K1'
+          $ref: "#/definitions/objects/Z60K1"
         Z60K2:
-          $ref: '#/definitions/objects/Z60K2'
+          $ref: "#/definitions/objects/Z60K2"
       required:
-      - Z1K1
-      - Z60K1
+        - Z1K1
+        - Z60K1
       type: object

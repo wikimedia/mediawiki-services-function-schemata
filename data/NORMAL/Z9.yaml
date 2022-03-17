@@ -1,10 +1,10 @@
 # Z9/Reference (Z4/Type)
 $id: Z9
-$ref: '#/definitions/objects/Z9'
+$ref: "#/definitions/objects/Z9"
 definitions:
   objects:
     Z9:
-      $ref: '#/definitions/objects/Z9_literal'
+      $ref: "#/definitions/objects/Z9_literal"
     Z9K1:
       pattern: ^Z[1-9]\d*$
       type: string
@@ -13,11 +13,11 @@ definitions:
       properties:
         Z1K1:
           enum:
-          - Z9
+            - Z9
           type: string
         Z9K1:
-          $ref: '#/definitions/objects/Z9K1'
+          $ref: "#/definitions/objects/Z9K1"
       required:
-      - Z1K1
-      - Z9K1
+        - Z1K1
+        - Z9K1
       type: object

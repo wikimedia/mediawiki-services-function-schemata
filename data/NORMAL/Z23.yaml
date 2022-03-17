@@ -1,23 +1,22 @@
 # Z23/Nothing (Z4/Type)
 $id: Z23
-$ref: '#/definitions/objects/Z23'
+$ref: "#/definitions/objects/Z23"
 definitions:
   objects:
     Z23:
       allOf:
-      - $ref: Z9#/definitions/objects/Z9
-      - additionalProperties: false
-        properties:
-          Z1K1:
-            enum:
-            - Z9
-            type: string
-          Z9K1:
-            enum:
-            - Z23
-            type: string
-        required:
-        - Z1K1
-        - Z9K1
-        type: object
-
+        - $ref: Z9#/definitions/objects/Z9
+        - additionalProperties: false
+          properties:
+            Z1K1:
+              enum:
+                - Z9
+              type: string
+            Z9K1:
+              enum:
+                - Z23
+              type: string
+          required:
+            - Z1K1
+            - Z9K1
+          type: object

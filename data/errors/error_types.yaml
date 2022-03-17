@@ -2,7 +2,7 @@ patterns:
   keywords:
     type:
       - errorType: Z533
-        name: "Z6K1 must be a string"
+        name: Z6K1 must be a string
         keyword: type
         dataPointer:
           - Z6K1
@@ -10,7 +10,7 @@ patterns:
           expected: string
 
       - errorType: Z524
-        name: "Z1K1 must not be a string or array"
+        name: Z1K1 must not be a string or array
         keyword: type
         dataPointer:
           - Z1K1
@@ -21,7 +21,7 @@ patterns:
             - array
 
       - errorType: Z536
-        name: "Z9K1 must be a string"
+        name: Z9K1 must be a string
         keyword: type
         dataPointer:
           - Z9K1
@@ -29,7 +29,7 @@ patterns:
           expected: string
 
       - errorType: Z521
-        name: "ZObjects must not be number or boolean or null"
+        name: ZObjects must not be number or boolean or null
         keyword: type
         dataPointer: []
         keywordArgs:
@@ -41,35 +41,35 @@ patterns:
 
       # Error fallback
       - errorType: Z551
-        name: "Key type mismatch"
+        name: Key type mismatch
         keyword: type
         dataPointer: []
         keywordArgs: []
 
     required:
       - errorType: Z532
-        name: "Z6 without a Z6K1"
+        name: Z6 without a Z6K1
         keyword: required
         dataPointer: []
         keywordArgs:
           missing: Z6K1
 
       - errorType: Z535
-        name: "Z9 without a Z9K1"
+        name: Z9 without a Z9K1
         keyword: required
         dataPointer: []
         keywordArgs:
           missing: Z9K1
 
       - errorType: Z523
-        name: "Missing type (Z1K1)"
+        name: Missing type (Z1K1)
         keyword: required
         dataPointer: []
         keywordArgs:
           missing: Z1K1
 
       - errorType: Z513
-        name: "Resolved object without Z2K2"
+        name: Resolved object without Z2K2
         keyword: required
         dataPointer: []
         keywordArgs:
@@ -77,14 +77,14 @@ patterns:
 
       # Error fallback
       - errorType: Z511
-        name: "Key not found"
+        name: Key not found
         keyword: required
         dataPointer: []
         keywordArgs: []
 
     pattern:
       - errorType: Z537
-        name: "Z9K1 must look like a reference"
+        name: Z9K1 must look like a reference
         keyword: pattern
         dataPointer:
           - Z9K1
@@ -93,7 +93,7 @@ patterns:
 
     additionalProperties:
       - errorType: Z525
-        name: "Invalid key"
+        name: Invalid key
         keyword: additionalProperties
         dataPointer: []
         keywordArgs:
@@ -101,7 +101,7 @@ patterns:
 
     not:
       - errorType: Z553
-        name: "Disallowed root object"
+        name: Disallowed root object
         keyword: not
         dataPointer:
           - Z2K2

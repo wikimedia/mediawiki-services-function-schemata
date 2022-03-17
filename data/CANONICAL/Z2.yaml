@@ -1,42 +1,42 @@
 # Z2/Persistent object (Z4/Type)
 $id: Z2
-$ref: '#/definitions/objects/Z2'
+$ref: "#/definitions/objects/Z2"
 definitions:
   objects:
     Z2:
       anyOf:
-      - $ref: '#/definitions/objects/Z2_literal'
-      - $ref: Z9#/definitions/objects/Z9
-      - $ref: Z18#/definitions/objects/Z18
+        - $ref: "#/definitions/objects/Z2_literal"
+        - $ref: Z9#/definitions/objects/Z9
+        - $ref: Z18#/definitions/objects/Z18
     Z2_literal:
       additionalProperties: false
       properties:
         Z1K1:
           allOf:
-          - $ref: Z9#/definitions/objects/Z9
-          - enum:
-            - Z2
-            type: string
+            - $ref: Z9#/definitions/objects/Z9
+            - enum:
+                - Z2
+              type: string
         Z2K1:
           $ref: Z6#/definitions/objects/Z6
         Z2K2:
           allOf:
-          - $ref: Z1#/definitions/objects/Z1
-          - not:
-              anyOf:
-              - $ref: Z2#/definitions/objects/Z2_literal
-              - $ref: Z3#/definitions/objects/Z3_literal
-              - $ref: Z9#/definitions/objects/Z9_literal
-              - $ref: Z17#/definitions/objects/Z17_literal
-              - $ref: Z18#/definitions/objects/Z18_literal
-              - $ref: Z39#/definitions/objects/Z39
+            - $ref: Z1#/definitions/objects/Z1
+            - not:
+                anyOf:
+                  - $ref: Z2#/definitions/objects/Z2_literal
+                  - $ref: Z3#/definitions/objects/Z3_literal
+                  - $ref: Z9#/definitions/objects/Z9_literal
+                  - $ref: Z17#/definitions/objects/Z17_literal
+                  - $ref: Z18#/definitions/objects/Z18_literal
+                  - $ref: Z39#/definitions/objects/Z39
         Z2K3:
           $ref: Z12#/definitions/objects/Z12
         Z2K4:
           $ref: Z32#/definitions/objects/Z32
       required:
-      - Z1K1
-      - Z2K1
-      - Z2K2
-      - Z2K3
+        - Z1K1
+        - Z2K1
+        - Z2K2
+        - Z2K3
       type: object
