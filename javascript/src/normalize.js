@@ -68,7 +68,7 @@ async function normalize( o, generically ) {
  * @param {boolean} generically whether to produce generic lists (Z10s if false)
  * @return {Object} a Z22
  */
-async function normalizeExport( o, generically = false ) {
+async function normalizeExport( o, generically = true ) {
 	const status = await mixedZ1Validator.validateStatus( o );
 
 	if ( status.isValid() ) {

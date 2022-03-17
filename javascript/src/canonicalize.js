@@ -78,7 +78,7 @@ async function canonicalize( o ) {
  * @return {Array} an array of [data, error]
  */
 async function canonicalizeExport( o ) {
-	const normalized = await normalize( o );
+	const normalized = await normalize( o, /* generically= */false );
 
 	if ( ( await Z5Validator.validateStatus( normalized.Z22K2 ) ).isValid() ) {
 		// forward the error that happened in preliminary normalization
