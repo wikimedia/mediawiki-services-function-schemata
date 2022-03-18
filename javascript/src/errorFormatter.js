@@ -1,6 +1,6 @@
 'use strict';
 
-const { arrayToZ10, isString, isZid, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
+const { arrayToZ10, isString, isKey, isZid, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
 const { dataDir, readYaml } = require( './fileUtils.js' );
 const errorTypes = require( './error.js' );
 
@@ -191,14 +191,15 @@ class ErrorFormatter {
 		if ( candidates ) {
 			return candidates.find( ( descriptor ) => {
 				switch ( err.keyword ) {
-					case 'type':
-						return this.matchTypeDescriptor( descriptor, err );
 					case 'required':
 						return !descriptor.keywordArgs.missing ||
 							descriptor.keywordArgs.missing === err.params.missingProperty;
 					case 'additionalProperties':
 						return true;
-					default: return false;
+					case 'type':
+					case 'pattern':
+					default:
+						return this.matchTypeDescriptor( descriptor, err );
 				}
 			} );
 		}
@@ -273,7 +274,7 @@ class ErrorFormatter {
 	 * @return {Object}
 	 * @throws Will throw an error if the error type is not valid
 	 */
-	static createZErrorInstance( errorType, err ) {
+	static createZErrorInstance( errorType, err = {} ) {
 		const errorKeys = [];
 
 		if ( !isString( errorType ) || !isZid( errorType ) ) {
@@ -336,11 +337,21 @@ class ErrorFormatter {
 				errorKeys.push( wrapInQuote( err.data ) );
 				break;
 
+			case errorTypes.error.invalid_zreference:
+				errorKeys.push( wrapInZ6( err.data ) );
+				break;
+
+			case errorTypes.error.disallowed_root_object:
+				errorKeys.push( wrapInQuote( err.data ) );
+				break;
+
 			default:
-				// Unknown error, we will create it if we can
-				for ( const value in err ) {
-					errorKeys.push( err[ value ] );
-				}
+				// Unknown error
+				Object.keys( err ).forEach( ( key ) => {
+					if ( isKey( key ) ) {
+						errorKeys.push( err[ key ] );
+					}
+				} );
 				break;
 		}
 
