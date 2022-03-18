@@ -108,7 +108,7 @@ const error = {
 	invalid_json: 'Z548',
 	invalid_zreference: 'Z549',
 	unknown_zreference: 'Z550',
-	key_type_mismatch: 'Z551',
+	schema_type_mismatch: 'Z551',
 	disallowed_root_object: 'Z553'
 };
 
