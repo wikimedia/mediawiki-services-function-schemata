@@ -1,6 +1,6 @@
 'use strict';
 
-const { arrayToZ10, isString, isKey, isZid, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
+const { convertArrayToKnownTypedList, isString, isKey, isZid, wrapInZ6, wrapInZ9, wrapInKeyReference, wrapInQuote } = require( './utils.js' );
 const { dataDir, readYaml } = require( './fileUtils.js' );
 const errorTypes = require( './error.js' );
 
@@ -172,7 +172,7 @@ class ErrorFormatter {
 		return this.createZErrorInstance(
 			errorTypes.error.list_of_errors,
 			{
-				list: arrayToZ10( array )
+				list: convertArrayToKnownTypedList( array, 'Z5' )
 			}
 		);
 	}
