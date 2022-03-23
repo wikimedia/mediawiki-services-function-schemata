@@ -385,7 +385,7 @@ class ZObjectKeyFactory {
 	static async create( ZObject ) {
 		const normalize = require( './normalize.js' );
 		const normalizedEnvelope = await normalize( ZObject );
-		// FIX BEFORE SUBMITTING: return here on error.
+		// FIXME (T304144): return here on error.
 		const normalized = normalizedEnvelope.Z22K1;
 		const identity = await findIdentity( normalized );
 		if ( identity === null ) {
