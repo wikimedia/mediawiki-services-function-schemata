@@ -25,7 +25,7 @@ definitions:
     Z6:
       anyOf:
         - $ref: "#/definitions/objects/Z6_literal"
-        - $ref: Z18#/definitions/objects/Z18
+        - $ref: RESOLVER#/definitions/objects/RESOLVER
     Z6_Key_Pattern:
       oneOf:
         - pattern: ^Z[1-9]\d*(K[1-9]\d*)?$

@@ -66,8 +66,15 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z8
         Z14K3:
-          Z1K1: Z9
-          Z9K1: Z16
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z16
+          Z16K1:
+            Z1K1: Z9
+            Z9K1: Z700
+          Z16K2:
+            Z1K1: Z6
+            Z6K1: code is string
         Z1K1:
           Z1K1: Z9
           Z9K1: Z14

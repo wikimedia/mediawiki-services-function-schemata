@@ -21,6 +21,7 @@ test( 'GENERIC' ).then();
 test( 'LIST' ).then();
 test( 'Z1' ).then();
 test( 'Z2' ).then();
+test( 'Z3' ).then();
 test( 'Z4' ).then();
 test( 'Z7' ).then();
 test( 'Z8' ).then();

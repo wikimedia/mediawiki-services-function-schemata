@@ -29,26 +29,52 @@ test_Z4:
   Z4K3: Z110
 test_objects:
   failure:
-    - name: no K1
+    # TODO (T304682): Fix and reactivate these tests
+    #    - name: no K1
+    #      object:
+    #        Z1K1:
+    #          Z1K1: Z9
+    #          Z9K1: Z10001
+    #        K2:
+    #          Z1K1:
+    #            Z1K1: Z9
+    #            Z9K1: Z10001
+    #          K1:
+    #            Z1K1: Z6
+    #            Z6K1: valid element
+    #          K2:
+    #            Z1K1:
+    #              Z1K1: Z9
+    #              Z9K1: Z10002
+    #    - name: no K1 and no K2
+    #      object:
+    #        Z1K1:
+    #          Z1K1: Z9
+    #          Z9K1: Z10001
+    - name: K1 of wrong type
       object:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z10001
+        K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z39
+          Z39K1:
+            Z1K1: Z6
+            Z6K1: incorrect type
         K2:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z10001
           K1:
-            Z1K1:
-              Z1K1: Z9
-              Z9K1: Z7
-            Z7K1:
-              Z1K1: Z9
-              Z9K1: Z1000
+            Z1K1: Z6
+            Z6K1: nyat Z10001
           K2:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10002
+
     - name: K2.K1 of wrong type
       object:
         Z1K1:
@@ -63,11 +89,12 @@ test_objects:
             Z9K1: Z10001
           K1:
             Z1K1:
-              Z1K1: Z9
-              Z9K1: Z7
-            Z7K1:
-              Z1K1: Z9
-              Z9K1: Z1000
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z39
+              Z39K1:
+                Z1K1: Z6
+                Z6K1: incorrect type
           K2:
             Z1K1:
               Z1K1: Z9

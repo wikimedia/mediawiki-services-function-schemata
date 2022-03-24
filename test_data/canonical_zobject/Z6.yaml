@@ -2,8 +2,10 @@ test_information:
   name: canonical Z6
 test_objects:
   failure:
-    - name: looks like a reference
-      object: Z13
+    - name: bad string, cannot be an array
+      object: []
+    - name: bad string, cannot be a number
+      object: 2
   success:
     - name: good string
       object: real good, just very good
@@ -13,3 +15,5 @@ test_objects:
         Z6K1: Z10K10
     - name: lazyZnKn
       object: Z10K10
+    - name: can be a reference
+      object: Z10001

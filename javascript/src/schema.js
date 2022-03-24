@@ -523,7 +523,7 @@ class SchemaFactory {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
 		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
 		const directory = dataDir( 'CANONICAL' );
-		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?)|(LIST))\.yaml/;
+		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?)|(LIST)|(RESOLVER))\.yaml/;
 
 		for ( const fileName of fs.readdirSync( directory ) ) {
 			if ( fileName.match( fileRegex ) === null ) {
@@ -557,7 +557,7 @@ class SchemaFactory {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
 		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
 		const directory = dataDir( 'NORMAL' );
-		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?)|(GENERIC)|(LIST))\.yaml/;
+		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?)|(GENERIC)|(LIST)|(RESOLVER))\.yaml/;
 
 		for ( const fileName of fs.readdirSync( directory ) ) {
 			if ( fileName.match( fileRegex ) === null ) {
@@ -699,18 +699,26 @@ class SchemaFactory {
 	async createUserDefined( Z4s ) {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
+
 		const normalized = await Promise.all(
 			Z4s.map( async ( o ) => ( await normalize( o ) ).Z22K1 ) );
 
-		const errorIndex = await Promise.all(
-			normalized.map( async ( o ) => ( await Z5Validator.validateStatus( o ) ).isValid() ) );
+		const errorArray = await Promise.all(
+			normalized.map( async ( o ) => ( await Z5Validator.validateStatus( o ) ).isValid() )
+		);
+		const errorIndex = errorArray.indexOf( true );
 		if ( errorIndex > -1 ) {
 			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
 		}
 
+		// TODO (T304648): Interrogate whether doing this operation twice (normalized and normalZ4s)
+		// is intentional and, if so, add comment to the code explaining why.
 		const normalZ4s = await Promise.all(
 			Z4s.map( async ( Z4 ) => ( await normalize( Z4 ) ).Z22K1 ) );
 
+		// TODO (T304648): Interrogate whether doing the following identical loops and duplicating
+		// ZObjectKeyFactory.create( item ).asString() is intentional, and if so, add comment
+		// the code explaining why.
 		for ( const Z4 of normalZ4s ) {
 			const key = ( await ZObjectKeyFactory.create( Z4 ) ).asString();
 			typeCache.set( key, new GenericSchema( new Map() ) );
