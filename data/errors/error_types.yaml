@@ -91,6 +91,13 @@ patterns:
         keywordArgs:
           pattern: "^Z[1-9]\\d*$"
 
+      - errorType: Z549
+        name: Invalid reference
+        keyword: pattern
+        dataPointer: []
+        keywordArgs:
+          pattern: "^Z[1-9]\\d*$"
+
     additionalProperties:
       - errorType: Z525
         name: Invalid key
