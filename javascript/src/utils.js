@@ -193,7 +193,7 @@ function arrayToZ10( array, canonical = false ) {
 }
 
 /**
- * Turns a JS array into a Typed List.
+ * Turns a JS array into a Typed List after inferring the element type.
  *
  * @param {Array} array an array of ZObjects
  * @param {boolean} canonical whether to output in canonical form
@@ -211,28 +211,54 @@ async function convertArrayToZList( array, canonical = false ) {
 	} else {
 		headType = 'Z1';
 	}
-	let Z1K1 = 'Z7';
-	let Z7K1 = 'Z881';
-	function soupUpZ9( Z9 ) {
-		if ( isString( Z9 ) ) {
-			return {
-				Z1K1: 'Z9',
-				Z9K1: Z9
-			};
-		}
-		return Z9;
-	}
-	if ( !canonical ) {
-		headType = soupUpZ9( headType );
-		Z1K1 = soupUpZ9( Z1K1 );
-		Z7K1 = soupUpZ9( Z7K1 );
-	}
-	const listType = {
-		Z1K1: Z1K1,
-		Z7K1: Z7K1,
-		Z881K1: headType
-	};
+	return convertArrayToKnownTypedList( array, headType, canonical );
+}
+
+/**
+ * Turns a JS array into a Typed List of a known type.
+ *
+ * @param {Array} array an array of ZObjects
+ * @param {string} type the known type of the typed list
+ * @param {boolean} canonical whether to output in canonical form
+ * @return {Object} a Typed List corresponding to the input array
+ */
+function convertArrayToKnownTypedList( array, type, canonical = false ) {
+	const listType = getTypedListType( type, canonical );
 	return convertArrayToZListInternal( array, 'K1', 'K2', listType );
+}
+
+/**
+ * Creates the type value of a Typed List given the expected type of its elements.
+ *
+ * @param {Object|string} elementType for the list, in normal form
+ * @param {boolean} canonical whether to output in canonical form
+ * @return {Object} the type of a typed list where the elements are the given type
+ */
+function getTypedListType( elementType, canonical = false ) {
+	const listType = {
+		Z1K1: canonical ? 'Z7' : wrapInZ9( 'Z7' ),
+		Z7K1: canonical ? 'Z881' : wrapInZ9( 'Z881' )
+	};
+
+	// elementType can be a string or an object
+	// If it's a string, the type is a canonical reference
+	// If it's an object, it may be:
+	// 1. a normal reference, e.g. { Z1K1: Z9, Z9K1: Z6 }
+	// 2. a canonical function call, e.g. { Z1K1: Z7, Z7K1: Z885, Z885K1: Z500 }
+	// 3. a normal function call, e.g. {Z1K1:{ Z1K1: Z9, Z9K1: Z7 }, Z7K1:{ Z1K1: Z9, Z9K1: Z999 }}
+	if ( isString( elementType ) ) {
+		listType.Z881K1 = canonical ? elementType : wrapInZ9( elementType );
+	} else {
+		if ( elementType.Z1K1 === 'Z9' ) {
+			listType.Z881K1 = canonical ? elementType.Z9K1 : elementType;
+		} else {
+			// FIXME (T304619): If the type is described by a function call,
+			// it could be either normal or canonical
+			listType.Z881K1 = elementType;
+		}
+	}
+
+	return listType;
 }
 
 const builtInTypes = new Set( [
@@ -289,6 +315,7 @@ function wrapInQuote( data ) {
 module.exports = {
 	arrayToZ10,
 	convertArrayToZList,
+	convertArrayToKnownTypedList,
 	convertZListToArray,
 	isString,
 	isArray,
@@ -301,6 +328,7 @@ module.exports = {
 	deepCopy,
 	getHead,
 	getTail,
+	getTypedListType,
 	inferType,
 	isEmptyZList,
 	isUserDefined,

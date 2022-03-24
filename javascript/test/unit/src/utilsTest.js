@@ -1,6 +1,6 @@
 'use strict';
 
-const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
+const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, convertArrayToKnownTypedList, getTypedListType, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -141,6 +141,274 @@ QUnit.test( 'convertArrayToZList with single type', async ( assert ) => {
 		}
 	};
 	assert.deepEqual( expected, await convertArrayToZList( array ) );
+} );
+
+QUnit.test( 'convertArrayToZList with function call types', async ( assert ) => {
+	const array = [
+		{
+			Z1K1: {
+				Z1K1: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z7'
+				},
+				Z7K1: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z8888'
+				}
+			},
+			K1: 'strink'
+		},
+		{
+			Z1K1: {
+				Z1K1: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z7'
+				},
+				Z7K1: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z8888'
+				}
+			},
+			K1: 'stronk'
+		}
+	];
+	const listZ1K1 = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z881'
+		},
+		Z881K1: {
+			Z1K1: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z7'
+			},
+			Z7K1: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z8888'
+			}
+		}
+	};
+	const expected = {
+		Z1K1: listZ1K1,
+		K1: array[ 0 ],
+		K2: {
+			Z1K1: listZ1K1,
+			K1: array[ 1 ],
+			K2: {
+				Z1K1: listZ1K1
+			}
+		}
+	};
+	assert.deepEqual( expected, await convertArrayToZList( array ) );
+} );
+
+QUnit.test( 'convertArrayToZList with canonical function call types', async ( assert ) => {
+	const array = [
+		{
+			Z1K1: {
+				Z1K1: 'Z7',
+				Z7K1: 'Z8888',
+				Z8888K1: 'some arg'
+			},
+			K1: 'strink'
+		},
+		{
+			Z1K1: {
+				Z1K1: 'Z7',
+				Z7K1: 'Z8888',
+				Z8888K1: 'some arg'
+			},
+			K1: 'stronk'
+		}
+	];
+	const listZ1K1 = {
+		Z1K1: 'Z7',
+		Z7K1: 'Z881',
+		Z881K1: {
+			Z1K1: 'Z7',
+			Z7K1: 'Z8888',
+			Z8888K1: 'some arg'
+		}
+	};
+	const expected = {
+		Z1K1: listZ1K1,
+		K1: array[ 0 ],
+		K2: {
+			Z1K1: listZ1K1,
+			K1: array[ 1 ],
+			K2: {
+				Z1K1: listZ1K1
+			}
+		}
+	};
+	assert.deepEqual( expected, await convertArrayToZList( array, /* canonical */true ) );
+} );
+
+QUnit.test( 'convertArrayToKnownTypedLists canonical with string type', ( assert ) => {
+	const array = [ 'list of', 'strings' ];
+	const listZ1K1 = {
+		Z1K1: 'Z7',
+		Z7K1: 'Z881',
+		Z881K1: 'Z6'
+	};
+	const expected = {
+		Z1K1: listZ1K1,
+		K1: array[ 0 ],
+		K2: {
+			Z1K1: listZ1K1,
+			K1: array[ 1 ],
+			K2: {
+				Z1K1: listZ1K1
+			}
+		}
+	};
+	assert.deepEqual( expected, convertArrayToKnownTypedList( array, 'Z6', /* canonical */true ) );
+} );
+
+QUnit.test( 'convertArrayToKnownTypedLists normal with string type', ( assert ) => {
+	const array = [ { Z1K1: 'Z6', Z6K1: 'list of' }, { Z1K1: 'Z6', Z6K1: 'strings' } ];
+	const listZ1K1 = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z881'
+		},
+		Z881K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z6'
+		}
+	};
+	const expected = {
+		Z1K1: listZ1K1,
+		K1: array[ 0 ],
+		K2: {
+			Z1K1: listZ1K1,
+			K1: array[ 1 ],
+			K2: {
+				Z1K1: listZ1K1
+			}
+		}
+	};
+	assert.deepEqual( expected, convertArrayToKnownTypedList( array, 'Z6' ) );
+} );
+
+QUnit.test( 'getTypedListType return canonical with canonical reference', ( assert ) => {
+	const elementType = 'Z6';
+	const expected = {
+		Z1K1: 'Z7',
+		Z7K1: 'Z881',
+		Z881K1: 'Z6'
+	};
+	assert.deepEqual( expected, getTypedListType( elementType, true ) );
+} );
+
+QUnit.test( 'getTypedListType return canonical with normal reference', ( assert ) => {
+	const elementType = {
+		Z1K1: 'Z9',
+		Z9K1: 'Z6'
+	};
+	const expected = {
+		Z1K1: 'Z7',
+		Z7K1: 'Z881',
+		Z881K1: 'Z6'
+	};
+	assert.deepEqual( expected, getTypedListType( elementType, true ) );
+} );
+
+QUnit.test( 'getTypedListType return normal with canonical reference', ( assert ) => {
+	const elementType = 'Z6';
+	const expected = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z881'
+		},
+		Z881K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z6'
+		}
+	};
+	assert.deepEqual( expected, getTypedListType( elementType ) );
+} );
+
+QUnit.test( 'getTypedListType return normal with normal reference', ( assert ) => {
+	const elementType = {
+		Z1K1: 'Z9',
+		Z9K1: 'Z6'
+	};
+	const expected = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z881'
+		},
+		Z881K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z6'
+		}
+	};
+	assert.deepEqual( expected, getTypedListType( elementType ) );
+} );
+
+QUnit.test( 'getTypedListType with canonical function call', ( assert ) => {
+	const elementType = {
+		Z1K1: 'Z7',
+		Z7K1: 'Z885',
+		Z885K1: 'Z500'
+	};
+	const expected = {
+		Z1K1: 'Z7',
+		Z7K1: 'Z881',
+		Z881K1: elementType
+	};
+	assert.deepEqual( expected, getTypedListType( elementType, true ) );
+} );
+
+QUnit.test( 'getTypedListType with normal function call', ( assert ) => {
+	const elementType = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z8888'
+		}
+	};
+	const expected = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z7'
+		},
+		Z7K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z881'
+		},
+		Z881K1: {
+			Z1K1: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z7'
+			},
+			Z7K1: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z8888'
+			}
+		}
+	};
+	assert.deepEqual( expected, getTypedListType( elementType ) );
 } );
 
 QUnit.test( 'arrayToZ10', ( assert ) => {
