@@ -43,7 +43,10 @@ test_objects:
     - name: good Z14 (code)
       object:
         Z14K1: Z8
-        Z14K3: Z16
+        Z14K3:
+          Z1K1: Z16
+          Z16K1: Z700
+          Z16K2: code is string
         Z1K1: Z14
     - name: good Z14 (string)
       object:

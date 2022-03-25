@@ -1,6 +1,9 @@
 test_information:
   name: canonical Z3
 test_objects:
+  failure:
+    - name: cannot be a Z9
+      object: Z1000
   success:
     - name: arbitrary Z3
       object:
@@ -31,8 +34,6 @@ test_objects:
         Z3K3:
           Z12K1: []
           Z1K1: Z12
-    - name: can be a Z9
-      object: Z1000
     - name: can be a Z18
       object:
         Z18K1:

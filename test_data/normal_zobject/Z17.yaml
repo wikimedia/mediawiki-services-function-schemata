@@ -21,6 +21,10 @@ test_objects:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z17
+    - name: cannot be a Z9
+      object:
+        Z1K1: Z9
+        Z9K1: Z1000
   success:
     - name: good argument declaration
       object:
@@ -41,10 +45,6 @@ test_objects:
         Z1K1:
           Z1K1: Z9
           Z9K1: Z17
-    - name: can be a Z9
-      object:
-        Z1K1: Z9
-        Z9K1: Z1000
     - name: can be a Z18
       object:
         Z18K1:

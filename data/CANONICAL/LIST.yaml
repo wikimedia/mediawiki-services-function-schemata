@@ -7,8 +7,7 @@ definitions:
       anyOf:
         - $ref: "#/definitions/objects/LIST_array"
         - $ref: "#/definitions/objects/LIST_generic"
-        - $ref: Z9#/definitions/objects/Z9
-        - $ref: Z18#/definitions/objects/Z18
+        - $ref: RESOLVER#/definitions/objects/RESOLVER
     LIST_array:
       type: array
       items:
