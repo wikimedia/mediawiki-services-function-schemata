@@ -25,6 +25,7 @@ test( 'Z4' ).then();
 test( 'Z6' ).then();
 test( 'Z7' ).then();
 test( 'Z8' ).then();
+test( 'Z9' ).then();
 test( 'Z12' ).then();
 test( 'Z14' ).then();
 test( 'Z17' ).then();

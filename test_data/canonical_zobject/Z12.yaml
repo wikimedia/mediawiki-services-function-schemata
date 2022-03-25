@@ -72,3 +72,9 @@ test_objects:
                 Z1K1: Z60
                 Z60K1: es
               Z11K2: texto en español
+    - name: can be a Z9
+      object: Z1000
+    - name: can be a Z18
+      object:
+        Z18K1: Z400K1
+        Z1K1: Z18

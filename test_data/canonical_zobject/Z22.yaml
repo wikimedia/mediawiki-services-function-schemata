@@ -25,7 +25,5 @@ test_objects:
       object: Z1000
     - name: can be a Z18
       object:
-        Z18K1:
-          Z1K1: Z6
-          Z6K1: Z1000K1
+        Z18K1: Z400K1
         Z1K1: Z18

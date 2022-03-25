@@ -16,16 +16,12 @@ test_objects:
     - name: good argument declaration
       object:
         Z17K1: Z6
-        Z17K2:
-          Z1K1: Z6
-          Z6K1: Z1234K1234
+        Z17K2: Z400K1
         Z17K3:
           Z12K1: []
           Z1K1: Z12
         Z1K1: Z17
     - name: can be a Z18
       object:
-        Z18K1:
-          Z1K1: Z6
-          Z6K1: Z1000K1
+        Z18K1: Z400K1
         Z1K1: Z18

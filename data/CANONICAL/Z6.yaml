@@ -33,16 +33,9 @@ definitions:
         - pattern: ^K[1-9]\d*$
           type: string
     Z6_ZnKn:
-      oneOf:
-        - allOf:
-            - $ref: "#/definitions/objects/Z6_explicit"
-            - type: object
-            - properties:
-                Z6K1:
-                  $ref: "#/definitions/objects/Z6_Key_Pattern"
-        - allOf:
-            - $ref: "#/definitions/objects/Z6_string"
-            - $ref: "#/definitions/objects/Z6_Key_Pattern"
+      allOf:
+        - $ref: "#/definitions/objects/Z6_string"
+        - $ref: "#/definitions/objects/Z6_Key_Pattern"
     Z6_literal:
       anyOf:
         - $ref: "#/definitions/objects/Z6_string"
@@ -62,7 +55,9 @@ definitions:
                 - Z6
               type: string
         Z6K1:
-          type: string
+          allOf:
+            - type: string
+            - pattern: ^Z[1-9]\d*$
       required:
         - Z1K1
         - Z6K1

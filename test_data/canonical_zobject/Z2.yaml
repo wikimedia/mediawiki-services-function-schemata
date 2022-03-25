@@ -49,9 +49,7 @@ test_objects:
         Z2K2:
           Z1K1: Z3
           Z3K1: Z4
-          Z3K2:
-            Z1K1: Z6
-            Z6K1: Z3K3241
+          Z3K2: Z400K1
           Z3K3:
             Z12K1: []
             Z1K1: Z12
@@ -72,9 +70,7 @@ test_objects:
         Z2K1: my identification
         Z2K2:
           Z17K1: Z6
-          Z17K2:
-            Z1K1: Z6
-            Z6K1: Z1234K1234
+          Z17K2: Z400K1
           Z17K3:
             Z12K1: []
             Z1K1: Z12
@@ -87,9 +83,7 @@ test_objects:
         Z1K1: Z2
         Z2K1: my identification
         Z2K2:
-          Z18K1:
-            Z1K1: Z6
-            Z6K1: Z1234K1234
+          Z18K1: Z400K1
           Z1K1: Z18
         Z2K3:
           Z12K1: []
@@ -130,7 +124,5 @@ test_objects:
       object: Z1000
     - name: can be a Z18
       object:
-        Z18K1:
-          Z1K1: Z6
-          Z6K1: Z1000K1
+        Z18K1: Z400K1
         Z1K1: Z18
