@@ -31,25 +31,153 @@ test_objects:
           Z1K1: Z6
           Z6K1: Z1000K1
         Z1K1: Z18
-    - name: generic empty list
+    - name: typed list, empty
       object:
         Z1K1:
           Z1K1: Z7
           Z7K1: Z881
           Z881K1: Z6
-    - name: generic list with one element
+    - name: typed list, one element
       object:
         Z1K1:
           Z1K1: Z7
           Z7K1: Z881
           Z881K1: Z6
         K1: one element
-    - name: generic list with two elements
+    - name: typed list, two elements
       object:
         Z1K1:
           Z1K1: Z7
           Z7K1: Z881
           Z881K1: Z6
+        K1: first element
+        K2:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
+          K1: second element
+    - name: typed list, function is literal
+      object:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1:
+            Z1K1: Z8
+            Z8K1: []
+            Z8K2: Z4
+            Z8K3: []
+            Z8K4: []
+            Z8K5: Z881
+          Z881K1: Z6
+        K1: first element
+        K2:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
+          K1: second element
+    - name: typed list, function is recursively literal
+      object:
+        Z1K1:
+          Z1K1: Z7
+          Z7K1:
+            Z1K1: Z8
+            Z8K1: []
+            Z8K2: Z4
+            Z8K3: []
+            Z8K4: []
+            Z8K5:
+              Z1K1: Z8
+              Z8K1: []
+              Z8K2: Z4
+              Z8K3: []
+              Z8K4: []
+              Z8K5: Z881
+          Z881K1: Z6
+        K1: first element
+        K2:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
+          K1: second element
+
+    - name: typed list, type is literal
+      object:
+        Z1K1:
+          Z1K1: Z4
+          Z4K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
+          Z4K2:
+            - Z1K1: Z3
+              Z3K1: Z1
+              Z3K2: K1
+              Z3K3:
+                Z1K1: Z12
+                Z12K1: []
+            - Z1K1: Z3
+              Z3K1:
+                Z1K1: Z7
+                Z7K1: Z881
+                Z881K1: Z6
+              Z3K2: K2
+              Z3K3:
+                Z1K1: Z12
+                Z12K1: []
+          Z4K3: Z831
+        K1: first element
+        K2:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
+          K1: second element
+    - name: typed list, type is recursively literal
+      object:
+        Z1K1:
+          Z1K1: Z4
+          Z4K1:
+            Z1K1: Z4
+            Z4K1:
+              Z1K1: Z7
+              Z7K1: Z881
+              Z881K1: Z6
+            Z4K2:
+              - Z1K1: Z3
+                Z3K1: Z1
+                Z3K2: K1
+                Z3K3:
+                  Z1K1: Z12
+                  Z12K1: []
+              - Z1K1: Z3
+                Z3K1:
+                  Z1K1: Z7
+                  Z7K1: Z881
+                  Z881K1: Z6
+                Z3K2: K2
+                Z3K3:
+                  Z1K1: Z12
+                  Z12K1: []
+            Z4K3: Z831
+          Z4K2:
+            - Z1K1: Z3
+              Z3K1: Z1
+              Z3K2: K1
+              Z3K3:
+                Z1K1: Z12
+                Z12K1: []
+            - Z1K1: Z3
+              Z3K1:
+                Z1K1: Z7
+                Z7K1: Z881
+                Z881K1: Z6
+              Z3K2: K2
+              Z3K3:
+                Z1K1: Z12
+                Z12K1: []
+          Z4K3: Z831
         K1: first element
         K2:
           Z1K1:

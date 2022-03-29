@@ -50,7 +50,7 @@ test_objects:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z10
-    - name: can be a typed list
+    - name: typed list, type is function call
       object:
         Z1K1:
           Z1K1:
@@ -62,6 +62,544 @@ test_objects:
           Z881K1:
             Z1K1: Z9
             Z9K1: Z1
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+    - name: typed list, function is literal
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z8
+            Z8K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+            Z8K2:
+              Z1K1: Z9
+              Z9K1: Z4
+            Z8K3:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+            Z8K4:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+            Z8K5:
+              Z1K1: Z9
+              Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z1
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+    - name: typed list, function is recursively literal
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z8
+            Z8K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+            Z8K2:
+              Z1K1: Z9
+              Z9K1: Z6
+            Z8K3:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+            Z8K4:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+            Z8K5:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z8
+              Z8K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+              Z8K2:
+                Z1K1: Z9
+                Z9K1: Z6
+              Z8K3:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+              Z8K4:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+              Z8K5:
+                Z1K1: Z9
+                Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z1
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+    - name: typed list, type is literal
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z4
+          Z4K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+          Z4K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z3
+            K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z3
+              Z3K1:
+                Z1K1: Z9
+                Z9K1: Z1
+              Z3K2:
+                Z1K1: Z6
+                Z6K1: K1
+              Z3K3:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z12
+                Z12K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z10
+            K2:
+              Z1K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z7
+                Z7K1:
+                  Z1K1: Z9
+                  Z9K1: Z881
+                Z881K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+              K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+                Z3K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z1
+                Z3K2:
+                  Z1K1: Z6
+                  Z6K1: K2
+                Z3K3:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z12
+                  Z12K1:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z10
+              K2:
+                Z1K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z3
+          Z4K3:
+            Z1K1: Z9
+            Z9K1: Z831
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+    - name: typed list, type is recursively literal
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z4
+          Z4K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z4
+            Z4K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z1
+            Z4K2:
+              Z1K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z7
+                Z7K1:
+                  Z1K1: Z9
+                  Z9K1: Z881
+                Z881K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+              K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+                Z3K1:
+                  Z1K1: Z9
+                  Z9K1: Z1
+                Z3K2:
+                  Z1K1: Z6
+                  Z6K1: K1
+                Z3K3:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z12
+                  Z12K1:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z10
+              K2:
+                Z1K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z3
+                K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z3
+                  Z3K1:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z7
+                    Z7K1:
+                      Z1K1: Z9
+                      Z9K1: Z881
+                    Z881K1:
+                      Z1K1: Z9
+                      Z9K1: Z1
+                  Z3K2:
+                    Z1K1: Z6
+                    Z6K1: K2
+                  Z3K3:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z12
+                    Z12K1:
+                      Z1K1:
+                        Z1K1: Z9
+                        Z9K1: Z10
+                K2:
+                  Z1K1:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z7
+                    Z7K1:
+                      Z1K1: Z9
+                      Z9K1: Z881
+                    Z881K1:
+                      Z1K1: Z9
+                      Z9K1: Z3
+            Z4K3:
+              Z1K1: Z9
+              Z9K1: Z831
+          Z4K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z3
+            K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z3
+              Z3K1:
+                Z1K1: Z9
+                Z9K1: Z1
+              Z3K2:
+                Z1K1: Z6
+                Z6K1: K1
+              Z3K3:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z12
+                Z12K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z10
+            K2:
+              Z1K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z7
+                Z7K1:
+                  Z1K1: Z9
+                  Z9K1: Z881
+                Z881K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+              K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+                Z3K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z1
+                Z3K2:
+                  Z1K1: Z6
+                  Z6K1: K2
+                Z3K3:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z12
+                  Z12K1:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z10
+              K2:
+                Z1K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z3
+          Z4K3:
+            Z1K1: Z9
+            Z9K1: Z831
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+    - name: typed list, type and function are literal
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z4
+          Z4K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z8
+              Z8K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+              Z8K2:
+                Z1K1: Z9
+                Z9K1: Z6
+              Z8K3:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+              Z8K4:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+              Z8K5:
+                Z1K1: Z9
+                Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+          Z4K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z3
+            K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z3
+              Z3K1:
+                Z1K1: Z9
+                Z9K1: Z1
+              Z3K2:
+                Z1K1: Z6
+                Z6K1: K1
+              Z3K3:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z12
+                Z12K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z10
+            K2:
+              Z1K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z7
+                Z7K1:
+                  Z1K1: Z9
+                  Z9K1: Z881
+                Z881K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+              K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z3
+                Z3K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z1
+                Z3K2:
+                  Z1K1: Z6
+                  Z6K1: K2
+                Z3K3:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z12
+                  Z12K1:
+                    Z1K1:
+                      Z1K1: Z9
+                      Z9K1: Z10
+              K2:
+                Z1K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z3
+          Z4K3:
+            Z1K1: Z9
+            Z9K1: Z831
         K1:
           Z1K1: Z6
           Z6K1: first element

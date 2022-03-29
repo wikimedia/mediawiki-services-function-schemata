@@ -20,6 +20,8 @@ definitions:
                       enum:
                         - Z14
                         - Z1
+                        # FIXME (T305189) Remove Z9 when this is solved
+                        - Z9
       patternProperties:
         .*K2:
           $ref: "#/definitions/objects/LIST_OF_Z14"
