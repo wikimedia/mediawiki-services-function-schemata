@@ -9,7 +9,7 @@ const normalize = require( './normalize.js' );
 const normalFactory = SchemaFactory.NORMAL();
 const normalZ1Validator = normalFactory.create( 'Z1' );
 const Z5Validator = normalFactory.create( 'Z5_literal' );
-const Z6Validator = normalFactory.create( 'Z6' );
+const Z6Validator = normalFactory.create( 'Z6_literal' );
 const Z9Validator = normalFactory.create( 'Z9' );
 const Z10Validator = normalFactory.create( 'Z10' );
 const Z18Validator = normalFactory.create( 'Z18' );
@@ -31,7 +31,7 @@ async function canonicalizeObject( o ) {
 	// T295850 Explicitly ignore if the object is an argument declaration (Z18)
 	const isArgDeclaration = await Z18Validator.validate( o );
 
-	if ( await Z6Validator.validate( o ) && !isArgDeclaration ) {
+	if ( await Z6Validator.validate( o ) ) {
 		o.Z6K1 = await canonicalize( o.Z6K1 );
 
 		// return as string if Z6/String doesn't need to be escaped, i.e., is not in Zxxxx format
