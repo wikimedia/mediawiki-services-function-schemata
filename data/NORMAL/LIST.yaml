@@ -17,7 +17,7 @@ definitions:
       additionalProperties: false
       properties:
         Z1K1:
-          $ref: "#/definitions/objects/LIST_function_call_to_typed_list"
+          $ref: "#/definitions/objects/LIST_type"
       required:
         - Z1K1
       type: object
@@ -25,7 +25,7 @@ definitions:
       additionalProperties: false
       properties:
         Z1K1:
-          $ref: "#/definitions/objects/LIST_function_call_to_typed_list"
+          $ref: "#/definitions/objects/LIST_type"
         K1:
           $ref: Z1#/definitions/objects/Z1
         K2:
@@ -35,21 +35,51 @@ definitions:
         - K1
         - K2
       type: object
-    LIST_function_call_to_typed_list:
+
+    # LIST_type: Different representations of the type of a generic list
+    LIST_type:
+      oneOf:
+        - $ref: "#/definitions/objects/LIST_type_literal"
+        - $ref: "#/definitions/objects/LIST_type_function_call"
+
+    # LIST_type_literal: The type is defined by a Z4, where its identity Z4K1 is a generic type
+    LIST_type_literal:
+      allOf:
+        - $ref: Z4#/definitions/objects/Z4_literal
+        - properties:
+            Z4K1:
+              $ref: "#/definitions/objects/LIST_type"
+          type: object
+
+    # LIST_type_function_call: The type is defined by a Z7,
+    # where its function Z7K1 is the typed list function
+    LIST_type_function_call:
       allOf:
         - $ref: Z7#/definitions/objects/Z7
-        - $ref: "#/definitions/objects/LIST_value_of_Z7K1"
-    LIST_value_of_Z7K1:
-      properties:
-        Z7K1:
-          $ref: "#/definitions/objects/LIST_reference_to_typed_list"
-    LIST_reference_to_typed_list:
+        - properties:
+            Z7K1:
+              $ref: "#/definitions/objects/LIST_typed_list_function"
+
+    # LIST_typed_list_function: Different representations of the typed list function (Z881)
+    LIST_typed_list_function:
+      oneOf:
+        - $ref: "#/definitions/objects/LIST_typed_list_function_reference"
+        - $ref: "#/definitions/objects/LIST_typed_list_function_literal"
+
+    # LIST_typed_list_function_reference: A Z9 object pointing at Z881
+    LIST_typed_list_function_reference:
       allOf:
         - $ref: Z9#/definitions/objects/Z9
-        - $ref: "#/definitions/objects/LIST_value_of_Z9K1"
-    LIST_value_of_Z9K1:
-      properties:
-        Z9K1:
-          enum:
-            - Z881
-          type: string
+        - properties:
+            Z9K1:
+              enum:
+                - Z881
+              type: string
+
+    # LIST_typed_list_function_literal: The literal Z8 object representing Z881
+    LIST_typed_list_function_literal:
+      allOf:
+        - $ref: Z8#/definitions/objects/Z8_literal
+        - properties:
+            Z8K5:
+              $ref: "#/definitions/objects/LIST_typed_list_function"
