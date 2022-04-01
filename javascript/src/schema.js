@@ -10,7 +10,7 @@ const { Mutex } = require( 'async-mutex' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
 let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
-	Z8Validator, Z9Validator, Z18Validator, Z23Validator;
+	Z8Validator, Z9Validator, Z18Validator, Z21Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
@@ -24,7 +24,7 @@ function initializeValidators() {
 	Z8Validator = defaultFactory.create( 'Z8_literal' );
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 	Z18Validator = defaultFactory.create( 'Z18_literal' );
-	Z23Validator = defaultFactory.create( 'Z23' );
+	Z21Validator = defaultFactory.create( 'Z21' );
 }
 
 // TODO (T296659): Migrate validatesAs* functions to utils. Somehow avoid
@@ -119,7 +119,7 @@ async function validatesAsArgumentReference( Z1 ) {
  * @return {boolean} whether Z1 can validated as a Unit
  */
 async function validatesAsUnit( Z1 ) {
-	return await Z23Validator.validateStatus( Z1 );
+	return await Z21Validator.validateStatus( Z1 );
 }
 
 /**

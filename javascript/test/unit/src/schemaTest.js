@@ -521,7 +521,7 @@ QUnit.test( 'validatesAsArgumentReference', async ( assert ) => {
 QUnit.test( 'validatesAsUnit', async ( assert ) => {
 	const input = {
 		Z1K1: 'Z9',
-		Z9K1: 'Z23'
+		Z9K1: 'Z24'
 	};
 	assert.true( ( await validatesAsUnit( input ) ).isValid() );
 } );
