@@ -1,6 +1,6 @@
 'use strict';
 
-const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeUnit, makeResultEnvelope, convertArrayToZList, convertArrayToKnownTypedList, getTypedListType, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
+const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeVoid, makeResultEnvelope, convertArrayToZList, convertArrayToKnownTypedList, getTypedListType, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -527,13 +527,13 @@ QUnit.test( 'make* functions', async ( assert ) => {
 	assert.deepEqual( makeTrue(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } } );
 	assert.deepEqual( makeFalse(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z42' } } );
 
-	assert.deepEqual( makeUnit(), { Z1K1: 'Z9', Z9K1: 'Z23' } );
-	assert.deepEqual( makeUnit( false ), { Z1K1: 'Z9', Z9K1: 'Z23' } );
-	assert.deepEqual( makeUnit( true ), 'Z23' );
+	assert.deepEqual( makeVoid(), { Z1K1: 'Z9', Z9K1: 'Z24' } );
+	assert.deepEqual( makeVoid( false ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
+	assert.deepEqual( makeVoid( true ), 'Z24' );
 
-	assert.deepEqual( makeResultEnvelope( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z23', Z22K2: 'Z23' } );
-	assert.deepEqual( makeResultEnvelope( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z23' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z23' } } );
-	assert.deepEqual( makeResultEnvelope( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z23' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z23' } } );
+	assert.deepEqual( makeResultEnvelope( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
+	assert.deepEqual( makeResultEnvelope( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
+	assert.deepEqual( makeResultEnvelope( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
 } );
 
 QUnit.test( 'inferType', async ( assert ) => {

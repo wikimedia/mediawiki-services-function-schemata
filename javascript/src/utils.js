@@ -44,13 +44,51 @@ function deepCopy( o ) {
 	return JSON.parse( JSON.stringify( o ) );
 }
 
-// TODO (T285433): Return Z21 instead of Z23.
-// TODO (T289301): This should read its outputs from a configuration file.
+/**
+ * Create a Z23/nothing special object, which isn't a thing and this shouldn't exist.
+ *
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a reference to Z23(!)
+ * @deprecated Use makeVoid instead.
+ */
 function makeUnit( canonical = false ) {
 	if ( canonical ) {
 		return 'Z23';
 	}
 	return { Z1K1: 'Z9', Z9K1: 'Z23' };
+}
+
+/**
+ * Create a Z24 / Void object.  (Z24 is the only possible value of the type
+ * Z21 / Unit).
+ *
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a reference to Z24
+ *
+ * TODO (T289301): This should read its outputs from a configuration file.
+ */
+function makeVoid( canonical = false ) {
+	if ( canonical ) {
+		return 'Z24';
+	}
+	return { Z1K1: 'Z9', Z9K1: 'Z24' };
+}
+
+/**
+ * Checks whether the input is a Z24 / Void.  Allows for either canonical
+ * or normalized input (corresponding to what makeVoid produces).
+ *
+ * @param {Object | string} v item to be checked
+ * @return {boolean} whether v is a Z24
+ */
+function isVoid( v ) {
+	if ( isString( v ) ) {
+		return ( v === 'Z24' );
+	}
+	if ( isObject( v ) ) {
+		return ( v.Z1K1 === 'Z9' && v.Z9K1 === 'Z24' );
+	}
+	return false;
 }
 
 /**
@@ -91,8 +129,8 @@ function makeResultEnvelope( goodResult = null, badResult = null, canonical = fa
 	}
 	return {
 		Z1K1: Z1K1,
-		Z22K1: goodResult === null ? makeUnit( canonical ) : goodResult,
-		Z22K2: badResult === null ? makeUnit( canonical ) : badResult
+		Z22K1: goodResult === null ? makeVoid( canonical ) : goodResult,
+		Z22K2: badResult === null ? makeVoid( canonical ) : badResult
 	};
 }
 
@@ -337,6 +375,8 @@ module.exports = {
 	makeResultEnvelope,
 	makeTrue,
 	makeUnit,
+	makeVoid,
+	isVoid,
 	wrapInKeyReference,
 	wrapInQuote,
 	wrapInZ6,

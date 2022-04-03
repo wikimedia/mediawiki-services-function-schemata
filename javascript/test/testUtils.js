@@ -126,7 +126,7 @@ async function test( baseName, fn, testObjects ) {
 			const data = envelope.Z22K1;
 			const error = envelope.Z22K2;
 
-			assert.deepEqual( error, { Z1K1: 'Z9', Z9K1: 'Z23' } );
+			assert.deepEqual( error, { Z1K1: 'Z9', Z9K1: 'Z24' } );
 			assert.deepEqual( data, testObject.expected );
 		} );
 	} );
@@ -138,7 +138,7 @@ async function test( baseName, fn, testObjects ) {
 			const data = envelope.Z22K1;
 			const error = envelope.Z22K2;
 
-			assert.deepEqual( data, { Z1K1: 'Z9', Z9K1: 'Z23' } );
+			assert.deepEqual( data, { Z1K1: 'Z9', Z9K1: 'Z24' } );
 			assert.deepEqual( error.Z1K1, { Z1K1: 'Z9', Z9K1: 'Z5' } );
 
 			const notFound = getMissingZ5( error, testObject.errors );

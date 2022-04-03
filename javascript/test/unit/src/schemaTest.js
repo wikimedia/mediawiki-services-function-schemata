@@ -8,9 +8,9 @@ const {
 	validatesAsString,
 	validatesAsFunctionCall,
 	validatesAsArgumentReference,
-	validatesAsUnit,
 	ZObjectKeyFactory } = require( '../../../src/schema.js' );
 const normalize = require( '../../../src/normalize.js' );
+const { isVoid } = require( '../../../src/utils' );
 
 QUnit.module( 'schema.js' );
 
@@ -518,10 +518,10 @@ QUnit.test( 'validatesAsArgumentReference', async ( assert ) => {
 	assert.true( ( await validatesAsArgumentReference( input ) ).isValid() );
 } );
 
-QUnit.test( 'validatesAsUnit', async ( assert ) => {
+QUnit.test( 'isVoid', async ( assert ) => {
 	const input = {
 		Z1K1: 'Z9',
 		Z9K1: 'Z24'
 	};
-	assert.true( ( await validatesAsUnit( input ) ).isValid() );
+	assert.true( ( isVoid( input ) ) );
 } );
