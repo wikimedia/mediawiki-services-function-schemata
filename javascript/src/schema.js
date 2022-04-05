@@ -95,7 +95,7 @@ async function validatesAsReference( Z1 ) {
  * Validates a ZObject against the Function Call schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {boolean} whether Z1 can validated as a Function Call
+ * @return {ValidationStatus} whether Z1 can validated as a Function Call
  */
 async function validatesAsFunctionCall( Z1 ) {
 	return await Z7Validator.validateStatus( Z1 );
@@ -105,7 +105,7 @@ async function validatesAsFunctionCall( Z1 ) {
  * Validates a ZObject against the Argument Reference schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {boolean} whether Z1 can validated as a Argument Reference
+ * @return {ValidationStatus} whether Z1 can validated as a Argument Reference
  */
 async function validatesAsArgumentReference( Z1 ) {
 	return await Z18Validator.validateStatus( Z1 );
@@ -409,7 +409,7 @@ class BaseSchema {
 	 * the result was valid without surfacing errors.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {boolean} whether the object is valid
+	 * @return {ValidationStatus} whether the object is valid
 	 */
 	async validate( maybeValid ) {
 		return ( await this.validateStatus( maybeValid ) ).isValid();
