@@ -10,7 +10,7 @@ const { Mutex } = require( 'async-mutex' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
 let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
-	Z8Validator, Z9Validator, Z18Validator;
+	Z8Validator, Z9Validator, Z18Validator, Z23Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
@@ -24,6 +24,7 @@ function initializeValidators() {
 	Z8Validator = defaultFactory.create( 'Z8_literal' );
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 	Z18Validator = defaultFactory.create( 'Z18_literal' );
+	Z23Validator = defaultFactory.create( 'Z23' );
 }
 
 // TODO (T296659): Migrate validatesAs* functions to utils. Somehow avoid
@@ -109,6 +110,19 @@ async function validatesAsFunctionCall( Z1 ) {
  */
 async function validatesAsArgumentReference( Z1 ) {
 	return await Z18Validator.validateStatus( Z1 );
+}
+
+/**
+ * Validates a ZObject against the Nothing schema.
+ *
+ * TODO (T285433): Remove this function; it supports an old, mistaken usage of
+ * Nothing (instead of Unit) in function-orchestrator.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {ValidationStatus} whether Z1 can validated as Nothing
+ */
+async function validatesAsUnit( Z1 ) {
+	return await Z23Validator.validateStatus( Z1 );
 }
 
 /**
@@ -732,6 +746,7 @@ module.exports = {
 	validatesAsFunctionCall,
 	validatesAsFunction,
 	validatesAsReference,
+	validatesAsUnit,
 	validatesAsArgumentReference,
 	ZObjectKeyFactory
 };

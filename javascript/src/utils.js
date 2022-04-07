@@ -117,7 +117,7 @@ function makeFalse() {
  * @param {boolean} canonical whether output should be in canonical form
  * @return {Object} a Z22
  */
-function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
+function makeResultEnvelopeWithVoid( goodResult = null, badResult = null, canonical = false ) {
 	let Z1K1;
 	if ( canonical ) {
 		Z1K1 = 'Z22';
@@ -131,6 +131,33 @@ function makeResultEnvelope( goodResult = null, badResult = null, canonical = fa
 		Z1K1: Z1K1,
 		Z22K1: goodResult === null ? makeVoid( canonical ) : goodResult,
 		Z22K2: badResult === null ? makeVoid( canonical ) : badResult
+	};
+}
+
+/**
+ * Creates a Z22 containing goodResult and BadResult.
+ *
+ * @deprecated Use makeResultEnvelopeWithVoid instead.
+ *
+ * @param {Object} goodResult Z22K1 of resulting Z22
+ * @param {Object} badResult Z22K2 of resulting Z22
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a Z22
+ */
+function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
+	let Z1K1;
+	if ( canonical ) {
+		Z1K1 = 'Z22';
+	} else {
+		Z1K1 = {
+			Z1K1: 'Z9',
+			Z9K1: 'Z22'
+		};
+	}
+	return {
+		Z1K1: Z1K1,
+		Z22K1: goodResult === null ? makeUnit( canonical ) : goodResult,
+		Z22K2: badResult === null ? makeUnit( canonical ) : badResult
 	};
 }
 
@@ -373,6 +400,7 @@ module.exports = {
 	kidFromGlobalKey,
 	makeFalse,
 	makeResultEnvelope,
+	makeResultEnvelopeWithVoid,
 	makeTrue,
 	makeUnit,
 	makeVoid,
