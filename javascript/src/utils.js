@@ -202,10 +202,16 @@ function isEmptyZList( ZList ) {
  * @return {Array} an array consisting of all elements of ZList
  */
 function convertZListToArray( ZList ) {
+	if ( ZList === undefined ) {
+		console.error( 'convertZListToArray called with undefined; please fix your caller' );
+		return [];
+	}
+
 	// TODO (T292788): Remove support for Z10K1.
 	let tail = ZList;
 	const result = [];
 	while ( true ) {
+		// FIXME: This should only be called on "an already-validated ZList", which this isn't?
 		if ( isEmptyZList( tail ) ) {
 			break;
 		}

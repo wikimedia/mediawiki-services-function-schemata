@@ -489,6 +489,10 @@ QUnit.test( 'convertZListToArray with Typed List', ( assert ) => {
 	assert.deepEqual( expected, convertZListToArray( ZList ) );
 } );
 
+QUnit.test( 'convertZListToArray with undefined', ( assert ) => {
+	assert.deepEqual( [], convertZListToArray( undefined ) );
+} );
+
 QUnit.test( 'isZid', async ( assert ) => {
 	const testValues = [
 		{ value: '', isKey: false, isZid: false, isGlobalKey: false, message: 'Empty string' },
