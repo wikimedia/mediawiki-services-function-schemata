@@ -24,7 +24,8 @@ function isZid( k ) {
 }
 
 function isReference( z ) {
-	return z.match( /^[A-Z][1-9]\d*$/ ) !== null;
+	// Note that A1 and Q34 are References but K2 isn't.
+	return z.match( /^[A-JL-Z][1-9]\d*$/ ) !== null;
 }
 
 function isGlobalKey( k ) {

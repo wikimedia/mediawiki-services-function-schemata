@@ -202,6 +202,18 @@ test_objects:
         Z6K1: Z1K1
       expected: Z1K1
 
+    - name: unneccessary escaped string key for Z0 (invalid ZID)
+      object:
+        Z1K1: Z6
+        Z6K1: Z0
+      expected: Z0
+
+    - name: unneccessary escaped string key for K3 (local keys are not References)
+      object:
+        Z1K1: Z6
+        Z6K1: K3
+      expected: K3
+
     - name: unneccessary escaped string key with whitespace
       object:
         Z1K1: Z6

@@ -208,6 +208,18 @@ test_objects:
         Z1K1: Z6
         Z6K1: Z1K1
 
+    - name: potential string key for Z0 (invalid ZID)
+      object: Z0
+      expected:
+        Z1K1: Z6
+        Z6K1: Z0
+
+    - name: potential string key for K3 (local keys are not References)
+      object: K3
+      expected:
+        Z1K1: Z6
+        Z6K1: K3
+
     - name: string with wrong key
       object:
         Z1K1: Z6
