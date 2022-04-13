@@ -11,7 +11,7 @@ const normalZ1Validator = normalFactory.create( 'Z1' );
 const Z5Validator = normalFactory.create( 'Z5_literal' );
 const Z6Validator = normalFactory.create( 'Z6_literal' );
 const Z9Validator = normalFactory.create( 'Z9' );
-const Z10Validator = normalFactory.create( 'Z10' );
+const Z10Validator = normalFactory.create( 'Z10_literal' );
 const Z18Validator = normalFactory.create( 'Z18' );
 
 async function canonicalizeArray( a ) {
@@ -40,10 +40,9 @@ async function canonicalizeObject( o ) {
 		}
 	}
 
-	const listKeyRegex = /^Z881(.*)$/;
-	const typeKey = ( await ZObjectKeyFactory.create( o.Z1K1 ) ).asString();
+	const typeKey = ( await ZObjectKeyFactory.create( o.Z1K1 ) );
 	if (
-		( await Z10Validator.validate( o ) || typeKey.match( listKeyRegex ) ) &&
+		( await Z10Validator.validate( o ) || typeKey.ZID_ === 'Z881' ) &&
         !isArgDeclaration ) {
 		return await Promise.all( convertZListToArray( o ).map( canonicalize ) );
 	}
@@ -60,6 +59,7 @@ async function canonicalizeObject( o ) {
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
 async function canonicalize( o ) {
 	if ( isString( o ) ) {
+
 		return o;
 	}
 
