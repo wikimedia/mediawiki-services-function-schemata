@@ -10,7 +10,9 @@ const {
 	validatesAsArgumentReference,
 	ZObjectKeyFactory } = require( '../../../src/schema.js' );
 const normalize = require( '../../../src/normalize.js' );
-const { isVoid } = require( '../../../src/utils' );
+const {
+	isVoid,
+	isZMap } = require( '../../../src/utils' );
 
 QUnit.module( 'schema.js' );
 
@@ -364,6 +366,26 @@ QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', async
 		}
 	};
 	assert.deepEqual( ( await ZObjectKeyFactory.create( Z1, /* benjamin= */ true ) ).asString(), 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)' );
+} );
+
+QUnit.test( 'ZObjectKeyFactory with invalid object', async ( assert ) => {
+	const invalidZObject = {
+		Hello: 'Molly',
+		This: 'is Louis, Molly'
+	};
+	let failedResponse;
+	try {
+		failedResponse = ( await ZObjectKeyFactory.create( invalidZObject ) ).asString();
+	} catch ( error ) {
+		// These are implementation details and not guaranteed-stable
+		assert.strictEqual( error.name, 'Error' );
+		assert.strictEqual( error.message, 'Invalid ZObject input for type' );
+		assert.true( isZMap( error.errorZObjectPayload ) );
+		assert.strictEqual( error.errorZObjectPayload.K1.K1.K1.Z6K1, 'errors' );
+		assert.strictEqual( error.errorZObjectPayload.K1.K1.K2.Z5K1.Z9K1, 'Z502' );
+	}
+	// If we've set a response then something went wrong in going wrong.
+	assert.deepEqual( failedResponse, undefined );
 } );
 
 QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', async ( assert ) => {

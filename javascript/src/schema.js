@@ -380,13 +380,28 @@ class ZObjectKeyFactory {
 	 * @param {Object} ZObject a ZObject
 	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
 	 * @return {Promise<Object>} (Simple|Generic|UserDefined)TypeKey or ZObjectKey
+	 * @throws {Error} If input is not a valid ZObject.
 	 */
 	static async create( ZObject, benjamin = false ) {
 		const normalize = require( './normalize.js' );
 		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-		const normalizedEnvelope = await normalize( ZObject,
-			/* generically= */ true, /* withVoid= */ true, /* fromBenjamin */ benjamin );
-		// FIXME (T304144): return here on error.
+		const normalizedEnvelope = await normalize(
+			ZObject,
+			/* generically= */ true,
+			/* withVoid= */ true,
+			/* fromBenjamin */ benjamin
+		);
+
+		// (T304144): If validation failed with an error; return it.
+		if (
+			normalizedEnvelope.Z22K1.Z1K1 === 'Z9' &&
+			normalizedEnvelope.Z22K1.Z9K1 === 'Z24'
+		) {
+			const responseError = new Error( 'Invalid ZObject input for type' );
+			responseError.errorZObjectPayload = normalizedEnvelope.Z22K2;
+			throw responseError;
+		}
+
 		const normalized = normalizedEnvelope.Z22K1;
 		const identity = await findIdentity( normalized );
 		if ( identity === null ) {
