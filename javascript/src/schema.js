@@ -387,7 +387,9 @@ class ZObjectKeyFactory {
 	 */
 	static async create( ZObject ) {
 		const normalize = require( './normalize.js' );
-		const normalizedEnvelope = await normalize( ZObject );
+		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+		const normalizedEnvelope = await normalize( ZObject,
+			/* generically= */ true, /* withVoid= */ true );
 		// FIXME (T304144): return here on error.
 		const normalized = normalizedEnvelope.Z22K1;
 		const identity = await findIdentity( normalized );
@@ -703,8 +705,10 @@ class SchemaFactory {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
 
+		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 		const normalized = await Promise.all(
-			Z4s.map( async ( o ) => ( await normalize( o ) ).Z22K1 ) );
+			Z4s.map( async ( o ) => ( await normalize( o,
+				/* generically= */ true, /* withVoid= */ true ) ).Z22K1 ) );
 
 		const errorArray = await Promise.all(
 			normalized.map( async ( o ) => ( await Z5Validator.validateStatus( o ) ).isValid() )
@@ -717,7 +721,8 @@ class SchemaFactory {
 		// TODO (T304648): Interrogate whether doing this operation twice (normalized and normalZ4s)
 		// is intentional and, if so, add comment to the code explaining why.
 		const normalZ4s = await Promise.all(
-			Z4s.map( async ( Z4 ) => ( await normalize( Z4 ) ).Z22K1 ) );
+			Z4s.map( async ( Z4 ) => ( await normalize( Z4,
+				/* generically= */ true, /* withVoid= */ true ) ).Z22K1 ) );
 
 		// TODO (T304648): Interrogate whether doing the following identical loops and duplicating
 		// ZObjectKeyFactory.create( item ).asString() is intentional, and if so, add comment

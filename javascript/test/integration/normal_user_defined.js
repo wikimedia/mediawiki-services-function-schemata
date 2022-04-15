@@ -13,7 +13,9 @@ async function test( ZID ) {
 	const normalize = require( '../../src/normalize.js' );
 	const normalFile = path.join( 'test_data', 'normal_user_defined', ZID + '.yaml' );
 	const testDescriptor = readYaml( normalFile );
-	const testZ4 = ( await normalize( testDescriptor.test_Z4 ) ).Z22K1;
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const testZ4 = ( await normalize( testDescriptor.test_Z4,
+		/* generically= */ true, /* withVoid= */ true ) ).Z22K1;
 	const normalValidatorMap = await factory.createUserDefined( [ testZ4 ] );
 	const genericKey = ( await ZObjectKeyFactory.create( testZ4 ) ).asString();
 	const normalValidator = normalValidatorMap.get( genericKey );

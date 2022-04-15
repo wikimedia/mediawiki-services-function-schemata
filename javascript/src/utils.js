@@ -143,7 +143,7 @@ function makeResultEnvelopeWithVoid( goodResult = null, badResult = null, canoni
  * @param {Object} goodResult Z22K1 of resulting Z22
  * @param {Object} badResult Z22K2 of resulting Z22
  * @param {boolean} canonical whether output should be in canonical form
- * @return {Object} a Z22
+ * @return {Object} a Z22 / Result envelope
  */
 function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
 	let Z1K1;

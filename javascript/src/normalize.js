@@ -3,7 +3,8 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { arrayToZ10, convertArrayToZList, isArray, isReference, isString, makeResultEnvelope } = require( './utils.js' );
+const { arrayToZ10, convertArrayToZList, isArray, isReference, isString,
+	makeResultEnvelope, makeResultEnvelopeWithVoid } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
 const mixedFactory = SchemaFactory.MIXED();
@@ -62,19 +63,27 @@ async function normalize( o, generically ) {
 
 /**
  * Normalizes a canonical ZObject. Returns the normalized ZObject or a
- * Z5/Error in a Z22/Pair.
+ * Z5/Error in a Z22/Pair.  The withVoid argument supports our transition
+ * from Z23 to Z24 for the non-contentful portion of the envelope.
  *
  * @param {Object} o a ZObject
  * @param {boolean} generically whether to produce generic lists (Z10s if false)
- * @return {Object} a Z22
+ * @param {boolean} withVoid Whether to use Z24/void or Z23/Nothing
+ * @return {Object} a Z22 / Result envelope
  */
-async function normalizeExport( o, generically = true ) {
+async function normalizeExport( o, generically = true, withVoid = false ) {
 	const status = await mixedZ1Validator.validateStatus( o );
+	let functor;
+	if ( withVoid ) {
+		functor = makeResultEnvelopeWithVoid;
+	} else {
+		functor = makeResultEnvelope;
+	}
 
 	if ( status.isValid() ) {
-		return makeResultEnvelope( await normalize( o, generically ), null );
+		return functor( await normalize( o, generically ), null );
 	} else {
-		return makeResultEnvelope( null, status.getZ5() );
+		return functor( null, status.getZ5() );
 	}
 }
 

@@ -162,7 +162,9 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
 		],
 		Z4K3: 'Z1000'
 	};
-	const Z4 = ( await normalize( canonicalZ4 ) ).Z22K1;
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const Z4 = ( await normalize( canonicalZ4,
+		/* generically= */ true, /* withVoid= */ true ) ).Z22K1;
 	const schemaMap = await SchemaFactory.NORMAL().createUserDefined( [ Z4 ] );
 	// TODO (T298049): Why is the first entry here a ZObjectKey instead of a UserDefinedTypeKey?
 	assert.deepEqual( [
@@ -225,7 +227,9 @@ QUnit.test( 'subValidator for generic schema', async ( assert ) => {
 		],
 		Z4K3: 'Z1000'
 	};
-	const Z4 = ( await normalize( canonicalZ4 ) ).Z22K1;
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const Z4 = ( await normalize( canonicalZ4,
+		/* generically= */ true, /* withVoid= */ true ) ).Z22K1;
 	const schemaMap = await SchemaFactory.NORMAL().createUserDefined( [ Z4 ] );
 	const objectKey = await ZObjectKeyFactory.create( Z4 );
 	const topLevel = schemaMap.get( objectKey.asString() );
@@ -472,13 +476,17 @@ QUnit.test( 'validatesAsType', async ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	const normalizedZ4 = ( await normalize( Z4 ) ).Z22K1;
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const normalizedZ4 = ( await normalize( Z4,
+		/* generically= */ true, /* withVoid= */ true ) ).Z22K1;
 	assert.true( ( await validatesAsType( normalizedZ4 ) ).isValid() );
 } );
 
 QUnit.test( 'validatesAsError', async ( assert ) => {
 	const Z5 = { Z1K1: 'Z5', Z5K1: 'Z500', Z5K2: { Z1K1: { Z1K1: 'Z7', Z7K1: 'Z885', Z885K1: 'Z500' }, Z500K1: 'Basic data' } };
-	const normalizedZ5 = ( await normalize( Z5 ) ).Z22K1;
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const normalizedZ5 = ( await normalize( Z5,
+	/* generically= */ true, /* withVoid= */ true ) ).Z22K1;
 	assert.true( ( await validatesAsError( normalizedZ5 ) ).isValid() );
 } );
 

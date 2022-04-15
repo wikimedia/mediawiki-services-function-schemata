@@ -2,7 +2,7 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { convertZListToArray, isArray, isReference, isString, makeResultEnvelope } = require( './utils.js' );
+const { convertZListToArray, isArray, isReference, isString, makeResultEnvelopeWithVoid, makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory, ZObjectKeyFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 
@@ -72,13 +72,15 @@ async function canonicalize( o ) {
 
 /**
  * Canonicalizes a normalized ZObject. Returns either the canonicalized
- * ZObject or a Z5/Error.
+ * ZObject or a Z5/Error.  The withVoid argument supports our transition
+ * from Z23 to Z24 for the non-contentful portion of the envelope.
  *
  * @param {Object} o a ZObject
+ * @param {boolean} withVoid Whether to use Z24/void or Z23/Nothing
  * @return {Array} an array of [data, error]
  */
-async function canonicalizeExport( o ) {
-	const normalized = await normalize( o, /* generically= */false );
+async function canonicalizeExport( o, withVoid = false ) {
+	const normalized = await normalize( o, /* generically= */false, withVoid );
 
 	if ( ( await Z5Validator.validateStatus( normalized.Z22K2 ) ).isValid() ) {
 		// forward the error that happened in preliminary normalization
@@ -87,10 +89,17 @@ async function canonicalizeExport( o ) {
 
 	const status = await normalZ1Validator.validateStatus( normalized );
 
-	if ( status.isValid() ) {
-		return makeResultEnvelope( await canonicalize( normalized.Z22K1 ), null );
+	let functor;
+	if ( withVoid ) {
+		functor = makeResultEnvelopeWithVoid;
 	} else {
-		return makeResultEnvelope( null, status.getZ5() );
+		functor = makeResultEnvelope;
+	}
+
+	if ( status.isValid() ) {
+		return functor( await canonicalize( normalized.Z22K1 ), null );
+	} else {
+		return functor( null, status.getZ5() );
 	}
 }
 
