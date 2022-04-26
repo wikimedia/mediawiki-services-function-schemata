@@ -111,58 +111,6 @@ function makeFalse() {
 }
 
 /**
- * Creates a Z22 containing goodResult and BadResult.
- *
- * @param {Object} goodResult Z22K1 of resulting Z22
- * @param {Object} badResult Z22K2 of resulting Z22
- * @param {boolean} canonical whether output should be in canonical form
- * @return {Object} a Z22
- */
-function makeResultEnvelopeWithVoid( goodResult = null, badResult = null, canonical = false ) {
-	let Z1K1;
-	if ( canonical ) {
-		Z1K1 = 'Z22';
-	} else {
-		Z1K1 = {
-			Z1K1: 'Z9',
-			Z9K1: 'Z22'
-		};
-	}
-	return {
-		Z1K1: Z1K1,
-		Z22K1: goodResult === null ? makeVoid( canonical ) : goodResult,
-		Z22K2: badResult === null ? makeVoid( canonical ) : badResult
-	};
-}
-
-/**
- * Creates a Z22 containing goodResult and BadResult.
- *
- * @deprecated Use makeResultEnvelopeWithVoid instead.
- *
- * @param {Object} goodResult Z22K1 of resulting Z22
- * @param {Object} badResult Z22K2 of resulting Z22
- * @param {boolean} canonical whether output should be in canonical form
- * @return {Object} a Z22 / Result envelope
- */
-function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
-	let Z1K1;
-	if ( canonical ) {
-		Z1K1 = 'Z22';
-	} else {
-		Z1K1 = {
-			Z1K1: 'Z9',
-			Z9K1: 'Z22'
-		};
-	}
-	return {
-		Z1K1: Z1K1,
-		Z22K1: goodResult === null ? makeUnit( canonical ) : goodResult,
-		Z22K2: badResult === null ? makeUnit( canonical ) : badResult
-	};
-}
-
-/**
  * Retrieves the head of a ZList.
  *
  * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
@@ -333,6 +281,309 @@ function getTypedListType( elementType, canonical = false ) {
 	return listType;
 }
 
+/**
+ * Create a new, empty ZMap with the given valueType.
+ * At present, the key type of a ZMap can only be Z6 / String or Z39 / Key reference.
+ * TODO (T302015) When ZMap keys are extended beyond Z6/Z39, update accordingly
+ *
+ * @param {Object} keyType A Z9 instance in normal form
+ * @param {Object} valueType A ZObject in normal form
+ * @return {Object} a Z883 / ZMap with no entries, in normal form
+ */
+function makeEmptyZMap( keyType, valueType ) {
+	const allowedKeyTypes = [ 'Z6', 'Z39' ];
+	if ( !allowedKeyTypes.includes( keyType.Z9K1 ) ) {
+		console.error( 'makeEmptyZMap called with invalid keyType' );
+		return undefined;
+	}
+	const mapType = {
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+		Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' },
+		Z883K1: keyType,
+		Z883K2: valueType
+	};
+	// The map's K1 property is a list of pairs, and it's required to be present
+	// even when empty
+	const listType = {
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+		Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' },
+		Z881K1: {
+			Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+			Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' },
+			Z882K1: keyType,
+			Z882K2: valueType
+		}
+	};
+	return {
+		Z1K1: mapType,
+		K1: { Z1K1: listType }
+	};
+}
+
+/**
+ * Does a quick check to determine if the given ZObject is a Z883 / Map.
+ * Does not validate the ZObject.
+ *
+ * @param {Object} ZObject a Z1/ZObject, in canonical or normal form
+ * @return {boolean}
+ */
+function isZMap( ZObject ) {
+	return ( ZObject && isObject( ZObject ) && isObject( ZObject.Z1K1 ) &&
+		( ( ZObject.Z1K1.Z1K1 === 'Z7' && ZObject.Z1K1.Z7K1 === 'Z883' ) ||
+			( isObject( ZObject.Z1K1.Z1K1 ) && isObject( ZObject.Z1K1.Z7K1 ) &&
+				ZObject.Z1K1.Z1K1.Z9K1 === 'Z7' && ZObject.Z1K1.Z7K1.Z9K1 === 'Z883' ) ) );
+}
+
+/**
+ * Ensures there is an entry for the given key / value in the given ZMap.  If there is
+ * already an entry for the given key, overwrites the corresponding value.  Otherwise,
+ * creates a new entry. N.B.: Modifies the value of the ZMap's K1 in place.
+ *
+ * TODO (T302015) When ZMap keys are extended beyond Z6/Z39, update accordingly
+ *
+ * @param {Object} ZMap a Z883/Typed map, in normal form
+ * @param {Object} key a Z6 or Z39 instance, in normal form
+ * @param {Object} value a Z1/ZObject, in normal form
+ * @return {Object} the updated ZMap, in normal form
+ */
+function setZMapValue( ZMap, key, value ) {
+	if ( ZMap === undefined ) {
+		console.error( 'setZMapValue called with undefined; please fix your caller' );
+		return ZMap;
+	}
+
+	let tail = ZMap.K1;
+	while ( true ) {
+		if ( isEmptyZList( tail ) ) {
+			break;
+		}
+		const entry = getHead( tail );
+		if ( ( entry.K1.Z1K1 === 'Z6' && key.Z1K1 === 'Z6' && entry.K1.Z6K1 === key.Z6K1 ) ||
+			( entry.K1.Z1K1 === 'Z39' && key.Z1K1 === 'Z39' && entry.K1.Z39K1.Z9K1 === key.Z39K1.Z9K1 ) ) {
+			entry.K2 = value;
+			return ZMap;
+		}
+		tail = getTail( tail );
+	}
+	// The key isn't present in the map, so add an entry for it
+	const keyType = ZMap.Z1K1.Z883K1;
+	const valueType = ZMap.Z1K1.Z883K2;
+	const pairType = {
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+		Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' },
+		Z882K1: keyType,
+		Z882K2: valueType
+	};
+	tail.K1 = { Z1K1: pairType, K1: key, K2: value };
+	return ZMap;
+}
+
+/**
+ * Return the ZMap value corresponding to the given key, if present.
+ * TODO (T302015) When ZMap keys are extended beyond Z6/Z39, update accordingly
+ *
+ * @param {Object} ZMap a Z883/Typed map, in normal form
+ * @param {Object} key a Z6 or Z39 instance, in normal form
+ * @return {Object} a Z1/Object, the value of the map entry with the given key,
+ * or undefined if there is no such entry
+ */
+function getZMapValue( ZMap, key ) {
+	if ( ZMap === undefined ) {
+		console.error( 'getZMapValue called with undefined; please fix your caller' );
+		return undefined;
+	}
+
+	let tail = ZMap.K1;
+	while ( tail !== undefined ) {
+		if ( isEmptyZList( tail ) ) {
+			break;
+		}
+		const entry = getHead( tail );
+
+		if ( ( entry.K1.Z1K1 === 'Z6' && key.Z1K1 === 'Z6' && entry.K1.Z6K1 === key.Z6K1 ) ||
+			( entry.K1.Z1K1 === 'Z39' && key.Z1K1 === 'Z39' && entry.K1.Z39K1.Z9K1 === key.Z39K1.Z9K1 ) ) {
+			return entry.K2;
+		}
+		tail = getTail( tail );
+	}
+	return undefined;
+}
+
+/**
+ * Creates a Z22 containing goodResult and BadResult.
+ *
+ * @param {Object} goodResult Z22K1 of resulting Z22
+ * @param {Object} badResult Z22K2 of resulting Z22
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a Z22
+ */
+function makeResultEnvelopeWithVoid( goodResult = null, badResult = null, canonical = false ) {
+	let Z1K1;
+	if ( canonical ) {
+		Z1K1 = 'Z22';
+	} else {
+		Z1K1 = {
+			Z1K1: 'Z9',
+			Z9K1: 'Z22'
+		};
+	}
+	return {
+		Z1K1: Z1K1,
+		Z22K1: goodResult === null ? makeVoid( canonical ) : goodResult,
+		Z22K2: badResult === null ? makeVoid( canonical ) : badResult
+	};
+}
+
+/**
+ * Creates a Z22 containing goodResult and BadResult.
+ *
+ * @deprecated Use makeResultEnvelopeWithVoid instead.
+ *
+ * @param {Object} goodResult Z22K1 of resulting Z22
+ * @param {Object} badResult Z22K2 of resulting Z22
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a Z22 / Result envelope
+ */
+function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
+	let Z1K1;
+	if ( canonical ) {
+		Z1K1 = 'Z22';
+	} else {
+		Z1K1 = {
+			Z1K1: 'Z9',
+			Z9K1: 'Z22'
+		};
+	}
+	return {
+		Z1K1: Z1K1,
+		Z22K1: goodResult === null ? makeUnit( canonical ) : goodResult,
+		Z22K2: badResult === null ? makeUnit( canonical ) : badResult
+	};
+}
+
+/**
+ * Creates a map-based Z22 containing result and metadata.  metadata is normally a Z883 / Map.
+ * However, if metadata is a Z5 / Error object, we place it in a new ZMap, as the value of an entry
+ * with key "errors".  This is to support our transition from the older basic Z22s to map-based
+ * Z22s.
+ *
+ * @param {Object} result Z22K1 of resulting Z22
+ * @param {Object} metadata Z22K2 of resulting Z22 - either a Z883 / Map or a Z5 / Error
+ * @param {boolean} canonical whether output should be in canonical form
+ * @return {Object} a Z22
+ */
+function makeMappedResultEnvelope( result = null, metadata = null, canonical = false ) {
+	let ZMap;
+	if ( metadata && !isZMap( metadata ) && ( metadata.Z1K1 === 'Z5' || metadata.Z1K1.Z9K1 === 'Z5' ) ) {
+		const keyType = { Z1K1: 'Z9', Z9K1: 'Z6' };
+		const valueType = { Z1K1: 'Z9', Z9K1: 'Z1' };
+		ZMap = makeEmptyZMap( keyType, valueType );
+		setZMapValue( ZMap, { Z1K1: 'Z6', Z6K1: 'errors' }, metadata );
+	} else {
+		ZMap = metadata;
+	}
+	let envelopeType;
+	if ( canonical ) {
+		envelopeType = 'Z22';
+	} else {
+		envelopeType = {
+			Z1K1: 'Z9',
+			Z9K1: 'Z22'
+		};
+	}
+	return {
+		Z1K1: envelopeType,
+		Z22K1: result === null ? makeVoid( canonical ) : result,
+		Z22K2: ZMap === null ? makeVoid( canonical ) : ZMap
+	};
+}
+
+/**
+ * Converts a "basic" Z22/Evaluation result into a metadata-map Z22.
+ * Z22K1, the result, remains the same.  Z22K2, instead of a Z5/Error (or Z24/void),
+ * will contain a Z882/Map (Z6 -> Z1).  If the input Z22K2 contains a Z5,
+ * the map will contain an entry with key "errors", holding the Z5 value that previously
+ * was in Z22K2.
+ *
+ * N.B.: Temporary method, supporting transition to map-based Z22.
+ * Modifies the value of Z22K2 in place
+ *
+ * If the input already has a metadata map, returns it without any modification.
+ *
+ * @param {Object} ResultEnvelope a basic Z22/Evaluation result in normal form
+ * @return {Object} a metadata-map Z22/Evaluation result in normal form
+ */
+function maybeUpgradeResultEnvelope( ResultEnvelope ) {
+	if ( ResultEnvelope === undefined ) {
+		console.error( 'maybeUpgradeResultEnvelope called with undefined; please fix your caller' );
+		return undefined;
+	}
+	if ( isVoid( ResultEnvelope.Z22K2 ) || isZMap( ResultEnvelope.Z22K2 ) ) {
+		// Nothing to do: Z22K2 is void or result envelope already has a metadata map
+		return ResultEnvelope;
+	}
+
+	const errorValue = ResultEnvelope.Z22K2;
+	const keyType = { Z1K1: 'Z9', Z9K1: 'Z6' };
+	const valueType = { Z1K1: 'Z9', Z9K1: 'Z1' };
+	const ZMap = makeEmptyZMap( keyType, valueType );
+	setZMapValue( ZMap, { Z1K1: 'Z6', Z6K1: 'errors' }, errorValue );
+	ResultEnvelope.Z22K2 = ZMap;
+	return ResultEnvelope;
+}
+
+/**
+ * Converts a metadata-map Z22/Evaluation result into a "basic" Z22.
+ * Z22K1, the result, remains the same.  Z22K2, instead of a Z882/Map (Z6 -> Z1),
+ * will contain a Z5/Error extracted from the "errors" entry in the map (or Z24/void if
+ * there is no such entry).
+ *
+ * N.B.: Temporary method, supporting transition to map-based Z22.
+ * Modifies the value of Z22K2 in place.
+ *
+ * If the input is already basic, returns it without any modification.
+ *
+ * @param {Object} ResultEnvelope a Z22/Evaluation result with metadata map
+ * @return {Object} a basic Z22/Evaluation result
+ */
+function maybeDowngradeResultEnvelope( ResultEnvelope ) {
+	if ( ResultEnvelope === undefined ) {
+		console.error( 'maybeDowngradeResultEnvelope called with undefined; please fix your caller' );
+		return undefined;
+	}
+	if ( isVoid( ResultEnvelope.Z22K2 ) || !isZMap( ResultEnvelope.Z22K2 ) ) {
+		// Nothing to do; Z22K2 is void or result envelope is already basic
+		return ResultEnvelope;
+	}
+
+	let errorValue = getZMapValue( ResultEnvelope.Z22K2, { Z1K1: 'Z6', Z6K1: 'errors' } );
+	if ( errorValue === undefined ) {
+		errorValue = makeVoid();
+	}
+	ResultEnvelope.Z22K2 = errorValue;
+	return ResultEnvelope;
+}
+
+/**
+ * Retrieves the Z5/Error, if present, from the given Z22/Evaluation result (envelope).
+ * Works both with older "basic" Z22s and with newer map-based Z22s.
+ *
+ * @param {Object} envelope a Z22
+ * @return {Object} a Z5/Error if the envelope contains an error; Z24/void otherwise
+ */
+function getError( envelope ) {
+	const metadata = envelope.Z22K2;
+	if ( isZMap( metadata ) ) {
+		let error = getZMapValue( metadata, { Z1K1: 'Z6', Z6K1: 'errors' } );
+		if ( error === undefined ) {
+			error = makeVoid();
+		}
+		return error;
+	} else {
+		return metadata;
+	}
+}
+
 const builtInTypes = new Set( [
 	'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
 	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
@@ -408,6 +659,7 @@ module.exports = {
 	makeFalse,
 	makeResultEnvelope,
 	makeResultEnvelopeWithVoid,
+	makeMappedResultEnvelope,
 	makeTrue,
 	makeUnit,
 	makeVoid,
@@ -415,5 +667,12 @@ module.exports = {
 	wrapInKeyReference,
 	wrapInQuote,
 	wrapInZ6,
-	wrapInZ9
+	wrapInZ9,
+	makeEmptyZMap,
+	isZMap,
+	setZMapValue,
+	getZMapValue,
+	maybeUpgradeResultEnvelope,
+	maybeDowngradeResultEnvelope,
+	getError
 };

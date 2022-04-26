@@ -1,6 +1,6 @@
 'use strict';
 
-const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeVoid, makeResultEnvelope, makeResultEnvelopeWithVoid, convertArrayToZList, convertArrayToKnownTypedList, getTypedListType, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
+const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeVoid, makeEmptyZMap, isZMap, setZMapValue, getZMapValue, makeResultEnvelope, makeResultEnvelopeWithVoid, makeMappedResultEnvelope, maybeUpgradeResultEnvelope, maybeDowngradeResultEnvelope, getError, convertArrayToZList, convertArrayToKnownTypedList, getTypedListType, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -527,7 +527,92 @@ QUnit.test( 'isZid', async ( assert ) => {
 	} );
 } );
 
+const mapType1 = {
+	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+	Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' },
+	Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
+	Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
+};
+const listType1 = {
+	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+	Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' },
+	Z881K1: {
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+		Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' },
+		Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
+		Z882K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
+	}
+};
+const pairType1 = {
+	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+	Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' },
+	Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
+	Z882K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
+};
+const error1 = {
+	Z1K1: 'Z5',
+	Z5K1: {
+		Z1K1: 'Z507',
+		Z507K1: 'Could not dereference Z7K1'
+	}
+};
+const bogusMapType = {
+	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+	Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' },
+	Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
+	Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
+};
+
+QUnit.test( 'isZMap', async ( assert ) => {
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const singletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+	const doubletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+	const bogusZMap = { Z1K1: bogusMapType, K1: { Z1K1: listType1 } };
+	assert.strictEqual( isZMap( emptyZMap ), true );
+	assert.strictEqual( isZMap( singletonZMap ), true );
+	assert.strictEqual( isZMap( doubletonZMap ), true );
+	assert.strictEqual( isZMap( bogusZMap ), false );
+} );
+
+QUnit.test( 'getZMapValue', async ( assert ) => {
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const singletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+	const doubletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+	assert.strictEqual( getZMapValue( emptyZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), undefined );
+	assert.deepEqual( getZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), { Z1K1: 'Z6', Z6K1: 'Be warned!' } );
+	assert.deepEqual( getZMapValue( doubletonZMap, { Z1K1: 'Z6', Z6K1: 'errors' } ), error1 );
+} );
+
+QUnit.test( 'setZMapValue', async ( assert ) => {
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const singletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+	const modifiedSingletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1,
+				K1: { Z1K1: 'Z6', Z6K1: 'warnings' },
+				K2: { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } } } };
+	assert.deepEqual( setZMapValue( emptyZMap, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' } ),
+		singletonZMap );
+	assert.deepEqual( setZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } ),
+		modifiedSingletonZMap );
+} );
+
 QUnit.test( 'make* functions', async ( assert ) => {
+	const singletonZMapErrorsOnly = { Z1K1: mapType1,
+		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
 	assert.deepEqual( makeTrue(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } } );
 	assert.deepEqual( makeFalse(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z42' } } );
 
@@ -542,6 +627,86 @@ QUnit.test( 'make* functions', async ( assert ) => {
 	assert.deepEqual( makeResultEnvelopeWithVoid( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
 	assert.deepEqual( makeResultEnvelopeWithVoid( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
 	assert.deepEqual( makeResultEnvelopeWithVoid( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
+
+	assert.deepEqual( makeMappedResultEnvelope( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
+	assert.deepEqual( makeMappedResultEnvelope( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
+	assert.deepEqual( makeMappedResultEnvelope( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
+	assert.deepEqual( makeMappedResultEnvelope( null, singletonZMapErrorsOnly ),
+		mappedResultEnvelopeErrorsOnly );
+	assert.deepEqual( makeMappedResultEnvelope( null, error1 ), mappedResultEnvelopeErrorsOnly );
+
+	assert.deepEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z6' }, { Z1K1: 'Z9', Z9K1: 'Z1' } ), {
+		Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' }, Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' } },
+		K1: { Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' }, Z881K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' }, Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z882K2: { Z1K1: 'Z9', Z9K1: 'Z1' } } } }
+	} );
+	assert.deepEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z39' }, { Z1K1: 'Z9', Z9K1: 'Z5' } ), {
+		Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' }, Z883K1: { Z1K1: 'Z9', Z9K1: 'Z39' }, Z883K2: { Z1K1: 'Z9', Z9K1: 'Z5' } },
+		K1: { Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' }, Z881K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' }, Z882K1: { Z1K1: 'Z9', Z9K1: 'Z39' }, Z882K2: { Z1K1: 'Z9', Z9K1: 'Z5' } } } }
+	} );
+	assert.deepEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z6' }, listType1 ), {
+		Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' }, Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z883K2: listType1 },
+		K1: { Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' }, Z881K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' }, Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z882K2: listType1 } } }
+	} );
+	assert.deepEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z6' }, mapType1 ), {
+		Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' }, Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z883K2: mapType1 },
+		K1: { Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' }, Z881K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' }, Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z882K2: mapType1 } } }
+	} );
+
+} );
+
+QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
+	const singletonZMapErrorsOnly = { Z1K1: mapType1,
+		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+	const basicResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
+	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
+	const emptyResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } };
+	assert.strictEqual( maybeUpgradeResultEnvelope( mappedResultEnvelopeErrorsOnly ),
+		mappedResultEnvelopeErrorsOnly );
+	assert.strictEqual( maybeUpgradeResultEnvelope( emptyResultEnvelope ), emptyResultEnvelope );
+	assert.deepEqual( maybeUpgradeResultEnvelope( basicResultEnvelopeErrorsOnly ),
+		mappedResultEnvelopeErrorsOnly );
+} );
+
+QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
+	const singletonZMapErrorsOnly = { Z1K1: mapType1,
+		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+	const emptyResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } };
+	const doubletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+	const basicResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
+	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
+	const mappedResultEnvelope2Entries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: doubletonZMap };
+	assert.deepEqual( maybeDowngradeResultEnvelope( { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
+	assert.deepEqual( maybeDowngradeResultEnvelope( emptyResultEnvelope ), emptyResultEnvelope );
+	assert.deepEqual( maybeDowngradeResultEnvelope( mappedResultEnvelopeErrorsOnly ),
+		basicResultEnvelopeErrorsOnly );
+	assert.deepEqual( maybeDowngradeResultEnvelope( mappedResultEnvelope2Entries ),
+		basicResultEnvelopeErrorsOnly );
+} );
+
+QUnit.test( 'getError', async ( assert ) => {
+	const singletonZMapErrorsOnly = { Z1K1: mapType1,
+		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const mappedResultEnvelopeNoEntries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: emptyZMap };
+	const singletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+	const mappedResultEnvelopeWithWarnings = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMap };
+	const doubletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+	const basicResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
+	const mappedResultEnvelope2Entries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: doubletonZMap };
+	assert.strictEqual( getError( mappedResultEnvelopeErrorsOnly ), error1 );
+	assert.strictEqual( getError( mappedResultEnvelope2Entries ), error1 );
+	assert.strictEqual( getError( basicResultEnvelope ), error1 );
+	assert.deepEqual( getError( mappedResultEnvelopeNoEntries ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
+	assert.deepEqual( getError( mappedResultEnvelopeWithWarnings ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
 } );
 
 QUnit.test( 'inferType', async ( assert ) => {

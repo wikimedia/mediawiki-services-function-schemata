@@ -5,6 +5,7 @@
 const { convertZListToArray, isArray, isReference, isString, makeResultEnvelopeWithVoid, makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory, ZObjectKeyFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
+const { getError } = require( './utils' );
 
 const normalFactory = SchemaFactory.NORMAL();
 const normalZ1Validator = normalFactory.create( 'Z1' );
@@ -82,7 +83,8 @@ async function canonicalize( o ) {
 async function canonicalizeExport( o, withVoid = false ) {
 	const normalized = await normalize( o, /* generically= */false, withVoid );
 
-	if ( ( await Z5Validator.validateStatus( normalized.Z22K2 ) ).isValid() ) {
+	const possibleError = getError( normalized );
+	if ( ( await Z5Validator.validateStatus( possibleError ) ).isValid() ) {
 		// forward the error that happened in preliminary normalization
 		return normalized;
 	}
