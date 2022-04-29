@@ -1,6 +1,7 @@
 'use strict';
 
-const Ajv = require( 'ajv' ).default;
+const Ajv = require( 'ajv/dist/2020' );
+
 const fs = require( 'fs' );
 const path = require( 'path' );
 const { isString, isUserDefined, convertZListToArray } = require( './utils.js' );

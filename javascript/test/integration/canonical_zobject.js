@@ -5,7 +5,7 @@ const { SchemaFactory } = require( '../../src/schema.js' );
 const { readYaml } = require( '../../src/fileUtils.js' );
 const { testValidation } = require( '../testUtils.js' );
 
-QUnit.module( 'CANONICAL' );
+QUnit.module( 'CANONICAL VALIDATION' );
 
 const factory = SchemaFactory.CANONICAL();
 

@@ -6,6 +6,12 @@ definitions:
     LIST_of_Z17:
       $ref: LIST#/definitions/objects/LIST
       oneOf:
+        - $ref: LIST#/definitions/objects/LIST_benjamin
+          type: array
+          items:
+            $ref: "#/definitions/objects/Z17"
+          prefixItems:
+            - $ref: Z4#/definitions/objects/Z4
         - items:
             $ref: "#/definitions/objects/Z17"
           type: array

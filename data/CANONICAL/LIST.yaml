@@ -7,11 +7,19 @@ definitions:
       anyOf:
         - $ref: "#/definitions/objects/LIST_array"
         - $ref: "#/definitions/objects/LIST_generic"
+        - $ref: "#/definitions/objects/LIST_benjamin"
         - $ref: RESOLVER#/definitions/objects/RESOLVER
     LIST_array:
       type: array
       items:
         $ref: Z1#/definitions/objects/Z1
+    LIST_benjamin:
+      type: array
+      items:
+        $ref: Z1#/definitions/objects/Z1
+      minItems: 1
+      prefixItems:
+        - $ref: Z4#/definitions/objects/Z4
     LIST_generic:
       oneOf:
         - $ref: "#/definitions/objects/LIST_generic_empty"
