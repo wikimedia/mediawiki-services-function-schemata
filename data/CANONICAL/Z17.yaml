@@ -3,32 +3,6 @@ $id: Z17
 $ref: "#/definitions/objects/Z17"
 definitions:
   objects:
-    LIST_of_Z17:
-      anyOf:
-        - $ref: LIST#/definitions/objects/LIST_benjamin
-          minItems: 1
-          items:
-            - $ref: Z4#/definitions/objects/Z4
-          additionalItems:
-            $ref: "#/definitions/objects/Z17"
-        - $ref: LIST#/definitions/objects/LIST_array
-          items: []
-          additionalItems:
-            $ref: "#/definitions/objects/Z17"
-        - $ref: LIST#/definitions/objects/LIST_generic
-          type: object
-          properties:
-            Z1K1:
-              type: object
-              properties:
-                Z881K1:
-                  enum:
-                    - Z17
-            K1:
-              $ref: "#/definitions/objects/Z17"
-            K2:
-              $ref: "#/definitions/objects/LIST_of_Z17"
-        - $ref: RESOLVER#/definitions/objects/RESOLVER
     Z17:
       anyOf:
         - $ref: "#/definitions/objects/Z17_literal"
@@ -54,3 +28,33 @@ definitions:
         - Z17K3
         - Z1K1
       type: object
+
+    # Schema for typed list
+    LIST_of_Z17:
+      anyOf:
+        - $ref: RESOLVER#/definitions/objects/RESOLVER
+        - $ref: LIST#/definitions/objects/LIST_literal
+          type: array
+          minItems: 1
+          items:
+            - $ref: "#/definitions/objects/TYPE_is_Z17"
+          additionalItems:
+            $ref: "#/definitions/objects/Z17"
+    TYPE_ref_Z17:
+      allOf:
+        - $ref: Z9#/definitions/objects/Z9
+        - type: string
+          enum:
+            - Z17
+    TYPE_literal_Z17:
+      allOf:
+        - $ref: Z4#/definitions/objects/Z4_literal
+        - type: object
+          properties:
+            Z4K1:
+              $ref: "#/definitions/objects/TYPE_is_Z17"
+    TYPE_is_Z17:
+      oneOf:
+        - $ref: "#/definitions/objects/TYPE_ref_Z17"
+        - $ref: "#/definitions/objects/TYPE_literal_Z17"
+        - $ref: RESOLVER#/definitions/objects/RESOLVER_without_Z9

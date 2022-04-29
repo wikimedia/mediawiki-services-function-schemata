@@ -12,7 +12,7 @@ definitions:
         - $ref: "#/definitions/objects/Z1_terminal"
         - $ref: "#/definitions/objects/Z1_nonterminal"
         # Z99/Quote should be allowed at any level of the tree
-        - $ref: Z99#/definitions/objects/Z99
+        - $ref: Z99#/definitions/objects/Z99_literal
     Z1_nonterminal:
       additionalProperties: false
       properties:
@@ -35,7 +35,7 @@ definitions:
       anyOf:
         - $ref: Z6#/definitions/objects/Z6
         - $ref: Z9#/definitions/objects/Z9
-        - $ref: LIST#/definitions/objects/LIST
+        - $ref: LIST#/definitions/objects/LIST_literal
     Z1_reference:
       allOf:
         - $ref: Z9#/definitions/objects/Z9

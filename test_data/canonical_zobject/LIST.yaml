@@ -13,6 +13,12 @@ test_objects:
         Z1K1:
           Z1K1: Z7
           Z7K1: Z90000
+    - name: wrong benjamin array with no type
+      object: []
+    - name: wrong benjamin array with wrong type
+      object:
+        - wrong type
+        - first element
   success:
     - name: testing empty benjamin array
       object:
@@ -26,172 +32,62 @@ test_objects:
         - Z6
         - soup soup
         - oh tasty soup soup
-    - name: good, empty Z10
-      object: []
-    - name: good, full Z10
-      object:
-        - air on the z string
-    - name: good, fuller Z10
-      object:
-        - air on the z string
-        - symphony in z
     - name: can be a Z9
       object: Z1000
     - name: can be a Z18
       object:
         Z18K1: Z400K1
         Z1K1: Z18
-    - name: typed list, empty
+    - name: benjamin array, type is function call
       object:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z6
-    - name: typed list, one element
+        - Z1K1: Z7
+          Z7K1: Z401
+        - first element
+        - second element
+    - name: benjamin array, type is function call to a literal functoin
       object:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z6
-        K1: one element
-    - name: typed list, two elements
-      object:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1: Z881
-          Z881K1: Z6
-        K1: first element
-        K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: second element
-    - name: typed list, function is literal
-      object:
-        Z1K1:
-          Z1K1: Z7
+        - Z1K1: Z7
           Z7K1:
             Z1K1: Z8
-            Z8K1: []
+            Z8K1: [ Z17 ]
             Z8K2: Z4
-            Z8K3: []
-            Z8K4: []
-            Z8K5: Z881
-          Z881K1: Z6
-        K1: first element
-        K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: second element
-    - name: typed list, function is recursively literal
+            Z8K3: [ Z20 ]
+            Z8K4: [ Z14 ]
+            Z8K5: Z401
+        - first element
+        - second element
+    - name: benjamin array, type is literal
       object:
-        Z1K1:
-          Z1K1: Z7
-          Z7K1:
-            Z1K1: Z8
-            Z8K1: []
-            Z8K2: Z4
-            Z8K3: []
-            Z8K4: []
-            Z8K5:
-              Z1K1: Z8
-              Z8K1: []
-              Z8K2: Z4
-              Z8K3: []
-              Z8K4: []
-              Z8K5: Z881
-          Z881K1: Z6
-        K1: first element
-        K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: second element
-
-    - name: typed list, type is literal
-      object:
-        Z1K1:
-          Z1K1: Z4
-          Z4K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
+        - Z1K1: Z4
+          Z4K1: Z6
           Z4K2:
+            - Z3
             - Z1K1: Z3
               Z3K1: Z1
               Z3K2: K1
               Z3K3:
                 Z1K1: Z12
-                Z12K1: []
-            - Z1K1: Z3
-              Z3K1:
-                Z1K1: Z7
-                Z7K1: Z881
-                Z881K1: Z6
-              Z3K2: K2
-              Z3K3:
-                Z1K1: Z12
-                Z12K1: []
-          Z4K3: Z831
-        K1: first element
-        K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: second element
-    - name: typed list, type is recursively literal
+                Z12K1: [ Z11 ]
+          Z4K3: Z101
+        - first element
+        - second element
+    - name: benjamin array, type is recursively literal
       object:
-        Z1K1:
-          Z1K1: Z4
+        - Z1K1: Z4
           Z4K1:
             Z1K1: Z4
-            Z4K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z6
+            Z4K1: Z6
             Z4K2:
-              - Z1K1: Z3
-                Z3K1: Z1
-                Z3K2: K1
-                Z3K3:
-                  Z1K1: Z12
-                  Z12K1: []
-              - Z1K1: Z3
-                Z3K1:
-                  Z1K1: Z7
-                  Z7K1: Z881
-                  Z881K1: Z6
-                Z3K2: K2
-                Z3K3:
-                  Z1K1: Z12
-                  Z12K1: []
-            Z4K3: Z831
+              - Z3
+            Z4K3: Z101
           Z4K2:
+            - Z3
             - Z1K1: Z3
               Z3K1: Z1
               Z3K2: K1
               Z3K3:
                 Z1K1: Z12
-                Z12K1: []
-            - Z1K1: Z3
-              Z3K1:
-                Z1K1: Z7
-                Z7K1: Z881
-                Z881K1: Z6
-              Z3K2: K2
-              Z3K3:
-                Z1K1: Z12
-                Z12K1: []
-          Z4K3: Z831
-        K1: first element
-        K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: second element
+                Z12K1: [ Z11 ]
+          Z4K3: Z101
+        - first element
+        - second element

@@ -6,7 +6,7 @@ test_objects:
       object:
         Z1: arbitrary string
         Z2K34:
-          Z89: []
+          Z89: [ Z6 ]
     - name: Z1 of type Z1
       object:
         Z1K1: Z1
@@ -16,7 +16,7 @@ test_objects:
     - name: happy Z9 reference
       object: Z2
     - name: happy Z9 array empty
-      object: []
+      object: [ Z1 ]
     - name: happy Z13
       object: Z13
     - name: happy nested Z13
@@ -24,6 +24,7 @@ test_objects:
         - Z13
     - name: happy Z6 array
       object:
+        - Z6
         - fanatics
         - have
         - their
@@ -39,20 +40,19 @@ test_objects:
         Z1K1: Z5
         Z5K1: Z401
     - name: happy Z23 reference
-      object:
-        - Z23
+      object: Z23
     - name: happy Z1 with a Z99 leaf
       object:
-        - Z1K1: Z99
-          Z99K1:
-            a: Z1
-            is: not
-            object: that
-            some: random
+        Z1K1: Z99
+        Z99K1:
+          a: Z1
+          is: not
+          object: that
+          some: random
     - name: happy Z1 with a Z99 non-leaf
       object:
-        - Z1K1: Z99
-          Z99K1: quoted string
+        Z1K1: Z99
+        Z99K1: quoted string
     - name: can be a Z9
       object: Z1000
     - name: can be a Z18

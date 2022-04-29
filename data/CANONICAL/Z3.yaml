@@ -3,32 +3,6 @@ $id: Z3
 $ref: "#/definitions/objects/Z3"
 definitions:
   objects:
-    LIST_of_Z3:
-      anyOf:
-        - $ref: LIST#/definitions/objects/LIST_benjamin
-          minItems: 1
-          items:
-            - $ref: Z4#/definitions/objects/Z4
-          additionalItems:
-            $ref: "#/definitions/objects/Z3"
-        - $ref: LIST#/definitions/objects/LIST_array
-          items: []
-          additionalItems:
-            $ref: "#/definitions/objects/Z3"
-        - $ref: LIST#/definitions/objects/LIST_generic
-          type: object
-          properties:
-            Z1K1:
-              type: object
-              properties:
-                Z881K1:
-                  enum:
-                    - Z3
-            K1:
-              $ref: "#/definitions/objects/Z3"
-            K2:
-              $ref: "#/definitions/objects/LIST_of_Z3"
-        - $ref: RESOLVER#/definitions/objects/RESOLVER
     Z3:
       anyOf:
         - $ref: "#/definitions/objects/Z3_literal"
@@ -54,3 +28,33 @@ definitions:
         - Z3K2
         - Z3K3
       type: object
+
+    # Schema for typed list
+    LIST_of_Z3:
+      anyOf:
+        - $ref: RESOLVER#/definitions/objects/RESOLVER
+        - $ref: LIST#/definitions/objects/LIST_literal
+          type: array
+          minItems: 1
+          items:
+            - $ref: "#/definitions/objects/TYPE_is_Z3"
+          additionalItems:
+            $ref: "#/definitions/objects/Z3"
+    TYPE_ref_Z3:
+      allOf:
+        - $ref: Z9#/definitions/objects/Z9
+        - type: string
+          enum:
+            - Z3
+    TYPE_literal_Z3:
+      allOf:
+        - $ref: Z4#/definitions/objects/Z4_literal
+        - type: object
+          properties:
+            Z4K1:
+              $ref: "#/definitions/objects/TYPE_is_Z3"
+    TYPE_is_Z3:
+      oneOf:
+        - $ref: "#/definitions/objects/TYPE_ref_Z3"
+        - $ref: "#/definitions/objects/TYPE_literal_Z3"
+        - $ref: RESOLVER#/definitions/objects/RESOLVER_without_Z9

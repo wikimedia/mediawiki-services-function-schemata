@@ -6,34 +6,63 @@ test_objects:
       object:
         Z1K1: Z4
         Z4K1: Z1000
-        Z4K2: []
-    - name: bad Z4 (Z4K2 does not contain Z3s)
+        Z4K2:
+          - Z3
+    - name: bad Z4 (benjamin array with wrongly typed item)
       object:
         Z1K1: Z4
         Z4K1: Z1000
         Z4K2:
+          - Z3
           - swears****
         Z4K3: Z1000
-    - name: bad Z4 with generic list of Z6s
+    - name: bad Z4 (wrongly typed benjamin array)
       object:
         Z1K1: Z4
         Z4K1: Z1000
         Z4K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
+          - Z6
+        Z4K3: Z1000
+    - name: good Z4 (benjamin array with no type)
+      object:
+        Z1K1: Z4
+        Z4K1: Z1000
+        Z4K2:
+          - Z1K1: Z3
+            Z3K1: Z6
+            Z3K2: Z1000K1
+            Z3K3:
+              Z1K1: Z12
+              Z12K1:
+                - Z11
+        Z4K3: Z1000
+    - name: bad Z4 (wrong elements in key list)
+      object:
+        Z1K1: Z4
+        Z4K1: Z1000
+        Z4K2:
+          - Z3
+          - Z3
         Z4K3: Z1000
   success:
+    - name: good Z4
+      object:
+        Z1K1: Z4
+        Z4K1: Z1000
+        Z4K2:
+          - Z3
+        Z4K3: Z1000
     - name: good Z4 (Z4K1 is a Z4)
       object:
         Z1K1: Z4
         Z4K1:
           Z1K1: Z4
           Z4K1: Z1000
-          Z4K2: []
+          Z4K2:
+            - Z3
           Z4K3: Z1000
-        Z4K2: []
+        Z4K2:
+          - Z3
         Z4K3: Z1000
     - name: good Z4 (is a Z7)
       object:
@@ -45,95 +74,52 @@ test_objects:
         Z4K1:
           Z1K1: Z7
           Z7K1: Z1000
-        Z4K2: []
+        Z4K2:
+          - Z3
         Z4K3: Z1000
-    - name: good Z4 with array of Z3s
+    - name: good Z4 (benjamin array with one item)
       object:
         Z1K1: Z4
         Z4K1: Z1000
         Z4K2:
+          - Z3
           - Z1K1: Z3
             Z3K1: Z6
             Z3K2: Z1000K1
             Z3K3:
               Z1K1: Z12
-              Z12K1: []
+              Z12K1:
+                - Z11
         Z4K3: Z1000
-    - name: good Z4 with empty generic list of Z3s
+    - name: good Z4 (benjamin array with literal type)
       object:
         Z1K1: Z4
         Z4K1: Z1000
         Z4K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z3
-        Z4K3: Z1000
-    - name: good Z4 with generic list of one Z3
-      object:
-        Z1K1: Z4
-        Z4K1: Z1000
-        Z4K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z3
-          K1:
-            Z1K1: Z3
+          - Z1K1: Z4
+            Z4K1: Z3
+            Z4K2: [ Z3 ]
+            Z4K3: Z1001
+          - Z1K1: Z3
             Z3K1: Z6
             Z3K2: Z1000K1
             Z3K3:
               Z1K1: Z12
-              Z12K1: []
+              Z12K1:
+                - Z11
         Z4K3: Z1000
-    - name: good Z4 with generic list of one Z3 and empty tail
+    - name: good Z4 (benjamin array with function call type)
       object:
         Z1K1: Z4
         Z4K1: Z1000
         Z4K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z3
-          K1:
-            Z1K1: Z3
+          - Z1K1: Z7
+            Z7K1: Z1001
+          - Z1K1: Z3
             Z3K1: Z6
             Z3K2: Z1000K1
             Z3K3:
               Z1K1: Z12
-              Z12K1: []
-          K2:
-            Z1K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z3
-        Z4K3: Z1000
-    - name: good Z4 with generic list of two Z3s
-      object:
-        Z1K1: Z4
-        Z4K1: Z1000
-        Z4K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z3
-          K1:
-            Z1K1: Z3
-            Z3K1: Z6
-            Z3K2: Z1000K1
-            Z3K3:
-              Z1K1: Z12
-              Z12K1: []
-          K2:
-            Z1K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z3
-            K1:
-              Z1K1: Z3
-              Z3K1: Z6
-              Z3K2: Z1000K2
-              Z3K3:
-                Z1K1: Z12
-                Z12K1: []
+              Z12K1:
+                - Z11
         Z4K3: Z1000

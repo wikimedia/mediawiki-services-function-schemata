@@ -18,7 +18,7 @@ test_objects:
         Z6K1: 3
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z533: Z6K1 must be a string, not null"
     errors:
       - Z502
@@ -35,7 +35,7 @@ test_objects:
         Z6K1: null
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z549: Invalid reference"
     errors:
       - Z502
@@ -50,7 +50,7 @@ test_objects:
       Z2K2: correct value
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z553: Disallowed Z9 as root ZObject"
     errors:
       - Z502
@@ -65,7 +65,7 @@ test_objects:
       Z2K2: Z9
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z523: Missing type Z1K1"
     errors:
       - Z502
@@ -80,7 +80,7 @@ test_objects:
         Z6K1: this is fine
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z513: resolved object without Z2K2"
     errors:
       - Z502
@@ -93,7 +93,7 @@ test_objects:
         Z6K1: Z222
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z521: ZObjects must not be null"
     errors:
       - Z502
@@ -108,7 +108,7 @@ test_objects:
       Z2K2: null
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z521: ZObjects must not be integer"
     errors:
       - Z502
@@ -123,7 +123,7 @@ test_objects:
       Z2K2: 3
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z521: ZObjects must not be number"
     errors:
       - Z502
@@ -138,7 +138,7 @@ test_objects:
       Z2K2: 3.14159
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Z521: ZObjects must not be boolean"
     errors:
       - Z502
@@ -153,7 +153,7 @@ test_objects:
       Z2K2: false
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: "Two errors: Z533"
     errors:
       - Z502
@@ -170,7 +170,7 @@ test_objects:
         Z6K1: false
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: One invalid key
     errors:
       - Z502
@@ -189,7 +189,7 @@ test_objects:
         keykey: something even odder
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]
   - name: Z6K1 must be a string instead of an array
     errors:
       - Z502
@@ -205,6 +205,7 @@ test_objects:
       Z2K3:
         Z1K1: Z12
         Z12K1:
+          - Z11
           - Z1K1: Z11
             Z11K1: Z1002
             Z11K2:
@@ -225,6 +226,7 @@ test_objects:
       Z2K3:
         Z1K1: Z12
         Z12K1:
+          - Z11
           - Z1K1: Z11
             Z11K1: Z1002
             Z11K2:
@@ -248,4 +250,4 @@ test_objects:
         Z1K1: Z6
       Z2K3:
         Z1K1: Z12
-        Z12K1: []
+        Z12K1: [ Z11 ]

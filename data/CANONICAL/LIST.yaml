@@ -5,110 +5,14 @@ definitions:
   objects:
     LIST:
       anyOf:
-        - $ref: "#/definitions/objects/LIST_array"
-        - $ref: "#/definitions/objects/LIST_generic"
-        - $ref: "#/definitions/objects/LIST_benjamin"
+        - $ref: "#/definitions/objects/LIST_literal"
         - $ref: RESOLVER#/definitions/objects/RESOLVER
-    LIST_array:
-      type: array
-      items: []
-      additionalItems:
-        $ref: Z1#/definitions/objects/Z1
-    LIST_benjamin:
+    # Canonical lists: The only representation possible is Benjamin Arrays,
+    # an Array where the first element is the type of the other elements
+    LIST_literal:
       type: array
       additionalItems:
         $ref: Z1#/definitions/objects/Z1
       minItems: 1
       items:
         - $ref: Z4#/definitions/objects/Z4
-    LIST_generic:
-      oneOf:
-        - $ref: "#/definitions/objects/LIST_generic_empty"
-        - $ref: "#/definitions/objects/LIST_generic_one"
-        - $ref: "#/definitions/objects/LIST_generic_full"
-    LIST_generic_empty:
-      type: object
-      additionalProperties: false
-      properties:
-        Z1K1:
-          $ref: "#/definitions/objects/LIST_type"
-      required:
-        - Z1K1
-    LIST_generic_one:
-      type: object
-      additionalProperties: false
-      properties:
-        Z1K1:
-          $ref: "#/definitions/objects/LIST_type"
-        K1:
-          $ref: Z1#/definitions/objects/Z1
-      required:
-        - Z1K1
-        - K1
-    LIST_generic_full:
-      type: object
-      additionalProperties: false
-      properties:
-        Z1K1:
-          $ref: "#/definitions/objects/LIST_type"
-        K1:
-          $ref: Z1#/definitions/objects/Z1
-        K2:
-          $ref: "#/definitions/objects/LIST"
-      required:
-        - Z1K1
-        - K1
-        - K2
-
-    # LIST_type: Different representations of the type of a generic list
-    LIST_type:
-      oneOf:
-        - $ref: "#/definitions/objects/LIST_type_function_call"
-        - $ref: "#/definitions/objects/LIST_type_literal"
-
-    # LIST_type_literal: The type is defined by a Z4, where its identity Z4K1 is a generic type
-    LIST_type_literal:
-      allOf:
-        - $ref: Z4#/definitions/objects/Z4_literal
-        - properties:
-            Z4K1:
-              $ref: "#/definitions/objects/LIST_type"
-          type: object
-
-    # LIST_type_function_call: The type is defined by a Z7,
-    # where its function Z7K1 is the typed list function
-    LIST_type_function_call:
-      allOf:
-        - $ref: Z7#/definitions/objects/Z7
-        - properties:
-            Z7K1:
-              $ref: "#/definitions/objects/LIST_typed_list_function"
-            Z881K1:
-              $ref: Z4#/definitions/objects/Z4
-          required:
-            - Z1K1
-            - Z7K1
-            - Z881K1
-          type: object
-
-    # LIST_typed_list_function: Different representations of the typed list function (Z881)
-    LIST_typed_list_function:
-      oneOf:
-        - $ref: "#/definitions/objects/LIST_typed_list_function_reference"
-        - $ref: "#/definitions/objects/LIST_typed_list_function_literal"
-
-    # LIST_typed_list_function_reference: A Z9 object pointing at Z881
-    LIST_typed_list_function_reference:
-      allOf:
-        - $ref: Z9#/definitions/objects/Z9
-        - enum:
-            - Z881
-          type: string
-
-    # LIST_typed_list_function_literal: The literal Z8 object representing Z881
-    LIST_typed_list_function_literal:
-      allOf:
-        - $ref: Z8#/definitions/objects/Z8_literal
-        - properties:
-            Z8K5:
-              $ref: "#/definitions/objects/LIST_typed_list_function"

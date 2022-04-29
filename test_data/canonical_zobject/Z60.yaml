@@ -5,15 +5,28 @@ test_objects:
     - name: bad language (no language code)
       object:
         Z1K1: Z60
-    - name: bad language (list with wrong type)
+    - name: bad language (benjamin array with wrongly typed item)
       object:
         Z1K1: Z60
         Z60K1: es
         Z60K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z3
+          - Z6
+          - Z1K1: Z11
+            Z11K1: Z1002
+            Z11K2: bad element
+    - name: bad language (benjamin array with wrong type)
+      object:
+        Z1K1: Z60
+        Z60K1: es
+        Z60K2:
+          - Z3
+    - name: bad language (benjamin array with no type)
+      object:
+        Z1K1: Z60
+        Z60K1: es
+        Z60K2:
+          - one element
+          - another element
   success:
     - name: good language
       object:
@@ -25,41 +38,44 @@ test_objects:
       object:
         Z18K1: Z400K1
         Z1K1: Z18
-    - name: good language (empty code aliases)
+    - name: good language (empty typed list)
       object:
         Z1K1: Z60
         Z60K1: es
-        Z60K2: []
-    - name: good language (code aliases)
+        Z60K2: [ Z6 ]
+    - name: good language (typed list with one alias)
       object:
         Z1K1: Z60
         Z60K1: es
         Z60K2:
+          - Z6
           - es-es
-          - es-mx
-    - name: good language (typed list of aliases)
-      object:
-        Z1K1: Z60
-        Z60K1: es
-        Z60K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: es-es
     - name: good language (typed list with two aliases)
       object:
         Z1K1: Z60
         Z60K1: es
         Z60K2:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: es-es
-          K2:
-            Z1K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z6
-            K1: es-mx
+          - Z6
+          - es-es
+          - es-mx
+    - name: good language (benjamin array with literal type)
+      object:
+        Z1K1: Z60
+        Z60K1: Z1000
+        Z60K2:
+          - Z1K1: Z4
+            Z4K1: Z6
+            Z4K2:
+              - Z3
+            Z4K3: Z1001
+          - lang-one
+          - lang-two
+    - name: good language (benjamin array with function call type)
+      object:
+        Z1K1: Z60
+        Z60K1: Z1000
+        Z60K2:
+          - Z1K1: Z7
+            Z7K1: Z1001
+          - lang-one
+          - lang-two

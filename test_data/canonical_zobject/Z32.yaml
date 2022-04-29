@@ -2,128 +2,138 @@ test_information:
   name: canonical Z32
 test_objects:
   failure:
-    - name: bad multilingual string set
+    - name: bad multilingual string set (Z32K1 empty array)
+      object:
+        Z1K1: Z32
+        Z32K1: []
+    - name: bad multilingual string set (Z32K1 typed list with no type)
       object:
         Z1K1: Z32
         Z32K1:
-          - string
-    - name: bad multilingual string set (wrongly typed Z32K1)
-      object:
-        Z1K1: Z32
-        Z32K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z6
-          K1: string
-    - name: bad multilingual string set (wrong Z31K2)
-      object:
-        Z1K1: Z32
-        Z32K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z31
-          K1:
-            Z1K1: Z31
+          - Z1K1: Z31
             Z31K1: Z1002
-            Z31K2: wrong value here
-    - name: bad multilingual string set (wrongly typed Z31K2)
+            Z31K2: [ Z6 ]
+    - name: bad multilingual string set (Z32K1 typed list with wrong type)
+      object:
+        Z1K1: Z32
+        Z32K1: [ Z6 ]
+    - name: bad multilingual string set (Z32K1 typed list with wrong item)
       object:
         Z1K1: Z32
         Z32K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z31
-          K1:
-            Z1K1: Z31
-            Z31K1: Z1002
-            Z31K2:
-              Z1K1:
-                Z1K1: Z7
-                Z7K1: Z881
-                Z881K1: Z11
-    - name: bad multilingual string set (wrong tail)
+          - Z31
+          - wrong item
+    - name: bad multilingual string set (Z31K2 empty array)
       object:
         Z1K1: Z32
         Z32K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z31
-          K1:
-            Z1K1: Z31
+          - Z31
+          - Z1K1: Z31
             Z31K1: Z1002
-            Z31K2:
-              - good head
-          K2:
-            Z1K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z6
-            K1: bad tail
-  success:
-    - name: good multilingual string set (all arrays)
+            Z31K2: []
+    - name: bad multilingual string set (Z31K2 typed list with no type)
       object:
         Z1K1: Z32
         Z32K1:
           - Z1K1: Z31
             Z31K1: Z1002
             Z31K2:
+              - string item
+    - name: bad multilingual string set (Z31K2 typed list with wrong type)
+      object:
+        Z1K1: Z32
+        Z32K1:
+          - Z1K1: Z31
+            Z31K1: Z1002
+            Z31K2:
+              - Z11
+              - string item
+    - name: bad multilingual string set (Z31K2 typed list with wrong item)
+      object:
+        Z1K1: Z32
+        Z32K1:
+          - Z1K1: Z31
+            Z31K1: Z1002
+            Z31K2:
+              - Z6
+              - Z1K1: Z11
+                Z11K1: Z1002
+                Z11K2: wrong item
+  success:
+    - name: good multilingual string set
+      object:
+        Z1K1: Z32
+        Z32K1:
+          - Z31
+          - Z1K1: Z31
+            Z31K1: Z1002
+            Z31K2:
+              - Z6
               - one string
               - another string
-    - name: good multilingual string set (Z31K2 is typed list of Z6)
+    - name: good multilingual string set (Z31K2 is empty)
       object:
         Z1K1: Z32
         Z32K1:
+          - Z31
           - Z1K1: Z31
             Z31K1: Z1002
             Z31K2:
-              Z1K1:
-                Z1K1: Z7
-                Z7K1: Z881
-                Z881K1: Z6
-              K1: first string
-              K2:
-                Z1K1:
-                  Z1K1: Z7
-                  Z7K1: Z881
-                  Z881K1: Z6
-                K1: second string
-    - name: good multilingual string set (Z32K1 is typed list of Z31)
+              - Z6
+    - name: good multilingual string set (Z32K1 is empty)
       object:
         Z1K1: Z32
         Z32K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z31
-          K1:
-            Z1K1: Z31
-            Z31K1: Z1002
-            Z31K2:
-              - item from list of strings
-    - name: good multilingual string set (Z32K1 is typed list with two Z31s)
+          - Z31
+    - name: good multilingual string set (Z32K1 type is literal)
       object:
         Z1K1: Z32
         Z32K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z31
-          K1:
-            Z1K1: Z31
+          - Z1K1: Z4
+            Z4K1: Z31
+            Z4K2: [ Z3 ]
+            Z4K3: Z401
+          - Z1K1: Z31
             Z31K1: Z1002
             Z31K2:
-              - item from list of strings
-          K2:
-            Z1K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z31
-            K1:
-              Z1K1: Z31
-              Z31K1: Z1002
-              Z31K2:
-                - item from another list of strings
+              - Z6
+              - one string
+              - another string
+    - name: good multilingual string set (Z31K2 type is literal)
+      object:
+        Z1K1: Z32
+        Z32K1:
+          - Z31
+          - Z1K1: Z31
+            Z31K1: Z1002
+            Z31K2:
+              - Z1K1: Z4
+                Z4K1: Z6
+                Z4K2: [ Z3 ]
+                Z4K3: Z401
+              - one string
+              - another string
+    - name: good multilingual string set (Z32K1 type is function call)
+      object:
+        Z1K1: Z32
+        Z32K1:
+          - Z1K1: Z7
+            Z7K1: Z401
+          - Z1K1: Z31
+            Z31K1: Z1002
+            Z31K2:
+              - Z6
+              - one string
+              - another string
+    - name: good multilingual string set (Z31K2 type is function call)
+      object:
+        Z1K1: Z32
+        Z32K1:
+          - Z31
+          - Z1K1: Z31
+            Z31K1: Z1002
+            Z31K2:
+              - Z1K1: Z7
+                Z7K1: Z401
+              - one string
+              - another string

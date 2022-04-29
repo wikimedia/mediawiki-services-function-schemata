@@ -9,7 +9,7 @@ test_objects:
         Z17K1: Z6
         Z17K2: my argument declaration
         Z17K3:
-          Z12K1: []
+          Z12K1: [ Z11 ]
           Z1K1: Z12
         Z1K1: Z17
   success:
@@ -18,7 +18,7 @@ test_objects:
         Z17K1: Z6
         Z17K2: Z400K1
         Z17K3:
-          Z12K1: []
+          Z12K1: [ Z11 ]
           Z1K1: Z12
         Z1K1: Z17
     - name: can be a Z18

@@ -5,279 +5,243 @@ test_objects:
     - name: bad function (missing return type)
       object:
         Z1K1: Z8
-        Z8K1: []
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
+        Z8K1: [ Z17 ]
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
     - name: bad function (missing identity)
       object:
         Z1K1: Z8
-        Z8K1: []
+        Z8K1: [ Z17 ]
         Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-    - name: bad function (wrong list of args)
-      object:
-        Z1K1: Z8
-        Z8K1:
-          - list of strings
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (wrong list of testers)
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+
+    - name: bad function (empty array of args)
       object:
         Z1K1: Z8
         Z8K1: []
         Z8K2: Z6
-        Z8K3:
-          - list of strings
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (wrong list of implementations)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4:
-          - list of strings
-        Z8K5: Z1000
-    - name: bad function (wrong array of args)
-      object:
-        Z1K1: Z8
-        Z8K1:
-          - Z1K1: Z12
-            Z12K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (wrong typed list of args)
-      object:
-        Z1K1: Z8
-        Z8K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z16
-          K1:
-            - wrong arg type
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (wrong array of testers)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3:
-          - Z1K1: Z6
-            Z6K1: Z1000
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (array with wrong tester)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3:
-          - Z1K1: Z20
-            Z20K1: Z1000
-            Z20K2: wrong value
-            Z20K3: another wrong value
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (wrong typed list of testers)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z12
-        Z8K4: []
-        Z8K5: Z1000
-    - name: bad function (wrong array of implementations)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4:
-          - Z1K1: Z12
-            Z12K1: []
-        Z8K5: Z1000
-    - name: bad function (wrong typed list of implementations)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z12
-          K1:
-            Z1K1: Z12
-            Z12K1: []
-        Z8K5: Z1000
-    - name: bad function (typed list of implementation with wrong tail)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z14
-          K1:
-            Z1K1: Z14
-            Z14K1: Z1000
-          K2:
-            Z1K1:
-              Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z6
-            K1: wrong tail
-        Z8K5: Z1000
-  success:
-    - name: good function (empty lists)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
-    - name: good function (array of args)
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+    - name: bad function (typed list of args with no type)
       object:
         Z1K1: Z8
         Z8K1:
           - Z1K1: Z17
             Z17K1: Z6
-            Z17K2: Z1000K1
+            Z17K2: Z401K1
             Z17K3:
               Z1K1: Z12
-              Z12K1: []
+              Z12K1: [ Z11 ]
         Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
-    - name: good function (typed list of args)
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+    - name: bad function (typed list of args with wrong type)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z6 ]
+        Z8K2: Z6
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+    - name: bad function (typed list of args with wrong item)
       object:
         Z1K1: Z8
         Z8K1:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z17
-          K1:
-            Z1K1: Z17
-            Z17K1: Z6
-            Z17K2: Z1000K1
-            Z17K3:
-              Z1K1: Z12
-              Z12K1: []
+          - Z17
+          - wrong arg
         Z8K2: Z6
-        Z8K3: []
-        Z8K4: []
-        Z8K5: Z1000
-    - name: good function (array of testers)
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+
+    - name: bad function (empty array of testers)
       object:
         Z1K1: Z8
-        Z8K1: []
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: []
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+
+    - name: bad function (typed list of testers with no type)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
         Z8K2: Z6
         Z8K3:
           - Z1K1: Z20
-            Z20K1: Z1000
+            Z20K1: Z401
             Z20K2:
               Z1K1: Z7
-              Z7K1: Z1001
+              Z7K1: Z402
             Z20K3:
               Z1K1: Z7
-              Z7K1: Z1002
-        Z8K4: []
-        Z8K5: Z1000
-    - name: good function (typed list of testers)
+              Z7K1: Z403
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+    - name: bad function (typed list of testers with wrong type)
       object:
         Z1K1: Z8
-        Z8K1: []
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: [ Z6 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+    - name: bad function (typed list of testers with wrong item)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
         Z8K2: Z6
         Z8K3:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z20
-          K1:
-            Z1K1: Z20
-            Z20K1: Z1000
+          - Z20
+          - wrong item
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+
+    - name: bad function (empty array of implementations)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: [ Z20 ]
+        Z8K4: []
+        Z8K5: Z401
+    - name: bad function (typed list of implementations with no type)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: [ Z20 ]
+        Z8K4:
+          - Z1K1: Z14
+            Z14K1: Z402
+            Z14K4: builtin
+        Z8K5: Z401
+    - name: bad function (typed list of implementations with wrong type)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z6 ]
+        Z8K5: Z401
+    - name: bad function (typed list of implementations with wrong item)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: [ Z20 ]
+        Z8K4:
+          - Z14
+          - wrong item
+        Z8K5: Z401
+
+  success:
+    - name: good function (empty lists)
+      object:
+        Z1K1: Z8
+        Z8K1: [ Z17 ]
+        Z8K2: Z6
+        Z8K3: [ Z20 ]
+        Z8K4: [ Z14 ]
+        Z8K5: Z401
+    - name: good function (minimal elements)
+      object:
+        Z1K1: Z8
+        Z8K1:
+          - Z17
+          - Z1K1: Z17
+            Z17K1: Z6
+            Z17K2: Z401K1
+            Z17K3:
+              Z1K1: Z12
+              Z12K1: [ Z11 ]
+        Z8K2: Z6
+        Z8K3:
+          - Z20
+          - Z1K1: Z20
+            Z20K1: Z401
             Z20K2:
               Z1K1: Z7
-              Z7K1: Z1001
+              Z7K1: Z402
             Z20K3:
               Z1K1: Z7
-              Z7K1: Z1002
-        Z8K4: []
-        Z8K5: Z1000
-    - name: good function (array of implementations)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
+              Z7K1: Z403
         Z8K4:
+          - Z14
           - Z1K1: Z14
-            Z14K1: Z1001
+            Z14K1: Z402
             Z14K4: builtin
-          - Z1K1: Z14
-            Z14K1: Z1002
-            Z14K4: builtin
-        Z8K5: Z1000
-    - name: good function (typed list with one implementation)
+        Z8K5: Z401
+    - name: good function (types are function calls)
       object:
         Z1K1: Z8
-        Z8K1: []
+        Z8K1:
+          - Z1K1: Z7
+            Z7K1: Z410
+          - Z1K1: Z17
+            Z17K1: Z6
+            Z17K2: Z401K1
+            Z17K3:
+              Z1K1: Z12
+              Z12K1: [ Z11 ]
         Z8K2: Z6
-        Z8K3: []
-        Z8K4:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z14
-          K1:
-            Z1K1: Z14
-            Z14K1: Z1000
-            Z14K4: builtin
-        Z8K5: Z1000
-    - name: good function (typed list with some implementation)
-      object:
-        Z1K1: Z8
-        Z8K1: []
-        Z8K2: Z6
-        Z8K3: []
-        Z8K4:
-          Z1K1:
-            Z1K1: Z7
-            Z7K1: Z881
-            Z881K1: Z14
-          K1:
-            Z1K1: Z14
-            Z14K1: Z1000
-            Z14K4: builtin
-          K2:
-            Z1K1:
+        Z8K3:
+          - Z1K1: Z7
+            Z7K1: Z411
+          - Z1K1: Z20
+            Z20K1: Z401
+            Z20K2:
               Z1K1: Z7
-              Z7K1: Z881
-              Z881K1: Z14
-            K1:
-              Z1K1: Z14
-              Z14K1: Z1000
-              Z14K4: builtin
-        Z8K5: Z1000
+              Z7K1: Z402
+            Z20K3:
+              Z1K1: Z7
+              Z7K1: Z403
+        Z8K4:
+          - Z1K1: Z7
+            Z7K1: Z412
+          - Z1K1: Z14
+            Z14K1: Z402
+            Z14K4: builtin
+        Z8K5: Z401
+    - name: good function (types are literals)
+      object:
+        Z1K1: Z8
+        Z8K1:
+          - Z1K1: Z4
+            Z4K1: Z17
+            Z4K2: [ Z3 ]
+            Z4K3: Z410
+          - Z1K1: Z17
+            Z17K1: Z6
+            Z17K2: Z401K1
+            Z17K3:
+              Z1K1: Z12
+              Z12K1: [ Z11 ]
+        Z8K2: Z6
+        Z8K3:
+          - Z1K1: Z4
+            Z4K1: Z20
+            Z4K2: [ Z3 ]
+            Z4K3: Z411
+          - Z1K1: Z20
+            Z20K1: Z401
+            Z20K2:
+              Z1K1: Z7
+              Z7K1: Z402
+            Z20K3:
+              Z1K1: Z7
+              Z7K1: Z403
+        Z8K4:
+          - Z1K1: Z4
+            Z4K1: Z14
+            Z4K2: [ Z3 ]
+            Z4K3: Z412
+          - Z1K1: Z14
+            Z14K1: Z402
+            Z14K4: builtin
+        Z8K5: Z401
