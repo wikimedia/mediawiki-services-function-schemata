@@ -591,6 +591,12 @@ QUnit.test( 'getZMapValue', async ( assert ) => {
 	assert.strictEqual( getZMapValue( emptyZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), undefined );
 	assert.deepEqual( getZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), { Z1K1: 'Z6', Z6K1: 'Be warned!' } );
 	assert.deepEqual( getZMapValue( doubletonZMap, { Z1K1: 'Z6', Z6K1: 'errors' } ), error1 );
+
+	// Double-check that trying to get a ZMapValue on undefined returns undefined.
+	assert.strictEqual(
+		getZMapValue( undefined, { Z1K1: 'Z6', Z6K1: 'warnings' } ),
+		undefined
+	);
 } );
 
 QUnit.test( 'setZMapValue', async ( assert ) => {
@@ -607,6 +613,12 @@ QUnit.test( 'setZMapValue', async ( assert ) => {
 		singletonZMap );
 	assert.deepEqual( setZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } ),
 		modifiedSingletonZMap );
+
+	// Double-check that trying to set a ZMapValue on undefined returns undefined.
+	assert.strictEqual(
+		setZMapValue( undefined, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' } ),
+		undefined
+	);
 } );
 
 QUnit.test( 'make* functions', async ( assert ) => {
@@ -652,6 +664,9 @@ QUnit.test( 'make* functions', async ( assert ) => {
 		K1: { Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' }, Z881K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' }, Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z882K2: mapType1 } } }
 	} );
 
+	// Double-check that trying to make a Map from an unsupported key type returns undefined.
+	assert.strictEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z41' }, { Z1K1: 'Z9', Z9K1: 'Z1' } ), undefined );
+
 } );
 
 QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
@@ -665,6 +680,9 @@ QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
 	assert.strictEqual( maybeUpgradeResultEnvelope( emptyResultEnvelope ), emptyResultEnvelope );
 	assert.deepEqual( maybeUpgradeResultEnvelope( basicResultEnvelopeErrorsOnly ),
 		mappedResultEnvelopeErrorsOnly );
+
+	// Double-check that trying to upgrade undefined returns undefined.
+	assert.strictEqual( maybeUpgradeResultEnvelope( undefined ), undefined );
 } );
 
 QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
@@ -684,6 +702,31 @@ QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
 		basicResultEnvelopeErrorsOnly );
 	assert.deepEqual( maybeDowngradeResultEnvelope( mappedResultEnvelope2Entries ),
 		basicResultEnvelopeErrorsOnly );
+
+	// Double-check that trying to downgrade undefined returns undefined.
+	assert.strictEqual( maybeDowngradeResultEnvelope( undefined ), undefined );
+
+	// If the mapped ResultEnvelope has an errors key but no value, it should be a void
+	const mappedResultEnvelopeEmptyErrors = {
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' },
+		Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' },
+		Z22K2: {
+			Z1K1: mapType1,
+			K1: {
+				Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' } }
+			}
+		}
+	};
+	const unmappedResultEnvelopeEmptyErrors = {
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' },
+		Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' },
+		Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' }
+	};
+	assert.deepEqual(
+		maybeDowngradeResultEnvelope( mappedResultEnvelopeEmptyErrors ),
+		unmappedResultEnvelopeEmptyErrors
+	);
 } );
 
 QUnit.test( 'getError', async ( assert ) => {

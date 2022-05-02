@@ -349,7 +349,7 @@ function isZMap( ZObject ) {
 function setZMapValue( ZMap, key, value ) {
 	if ( ZMap === undefined ) {
 		console.error( 'setZMapValue called with undefined; please fix your caller' );
-		return ZMap;
+		return undefined;
 	}
 
 	let tail = ZMap.K1;
