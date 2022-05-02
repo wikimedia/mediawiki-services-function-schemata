@@ -10,7 +10,7 @@ const {
 	isObject,
 	isKey,
 	isZid,
-	// isReference,
+	isReference,
 	isGlobalKey,
 	// deepEqual,
 	// deepCopy,
@@ -535,35 +535,43 @@ QUnit.test( 'convertZListToArray with undefined', ( assert ) => {
 
 QUnit.test( 'isZid', async ( assert ) => {
 	const testValues = [
-		{ value: '', isKey: false, isZid: false, isGlobalKey: false, message: 'Empty string' },
+		{ value: '', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Empty string' },
 
-		{ value: 'Z1', isKey: false, isZid: true, isGlobalKey: false, message: 'Trivial ZID' },
-		{ value: 'Z123', isKey: false, isZid: true, isGlobalKey: false, message: 'Simple ZID' },
-		{ value: 'Z01', isKey: false, isZid: false, isGlobalKey: false, message: 'Zero-padded ZID' },
-		{ value: 'Z1234567890', isKey: false, isZid: true, isGlobalKey: false, message: 'Long ZID' },
-		{ value: ' \tZ1  \n ', isKey: false, isZid: false, isGlobalKey: false, message: 'Whitespace-beset ZID' },
-		{ value: 'Z', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial ZID' },
+		{ value: 'Z1', isKey: false, isZid: true, isGlobalKey: false, isReference: true, message: 'Trivial ZID' },
+		{ value: 'Z123', isKey: false, isZid: true, isGlobalKey: false, isReference: true, message: 'Simple ZID' },
+		{ value: 'Z01', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Zero-padded ZID' },
+		{ value: 'Z1234567890', isKey: false, isZid: true, isGlobalKey: false, isReference: true, message: 'Long ZID' },
+		{ value: ' \tZ1  \n ', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Whitespace-beset ZID' },
+		{ value: 'Z', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Partial ZID' },
 
-		{ value: 'Z1K1', isKey: true, isZid: false, isGlobalKey: true, message: 'Trivial global key' },
-		{ value: 'Z123K1', isKey: true, isZid: false, isGlobalKey: true, message: 'Simple global key' },
-		{ value: 'Z1234567890K1234567890', isKey: true, isZid: false, isGlobalKey: true, message: 'Long global key' },
-		{ value: 'Z01K1', isKey: false, isZid: false, isGlobalKey: false, message: 'Zero-padded global key' },
-		{ value: ' \tZ1K1  \n ', isKey: false, isZid: false, isGlobalKey: false, message: 'Whitespace-beset global key' },
-		{ value: 'ZK1', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial ZID global key' },
-		{ value: 'Z1K', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial key global key' },
+		{ value: 'Z1K1', isKey: true, isZid: false, isGlobalKey: true, isReference: false, message: 'Trivial global key' },
+		{ value: 'Z123K1', isKey: true, isZid: false, isGlobalKey: true, isReference: false, message: 'Simple global key' },
+		{ value: 'Z1234567890K1234567890', isKey: true, isZid: false, isGlobalKey: true, isReference: false, message: 'Long global key' },
+		{ value: 'Z01K1', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Zero-padded global key' },
+		{ value: ' \tZ1K1  \n ', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Whitespace-beset global key' },
+		{ value: 'ZK1', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Partial ZID global key' },
+		{ value: 'Z1K', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Partial key global key' },
 
-		{ value: 'K1', isKey: true, isZid: false, isGlobalKey: false, message: 'Trivial local key' },
-		{ value: 'K123', isKey: true, isZid: false, isGlobalKey: false, message: 'Simple local key' },
-		{ value: 'K1234567890', isKey: true, isZid: false, isGlobalKey: false, message: 'Long local key' },
-		{ value: 'K01', isKey: false, isZid: false, isGlobalKey: false, message: 'Zero-padded local key' },
-		{ value: ' \tK1  \n ', isKey: false, isZid: false, isGlobalKey: false, message: 'Whitespace-beset local key' },
-		{ value: 'K', isKey: false, isZid: false, isGlobalKey: false, message: 'Partial local key' }
+		{ value: 'A1', isKey: false, isZid: false, isGlobalKey: false, isReference: true, message: 'Trivial non-Wikifunctions ID' },
+		{ value: 'A123', isKey: false, isZid: false, isGlobalKey: false, isReference: true, message: 'Simple non-Wikifunctions ID' },
+		{ value: 'A1234567890', isKey: false, isZid: false, isGlobalKey: false, isReference: true, message: 'Long non-Wikifunctions ID' },
+		{ value: 'A01', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Zero-padded non-Wikifunctions ID' },
+		{ value: ' \tA1  \n ', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Whitespace-beset non-Wikifunctions ID' },
+		{ value: 'A', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Partial non-Wikifunctions ID' },
+
+		{ value: 'K1', isKey: true, isZid: false, isGlobalKey: false, isReference: false, message: 'Trivial local key' },
+		{ value: 'K123', isKey: true, isZid: false, isGlobalKey: false, isReference: false, message: 'Simple local key' },
+		{ value: 'K1234567890', isKey: true, isZid: false, isGlobalKey: false, isReference: false, message: 'Long local key' },
+		{ value: 'K01', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Zero-padded local key' },
+		{ value: ' \tK1  \n ', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Whitespace-beset local key' },
+		{ value: 'K', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Partial local key' }
 	];
 
 	testValues.forEach( ( testRun ) => {
 		assert.strictEqual( isKey( testRun.value ), testRun.isKey, testRun.message + ': isKey' );
 		assert.strictEqual( isZid( testRun.value ), testRun.isZid, testRun.message + ': isZid' );
 		assert.strictEqual( isGlobalKey( testRun.value ), testRun.isGlobalKey, testRun.message + ': isGlobalKey' );
+		assert.strictEqual( isReference( testRun.value ), testRun.isReference, testRun.message + ': isReference' );
 	} );
 } );
 
