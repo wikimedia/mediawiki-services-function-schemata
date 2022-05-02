@@ -1,6 +1,46 @@
 'use strict';
 
-const { isString, isArray, isObject, isKey, isZid, isGlobalKey, kidFromGlobalKey, makeTrue, makeFalse, makeVoid, makeEmptyZMap, isZMap, setZMapValue, getZMapValue, makeResultEnvelope, makeResultEnvelopeWithVoid, makeMappedResultEnvelope, maybeUpgradeResultEnvelope, maybeDowngradeResultEnvelope, getError, convertArrayToZList, convertArrayToKnownTypedList, getTypedListType, arrayToZ10, convertZListToArray, inferType } = require( '../../../src/utils.js' );
+const {
+	arrayToZ10,
+	convertArrayToZList,
+	convertArrayToKnownTypedList,
+	convertZListToArray,
+	isString,
+	isArray,
+	isObject,
+	isKey,
+	isZid,
+	// isReference,
+	isGlobalKey,
+	// deepEqual,
+	// deepCopy,
+	// getHead,
+	// getTail,
+	getTypedListType,
+	inferType,
+	// isEmptyZList,
+	// isUserDefined,
+	kidFromGlobalKey,
+	makeFalse,
+	makeResultEnvelope,
+	makeResultEnvelopeWithVoid,
+	makeMappedResultEnvelope,
+	makeTrue,
+	// makeUnit,
+	makeVoid,
+	isVoid,
+	// wrapInKeyReference,
+	// wrapInQuote,
+	// wrapInZ6,
+	// wrapInZ9,
+	makeEmptyZMap,
+	isZMap,
+	setZMapValue,
+	getZMapValue,
+	maybeUpgradeResultEnvelope,
+	maybeDowngradeResultEnvelope,
+	getError
+} = require( '../../../src/utils.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -667,6 +707,19 @@ QUnit.test( 'make* functions', async ( assert ) => {
 	// Double-check that trying to make a Map from an unsupported key type returns undefined.
 	assert.strictEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z41' }, { Z1K1: 'Z9', Z9K1: 'Z1' } ), undefined );
 
+} );
+
+QUnit.test( 'isVoid', async ( assert ) => {
+	assert.strictEqual( isVoid( [] ), false );
+	assert.strictEqual( isVoid( '' ), false );
+	assert.strictEqual( isVoid( 'z24' ), false );
+	assert.strictEqual( isVoid( 'Z24' ), true );
+	assert.strictEqual( isVoid( {} ), false );
+	assert.strictEqual( isVoid( { Z1K1: '' } ), false );
+	assert.strictEqual( isVoid( { Z1K1: 'Z9' } ), false );
+	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: '' } ), false );
+	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: 'z24' } ), false );
+	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: 'Z24' } ), true );
 } );
 
 QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
