@@ -2,7 +2,8 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { convertZListToArray, isArray, isReference, isString, makeResultEnvelopeWithVoid, makeResultEnvelope } = require( './utils.js' );
+const { convertZListToArray, isArray, isReference, isString, makeMappedResultEnvelope,
+	makeResultEnvelope } = require( './utils.js' );
 const { SchemaFactory, ZObjectKeyFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 const { getError } = require( './utils' );
@@ -74,10 +75,12 @@ async function canonicalize( o ) {
 /**
  * Canonicalizes a normalized ZObject. Returns either the canonicalized
  * ZObject or a Z5/Error.  The withVoid argument supports our transition
- * from Z23 to Z24 for the non-contentful portion of the envelope.
+ * from Z23 to Z24 for the non-contentful portion of the envelope, AND
+ * our transition from basic Z22 envelopes to map-based envelopes.  With
+ * withVoid = true, BOTH Z24 and map-based envelopes will be used.
  *
  * @param {Object} o a ZObject
- * @param {boolean} withVoid Whether to use Z24/void or Z23/Nothing
+ * @param {boolean} withVoid If true, use Z24/void and map-based Z22
  * @return {Array} an array of [data, error]
  */
 async function canonicalizeExport( o, withVoid = false ) {
@@ -93,7 +96,7 @@ async function canonicalizeExport( o, withVoid = false ) {
 
 	let functor;
 	if ( withVoid ) {
-		functor = makeResultEnvelopeWithVoid;
+		functor = makeMappedResultEnvelope;
 	} else {
 		functor = makeResultEnvelope;
 	}

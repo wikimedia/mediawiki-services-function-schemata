@@ -139,7 +139,12 @@ async function test( baseName, fn, testObjects ) {
 			const error = envelope.Z22K2;
 
 			assert.deepEqual( data, { Z1K1: 'Z9', Z9K1: 'Z24' } );
-			assert.deepEqual( error.Z1K1, { Z1K1: 'Z9', Z9K1: 'Z5' } );
+			assert.deepEqual( error.Z1K1, {
+				Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+				Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' },
+				Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
+				Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
+			} );
 
 			const notFound = getMissingZ5( error, testObject.errors );
 
