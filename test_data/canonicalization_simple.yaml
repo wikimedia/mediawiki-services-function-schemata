@@ -1,0 +1,175 @@
+test_information:
+  name: canonicalize to simple arrays
+
+test_objects:
+
+  success:
+
+    - name: empty typed list to empty benjamin array
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z11
+      expected: []
+
+    - name: typed list to simple array
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z6
+        K1:
+          Z1K1: Z6
+          Z6K1: first item
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z6
+          K1:
+            Z1K1: Z6
+            Z6K1: second item
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z6
+      expected:
+        - first item
+        - second item
+
+    - name: typed list of lists
+      object:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+        K1:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z1
+      expected:
+        - []
+
+    - name: typed list, type is literal
+      object:
+        Z1K1:
+          Z1K1: Z4
+          Z4K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z1
+          Z4K2:
+            Z1K1:
+              Z1K1: Z7
+              Z7K1: Z881
+              Z881K1: Z3
+            K1:
+              Z1K1: Z3
+              Z3K1: Z1
+              Z3K2: K1
+              Z3K3:
+                Z1K1: Z12
+                Z12K1:
+                  Z1K1:
+                    Z1K1: Z7
+                    Z7K1: Z881
+                    Z881K1: Z11
+            K2:
+              Z1K1:
+                Z1K1: Z7
+                Z7K1: Z881
+                Z881K1: Z3
+              K1:
+                Z1K1: Z3
+                Z3K1:
+                  Z1K1: Z7
+                  Z7K1: Z881
+                  Z881K1: Z1
+                Z3K2: K2
+                Z3K3:
+                  Z1K1: Z12
+                  Z12K1:
+                    Z1K1:
+                      Z1K1: Z7
+                      Z7K1: Z881
+                      Z881K1: Z11
+              K2:
+                Z1K1:
+                  Z1K1: Z7
+                  Z7K1: Z881
+                  Z881K1: Z3
+          Z4K3: Z831
+        K1:
+          Z1K1: Z6
+          Z6K1: first element
+        K2:
+          Z1K1:
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z1
+      expected:
+        - first element
