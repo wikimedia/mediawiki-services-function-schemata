@@ -78,7 +78,7 @@ async function testNaturalLanguagesParsing( directory, languages ) {
 
 		isoCodes.push( language.Z2K2.Z60K1 );
 		if ( 'Z60K2' in language.Z2K2 ) {
-			const aliases = language.Z2K2.Z60K2;
+			const aliases = language.Z2K2.Z60K2.slice( 1 );
 			for ( const alias in aliases ) {
 				isoCodes.push( aliases[ alias ] );
 			}
