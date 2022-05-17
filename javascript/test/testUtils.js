@@ -124,9 +124,9 @@ async function test( baseName, fn, testObjects ) {
 		await QUnit.test( `${baseName}: ${testObject.name}`, async ( assert ) => {
 			const envelope = await fn( testObject.object );
 			const data = envelope.Z22K1;
-			const error = envelope.Z22K2;
+			const metadata = envelope.Z22K2;
 
-			assert.deepEqual( error, { Z1K1: 'Z9', Z9K1: 'Z24' } );
+			assert.deepEqual( metadata, { Z1K1: 'Z9', Z9K1: 'Z24' } );
 			assert.deepEqual( data, testObject.expected );
 		} );
 	} );
@@ -136,17 +136,17 @@ async function test( baseName, fn, testObjects ) {
 		await QUnit.test( `${baseName}: ${testObject.name}`, async ( assert ) => {
 			const envelope = await fn( testObject.object );
 			const data = envelope.Z22K1;
-			const error = envelope.Z22K2;
+			const metadata = envelope.Z22K2;
 
 			assert.deepEqual( data, { Z1K1: 'Z9', Z9K1: 'Z24' } );
-			assert.deepEqual( error.Z1K1, {
+			assert.deepEqual( metadata.Z1K1, {
 				Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
 				Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' },
 				Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
 				Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
 			} );
 
-			const notFound = getMissingZ5( error, testObject.errors );
+			const notFound = getMissingZ5( metadata, testObject.errors );
 
 			assert.strictEqual( notFound.size, 0 );
 		} );
