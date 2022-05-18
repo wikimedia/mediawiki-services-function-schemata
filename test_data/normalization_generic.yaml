@@ -1,5 +1,5 @@
 test_information:
-  name: normalize ZObject
+  name: normalize generic ZObject
 
 test_objects:
 
@@ -99,9 +99,9 @@ test_objects:
                 Z1K1: Z9
                 Z9K1: Z1
 
-    - name: object in list
+    - name: reference in list
       object:
-        - Z1
+        - Z401
       expected:
         Z1K1:
           Z1K1:
@@ -112,10 +112,10 @@ test_objects:
             Z9K1: Z881
           Z881K1:
             Z1K1: Z9
-            Z9K1: Z9
+            Z9K1: Z1
         K1:
           Z1K1: Z9
-          Z9K1: Z1
+          Z9K1: Z401
         K2:
           Z1K1:
             Z1K1:
@@ -126,7 +126,61 @@ test_objects:
               Z9K1: Z881
             Z881K1:
               Z1K1: Z9
-              Z9K1: Z9
+              Z9K1: Z1
+
+    - name: objects in list
+      object:
+        - Z1K1: Z60
+          Z60K1: en
+        - Z1K1: Z60
+          Z60K1: es
+      expected:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z60
+        K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z60
+          Z60K1:
+            Z1K1: Z6
+            Z6K1: en
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z60
+          K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z60
+            Z60K1:
+              Z1K1: Z6
+              Z6K1: es
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z60
 
     - name: list object in object
       object:

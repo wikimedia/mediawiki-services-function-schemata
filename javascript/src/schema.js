@@ -392,13 +392,14 @@ class ZObjectKeyFactory {
 	 *  "Z6{Z6K1:vittles}"
 	 *
 	 * @param { Object } ZObject a ZObject
+	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
 	 * @return { Object } (Simple|Generic|UserDefined)TypeKey or ZObjectKey
 	 */
-	static async create( ZObject ) {
+	static async create( ZObject, benjamin = false ) {
 		const normalize = require( './normalize.js' );
 		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 		const normalizedEnvelope = await normalize( ZObject,
-			/* generically= */ true, /* withVoid= */ true );
+			/* generically= */ true, /* withVoid= */ true, /* fromBenjamin */ benjamin );
 		// FIXME (T304144): return here on error.
 		const normalized = normalizedEnvelope.Z22K1;
 		const identity = await findIdentity( normalized );
@@ -709,16 +710,18 @@ class SchemaFactory {
 	 *  const Z10001Schema = factory.createUserDefined([Z4]);
 	 *
 	 * @param {Object} Z4s the descriptor for the user-defined types
+	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
 	 * @return {Schema} a fully-initialized Schema
 	 */
-	async createUserDefined( Z4s ) {
+	async createUserDefined( Z4s, benjamin = false ) {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
 
 		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 		const normalized = await Promise.all(
 			Z4s.map( async ( o ) => ( await normalize( o,
-				/* generically= */ true, /* withVoid= */ true ) ).Z22K1 ) );
+				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
+			) ).Z22K1 ) );
 
 		const errorArray = await Promise.all(
 			normalized.map( async ( o ) => ( await Z5Validator.validateStatus( o ) ).isValid() )
@@ -732,7 +735,8 @@ class SchemaFactory {
 		// is intentional and, if so, add comment to the code explaining why.
 		const normalZ4s = await Promise.all(
 			Z4s.map( async ( Z4 ) => ( await normalize( Z4,
-				/* generically= */ true, /* withVoid= */ true ) ).Z22K1 ) );
+				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
+			) ).Z22K1 ) );
 
 		// TODO (T304648): Interrogate whether doing the following identical loops and duplicating
 		// ZObjectKeyFactory.create( item ).asString() is intentional, and if so, add comment

@@ -10,6 +10,7 @@ test_objects:
         Z1K1: Z9
         Z9K1: Z4
 
+    # TODO (T292788) Remove Z10 support
     - name: list with empty string
       object:
         - ""
@@ -25,6 +26,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: list with two empty strings
       object:
         - ""
@@ -48,6 +50,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: lists with ordered strings
       object:
         - a
@@ -71,6 +74,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: lists with unordered strings
       object:
         - b
@@ -94,6 +98,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: list with lists
       object:
         - []
@@ -230,6 +235,7 @@ test_objects:
           Z1K1: Z6
           Z6K1: Z
 
+    # TODO (T292788) Remove Z10 support
     - name: array with escaped string
       object:
         - Z1K1: Z6
@@ -304,6 +310,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Q96807071
 
+    # TODO (T292788) Remove Z10 support
     - name: empty list as object in mixed form
       object:
         Z1K1: Z10
@@ -312,6 +319,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: empty list as object
       object: []
       expected:
@@ -319,6 +327,7 @@ test_objects:
           Z1K1: Z9
           Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: single string in list in mixed form, tail empty array
       object:
         Z1K1:
@@ -340,6 +349,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: single string in list as object
       object:
         - a
@@ -355,6 +365,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: "mixed form: normal Z10 head of canonical reference"
       object:
         Z1K1:
@@ -374,6 +385,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: "mixed form: normal Z10 reference-shaped string"
       object:
         Z1K1:
@@ -395,6 +407,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: two strings in list
       object:
         - a
@@ -418,6 +431,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: two strings in list in mixed form, tail as array
       object:
         Z1K1: Z10
@@ -443,6 +457,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: two strings in list in mixed form, tails mixed
       object:
         Z1K1:
@@ -478,6 +493,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: empty object in list
       object:
         - Z1K1: Z10
@@ -494,6 +510,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: empty objects in list
       object:
         - Z1K1: Z10
@@ -519,6 +536,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: empty list in list
       object:
         - []
@@ -535,6 +553,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: empty lists in list
       object:
         - []
@@ -560,6 +579,7 @@ test_objects:
               Z1K1: Z9
               Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: object in list
       object:
         - Z1
@@ -575,6 +595,7 @@ test_objects:
             Z1K1: Z9
             Z9K1: Z10
 
+    # TODO (T292788) Remove Z10 support
     - name: list object in object
       object:
         Z1K1: Z60

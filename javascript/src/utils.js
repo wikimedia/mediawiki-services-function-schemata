@@ -213,23 +213,46 @@ function arrayToZ10( array, canonical = false ) {
 }
 
 /**
- * Turns a JS array into a Typed List after inferring the element type.
+ * Infers the shared type of an array of normal ZObjects
  *
  * @param {Array} array an array of ZObjects
  * @param {boolean} canonical whether to output in canonical form
- * @return {Object} a Typed List corresponding to the input array
+ * @return {Object} type of all the elements of the list or Z1
  */
-async function convertArrayToZList( array, canonical = false ) {
+async function inferItemType( array, canonical = false ) {
 	const { ZObjectKeyFactory } = require( './schema.js' );
 	let headType;
 	const Z1K1s = new Set();
 	for ( const element of array ) {
 		Z1K1s.add( ( await ZObjectKeyFactory.create( element.Z1K1 ) ).asString() );
 	}
-	if ( Z1K1s.size === 1 ) {
+
+	// If inferred type is a resolver type, return Z1 instead
+	const resolverTypes = [ 'Z9', 'Z7', 'Z18' ];
+	if ( ( Z1K1s.size === 1 ) && ( !resolverTypes.includes( Z1K1s.values().next().value ) ) ) {
 		headType = array[ 0 ].Z1K1;
 	} else {
 		headType = 'Z1';
+	}
+
+	return ( isString( headType ) && !canonical ) ? { Z1K1: 'Z9', Z9K1: headType } : headType;
+}
+
+/**
+ * Turns a JS array into a Typed List after inferring the element type.
+ *
+ * @param {Array} array an array of ZObjects
+ * @param {boolean} canonical whether to output in canonical form
+ * @param {boolean} benjamin whether to expect a benjamin array as input
+ * @return {Object} a Typed List corresponding to the input array
+ */
+async function convertArrayToZList( array, canonical = false, benjamin = false ) {
+	let headType;
+	if ( benjamin ) {
+		headType = array.length >= 1 ? array[ 0 ] : ( canonical ? 'Z1' : { Z1K1: 'Z9', Z9K1: 'Z1' } );
+		array.shift();
+	} else {
+		headType = await inferItemType( array, canonical );
 	}
 	return convertArrayToKnownTypedList( array, headType, canonical );
 }
@@ -642,6 +665,7 @@ module.exports = {
 	convertArrayToZList,
 	convertArrayToKnownTypedList,
 	convertZListToArray,
+	inferItemType,
 	isString,
 	isArray,
 	isObject,

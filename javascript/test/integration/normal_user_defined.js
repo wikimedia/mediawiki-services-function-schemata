@@ -15,9 +15,11 @@ async function test( ZID ) {
 	const testDescriptor = readYaml( normalFile );
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 	const testZ4 = ( await normalize( testDescriptor.test_Z4,
-		/* generically= */ true, /* withVoid= */ true ) ).Z22K1;
-	const normalValidatorMap = await factory.createUserDefined( [ testZ4 ] );
-	const genericKey = ( await ZObjectKeyFactory.create( testZ4 ) ).asString();
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
+	const normalValidatorMap = await factory.createUserDefined( [ testZ4 ], /* benjamin= */ true );
+	const genericKey = (
+		await ZObjectKeyFactory.create( testZ4, /* benjamin= */ true )
+	).asString();
 	const normalValidator = normalValidatorMap.get( genericKey );
 	const info = testDescriptor.test_information;
 	await testValidation( info.name, normalValidator, testDescriptor.test_objects );
