@@ -22,6 +22,7 @@ definitions:
               $ref: "#/definitions/objects/Z11"
             K2:
               $ref: "#/definitions/objects/LIST_of_Z11"
+        - $ref: RESOLVER#/definitions/objects/RESOLVER
     Z11:
       anyOf:
         - $ref: "#/definitions/objects/Z11_literal"

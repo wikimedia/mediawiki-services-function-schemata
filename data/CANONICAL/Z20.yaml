@@ -22,6 +22,7 @@ definitions:
               $ref: "#/definitions/objects/Z20"
             K2:
               $ref: "#/definitions/objects/LIST_of_Z20"
+        - $ref: RESOLVER#/definitions/objects/RESOLVER
     Z20:
       anyOf:
         - $ref: "#/definitions/objects/Z20_literal"

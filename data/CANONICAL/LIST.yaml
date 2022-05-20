@@ -11,14 +11,15 @@ definitions:
         - $ref: RESOLVER#/definitions/objects/RESOLVER
     LIST_array:
       type: array
-      items:
+      items: []
+      additionalItems:
         $ref: Z1#/definitions/objects/Z1
     LIST_benjamin:
       type: array
-      items:
+      additionalItems:
         $ref: Z1#/definitions/objects/Z1
       minItems: 1
-      prefixItems:
+      items:
         - $ref: Z4#/definitions/objects/Z4
     LIST_generic:
       oneOf:

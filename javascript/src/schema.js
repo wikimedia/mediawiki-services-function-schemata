@@ -1,6 +1,6 @@
 'use strict';
 
-const Ajv = require( 'ajv/dist/2020' );
+const Ajv = require( 'ajv' ).default;
 
 const fs = require( 'fs' );
 const path = require( 'path' );
@@ -26,6 +26,14 @@ function initializeValidators() {
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 	Z18Validator = defaultFactory.create( 'Z18_literal' );
 	Z23Validator = defaultFactory.create( 'Z23' );
+}
+
+function newAjv() {
+	return new Ajv( {
+		allowMatchingProperties: true,
+		verbose: true,
+		strictTuples: false,
+		strictTypes: false } );
 }
 
 // TODO (T296659): Migrate validatesAs* functions to utils. Somehow avoid
@@ -515,7 +523,7 @@ class SchemaFactory {
 
 	constructor( ajv = null ) {
 		if ( ajv === null ) {
-			ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
+			ajv = newAjv();
 		}
 		this.ajv_ = ajv;
 	}
@@ -527,7 +535,7 @@ class SchemaFactory {
 	 */
 	static CANONICAL() {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
-		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
+		const ajv = newAjv();
 		const directory = dataDir( 'CANONICAL' );
 		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?)|(LIST)|(RESOLVER))\.yaml/;
 
@@ -548,7 +556,7 @@ class SchemaFactory {
 	 * @return {SchemaFactory} factory with lonely mixed form schema
 	 */
 	static MIXED() {
-		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
+		const ajv = newAjv();
 		const directory = dataDir( 'MIXED' );
 		ajv.addSchema( readYaml( path.join( directory, 'Z1.yaml' ) ) );
 		return new SchemaFactory( ajv );
@@ -561,7 +569,7 @@ class SchemaFactory {
 	 */
 	static NORMAL() {
 		// Add all schemata for normal ZObjects to ajv's parsing context.
-		const ajv = new Ajv( { allowMatchingProperties: true, verbose: true } );
+		const ajv = newAjv();
 		const directory = dataDir( 'NORMAL' );
 		const fileRegex = /((Z[1-9]\d*(K[1-9]\d*)?)|(GENERIC)|(LIST)|(RESOLVER))\.yaml/;
 
@@ -603,6 +611,7 @@ class SchemaFactory {
 		} catch ( err ) {
 			console.log( 'Could not parse schema' );
 			console.log( err.message );
+			console.log( 'schema was', schema );
 			return null;
 		}
 	}
