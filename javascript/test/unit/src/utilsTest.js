@@ -615,11 +615,14 @@ QUnit.test( 'isZMap', async ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } };
 	const doubletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
-			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+			K2: { Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+				K2: { Z1K1: listType1 } } } };
 	const bogusZMap = { Z1K1: bogusMapType, K1: { Z1K1: listType1 } };
 	assert.strictEqual( isZMap( emptyZMap ), true );
 	assert.strictEqual( isZMap( singletonZMap ), true );
@@ -631,11 +634,14 @@ QUnit.test( 'getZMapValue', async ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } };
 	const doubletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
-			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+			K2: { Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+				K2: { Z1K1: listType1 } } } };
 	assert.strictEqual( getZMapValue( emptyZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), undefined );
 	assert.deepEqual( getZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), { Z1K1: 'Z6', Z6K1: 'Be warned!' } );
 	assert.deepEqual( getZMapValue( doubletonZMap, { Z1K1: 'Z6', Z6K1: 'errors' } ), error1 );
@@ -651,12 +657,14 @@ QUnit.test( 'setZMapValue', async ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } };
 	const modifiedSingletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1,
 				K1: { Z1K1: 'Z6', Z6K1: 'warnings' },
-				K2: { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } } } };
+				K2: { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } },
+			K2: { Z1K1: listType1 } } };
 	assert.deepEqual( setZMapValue( emptyZMap, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' } ),
 		singletonZMap );
 	assert.deepEqual( setZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } ),
@@ -671,7 +679,9 @@ QUnit.test( 'setZMapValue', async ( assert ) => {
 
 QUnit.test( 'make* functions', async ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
-		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+			K2: { Z1K1: listType1 } } };
 	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
 	assert.deepEqual( makeTrue(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } } );
 	assert.deepEqual( makeFalse(), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z42' } } );
@@ -732,7 +742,9 @@ QUnit.test( 'isVoid', async ( assert ) => {
 
 QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
-		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+			K2: { Z1K1: listType1 } } };
 	const basicResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
 	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
 	const emptyResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } };
@@ -748,12 +760,16 @@ QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
 
 QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
-		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+			K2: { Z1K1: listType1 } } };
 	const emptyResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } };
 	const doubletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
-			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+			K2: { Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+				K2: { Z1K1: listType1 } } } };
 	const basicResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
 	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
 	const mappedResultEnvelope2Entries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: doubletonZMap };
@@ -775,7 +791,8 @@ QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
 			Z1K1: mapType1,
 			K1: {
 				Z1K1: listType1,
-				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' } }
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' } },
+				K2: { Z1K1: listType1 }
 			}
 		}
 	};
@@ -792,18 +809,23 @@ QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
 
 QUnit.test( 'getError', async ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
-		K1: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } };
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+			K2: { Z1K1: listType1 } } };
 	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const mappedResultEnvelopeNoEntries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: emptyZMap };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } } } };
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } };
 	const mappedResultEnvelopeWithWarnings = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMap };
 	const doubletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
-			K2: { Z1K1: listType1, K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 } } } };
+			K2: { Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+				K2: { Z1K1: listType1 } } } };
 	const basicResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
 	const mappedResultEnvelope2Entries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: doubletonZMap };
 	assert.strictEqual( getError( mappedResultEnvelopeErrorsOnly ), error1 );

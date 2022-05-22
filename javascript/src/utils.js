@@ -375,6 +375,8 @@ function setZMapValue( ZMap, key, value ) {
 		Z882K2: valueType
 	};
 	tail.K1 = { Z1K1: pairType, K1: key, K2: value };
+	const listType = tail.Z1K1;
+	tail.K2 = { Z1K1: listType };
 	return ZMap;
 }
 
