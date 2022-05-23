@@ -4,11 +4,17 @@ $ref: "#/definitions/objects/Z6"
 definitions:
   objects:
     LIST_of_Z6:
-      $ref: LIST#/definitions/objects/LIST
-      oneOf:
-        - items:
+      anyOf:
+        - $ref: LIST#/definitions/objects/LIST_benjamin
+          minItems: 1
+          items:
+            - $ref: Z4#/definitions/objects/Z4
+          additionalItems:
             $ref: "#/definitions/objects/Z6"
-          type: array
+        - $ref: LIST#/definitions/objects/LIST_array
+          items: []
+          additionalItems:
+            $ref: "#/definitions/objects/Z6"
         - $ref: LIST#/definitions/objects/LIST_generic
           type: object
           properties:

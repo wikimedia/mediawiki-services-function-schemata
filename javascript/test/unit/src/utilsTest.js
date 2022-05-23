@@ -841,7 +841,7 @@ QUnit.test( 'inferType', async ( assert ) => {
 	assert.deepEqual( inferType( 'Z0' ), 'Z6' );
 	assert.deepEqual( inferType( 'Z1K1' ), 'Z6' );
 	assert.deepEqual( inferType( 'Z1' ), 'Z9' );
-	assert.deepEqual( inferType( [ 'Z1' ] ), 'Z10' );
+	assert.deepEqual( inferType( [ 'Z1' ] ), 'LIST' );
 	assert.deepEqual( inferType( { Z1K1: 'Z1' } ), 'Z1' );
 } );
 

@@ -604,7 +604,7 @@ function inferType( object ) {
 		return 'Z6';
 	}
 	if ( isArray( object ) ) {
-		return 'Z10';
+		return 'LIST';
 	}
 	return object.Z1K1;
 }

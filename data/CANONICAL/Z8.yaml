@@ -6,7 +6,7 @@ definitions:
     Z8:
       anyOf:
         - $ref: "#/definitions/objects/Z8_literal"
-        - $ref: RESOLVER#/definitions/objects/RESOLVER
+        - $ref: "RESOLVER#/definitions/objects/RESOLVER"
     Z8_literal:
       additionalProperties: false
       properties:
