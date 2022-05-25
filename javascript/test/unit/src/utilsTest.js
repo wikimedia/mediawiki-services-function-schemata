@@ -12,8 +12,8 @@ const {
 	isZid,
 	isReference,
 	isGlobalKey,
-	// deepEqual,
-	// deepCopy,
+	deepEqual,
+	deepCopy,
 	// getHead,
 	// getTail,
 	getTypedListType,
@@ -573,6 +573,10 @@ QUnit.test( 'isZid', async ( assert ) => {
 		assert.strictEqual( isGlobalKey( testRun.value ), testRun.isGlobalKey, testRun.message + ': isGlobalKey' );
 		assert.strictEqual( isReference( testRun.value ), testRun.isReference, testRun.message + ': isReference' );
 	} );
+} );
+
+QUnit.test( 'deepEqual and deepCopy', ( assert ) => {
+	assert.strictEqual( deepEqual( deepCopy( [ undefined ] ), [ undefined ] ), true );
 } );
 
 const mapType1 = {
