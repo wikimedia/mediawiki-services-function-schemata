@@ -377,9 +377,9 @@ class ZObjectKeyFactory {
 	 *
 	 *  "Z6{Z6K1:vittles}"
 	 *
-	 * @param { Object } ZObject a ZObject
+	 * @param {Object} ZObject a ZObject
 	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
-	 * @return { Object } (Simple|Generic|UserDefined)TypeKey or ZObjectKey
+	 * @return {Promise<Object>} (Simple|Generic|UserDefined)TypeKey or ZObjectKey
 	 */
 	static async create( ZObject, benjamin = false ) {
 		const normalize = require( './normalize.js' );
@@ -653,9 +653,9 @@ class SchemaFactory {
 	 * against which validators to test the elements of a ZObject with the
 	 * corresponding keys.
 	 *
-	 * @param { Object } Z4 a Z4/Type
-	 * @param { Map } typeCache mapping from typekeys (see ZObjectKeyFactory.create) to BaseSchemata
-	 * @return { Map } mapping from type keys to BaseSchemata
+	 * @param {Object} Z4 a Z4/Type
+	 * @param {Map} typeCache mapping from typekeys (see ZObjectKeyFactory.create) to BaseSchemata
+	 * @return {Map} mapping from type keys to BaseSchemata
 	 */
 	async keyMapForUserDefined( Z4, typeCache ) {
 		const keyMap = new Map();
