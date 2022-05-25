@@ -51,6 +51,9 @@ async function testCreateNormal() {
 
 		const nestedStringError = normalError( [ 'Z507', 'Z509' ], [ 'Extra data' ] );
 		assert.deepEqual( nestedStringError, { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z5' }, Z5K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z507' }, Z507K1: { Z1K1: 'Z509', Z509K1: { Z1K1: 'Z6', Z6K1: 'Extra data' } } } } );
+
+		const simpleNonStringError = normalError( [ 'Z507' ], [ { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } } ] );
+		assert.deepEqual( simpleNonStringError, { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z5' }, Z5K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z507' }, Z507K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z40' }, Z40K1: { Z1K1: 'Z9', Z9K1: 'Z41' } } } } );
 	} );
 }
 
