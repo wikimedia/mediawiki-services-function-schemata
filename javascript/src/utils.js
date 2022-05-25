@@ -46,20 +46,6 @@ function deepCopy( o ) {
 }
 
 /**
- * Create a Z23/nothing special object, which isn't a thing and this shouldn't exist.
- *
- * @param {boolean} canonical whether output should be in canonical form
- * @return {Object} a reference to Z23(!)
- * @deprecated Use makeVoid instead.
- */
-function makeUnit( canonical = false ) {
-	if ( canonical ) {
-		return 'Z23';
-	}
-	return { Z1K1: 'Z9', Z9K1: 'Z23' };
-}
-
-/**
  * Create a Z24 / Void object.  (Z24 is the only possible value of the type
  * Z21 / Unit).
  *
@@ -460,33 +446,6 @@ function makeResultEnvelopeWithVoid( goodResult = null, badResult = null, canoni
 }
 
 /**
- * Creates a Z22 containing goodResult and BadResult.
- *
- * @deprecated Use makeResultEnvelopeWithVoid instead.
- *
- * @param {Object} goodResult Z22K1 of resulting Z22
- * @param {Object} badResult Z22K2 of resulting Z22
- * @param {boolean} canonical whether output should be in canonical form
- * @return {Object} a Z22 / Result envelope
- */
-function makeResultEnvelope( goodResult = null, badResult = null, canonical = false ) {
-	let Z1K1;
-	if ( canonical ) {
-		Z1K1 = 'Z22';
-	} else {
-		Z1K1 = {
-			Z1K1: 'Z9',
-			Z9K1: 'Z22'
-		};
-	}
-	return {
-		Z1K1: Z1K1,
-		Z22K1: goodResult === null ? makeUnit( canonical ) : goodResult,
-		Z22K2: badResult === null ? makeUnit( canonical ) : badResult
-	};
-}
-
-/**
  * Creates a map-based Z22 containing result and metadata.  metadata is normally a Z883 / Map.
  * However, if metadata is a Z5 / Error object, we place it in a new ZMap, as the value of an entry
  * with key "errors".  This is to support our transition from the older basic Z22s to map-based
@@ -683,11 +642,9 @@ module.exports = {
 	isUserDefined,
 	kidFromGlobalKey,
 	makeFalse,
-	makeResultEnvelope,
 	makeResultEnvelopeWithVoid,
 	makeMappedResultEnvelope,
 	makeTrue,
-	makeUnit,
 	makeVoid,
 	isVoid,
 	wrapInKeyReference,
