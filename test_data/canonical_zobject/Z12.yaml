@@ -11,6 +11,14 @@ test_objects:
       object:
         Z1K1: Z12
         Z12K1: []
+    - name: bad multilingual string (invalid monolingual)
+      object:
+        Z1K1: Z12
+        Z12K1:
+          - Z11
+          - Z1K1: Z11
+            Z11K1: en
+            Z11K2: english text
     - name: bad multilingual string (typed list with no type)
       object:
         Z1K1: Z12
@@ -46,6 +54,14 @@ test_objects:
             Z11K1:
               Z1K1: Z60
               Z60K1: en
+            Z11K2: english text
+    - name: good multilingual string (reference language code)
+      object:
+        Z1K1: Z12
+        Z12K1:
+          - Z11
+          - Z1K1: Z11
+            Z11K1: Z1002
             Z11K2: english text
     - name: good multilingual string (typed list with two Z11s)
       object:

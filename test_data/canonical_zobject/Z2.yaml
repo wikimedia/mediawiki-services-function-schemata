@@ -98,6 +98,18 @@ test_objects:
         Z2K3:
           Z12K1: [ Z11 ]
           Z1K1: Z12
+    - name: bad Z2 with invalid Z2K3/label type (Z11K1 is a string)
+      object:
+        Z1K1: Z2
+        Z2K1: my identification
+        Z2K2: this is a valid text
+        Z2K3:
+          Z12K1:
+            - Z11
+            - Z1K1: Z11
+              Z11K1: en
+              Z11K2: english label
+          Z1K1: Z12
   success:
     - name: arbitrary Z2
       object:
@@ -112,6 +124,18 @@ test_objects:
                 Z60K1: en
               Z11K2: english text
               Z1K1: Z11
+          Z1K1: Z12
+    - name: monolingual string language is reference
+      object:
+        Z1K1: Z2
+        Z2K1: my identification
+        Z2K2: this is a valid text
+        Z2K3:
+          Z12K1:
+            - Z11
+            - Z1K1: Z11
+              Z11K1: Z1002
+              Z11K2: english label
           Z1K1: Z12
     - name: obmutescent Z2
       object:
