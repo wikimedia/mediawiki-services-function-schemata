@@ -9,11 +9,11 @@ const { getError } = require( './utils' );
 
 const normalFactory = SchemaFactory.NORMAL();
 const normalZ1Validator = normalFactory.create( 'Z1' );
+const Z4Validator = normalFactory.create( 'Z4_literal' );
 const Z5Validator = normalFactory.create( 'Z5_literal' );
 const Z6Validator = normalFactory.create( 'Z6_literal' );
 const Z7Validator = normalFactory.create( 'Z7_literal' );
 const Z9Validator = normalFactory.create( 'Z9_literal' );
-const Z10Validator = normalFactory.create( 'Z10_literal' );
 const TypedListValidator = normalFactory.create( 'LIST_literal' );
 
 async function canonicalizeObject( o, benjamin ) {
@@ -35,13 +35,6 @@ async function canonicalizeObject( o, benjamin ) {
 		}
 	}
 
-	// TODO (T292788): Remove support for Z10K1.
-	if ( await Z10Validator.validate( o ) ) {
-		return await Promise.all(
-			convertZListToArray( o ).map( ( e ) => canonicalize( e, benjamin ) )
-		);
-	}
-
 	if ( await TypedListValidator.validate( o ) ) {
 		const itemList = await Promise.all(
 			convertZListToArray( o ).map( ( e ) => canonicalize( e, benjamin ) )
@@ -49,10 +42,24 @@ async function canonicalizeObject( o, benjamin ) {
 
 		if ( benjamin ) {
 			let itemType;
-			// If type is a function call, item is the content of Z88K1
-			if ( await Z7Validator.validate( o.Z1K1 ) ) {
+			// FIXME: Should we search recursively for Z881?
+			if (
+				await Z7Validator.validate( o.Z1K1 ) &&
+				( await canonicalize( o.Z1K1.Z7K1 ) === 'Z881' )
+			) {
+				// If type is a function call to Z881,
+				// itemType is the canonical content of Z88K1.
 				itemType = await canonicalize( o.Z1K1.Z881K1, benjamin );
+			} else if (
+				await Z4Validator.validate( o.Z1K1 ) &&
+				await Z7Validator.validate( o.Z1K1.Z4K1 ) &&
+				( await canonicalize( o.Z1K1.Z4K1.Z7K1 ) === 'Z881' )
+			) {
+				// If type is a literal and Z4K1 is function call to Z881,
+				// itemType is the content of Z4K1.Z88K1
+				itemType = await canonicalize( o.Z1K1.Z4K1.Z881K1, benjamin );
 			} else {
+				// Else, itemType is the whole type ZObject transformed into canonical form.
 				itemType = await canonicalize( o.Z1K1, benjamin );
 			}
 			return [ itemType ].concat( itemList );

@@ -23,6 +23,29 @@ test_objects:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10
+    - name: bad multilingual string (Z10 with one Z11)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z11
+            Z11K1:
+              Z1K1: Z9
+              Z9K1: Z1002
+            Z11K2:
+              Z1K1: Z6
+              Z6K1: english label
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
     - name: bad multilingual string (wrongly typed list)
       object:
         Z1K1:
@@ -65,39 +88,17 @@ test_objects:
             Z11K2:
               Z1K1: Z6
               Z6K1: english label
+    - name: bad multilingual string (empty Z10)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z12
+        Z12K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+
   success:
-    - name: good multilingual string (empty Z10)
-      object:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z12
-        Z12K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-    - name: good multilingual string (Z10 with one Z11)
-      object:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z12
-        Z12K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-          Z10K1:
-            Z1K1:
-              Z1K1: Z9
-              Z9K1: Z11
-            Z11K1:
-              Z1K1: Z9
-              Z9K1: Z1002
-            Z11K2:
-              Z1K1: Z6
-              Z6K1: english label
-          Z10K2:
-            Z1K1:
-              Z1K1: Z9
-              Z9K1: Z10
     - name: good multilingual string (empty typed list of Z11s)
       object:
         Z1K1:

@@ -99,30 +99,28 @@ function makeFalse() {
 /**
  * Retrieves the head of a ZList.
  *
- * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
- * @return {Object} the head list element, (Z10)?K1
+ * @param {Object} ZList a generic typed list (Z881)
+ * @return {Object} the head list element, K1
  */
 function getHead( ZList ) {
-	// TODO (T292788): Remove support for Z10K1.
-	return ZList.Z10K1 || ZList.K1;
+	return ZList.K1;
 }
 
 /**
  * Retrieves the tail of a ZList.
  *
- * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
- * @return {Array} the tail list element, (Z10)?K2
+ * @param {Object} ZList a generic typed list (Z881)
+ * @return {Array} the tail list element, K2
  */
 function getTail( ZList ) {
-	// TODO (T292788): Remove support for Z10K1.
-	return ZList.Z10K2 || ZList.K2;
+	return ZList.K2;
 }
 
 /**
  * Determines whether an already-validated ZList is empty. Because the list has
- * already been validated, it is sufficient to check for the presence of (Z10)K1.
+ * already been validated, it is sufficient to check for the presence of K1.
  *
- * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
+ * @param {Object} ZList a generic typed list (Z881)
  * @return {boolean} whether ZList is empty
  */
 function isEmptyZList( ZList ) {
@@ -130,9 +128,13 @@ function isEmptyZList( ZList ) {
 }
 
 /**
- * Turns a Z10 into a JS array for ease of iteration.
+ * Turns a ZList into a JS array for ease of iteration.
  *
- * @param {Object} ZList a generic typed list (Z881) or a Z10 (deprecated)
+ * TODO (T310482): Deprecate this method once function-orchestrator is fully operating with
+ * benjamin arrays. This method can stay as a private internal function in canonicalize, but
+ * should not be exported.
+ *
+ * @param {Object} ZList a generic typed list (Z881)
  * @return {Array} an array consisting of all elements of ZList
  */
 function convertZListToArray( ZList ) {
@@ -141,7 +143,6 @@ function convertZListToArray( ZList ) {
 		return [];
 	}
 
-	// TODO (T292788): Remove support for Z10K1.
 	let tail = ZList;
 	const result = [];
 	while ( true ) {
@@ -159,8 +160,8 @@ function convertZListToArray( ZList ) {
  * Turns a JS array into a Typed List.
  *
  * @param {Array} array an array of ZObjects
- * @param {string} headKey key to be used for list head (Z10K1 or K1)
- * @param {string} tailKey key to be used for list tail (Z10K2 or K2)
+ * @param {string} headKey key to be used for list head (K1)
+ * @param {string} tailKey key to be used for list tail (K2)
  * @param {Object} tailType list type
  * @return {Object} a Typed List corresponding to the input array
  */
@@ -176,26 +177,6 @@ function convertArrayToZListInternal( array, headKey, tailKey, tailType ) {
 		tail = tail[ tailKey ];
 	}
 	return result;
-}
-
-/**
- * Turns a JS array into a Z10.
- *
- * @param {Array} array an array of ZObjects
- * @param {boolean} canonical whether to output in canonical form
- * @return {Object} a Z10 List corresponding to the input array
- */
-function arrayToZ10( array, canonical = false ) {
-	let Z1K1;
-	if ( canonical ) {
-		Z1K1 = 'Z10';
-	} else {
-		Z1K1 = {
-			Z1K1: 'Z9',
-			Z9K1: 'Z10'
-		};
-	}
-	return convertArrayToZListInternal( array, 'Z10K1', 'Z10K2', Z1K1 );
 }
 
 /**
@@ -631,7 +612,7 @@ function setMetadataValue( envelope, key, value ) {
 }
 
 const builtInTypes = new Set( [
-	'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
+	'Z1', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
 	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
 	'Z60', 'Z61', 'Z7', 'Z8', 'Z80', 'Z86', 'Z9', 'Z99'
 ] );
@@ -682,7 +663,6 @@ function wrapInQuote( data ) {
 }
 
 module.exports = {
-	arrayToZ10,
 	convertArrayToZList,
 	convertArrayToKnownTypedList,
 	convertZListToArray,

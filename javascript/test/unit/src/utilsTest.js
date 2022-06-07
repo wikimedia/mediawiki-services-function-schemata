@@ -1,7 +1,6 @@
 'use strict';
 
 const {
-	arrayToZ10,
 	convertArrayToZList,
 	convertArrayToKnownTypedList,
 	convertZListToArray,
@@ -449,45 +448,6 @@ QUnit.test( 'getTypedListType with normal function call', ( assert ) => {
 		}
 	};
 	assert.deepEqual( expected, getTypedListType( elementType ) );
-} );
-
-QUnit.test( 'arrayToZ10', ( assert ) => {
-	const array = [
-		{
-			Z1K1: 'Z6',
-			Z6K1: 'stank'
-		}
-	];
-	const listZ1K1 = { Z1K1: 'Z9', Z9K1: 'Z10' };
-	assert.deepEqual(
-		arrayToZ10( array ),
-		{ Z1K1: listZ1K1, Z10K1: array[ 0 ], Z10K2: { Z1K1: listZ1K1 } }
-	);
-	assert.deepEqual(
-		arrayToZ10( array, true ),
-		{ Z1K1: 'Z10', Z10K1: array[ 0 ], Z10K2: { Z1K1: 'Z10' } }
-	);
-} );
-
-QUnit.test( 'convertZListToArray with Z10', ( assert ) => {
-	const expected = [
-		{
-			Z1K1: 'Z6',
-			Z6K1: 'stank'
-		}
-	];
-	const listZ1K1 = {
-		Z1K1: 'Z9',
-		Z9K1: 'Z10'
-	};
-	const Z10 = {
-		Z1K1: listZ1K1,
-		Z10K1: expected[ 0 ],
-		Z10K2: {
-			Z1K1: listZ1K1
-		}
-	};
-	assert.deepEqual( expected, convertZListToArray( Z10 ) );
 } );
 
 QUnit.test( 'convertZListToArray with Typed List', ( assert ) => {

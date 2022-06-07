@@ -23,7 +23,7 @@ QUnit.module( 'canonicalization' );
 }
 
 {
-	const testPath = path.join( 'test_data', 'canonicalization_simple.yaml' );
+	const testPath = path.join( 'test_data', 'canonicalization_legacy.yaml' );
 	const testDescriptor = readYaml( testPath );
 	const info = testDescriptor.test_information;
 

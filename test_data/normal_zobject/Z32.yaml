@@ -31,6 +31,37 @@ test_objects:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10
+    - name: bad multilingual string set (all Z10s)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z32
+        Z32K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z31
+            Z31K1:
+              Z1K1: Z9
+              Z9K1: Z1002
+            Z31K2:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z10
+              Z10K1:
+                Z1K1: Z6
+                Z6K1: good value
+              Z10K2:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z10
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
     - name: bad multilingual string set (Z31K1 has typed list of wrong type)
       object:
         Z1K1:
@@ -92,47 +123,17 @@ test_objects:
               Z881K1:
                 Z1K1: Z9
                 Z9K1: Z31
+    - name: bad multilingual string set (empty Z10)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z32
+        Z32K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+
   success:
-    - name: good multilingual string set (empty Z10)
-      object:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z32
-        Z32K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-    - name: good multilingual string set (all Z10s)
-      object:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z32
-        Z32K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-          Z10K1:
-            Z1K1:
-              Z1K1: Z9
-              Z9K1: Z31
-            Z31K1:
-              Z1K1: Z9
-              Z9K1: Z1002
-            Z31K2:
-              Z1K1:
-                Z1K1: Z9
-                Z9K1: Z10
-              Z10K1:
-                Z1K1: Z6
-                Z6K1: good value
-              Z10K2:
-                Z1K1:
-                  Z1K1: Z9
-                  Z9K1: Z10
-          Z10K2:
-            Z1K1:
-              Z1K1: Z9
-              Z9K1: Z10
     - name: good multilingual string set (Z32K1 is empty typed list of Z31)
       object:
         Z1K1:

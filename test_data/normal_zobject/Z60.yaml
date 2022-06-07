@@ -33,6 +33,25 @@ test_objects:
             Z1K1:
               Z1K1: Z9
               Z9K1: Z10
+    - name: bad language (Z10 of code aliases)
+      object:
+        Z1K1:
+          Z1K1: Z9
+          Z9K1: Z60
+        Z60K1:
+          Z1K1: Z6
+          Z6K1: es
+        Z60K2:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z10
+          Z10K1:
+            Z1K1: Z6
+            Z6K1: es-mx
+          Z10K2:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z10
     - name: bad language (typed list with wrong type)
       object:
         Z1K1:
@@ -73,7 +92,7 @@ test_objects:
         Z18K1:
           Z1K1: Z6
           Z6K1: Z1000K1
-    - name: good language (empty Z10 of code aliases)
+    - name: good language (empty list of code aliases)
       object:
         Z1K1:
           Z1K1: Z9
@@ -83,27 +102,15 @@ test_objects:
           Z6K1: es
         Z60K2:
           Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-    - name: good language (Z10 of code aliases)
-      object:
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z60
-        Z60K1:
-          Z1K1: Z6
-          Z6K1: es
-        Z60K2:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-          Z10K1:
-            Z1K1: Z6
-            Z6K1: es-mx
-          Z10K2:
             Z1K1:
               Z1K1: Z9
-              Z9K1: Z10
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z6
     - name: good language (empty typed list of Z6s)
       object:
         Z1K1:

@@ -11,7 +11,7 @@ test_objects:
           Z89:
             Z1K1:
               Z1K1: Z9
-              Z9K1: Z10
+              Z9K1: Z401
     - name: sad Z6
       object:
         Z1K1: Z6
@@ -28,17 +28,10 @@ test_objects:
           Z9K1: Z1
     - name: Z23 should never be instanced
       object:
-        Z10K1:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z23
-        Z10K2:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
         Z1K1:
           Z1K1: Z9
-          Z9K1: Z10
+          Z9K1: Z23
+
   success:
     - name: happy Z9 reference
       object:
@@ -47,56 +40,87 @@ test_objects:
     - name: happy Z9 array empty
       object:
         Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z9
     - name: happy Z13
       object:
         Z1K1: Z9
         Z9K1: Z13
-    - name: happy nested Z13
+    - name: happy array
       object:
-        Z10K1:
-          Z1K1: Z6
-          Z6K1: wherewith
-        Z10K2:
-          Z1K1: Z9
-          Z9K1: Z13
         Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10
-    - name: happy Z9 array
-      object:
-        Z10K1:
-          Z1K1: Z6
-          Z6K1: fanatics
-        Z10K2:
-          Z10K1:
-            Z1K1: Z6
-            Z6K1: have
-          Z10K2:
-            Z10K1:
-              Z1K1: Z6
-              Z6K1: their
-            Z10K2:
-              Z10K1:
-                Z1K1: Z6
-                Z6K1: dreams
-              Z10K2:
-                Z1K1:
-                  Z1K1: Z9
-                  Z9K1: Z10
-              Z1K1:
-                Z1K1: Z9
-                Z9K1: Z10
-            Z1K1:
-              Z1K1: Z9
-              Z9K1: Z10
           Z1K1:
             Z1K1: Z9
-            Z9K1: Z10
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z6
+        K1:
+          Z1K1: Z6
+          Z6K1: fanatics
+        K2:
+          Z1K1:
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z6
+          K1:
+            Z1K1: Z6
+            Z6K1: have
+          K2:
+            Z1K1:
+              Z1K1:
+                Z1K1: Z9
+                Z9K1: Z7
+              Z7K1:
+                Z1K1: Z9
+                Z9K1: Z881
+              Z881K1:
+                Z1K1: Z9
+                Z9K1: Z6
+            K1:
+              Z1K1: Z6
+              Z6K1: their
+            K2:
+              Z1K1:
+                Z1K1:
+                  Z1K1: Z9
+                  Z9K1: Z7
+                Z7K1:
+                  Z1K1: Z9
+                  Z9K1: Z881
+                Z881K1:
+                  Z1K1: Z9
+                  Z9K1: Z6
+              K1:
+                Z1K1: Z6
+                Z6K1: dreams
+              K2:
+                Z1K1:
+                  Z1K1:
+                    Z1K1: Z9
+                    Z9K1: Z7
+                  Z7K1:
+                    Z1K1: Z9
+                    Z9K1: Z881
+                  Z881K1:
+                    Z1K1: Z9
+                    Z9K1: Z6
     - name: happy Z6
       object:
         Z1K1: Z6
@@ -119,19 +143,21 @@ test_objects:
           Z9K1: Z401
     - name: happy Z23 reference
       object:
-        Z10K1:
-          Z1K1: Z9
-          Z9K1: Z23
-        Z10K2:
-          Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10
+        Z1K1: Z9
+        Z9K1: Z23
     - name: happy Z1 with a Z99 leaf
       object:
-        Z10K1:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z1
+        K1:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z99
@@ -140,29 +166,47 @@ test_objects:
             is: not
             object: that
             some: random
-        Z10K2:
+        K2:
           Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
     - name: happy Z1 with a Z99 non-leaf
       object:
-        Z10K1:
+        Z1K1:
+          Z1K1:
+            Z1K1: Z9
+            Z9K1: Z7
+          Z7K1:
+            Z1K1: Z9
+            Z9K1: Z881
+          Z881K1:
+            Z1K1: Z9
+            Z9K1: Z1
+        K1:
           Z1K1:
             Z1K1: Z9
             Z9K1: Z99
           Z99K1:
             Z1K1: Z6
             Z6K1: quoted string
-        Z10K2:
+        K2:
           Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10
-        Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10
+            Z1K1:
+              Z1K1: Z9
+              Z9K1: Z7
+            Z7K1:
+              Z1K1: Z9
+              Z9K1: Z881
+            Z881K1:
+              Z1K1: Z9
+              Z9K1: Z1
     - name: can be a Z9
       object:
         Z1K1: Z9

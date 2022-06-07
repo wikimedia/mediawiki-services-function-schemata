@@ -498,7 +498,7 @@ class GenericSchema extends BaseSchema {
 	 * @return {ValidationStatus} a validation status instance
 	 */
 	async validateStatus( maybeValid ) {
-		// TODO (T296842): Check for stray keys; allow non-local keys for e.g. Z10?
+		// TODO (T296842): Check for stray keys; allow non-local keys
 		for ( const key of this.keyMap_.keys() ) {
 			// TODO (T290996): How to signal optional keys?
 			if ( maybeValid[ key ] === undefined ) {
@@ -620,19 +620,16 @@ class SchemaFactory {
 
 	/**
 	 * Create a schema for the desired native type. A schema for normalized
-	 * Z10s, for example, can be created as easily as
+	 * Z11s, for example, can be created as easily as
 	 *
 	 *  const factory = SchemaFactory.NORMAL();
-	 *  const Z10Schema = factory.create("Z10");
+	 *  const Z11Schema = factory.create("Z11");
 	 *
 	 * @param {string} schemaName the name of a supported schema
 	 * @return {Schema} a fully-initialized Schema or null if unsupported
 	 */
 	create( schemaName ) {
 		let type = schemaName;
-		if ( schemaName === 'Z13' ) {
-			type = 'Z10';
-		}
 		if ( schemaName === 'Z41' || schemaName === 'Z42' ) {
 			type = 'Z40';
 		}

@@ -6,7 +6,6 @@ definitions:
     LIST_OF_Z31:
       $ref: LIST#/definitions/objects/LIST
       anyOf:
-        - $ref: Z10#/definitions/objects/Z10
         - $ref: LIST#/definitions/objects/LIST_literal
           type: object
           properties:

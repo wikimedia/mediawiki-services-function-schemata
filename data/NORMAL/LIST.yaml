@@ -6,7 +6,6 @@ definitions:
     LIST:
       anyOf:
         - $ref: "#/definitions/objects/LIST_literal"
-        - $ref: Z10#/definitions/objects/Z10
         - $ref: RESOLVER#/definitions/objects/RESOLVER
 
     LIST_literal:

@@ -1,11 +1,11 @@
 test_information:
-  name: canonicalize to simple arrays
+  name: canonicalize to legacy lists
 
 test_objects:
 
   success:
 
-    - name: empty typed list to empty benjamin array
+    - name: empty typed list to empty simple array
       object:
         Z1K1:
           Z1K1:
@@ -114,7 +114,7 @@ test_objects:
       expected:
         - []
 
-    - name: typed list, type is literal
+    - name: typed list to simple array, type is literal
       object:
         Z1K1:
           Z1K1: Z4

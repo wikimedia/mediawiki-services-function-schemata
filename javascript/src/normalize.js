@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { arrayToZ10, convertArrayToZList, isArray, isReference, isString,
+const { convertArrayToZList, isArray, isReference, isString,
 	makeMappedResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
@@ -23,18 +23,12 @@ async function normalize( o, generically, benjamin ) {
 		}
 	}
 
-	// If generic = true, converts to generic list
 	// If benjamin = true, interprets array as benjamin array
-	// TODO (T292788): To remove support for Z10K1, remove behavior for
-	// generic=false and benjamin=false
+	// TODO (T292788): Remove behavior for benjamin=false
 	if ( isArray( o ) ) {
-		if ( generically ) {
-			return await convertArrayToZList(
-				await Promise.all( o.map( partialNormalize ) ), false, benjamin
-			);
-		} else {
-			return await arrayToZ10( await Promise.all( o.map( partialNormalize ) ) );
-		}
+		return await convertArrayToZList(
+			await Promise.all( o.map( partialNormalize ) ), false, benjamin
+		);
 	}
 
 	if ( o.Z1K1 === 'Z5' &&
@@ -56,9 +50,6 @@ async function normalize( o, generically, benjamin ) {
 		if ( keys[ i ] === 'Z9K1' && isString( o.Z9K1 ) ) {
 			result.Z9K1 = o.Z9K1;
 			continue;
-		}
-		if ( keys[ i ] === 'Z10K1' && !keys.includes( 'Z10K2' ) ) {
-			result.Z10K2 = await partialNormalize( [] );
 		}
 		result[ keys[ i ] ] = await partialNormalize( o[ keys[ i ] ] );
 	}
