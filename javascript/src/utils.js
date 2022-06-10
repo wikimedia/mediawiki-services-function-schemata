@@ -393,15 +393,19 @@ function setZMapValue( ZMap, key, value ) {
  * Return the ZMap value corresponding to the given key, if present.
  * TODO (T302015) When ZMap keys are extended beyond Z6/Z39, update accordingly
  *
- * @param {Object} ZMap a Z883/Typed map, in normal form
- * @param {Object} key a Z6 or Z39 instance, in normal form
+ * @param {Object} ZMap a Z883/Typed map, in normal OR canonical form
+ * @param {Object} key a Z6 or Z39 instance, in normal OR canonical form (but same form as ZMap)
+ * @param {boolean} benjamin If ZMap canonical, whether to expect Benjamin format
  * @return {Object} a Z1/Object, the value of the map entry with the given key,
  * or undefined if there is no such entry
  */
-function getZMapValue( ZMap, key ) {
+function getZMapValue( ZMap, key, benjamin = false ) {
 	if ( ZMap === undefined ) {
 		console.error( 'getZMapValue called with undefined; please fix your caller' );
 		return undefined;
+	}
+	if ( isArray( ZMap.K1 ) ) {
+		return getValueFromCanonicalZMap( ZMap, key, benjamin );
 	}
 
 	let tail = ZMap.K1;
@@ -416,6 +420,31 @@ function getZMapValue( ZMap, key ) {
 			return entry.K2;
 		}
 		tail = getTail( tail );
+	}
+	return undefined;
+}
+
+/**
+ * Return the ZMap value corresponding to the given key, if present.
+ * INTERNAL to this file; external callers use getZMapValue.
+ * TODO (T302015) When ZMap keys are extended beyond Z6/Z39, update accordingly
+ *
+ * @param {Object} ZMap a Z883/Typed map, in canonical form
+ * @param {Object} key a Z6 or Z39 instance, in canonical form
+ * @param {boolean} benjamin whether to expect Benjamin format
+ * @return {Object} a Z1/Object, the value of the map entry with the given key,
+ * or undefined if there is no such entry
+ */
+function getValueFromCanonicalZMap( ZMap, key, benjamin = false ) {
+	const K1Array = ZMap.K1;
+	const firstIndex = benjamin ? 1 : 0;
+	for ( let i = firstIndex; i < K1Array.length; i++ ) {
+		const entry = K1Array[ i ];
+		if ( ( entry.K1 === key ) ||
+			( entry.K1.Z1K1 === 'Z6' && key.Z1K1 === 'Z6' && entry.K1.Z6K1 === key.Z6K1 ) ||
+			( entry.K1.Z1K1 === 'Z39' && key.Z1K1 === 'Z39' && entry.K1.Z39K1 === key.Z39K1 ) ) {
+			return entry.K2;
+		}
 	}
 	return undefined;
 }
@@ -552,15 +581,24 @@ function maybeDowngradeResultEnvelope( ResultEnvelope ) {
  * Retrieves the Z5/Error, if present, from the given Z22/Evaluation result (envelope).
  * Works both with older "basic" Z22s and with newer map-based Z22s.
  *
- * @param {Object} envelope a Z22
+ * @param {Object} envelope a Z22/Evaluation result (envelope), in normal OR canonical form
+ * @param {boolean} benjamin If envelope canonical, whether to expect Benjamin format
  * @return {Object} a Z5/Error if the envelope contains an error; Z24/void otherwise
  */
-function getError( envelope ) {
+function getError( envelope, benjamin = false ) {
 	const metadata = envelope.Z22K2;
 	if ( isZMap( metadata ) ) {
-		let error = getZMapValue( metadata, { Z1K1: 'Z6', Z6K1: 'errors' } );
+		let canonical, key;
+		if ( isArray( metadata.K1 ) ) {
+			canonical = true;
+			key = 'errors';
+		} else {
+			canonical = false;
+			key = { Z1K1: 'Z6', Z6K1: 'errors' };
+		}
+		let error = getZMapValue( metadata, key, benjamin );
 		if ( error === undefined ) {
-			error = makeVoid();
+			error = makeVoid( canonical );
 		}
 		return error;
 	} else {

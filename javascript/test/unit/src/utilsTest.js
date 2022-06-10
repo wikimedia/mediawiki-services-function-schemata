@@ -39,6 +39,7 @@ const {
 	maybeDowngradeResultEnvelope,
 	getError
 } = require( '../../../src/utils.js' );
+const canonicalize = require( '../../../src/canonicalize.js' );
 
 QUnit.module( 'utils.js' );
 
@@ -600,10 +601,10 @@ const pairType1 = {
 	Z882K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
 };
 const error1 = {
-	Z1K1: 'Z5',
+	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z5' },
 	Z5K1: {
-		Z1K1: 'Z507',
-		Z507K1: 'Could not dereference Z7K1'
+		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z507' },
+		Z507K1: { Z1K1: 'Z6', Z6K1: 'Could not dereference Z7K1' }
 	}
 };
 const bogusMapType = {
@@ -651,6 +652,56 @@ QUnit.test( 'getZMapValue', async ( assert ) => {
 	// Double-check that trying to get a ZMapValue on undefined returns undefined.
 	assert.strictEqual(
 		getZMapValue( undefined, { Z1K1: 'Z6', Z6K1: 'warnings' } ),
+		undefined
+	);
+} );
+
+QUnit.test( 'getZMapValue with pre-Benjamin canonical form', async ( assert ) => {
+	const emptyZMap =
+		( await canonicalize( { Z1K1: mapType1, K1: { Z1K1: listType1 } }, false, false ) ).Z22K1;
+	const singletonZMap = ( await canonicalize( { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } }, false, false ) ).Z22K1;
+	const doubletonZMap = ( await canonicalize( { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+				K2: { Z1K1: listType1 } } } }, false, false ) ).Z22K1;
+	assert.strictEqual( getZMapValue( emptyZMap, 'warnings' ), undefined );
+	assert.deepEqual( getZMapValue( singletonZMap, 'warnings' ), 'Be warned!' );
+	assert.deepEqual( getZMapValue( doubletonZMap, 'errors' ),
+		( await canonicalize( error1, false, false ) ).Z22K1 );
+
+	// Double-check that trying to get a ZMapValue on undefined returns undefined.
+	assert.strictEqual(
+		getZMapValue( undefined, 'warnings' ),
+		undefined
+	);
+} );
+
+QUnit.test( 'getZMapValue with (Benjamin) canonical form', async ( assert ) => {
+	const emptyZMap =
+		( await canonicalize( { Z1K1: mapType1, K1: { Z1K1: listType1 } }, false, true ) ).Z22K1;
+	const singletonZMap = ( await canonicalize( { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } }, false, true ) ).Z22K1;
+	const doubletonZMap = ( await canonicalize( { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1,
+				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
+				K2: { Z1K1: listType1 } } } }, false, true ) ).Z22K1;
+	assert.strictEqual( getZMapValue( emptyZMap, 'warnings', true ), undefined );
+	assert.deepEqual( getZMapValue( singletonZMap, 'warnings', true ), 'Be warned!' );
+	assert.deepEqual( getZMapValue( doubletonZMap, 'errors', true ),
+		( await canonicalize( error1, false, true ) ).Z22K1 );
+
+	// Double-check that trying to get a ZMapValue on undefined returns undefined.
+	assert.strictEqual(
+		getZMapValue( undefined, 'warnings', true ),
 		undefined
 	);
 } );
