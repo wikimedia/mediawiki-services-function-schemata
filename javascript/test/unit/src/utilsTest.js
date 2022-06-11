@@ -646,7 +646,10 @@ QUnit.test( 'getZMapValue', async ( assert ) => {
 				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
 				K2: { Z1K1: listType1 } } } };
 	assert.strictEqual( getZMapValue( emptyZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), undefined );
+	assert.strictEqual( getZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'not there' } ), undefined );
 	assert.deepEqual( getZMapValue( singletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), { Z1K1: 'Z6', Z6K1: 'Be warned!' } );
+	assert.strictEqual( getZMapValue( doubletonZMap, { Z1K1: 'Z6', Z6K1: 'not there' } ), undefined );
+	assert.deepEqual( getZMapValue( doubletonZMap, { Z1K1: 'Z6', Z6K1: 'warnings' } ), { Z1K1: 'Z6', Z6K1: 'Be warned!' } );
 	assert.deepEqual( getZMapValue( doubletonZMap, { Z1K1: 'Z6', Z6K1: 'errors' } ), error1 );
 
 	// Double-check that trying to get a ZMapValue on undefined returns undefined.
@@ -670,7 +673,10 @@ QUnit.test( 'getZMapValue with pre-Benjamin canonical form', async ( assert ) =>
 				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
 				K2: { Z1K1: listType1 } } } }, false, false ) ).Z22K1;
 	assert.strictEqual( getZMapValue( emptyZMap, 'warnings' ), undefined );
+	assert.strictEqual( getZMapValue( singletonZMap, 'not there' ), undefined );
 	assert.deepEqual( getZMapValue( singletonZMap, 'warnings' ), 'Be warned!' );
+	assert.strictEqual( getZMapValue( doubletonZMap, 'not there' ), undefined );
+	assert.deepEqual( getZMapValue( doubletonZMap, 'warnings' ), 'Be warned!' );
 	assert.deepEqual( getZMapValue( doubletonZMap, 'errors' ),
 		( await canonicalize( error1, false, false ) ).Z22K1 );
 
@@ -695,7 +701,10 @@ QUnit.test( 'getZMapValue with (Benjamin) canonical form', async ( assert ) => {
 				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
 				K2: { Z1K1: listType1 } } } }, false, true ) ).Z22K1;
 	assert.strictEqual( getZMapValue( emptyZMap, 'warnings', true ), undefined );
+	assert.strictEqual( getZMapValue( singletonZMap, 'not there', true ), undefined );
 	assert.deepEqual( getZMapValue( singletonZMap, 'warnings', true ), 'Be warned!' );
+	assert.strictEqual( getZMapValue( doubletonZMap, 'not there', true ), undefined );
+	assert.deepEqual( getZMapValue( doubletonZMap, 'warnings', true ), 'Be warned!' );
 	assert.deepEqual( getZMapValue( doubletonZMap, 'errors', true ),
 		( await canonicalize( error1, false, true ) ).Z22K1 );
 
