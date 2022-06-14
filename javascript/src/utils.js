@@ -606,6 +606,30 @@ function getError( envelope, benjamin = false ) {
 	}
 }
 
+/**
+ * Ensures there is an entry for the given key / value in the metadata map
+ * of the given Z22 / Evaluation result (envelope).  If the envelope has
+ * no metadata map, creates one.  If there is already an entry for the given key,
+ * overwrites the corresponding value.  Otherwise, creates a new entry.
+ * N.B.: May modify the value of Z22K2 and the ZMap's K1 in place.
+ *
+ * @param {Object} envelope a Z22/Evaluation result, in normal form
+ * @param {Object} key a Z6 or Z39 instance, in normal form
+ * @param {Object} value a Z1/ZObject, in normal form
+ * @return {Object} the updated envelope, in normal form
+ */
+function setMetadataValue( envelope, key, value ) {
+	let zMap = envelope.Z22K2;
+	if ( zMap === undefined || isVoid( zMap ) ) {
+		const keyType = { Z1K1: 'Z9', Z9K1: 'Z6' };
+		const valueType = { Z1K1: 'Z9', Z9K1: 'Z1' };
+		zMap = makeEmptyZMap( keyType, valueType );
+	}
+	zMap = setZMapValue( zMap, key, value );
+	envelope.Z22K2 = zMap;
+	return envelope;
+}
+
 const builtInTypes = new Set( [
 	'Z1', 'Z10', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
 	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
@@ -695,5 +719,6 @@ module.exports = {
 	getZMapValue,
 	maybeUpgradeResultEnvelope,
 	maybeDowngradeResultEnvelope,
-	getError
+	getError,
+	setMetadataValue
 };

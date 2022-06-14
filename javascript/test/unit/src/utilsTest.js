@@ -37,7 +37,8 @@ const {
 	getZMapValue,
 	maybeUpgradeResultEnvelope,
 	maybeDowngradeResultEnvelope,
-	getError
+	getError,
+	setMetadataValue
 } = require( '../../../src/utils.js' );
 const canonicalize = require( '../../../src/canonicalize.js' );
 
@@ -736,6 +737,46 @@ QUnit.test( 'setZMapValue', async ( assert ) => {
 	assert.strictEqual(
 		setZMapValue( undefined, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' } ),
 		undefined
+	);
+} );
+
+QUnit.test( 'setMetadataValue', async ( assert ) => {
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const singletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
+			K2: { Z1K1: listType1 } } };
+	const modifiedSingletonZMap = { Z1K1: mapType1,
+		K1: { Z1K1: listType1,
+			K1: { Z1K1: pairType1,
+				K1: { Z1K1: 'Z6', Z6K1: 'warnings' },
+				K2: { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' } },
+			K2: { Z1K1: listType1 } } };
+	const noEnvelope = { Z1K1: 'Z22', Z22K1: makeVoid(), Z22K2: undefined };
+	const emptyEnvelope = { Z1K1: 'Z22', Z22K1: makeVoid(), Z22K2: emptyZMap };
+	const singletonEnvelope = { Z1K1: 'Z22', Z22K1: makeVoid(), Z22K2: singletonZMap };
+	const modifiedSingletonEnvelope = { Z1K1: 'Z22', Z22K1: makeVoid(), Z22K2: modifiedSingletonZMap };
+
+	assert.deepEqual(
+		setMetadataValue(
+			noEnvelope,
+			{ Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' }
+		),
+		singletonEnvelope
+	);
+	assert.deepEqual(
+		setMetadataValue(
+			emptyEnvelope,
+			{ Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' }
+		),
+		singletonEnvelope
+	);
+	assert.deepEqual(
+		setMetadataValue(
+			singletonEnvelope,
+			{ Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Relax, but this is still a warning' }
+		),
+		modifiedSingletonEnvelope
 	);
 } );
 
