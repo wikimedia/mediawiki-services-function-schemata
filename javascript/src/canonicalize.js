@@ -2,7 +2,7 @@
 
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
-const { convertZListToArray, isReference, isString, makeMappedResultEnvelope } = require( './utils.js' );
+const { convertZListToItemArray, isReference, isString, makeMappedResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 const normalize = require( './normalize.js' );
 const { getError } = require( './utils' );
@@ -37,7 +37,7 @@ async function canonicalizeObject( o, benjamin ) {
 
 	if ( await TypedListValidator.validate( o ) ) {
 		const itemList = await Promise.all(
-			convertZListToArray( o ).map( ( e ) => canonicalize( e, benjamin ) )
+			convertZListToItemArray( o ).map( ( e ) => canonicalize( e, benjamin ) )
 		);
 
 		if ( benjamin ) {
@@ -94,7 +94,7 @@ async function canonicalize( o, benjamin ) {
  * else to simple arrays
  * @return {Array} an array of [data, error]
  */
-async function canonicalizeExport( o, withVoid = false, toBenjamin = false ) {
+async function canonicalizeExport( o, withVoid = false, toBenjamin = true ) {
 	const normalized = await normalize( o, /* generically= */false, withVoid, toBenjamin );
 
 	const possibleError = getError( normalized );

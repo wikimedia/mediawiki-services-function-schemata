@@ -4,7 +4,7 @@ const Ajv = require( 'ajv' ).default;
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { isString, isUserDefined, convertZListToArray } = require( './utils.js' );
+const { isString, isUserDefined, convertZListToItemArray } = require( './utils.js' );
 const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const { Mutex } = require( 'async-mutex' );
@@ -300,7 +300,7 @@ class UserDefinedTypeKey extends GenericTypeKey {
 
 	static async create( identity ) {
 		const children = [];
-		for ( const Z3 of convertZListToArray( identity.Z4K2 ) ) {
+		for ( const Z3 of convertZListToItemArray( identity.Z4K2 ) ) {
 			// eslint-disable-next-line no-use-before-define
 			children.push( await ZObjectKeyFactory.create( Z3.Z3K1 ) );
 		}
@@ -382,7 +382,7 @@ class ZObjectKeyFactory {
 	 * @return {Promise<Object>} (Simple|Generic|UserDefined)TypeKey or ZObjectKey
 	 * @throws {Error} If input is not a valid ZObject.
 	 */
-	static async create( ZObject, benjamin = false ) {
+	static async create( ZObject, benjamin = true ) {
 		const normalize = require( './normalize.js' );
 		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 		const normalizedEnvelope = await normalize(
@@ -671,7 +671,7 @@ class SchemaFactory {
 	 */
 	async keyMapForUserDefined( Z4, typeCache ) {
 		const keyMap = new Map();
-		const Z3s = convertZListToArray( Z4.Z4K2 );
+		const Z3s = convertZListToItemArray( Z4.Z4K2 );
 		for ( const Z3 of Z3s ) {
 			const propertyName = Z3.Z3K2.Z6K1;
 			const propertyType = Z3.Z3K1;
@@ -711,7 +711,7 @@ class SchemaFactory {
 	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
 	 * @return {Schema} a fully-initialized Schema
 	 */
-	async createUserDefined( Z4s, benjamin = false ) {
+	async createUserDefined( Z4s, benjamin = true ) {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
 

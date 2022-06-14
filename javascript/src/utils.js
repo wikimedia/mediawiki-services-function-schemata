@@ -128,7 +128,7 @@ function isEmptyZList( ZList ) {
 }
 
 /**
- * Turns a ZList into a JS array for ease of iteration.
+ * Turns a ZList into a simple JS array for ease of iteration.
  *
  * TODO (T310482): Deprecate this method once function-orchestrator is fully operating with
  * benjamin arrays. This method can stay as a private internal function in canonicalize, but
@@ -137,9 +137,9 @@ function isEmptyZList( ZList ) {
  * @param {Object} ZList a generic typed list (Z881)
  * @return {Array} an array consisting of all elements of ZList
  */
-function convertZListToArray( ZList ) {
+function convertZListToItemArray( ZList ) {
 	if ( ZList === undefined ) {
-		console.error( 'convertZListToArray called with undefined; please fix your caller' );
+		console.error( 'convertZListToItemArray called with undefined; please fix your caller' );
 		return [];
 	}
 
@@ -206,22 +206,30 @@ async function inferItemType( array, canonical = false ) {
 }
 
 /**
- * Turns a JS array into a Typed List after inferring the element type.
+ * Turns a JS array of items into a Typed List after inferring the element type.
  *
  * @param {Array} array an array of ZObjects
  * @param {boolean} canonical whether to output in canonical form
  * @param {boolean} benjamin whether to expect a benjamin array as input
  * @return {Object} a Typed List corresponding to the input array
  */
-async function convertArrayToZList( array, canonical = false, benjamin = false ) {
-	let headType;
-	if ( benjamin ) {
-		headType = array.length >= 1 ? array[ 0 ] : ( canonical ? 'Z1' : { Z1K1: 'Z9', Z9K1: 'Z1' } );
-		array.shift();
-	} else {
-		headType = await inferItemType( array, canonical );
-	}
+async function convertItemArrayToZList( array, canonical = false ) {
+	const headType = await inferItemType( array, canonical );
 	return convertArrayToKnownTypedList( array, headType, canonical );
+}
+
+/**
+ * Turns a benjamin array into a Typed List. The benjamin array is an array
+ * where the first item describes the types of the following ZObjects.
+ *
+ * @param {Array} array an array of ZObjects
+ * @param {boolean} canonical whether to output in canonical form
+ * @param {boolean} benjamin whether to expect a benjamin array as input
+ * @return {Object} a Typed List corresponding to the input array
+ */
+async function convertBenjaminArrayToZList( array, canonical = false ) {
+	const headType = array.length >= 1 ? array[ 0 ] : ( canonical ? 'Z1' : { Z1K1: 'Z9', Z9K1: 'Z1' } );
+	return convertArrayToKnownTypedList( array.slice( 1 ), headType, canonical );
 }
 
 /**
@@ -380,7 +388,7 @@ function setZMapValue( ZMap, key, value ) {
  * @return {Object} a Z1/Object, the value of the map entry with the given key,
  * or undefined if there is no such entry
  */
-function getZMapValue( ZMap, key, benjamin = false ) {
+function getZMapValue( ZMap, key, benjamin = true ) {
 	if ( ZMap === undefined ) {
 		console.error( 'getZMapValue called with undefined; please fix your caller' );
 		return undefined;
@@ -416,7 +424,7 @@ function getZMapValue( ZMap, key, benjamin = false ) {
  * @return {Object} a Z1/Object, the value of the map entry with the given key,
  * or undefined if there is no such entry
  */
-function getValueFromCanonicalZMap( ZMap, key, benjamin = false ) {
+function getValueFromCanonicalZMap( ZMap, key, benjamin = true ) {
 	const K1Array = ZMap.K1;
 	const firstIndex = benjamin ? 1 : 0;
 	for ( let i = firstIndex; i < K1Array.length; i++ ) {
@@ -566,7 +574,7 @@ function maybeDowngradeResultEnvelope( ResultEnvelope ) {
  * @param {boolean} benjamin If envelope canonical, whether to expect Benjamin format
  * @return {Object} a Z5/Error if the envelope contains an error; Z24/void otherwise
  */
-function getError( envelope, benjamin = false ) {
+function getError( envelope, benjamin = true ) {
 	const metadata = envelope.Z22K2;
 	if ( isZMap( metadata ) ) {
 		let canonical, key;
@@ -663,9 +671,10 @@ function wrapInQuote( data ) {
 }
 
 module.exports = {
-	convertArrayToZList,
+	convertItemArrayToZList,
+	convertBenjaminArrayToZList,
 	convertArrayToKnownTypedList,
-	convertZListToArray,
+	convertZListToItemArray,
 	inferItemType,
 	isString,
 	isArray,

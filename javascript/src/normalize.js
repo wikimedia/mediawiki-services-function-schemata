@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { convertArrayToZList, isArray, isReference, isString,
+const { convertBenjaminArrayToZList, convertItemArrayToZList, isArray, isReference, isString,
 	makeMappedResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
@@ -24,11 +24,16 @@ async function normalize( o, generically, benjamin ) {
 	}
 
 	// If benjamin = true, interprets array as benjamin array
-	// TODO (T292788): Remove behavior for benjamin=false
 	if ( isArray( o ) ) {
-		return await convertArrayToZList(
-			await Promise.all( o.map( partialNormalize ) ), false, benjamin
-		);
+		if ( benjamin ) {
+			return await convertBenjaminArrayToZList(
+				await Promise.all( o.map( partialNormalize ) ), false
+			);
+		} else {
+			return await convertItemArrayToZList(
+				await Promise.all( o.map( partialNormalize ) ), false
+			);
+		}
 	}
 
 	if ( o.Z1K1 === 'Z5' &&
@@ -73,7 +78,7 @@ async function normalize( o, generically, benjamin ) {
  * @return {Object} a Z22 / Evaluation result
  */
 // eslint-disable-next-line no-unused-vars
-async function normalizeExport( o, generically = true, withVoid = false, fromBenjamin = false ) {
+async function normalizeExport( o, generically = true, withVoid = false, fromBenjamin = true ) {
 	const status = await mixedZ1Validator.validateStatus( o );
 
 	if ( status.isValid() ) {
