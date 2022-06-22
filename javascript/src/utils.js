@@ -130,10 +130,6 @@ function isEmptyZList( ZList ) {
 /**
  * Turns a ZList into a simple JS array for ease of iteration.
  *
- * TODO (T310482): Deprecate this method once function-orchestrator is fully operating with
- * benjamin arrays. This method can stay as a private internal function in canonicalize, but
- * should not be exported.
- *
  * @param {Object} ZList a generic typed list (Z881)
  * @return {Array} an array consisting of all elements of ZList
  */
