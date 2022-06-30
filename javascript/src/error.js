@@ -72,7 +72,7 @@ const error = {
 	list_of_errors: 'Z509', // list of errors
 	nil: 'Z510', // -
 	key_not_found: 'Z511', // key reference, object
-	z9_error: 'Z512', // object
+	test_failed: 'Z512', // expected result, actual result
 	resolved_object_without_z2k2: 'Z513', // resolved object
 	builtin_does_not_exist: 'Z514', // implementation
 	builtin_id_error: 'Z515', // implementation
