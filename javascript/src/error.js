@@ -10,7 +10,7 @@ function innerError( codes, args, normalized = false ) {
 			Z1K1: z1k1
 		};
 		for ( let i = 0; i < args.length; i++ ) {
-			errorObject[ codes + 'K' + ( i + 1 ).toString() ] = args[ i ];
+			errorObject[ codes[ 0 ] + 'K' + ( i + 1 ).toString() ] = args[ i ];
 		}
 		return errorObject;
 	} else {
