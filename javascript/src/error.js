@@ -109,7 +109,8 @@ const error = {
 	invalid_zreference: 'Z549',
 	unknown_zreference: 'Z550',
 	schema_type_mismatch: 'Z551',
-	disallowed_root_object: 'Z553'
+	disallowed_root_object: 'Z553',
+	invalid_programming_language: 'Z558'
 };
 
 module.exports = {
