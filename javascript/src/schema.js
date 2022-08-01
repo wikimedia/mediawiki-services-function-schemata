@@ -52,7 +52,7 @@ function validatesAsZObject( Z1 ) {
  * Determines whether argument is a Z4.
  *
  * @param {Object} Z1 a ZObject
- * @return {ValidationStatus} Status is only valid if Z1 validates as Z4
+ * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z4
  */
 async function validatesAsType( Z1 ) {
 	return await Z4Validator.validateStatus( Z1 );
@@ -62,7 +62,7 @@ async function validatesAsType( Z1 ) {
  * Determines whether argument is a Z5.
  *
  * @param {Object} Z1 a ZObject
- * @return {ValidationStatus} Status is only valid if Z1 validates as Z5
+ * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z5
  */
 async function validatesAsError( Z1 ) {
 	return await Z5Validator.validateStatus( Z1 );
@@ -84,7 +84,7 @@ async function validatesAsString( Z1 ) {
  * Determines whether argument is a Z8.
  *
  * @param {Object} Z1 a ZObject
- * @return {ValidationStatus} Status is only valid if Z1 validates as Z8
+ * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z8
  */
 async function validatesAsFunction( Z1 ) {
 	return await Z8Validator.validateStatus( Z1 );
@@ -94,7 +94,7 @@ async function validatesAsFunction( Z1 ) {
  * Determines whether argument is a Z9.
  *
  * @param {Object} Z1 a ZObject
- * @return {ValidationStatus} Status is only valid if Z1 validates as Z9
+ * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z9
  */
 async function validatesAsReference( Z1 ) {
 	return await Z9Validator.validateStatus( Z1 );
@@ -104,7 +104,7 @@ async function validatesAsReference( Z1 ) {
  * Validates a ZObject against the Function Call schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {ValidationStatus} whether Z1 can validated as a Function Call
+ * @return {Promise<ValidationStatus>} whether Z1 can validated as a Function Call
  */
 async function validatesAsFunctionCall( Z1 ) {
 	return await Z7Validator.validateStatus( Z1 );
@@ -114,7 +114,7 @@ async function validatesAsFunctionCall( Z1 ) {
  * Validates a ZObject against the Argument Reference schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {ValidationStatus} whether Z1 can validated as a Argument Reference
+ * @return {Promise<ValidationStatus>} whether Z1 can validated as a Argument Reference
  */
 async function validatesAsArgumentReference( Z1 ) {
 	return await Z18Validator.validateStatus( Z1 );
@@ -126,7 +126,7 @@ async function validatesAsArgumentReference( Z1 ) {
  * (in the case of a user-defined type).
  *
  * @param {Object} Z4 a Type
- * @return {Object|null} the Z4's identity
+ * @return {Promise<Object|null>} the Z4's identity
  */
 async function findIdentity( Z4 ) {
 	if (
@@ -152,7 +152,7 @@ async function findIdentity( Z4 ) {
  * the Function (if identity is a Function Call) or the ZID of a built-in type.
  *
  * @param {Object} Z4 a Type's identity
- * @return {Object|null} the associated ZID
+ * @return {Promise<Object|null>} the associated ZID
  */
 async function getZIDForType( Z4 ) {
 	if ( ( await validatesAsFunction( Z4 ) ).isValid() ) {
@@ -436,7 +436,7 @@ class BaseSchema {
 	 * the result was valid without surfacing errors.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {ValidationStatus} whether the object is valid
+	 * @return {Promise<ValidationStatus>} whether the object is valid
 	 */
 	async validate( maybeValid ) {
 		return ( await this.validateStatus( maybeValid ) ).isValid();
@@ -465,7 +465,7 @@ class Schema extends BaseSchema {
 	 * returned.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {ValidationStatus} a validation status instance
+	 * @return {Promise<ValidationStatus>} a validation status instance
 	 */
 	async validateStatus( maybeValid ) {
 		const release = await this.mutex_.acquire();
@@ -495,7 +495,7 @@ class GenericSchema extends BaseSchema {
 	 * returned.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {ValidationStatus} a validation status instance
+	 * @return {Promise<ValidationStatus>} a validation status instance
 	 */
 	async validateStatus( maybeValid ) {
 		// TODO (T296842): Check for stray keys; allow non-local keys
@@ -667,7 +667,7 @@ class SchemaFactory {
 	 *
 	 * @param {Object} Z4 a Z4/Type
 	 * @param {Map} typeCache mapping from typekeys (see ZObjectKeyFactory.create) to BaseSchemata
-	 * @return {Map} mapping from type keys to BaseSchemata
+	 * @return {Promise<Map>} mapping from type keys to BaseSchemata
 	 */
 	async keyMapForUserDefined( Z4, typeCache ) {
 		const keyMap = new Map();
@@ -709,7 +709,7 @@ class SchemaFactory {
 	 *
 	 * @param {Object} Z4s the descriptor for the user-defined types
 	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
-	 * @return {Schema} a fully-initialized Schema
+	 * @return {Promise<Schema>} a fully-initialized Schema
 	 */
 	async createUserDefined( Z4s, benjamin = true ) {
 		const typeCache = new Map();
