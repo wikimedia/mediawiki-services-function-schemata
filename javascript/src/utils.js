@@ -315,6 +315,18 @@ function makeEmptyZMap( keyType, valueType ) {
 }
 
 /**
+ * Create a new, empty ZMap for responses in a Z22/ResponseEnvelope.
+ *
+ * @return {Object} a Z883 / ZMap with no entries, in normal form
+ */
+function makeEmptyZResponseEnvelopeMap() {
+	return makeEmptyZMap(
+		{ Z1K1: 'Z9', Z9K1: 'Z6' },
+		{ Z1K1: 'Z9', Z9K1: 'Z1' }
+	);
+}
+
+/**
  * Does a quick check to determine if the given ZObject is a Z883 / Map.
  * Does not validate the ZObject.
  *
@@ -699,6 +711,7 @@ module.exports = {
 	wrapInZ6,
 	wrapInZ9,
 	makeEmptyZMap,
+	makeEmptyZResponseEnvelopeMap,
 	isZMap,
 	setZMapValue,
 	getZMapValue,

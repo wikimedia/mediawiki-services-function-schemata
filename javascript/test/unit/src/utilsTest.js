@@ -32,6 +32,7 @@ const {
 	// wrapInZ6,
 	// wrapInZ9,
 	makeEmptyZMap,
+	makeEmptyZResponseEnvelopeMap,
 	isZMap,
 	setZMapValue,
 	getZMapValue,
@@ -1002,6 +1003,13 @@ QUnit.test( 'make* functions', async ( assert ) => {
 	// Double-check that trying to make a Map from an unsupported key type returns undefined.
 	assert.strictEqual( makeEmptyZMap( { Z1K1: 'Z9', Z9K1: 'Z41' }, { Z1K1: 'Z9', Z9K1: 'Z1' } ), undefined );
 
+	assert.deepEqual(
+		makeEmptyZResponseEnvelopeMap(),
+		{
+			Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z883' }, Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' } },
+			K1: { Z1K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' }, Z881K1: { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' }, Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' }, Z882K1: { Z1K1: 'Z9', Z9K1: 'Z6' }, Z882K2: { Z1K1: 'Z9', Z9K1: 'Z1' } } } }
+		}
+	);
 } );
 
 QUnit.test( 'isVoid', async ( assert ) => {
