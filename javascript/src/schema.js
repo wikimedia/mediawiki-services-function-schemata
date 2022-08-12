@@ -7,7 +7,6 @@ const path = require( 'path' );
 const { isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
 const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
-const { Mutex } = require( 'async-mutex' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
 let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
@@ -52,20 +51,20 @@ function validatesAsZObject( Z1 ) {
  * Determines whether argument is a Z4.
  *
  * @param {Object} Z1 a ZObject
- * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z4
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z4
  */
-async function validatesAsType( Z1 ) {
-	return await Z4Validator.validateStatus( Z1 );
+function validatesAsType( Z1 ) {
+	return Z4Validator.validateStatus( Z1 );
 }
 
 /**
  * Determines whether argument is a Z5.
  *
  * @param {Object} Z1 a ZObject
- * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z5
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z5
  */
-async function validatesAsError( Z1 ) {
-	return await Z5Validator.validateStatus( Z1 );
+function validatesAsError( Z1 ) {
+	return Z5Validator.validateStatus( Z1 );
 }
 
 /**
@@ -76,48 +75,48 @@ async function validatesAsError( Z1 ) {
  * @param {Object} Z1 a ZObject
  * @return {ValidationStatus} Status is only valid if Z1 validates as either Z6 or Z7
  */
-async function validatesAsString( Z1 ) {
-	return await Z6Validator.validateStatus( Z1 );
+function validatesAsString( Z1 ) {
+	return Z6Validator.validateStatus( Z1 );
 }
 
 /**
  * Determines whether argument is a Z8.
  *
  * @param {Object} Z1 a ZObject
- * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z8
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z8
  */
-async function validatesAsFunction( Z1 ) {
-	return await Z8Validator.validateStatus( Z1 );
+function validatesAsFunction( Z1 ) {
+	return Z8Validator.validateStatus( Z1 );
 }
 
 /**
  * Determines whether argument is a Z9.
  *
  * @param {Object} Z1 a ZObject
- * @return {Promise<ValidationStatus>} Status is only valid if Z1 validates as Z9
+ * @return {ValidationStatus} Status is only valid if Z1 validates as Z9
  */
-async function validatesAsReference( Z1 ) {
-	return await Z9Validator.validateStatus( Z1 );
+function validatesAsReference( Z1 ) {
+	return Z9Validator.validateStatus( Z1 );
 }
 
 /**
  * Validates a ZObject against the Function Call schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {Promise<ValidationStatus>} whether Z1 can validated as a Function Call
+ * @return {ValidationStatus} whether Z1 can validated as a Function Call
  */
-async function validatesAsFunctionCall( Z1 ) {
-	return await Z7Validator.validateStatus( Z1 );
+function validatesAsFunctionCall( Z1 ) {
+	return Z7Validator.validateStatus( Z1 );
 }
 
 /**
  * Validates a ZObject against the Argument Reference schema.
  *
  * @param {Object} Z1 object to be validated
- * @return {Promise<ValidationStatus>} whether Z1 can validated as a Argument Reference
+ * @return {ValidationStatus} whether Z1 can validated as a Argument Reference
  */
-async function validatesAsArgumentReference( Z1 ) {
-	return await Z18Validator.validateStatus( Z1 );
+function validatesAsArgumentReference( Z1 ) {
+	return Z18Validator.validateStatus( Z1 );
 }
 
 /**
@@ -126,18 +125,18 @@ async function validatesAsArgumentReference( Z1 ) {
  * (in the case of a user-defined type).
  *
  * @param {Object} Z4 a Type
- * @return {Promise<Object|null>} the Z4's identity
+ * @return {Object|null} the Z4's identity
  */
-async function findIdentity( Z4 ) {
+function findIdentity( Z4 ) {
 	if (
-		( await validatesAsFunctionCall( Z4 ) ).isValid() ||
-        ( await validatesAsReference( Z4 ) ).isValid() ) {
+		validatesAsFunctionCall( Z4 ).isValid() ||
+        validatesAsReference( Z4 ).isValid() ) {
 		return Z4;
 	}
-	if ( ( await validatesAsType( Z4 ) ).isValid() ) {
-		const identity = await findIdentity( Z4.Z4K1 );
+	if ( validatesAsType( Z4 ).isValid() ) {
+		const identity = findIdentity( Z4.Z4K1 );
 		if (
-			( await validatesAsReference( identity ) ).isValid() &&
+			validatesAsReference( identity ).isValid() &&
             !isBuiltInType( identity.Z9K1 ) ) {
 			return Z4;
 		}
@@ -152,20 +151,20 @@ async function findIdentity( Z4 ) {
  * the Function (if identity is a Function Call) or the ZID of a built-in type.
  *
  * @param {Object} Z4 a Type's identity
- * @return {Promise<Object|null>} the associated ZID
+ * @return {Object|null} the associated ZID
  */
-async function getZIDForType( Z4 ) {
-	if ( ( await validatesAsFunction( Z4 ) ).isValid() ) {
-		return await getZIDForType( Z4.Z8K5 );
+function getZIDForType( Z4 ) {
+	if ( validatesAsFunction( Z4 ).isValid() ) {
+		return getZIDForType( Z4.Z8K5 );
 	}
-	if ( ( await validatesAsReference( Z4 ) ).isValid() ) {
+	if ( validatesAsReference( Z4 ).isValid() ) {
 		return Z4.Z9K1;
 	}
-	if ( ( await validatesAsFunctionCall( Z4 ) ).isValid() ) {
-		return await getZIDForType( Z4.Z7K1 );
+	if ( validatesAsFunctionCall( Z4 ).isValid() ) {
+		return getZIDForType( Z4.Z7K1 );
 	}
-	if ( ( await validatesAsType( Z4 ) ).isValid() ) {
-		return await getZIDForType( Z4.Z4K1 );
+	if ( validatesAsType( Z4 ).isValid() ) {
+		return getZIDForType( Z4.Z4K1 );
 	}
 	if ( isString( Z4 ) ) {
 		// If Z4 is a string, original object was a Z6 or a Z9.
@@ -205,7 +204,7 @@ class ZObjectKey {
 		this.string_ = null;
 	}
 
-	static async create( ZObject ) {
+	static create( ZObject ) {
 		const children = new Map();
 		let typeKey;
 		for ( const objectKey of Object.keys( ZObject ) ) {
@@ -215,7 +214,7 @@ class ZObjectKey {
 				subKey = SimpleTypeKey.create( value );
 			} else {
 				// eslint-disable-next-line no-use-before-define
-				subKey = await ZObjectKeyFactory.create( ZObject[ objectKey ] );
+				subKey = ZObjectKeyFactory.create( ZObject[ objectKey ] );
 			}
 			if ( objectKey === 'Z1K1' ) {
 				typeKey = subKey;
@@ -251,7 +250,7 @@ class GenericTypeKey {
 		this.string_ = null;
 	}
 
-	static async create( ZID, identity ) {
+	static create( ZID, identity ) {
 		const argumentKeys = [];
 		const skipTheseKeys = new Set( [ 'Z1K1', 'Z7K1' ] );
 		for ( const argumentKey of Object.keys( identity ) ) {
@@ -264,7 +263,7 @@ class GenericTypeKey {
 		const children = [];
 		for ( const argumentKey of argumentKeys ) {
 			// eslint-disable-next-line no-use-before-define
-			children.push( await ZObjectKeyFactory.create( identity[ argumentKey ] ) );
+			children.push( ZObjectKeyFactory.create( identity[ argumentKey ] ) );
 		}
 		return new GenericTypeKey( ZID, children );
 	}
@@ -298,11 +297,11 @@ class UserDefinedTypeKey extends GenericTypeKey {
 		super( '', children );
 	}
 
-	static async create( identity ) {
+	static create( identity ) {
 		const children = [];
 		for ( const Z3 of convertZListToItemArray( identity.Z4K2 ) ) {
 			// eslint-disable-next-line no-use-before-define
-			children.push( await ZObjectKeyFactory.create( Z3.Z3K1 ) );
+			children.push( ZObjectKeyFactory.create( Z3.Z3K1 ) );
 		}
 		return new UserDefinedTypeKey( children );
 	}
@@ -379,13 +378,13 @@ class ZObjectKeyFactory {
 	 *
 	 * @param {Object} ZObject a ZObject
 	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
-	 * @return {Promise<Object>} (Simple|Generic|UserDefined)TypeKey or ZObjectKey
+	 * @return {Object} (Simple|Generic|UserDefined)TypeKey or ZObjectKey
 	 * @throws {Error} If input is not a valid ZObject.
 	 */
-	static async create( ZObject, benjamin = true ) {
+	static create( ZObject, benjamin = true ) {
 		const normalize = require( './normalize.js' );
 		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-		const normalizedEnvelope = await normalize(
+		const normalizedEnvelope = normalize(
 			ZObject,
 			/* generically= */ true,
 			/* withVoid= */ true,
@@ -403,19 +402,19 @@ class ZObjectKeyFactory {
 		}
 
 		const normalized = normalizedEnvelope.Z22K1;
-		const identity = await findIdentity( normalized );
+		const identity = findIdentity( normalized );
 		if ( identity === null ) {
 			// ZObject isn't a type, so create a ZObjectKey.
 			return ZObjectKey.create( normalized );
 		}
-		const ZID = await getZIDForType( identity );
-		if ( ( await validatesAsReference( identity ) ).isValid() ) {
+		const ZID = getZIDForType( identity );
+		if ( validatesAsReference( identity ).isValid() ) {
 			// Built-in type.
 			return SimpleTypeKey.create( ZID );
-		} else if ( ( await validatesAsType( identity ) ).isValid() ) {
+		} else if ( validatesAsType( identity ).isValid() ) {
 			// User-defined type.
 			return UserDefinedTypeKey.create( identity );
-		} else if ( ( await validatesAsFunctionCall( identity ) ).isValid() ) {
+		} else if ( validatesAsFunctionCall( identity ).isValid() ) {
 			// Generic type.
 			return GenericTypeKey.create( ZID, identity );
 		} else {
@@ -436,10 +435,10 @@ class BaseSchema {
 	 * the result was valid without surfacing errors.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {Promise<ValidationStatus>} whether the object is valid
+	 * @return {ValidationStatus} whether the object is valid
 	 */
-	async validate( maybeValid ) {
-		return ( await this.validateStatus( maybeValid ) ).isValid();
+	validate( maybeValid ) {
+		return this.validateStatus( maybeValid ).isValid();
 	}
 
 	subValidator( key ) {
@@ -451,7 +450,6 @@ class Schema extends BaseSchema {
 	constructor( validate, subValidators = null ) {
 		super();
 		this.validate_ = validate;
-		this.mutex_ = new Mutex();
 		if ( subValidators !== null ) {
 			for ( const key of subValidators.keys() ) {
 				this.keyMap_.set( key, new Schema( subValidators.get( key ) ) );
@@ -465,13 +463,11 @@ class Schema extends BaseSchema {
 	 * returned.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {Promise<ValidationStatus>} a validation status instance
+	 * @return {ValidationStatus} a validation status instance
 	 */
-	async validateStatus( maybeValid ) {
-		const release = await this.mutex_.acquire();
+	validateStatus( maybeValid ) {
 		const result = this.validate_( maybeValid );
 		const validationStatus = new ValidationStatus( this.validate_, result );
-		await release();
 		return validationStatus;
 	}
 }
@@ -499,9 +495,9 @@ class GenericSchema extends BaseSchema {
 	 * returned.
 	 *
 	 * @param {Object} maybeValid a JSON object
-	 * @return {Promise<ValidationStatus>} a validation status instance
+	 * @return {ValidationStatus} a validation status instance
 	 */
-	async validateStatus( maybeValid ) {
+	validateStatus( maybeValid ) {
 		const allKeys = new Set( Object.keys( maybeValid ) );
 		allKeys.delete( 'Z1K1' );
 		for ( const key of this.keyMap_.keys() ) {
@@ -511,7 +507,7 @@ class GenericSchema extends BaseSchema {
 			}
 			// If key is not present, maybeValid[ key ] is undefined, which will
 			// not validate well.
-			const howsIt = await this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
+			const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
 			if ( !howsIt.isValid() ) {
 				// TODO (T296842): Somehow include key.
 				// TODO (T296842): Consider conjunction of all errors?
@@ -680,28 +676,27 @@ class SchemaFactory {
 	 *
 	 * @param {Object} Z4 a Z4/Type
 	 * @param {Map} typeCache mapping from typekeys (see ZObjectKeyFactory.create) to BaseSchemata
-	 * @return {Promise<Map>} mapping from type keys to BaseSchemata
+	 * @return {Map} mapping from type keys to BaseSchemata
 	 */
-	async keyMapForUserDefined( Z4, typeCache ) {
+	keyMapForUserDefined( Z4, typeCache ) {
 		const keyMap = new Map();
 		const Z3s = convertZListToItemArray( Z4.Z4K2 );
 		for ( const Z3 of Z3s ) {
 			const propertyName = Z3.Z3K2.Z6K1;
 			const propertyType = Z3.Z3K1;
-			const identity = await findIdentity( propertyType );
+			const identity = findIdentity( propertyType );
 			let subValidator;
 			// TODO (T316787): Ensure that this works properly for nested user-
 			// defined types.
-			if (
-				( await validatesAsReference( identity ) ).isValid() &&
+			if ( validatesAsReference( identity ).isValid() &&
                 isBuiltInType( identity.Z9K1 ) ) {
 				subValidator = this.create( identity.Z9K1 );
 			} else {
-				const key = ( await ZObjectKeyFactory.create( propertyType ) ).asString();
+				const key = ZObjectKeyFactory.create( propertyType ).asString();
 				if ( !( typeCache.has( key ) ) ) {
 					typeCache.set(
 						key,
-						( await this.createUserDefined( [ propertyType ] ) ).get( key ) );
+						this.createUserDefined( [ propertyType ] ).get( key ) );
 				}
 				subValidator = typeCache.get( key );
 			}
@@ -726,21 +721,19 @@ class SchemaFactory {
 	 *
 	 * @param {Object} Z4s the descriptor for the user-defined types
 	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
-	 * @return {Promise<Schema>} a fully-initialized Schema
+	 * @return {Schema} a fully-initialized Schema
 	 */
-	async createUserDefined( Z4s, benjamin = true ) {
+	createUserDefined( Z4s, benjamin = true ) {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
 
 		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-		const normalized = await Promise.all(
-			Z4s.map( async ( o ) => ( await normalize( o,
+		const normalized = Z4s.map(
+			( o ) => normalize( o,
 				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
-			) ).Z22K1 ) );
+			).Z22K1 );
 
-		const errorArray = await Promise.all(
-			normalized.map( async ( o ) => ( await Z5Validator.validateStatus( o ) ).isValid() )
-		);
+		const errorArray = normalized.map( ( o ) => Z5Validator.validateStatus( o ).isValid() );
 		const errorIndex = errorArray.indexOf( true );
 		if ( errorIndex > -1 ) {
 			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
@@ -748,21 +741,21 @@ class SchemaFactory {
 
 		// TODO (T304648): Interrogate whether doing this operation twice (normalized and normalZ4s)
 		// is intentional and, if so, add comment to the code explaining why.
-		const normalZ4s = await Promise.all(
-			Z4s.map( async ( Z4 ) => ( await normalize( Z4,
+		const normalZ4s = Z4s.map(
+			( Z4 ) => normalize( Z4,
 				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
-			) ).Z22K1 ) );
+			).Z22K1 );
 
 		// TODO (T304648): Interrogate whether doing the following identical loops and duplicating
 		// ZObjectKeyFactory.create( item ).asString() is intentional, and if so, add comment
 		// the code explaining why.
 		for ( const Z4 of normalZ4s ) {
-			const key = ( await ZObjectKeyFactory.create( Z4 ) ).asString();
+			const key = ZObjectKeyFactory.create( Z4 ).asString();
 			typeCache.set( key, new GenericSchema( new Map() ) );
 		}
 		for ( const Z4 of normalZ4s ) {
-			const key = ( await ZObjectKeyFactory.create( Z4 ) ).asString();
-			typeCache.get( key ).updateKeyMap( await this.keyMapForUserDefined( Z4, typeCache ) );
+			const key = ZObjectKeyFactory.create( Z4 ).asString();
+			typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
 		}
 		return typeCache;
 	}

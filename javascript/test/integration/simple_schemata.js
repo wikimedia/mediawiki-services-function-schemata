@@ -12,7 +12,6 @@ const directory_ = path.join( 'test_data', 'simple_schemata' );
 
 // Every .yaml file in directory_ contains a validator schema and objects which
 // should (or should not) validate against that schema.
-const promises = [];
 for ( const file of fs.readdirSync( directory_ ) ) {
 	const fileName = path.join( directory_, file );
 	const testDescriptor = readYaml( fileName );
@@ -28,7 +27,6 @@ for ( const file of fs.readdirSync( directory_ ) ) {
 		} );
 	} else {
 		// Validator was parsed successfully; test validation of objects.
-		promises.push( testValidation( info.name, validator, testDescriptor.test_objects ) );
+		testValidation( info.name, validator, testDescriptor.test_objects );
 	}
 }
-Promise.all( promises ).then();

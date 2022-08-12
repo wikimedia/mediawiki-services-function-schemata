@@ -25,7 +25,7 @@ QUnit.test( 'createZErrorInstance: Wrong error zid', ( assert ) => {
 	);
 } );
 
-QUnit.test( 'createZErrorInstance: Not builtin error, no args', async ( assert ) => {
+QUnit.test( 'createZErrorInstance: Not builtin error, no args', ( assert ) => {
 	const error = errorFormatter.createZErrorInstance( 'Z999' );
 	assert.deepEqual(
 		error,
@@ -43,7 +43,7 @@ QUnit.test( 'createZErrorInstance: Not builtin error, no args', async ( assert )
 	);
 } );
 
-QUnit.test( 'createZErrorInstance: Not builtin error, with arg', async ( assert ) => {
+QUnit.test( 'createZErrorInstance: Not builtin error, with arg', ( assert ) => {
 	const error = errorFormatter.createZErrorInstance( 'Z999', { K1: { Z1K1: 'Z9', Z9K1: 'Z666' } } );
 	assert.deepEqual(
 		error,
@@ -62,7 +62,7 @@ QUnit.test( 'createZErrorInstance: Not builtin error, with arg', async ( assert 
 	);
 } );
 
-QUnit.test( 'createZErrorInstance: Not builtin error, with args', async ( assert ) => {
+QUnit.test( 'createZErrorInstance: Not builtin error, with args', ( assert ) => {
 	const error = errorFormatter.createZErrorInstance( 'Z999', {
 		K1: { Z1K1: 'Z9', Z9K1: 'Z666' }, K2: { Z1K1: 'Z6', Z6K1: 'error msg' }
 	} );
@@ -84,7 +84,7 @@ QUnit.test( 'createZErrorInstance: Not builtin error, with args', async ( assert
 	);
 } );
 
-QUnit.test( 'createZErrorInstance', async ( assert ) => {
+QUnit.test( 'createZErrorInstance', ( assert ) => {
 	const error = errorFormatter.createZErrorInstance( 'Z502', { subtype: { Z1K1: 'Z9', Z9K1: 'Z526' } } );
 	assert.deepEqual(
 		error,
