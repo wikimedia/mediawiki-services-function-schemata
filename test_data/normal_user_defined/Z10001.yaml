@@ -4,8 +4,8 @@ test_Z4:
   Z1K1: Z4
   Z4K1:
     Z1K1: Z7
-    Z7K1: Z882
-    Z882K1: Z6
+    Z7K1: Z881
+    Z881K1: Z6
   Z4K2:
     - Z3
     - Z1K1: Z3
@@ -19,15 +19,15 @@ test_Z4:
     - Z1K1: Z3
       Z3K1:
         Z1K1: Z7
-        Z7K1: Z882
-        Z882K1: Z6
+        Z7K1: Z881
+        Z881K1: Z6
       Z3K2:
         Z1K1: Z6
         Z6K1: K2
       Z3K3:
         Z1K1: Z12
         Z12K1: [ Z11 ]
-  Z4K3: Z110
+  Z4K3: Z831
 test_objects:
   failure:
     # TODO (T304682): Fix and reactivate these tests
@@ -104,19 +104,22 @@ test_objects:
     - name: good Z10001
       object:
         Z1K1:
-          Z1K1: Z9
-          Z9K1: Z10001
+          Z1K1: Z7
+          Z7K1: Z881
+          Z881K1: Z6
         K1:
           Z1K1: Z6
           Z6K1: nyat Z10001
         K2:
           Z1K1:
-            Z1K1: Z9
-            Z9K1: Z10001
+            Z1K1: Z7
+            Z7K1: Z881
+            Z881K1: Z6
           K1:
             Z1K1: Z6
             Z6K1: not Z10001
           K2:
             Z1K1:
-              Z1K1: Z9
-              Z9K1: Z10002
+              Z1K1: Z7
+              Z7K1: Z881
+              Z881K1: Z6

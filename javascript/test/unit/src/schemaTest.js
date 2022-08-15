@@ -110,62 +110,63 @@ QUnit.test( 'subValidator for built-in schema', async ( assert ) => {
 	assert.true( await Z8K2Schema.validate( { Z1K1: 'Z9', Z9K1: 'Z40' } ) );
 } );
 
-QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
-	const canonicalZ4 = {
-		Z1K1: 'Z4',
-		Z4K1: 'Z10000',
-		Z4K2: [
-			'Z3',
-			{
-				Z1K1: 'Z3',
-				Z3K1: 'Z6',
-				Z3K2: {
-					Z1K1: 'Z6',
-					Z6K1: '10000K1'
-				},
-				Z3K3: {
-					Z1K1: 'Z9',
-					Z9K1: 'Z1212'
-				}
+const canonicalZ4 = {
+	Z1K1: 'Z4',
+	Z4K1: 'Z10000',
+	Z4K2: [
+		'Z3',
+		{
+			Z1K1: 'Z3',
+			Z3K1: 'Z6',
+			Z3K2: {
+				Z1K1: 'Z6',
+				Z6K1: 'Z10000K1'
 			},
-			{
-				Z1K1: 'Z3',
-				Z3K1: {
-					Z1K1: 'Z4',
-					Z4K1: {
-						Z1K1: 'Z7',
-						Z7K1: 'Z931',
-						Z931K1: 'Z6'
-					},
-					Z4K2: [
-						'Z3',
-						{
-							Z1K1: 'Z3',
-							Z3K1: 'Z6',
-							Z3K2: {
-								Z1K1: 'Z6',
-								Z6K1: 'K1'
-							},
-							Z3K3: {
-								Z1K1: 'Z9',
-								Z9K1: 'Z1212'
-							}
-						}
-					],
-					Z4K3: 'Z1000'
-				},
-				Z3K2: {
-					Z1K1: 'Z6',
-					Z6K1: '10000K2'
-				},
-				Z3K3: {
-					Z1K1: 'Z9',
-					Z9K1: 'Z1212'
-				}
+			Z3K3: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z1212'
 			}
-		],
-		Z4K3: 'Z1000'
-	};
+		},
+		{
+			Z1K1: 'Z3',
+			Z3K1: {
+				Z1K1: 'Z4',
+				Z4K1: {
+					Z1K1: 'Z7',
+					Z7K1: 'Z931',
+					Z931K1: 'Z6'
+				},
+				Z4K2: [
+					'Z3',
+					{
+						Z1K1: 'Z3',
+						Z3K1: 'Z6',
+						Z3K2: {
+							Z1K1: 'Z6',
+							Z6K1: 'K1'
+						},
+						Z3K3: {
+							Z1K1: 'Z9',
+							Z9K1: 'Z1212'
+						}
+					}
+				],
+				Z4K3: 'Z1000'
+			},
+			Z3K2: {
+				Z1K1: 'Z6',
+				Z6K1: 'Z10000K2'
+			},
+			Z3K3: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z1212'
+			}
+		}
+	],
+	Z4K3: 'Z1000'
+};
+
+QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 	const Z4 = ( await normalize( canonicalZ4,
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
@@ -173,68 +174,15 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
 		[ Z4 ], /* benjamin= */ true
 	);
 	// TODO (T298049): Why is the first entry here a ZObjectKey instead of a UserDefinedTypeKey?
-	assert.deepEqual( [
-		'Z4{"Z4K1":"Z10000","Z4K2":"Z881(Z3){\\"K1\\":\\"Z3{\\\\\\"Z3K1\\\\\\":\\\\\\"Z6\\\\\\",\\\\\\"Z3K2\\\\\\":\\\\\\"Z6{\\\\\\\\\\\\\\"Z6K1\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"10000K1\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"Z3K3\\\\\\":\\\\\\"Z1212\\\\\\"}\\",\\"K2\\":\\"Z881(Z3){\\\\\\"K1\\\\\\":\\\\\\"Z3{\\\\\\\\\\\\\\"Z3K1\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Z931(Z6)\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"Z3K2\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Z6{\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"Z6K1\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\":\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"10000K2\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"}\\\\\\\\\\\\\\",\\\\\\\\\\\\\\"Z3K3\\\\\\\\\\\\\\":\\\\\\\\\\\\\\"Z1212\\\\\\\\\\\\\\"}\\\\\\",\\\\\\"K2\\\\\\":\\\\\\"Z881(Z3){}\\\\\\"}\\"}","Z4K3":"Z1000"}',
-		'Z931(Z6)'
-	], [ ...schemaMap.keys() ] );
+	assert.deepEqual(
+		[ ...schemaMap.keys() ],
+		[
+			'<Z6,Z931(Z6)>',
+			'Z931(Z6)'
+		] );
 } );
 
 QUnit.test( 'subValidator for generic schema', async ( assert ) => {
-	const canonicalZ4 = {
-		Z1K1: 'Z4',
-		Z4K1: 'Z10000',
-		Z4K2: [
-			'Z3',
-			{
-				Z1K1: 'Z3',
-				Z3K1: 'Z6',
-				Z3K2: {
-					Z1K1: 'Z6',
-					Z6K1: 'Z10000K1'
-				},
-				Z3K3: {
-					Z1K1: 'Z9',
-					Z9K1: 'Z1212'
-				}
-			},
-			{
-				Z1K1: 'Z3',
-				Z3K1: {
-					Z1K1: 'Z4',
-					Z4K1: {
-						Z1K1: 'Z7',
-						Z7K1: 'Z931',
-						Z931K1: 'Z6'
-					},
-					Z4K2: [
-						'Z3',
-						{
-							Z1K1: 'Z3',
-							Z3K1: 'Z6',
-							Z3K2: {
-								Z1K1: 'Z6',
-								Z6K1: 'K1'
-							},
-							Z3K3: {
-								Z1K1: 'Z9',
-								Z9K1: 'Z1212'
-							}
-						}
-					],
-					Z4K3: 'Z1000'
-				},
-				Z3K2: {
-					Z1K1: 'Z6',
-					Z6K1: 'Z10000K2'
-				},
-				Z3K3: {
-					Z1K1: 'Z9',
-					Z9K1: 'Z1212'
-				}
-			}
-		],
-		Z4K3: 'Z1000'
-	};
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 	const Z4 = ( await normalize( canonicalZ4,
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
@@ -245,6 +193,40 @@ QUnit.test( 'subValidator for generic schema', async ( assert ) => {
 	const topLevel = schemaMap.get( objectKey.asString() );
 	const Z6Schema = topLevel.subValidator( 'Z10000K1' );
 	assert.true( await Z6Schema.validate( { Z1K1: 'Z6', Z6K1: 'Z 4 0' } ) );
+} );
+
+const anotherCanonicalZ4 = {
+	Z1K1: 'Z4',
+	Z4K1: 'Z10000',
+	Z4K2: [
+		'Z3',
+		{
+			Z1K1: 'Z3',
+			Z3K1: 'Z6',
+			Z3K2: {
+				Z1K1: 'Z6',
+				Z6K1: 'Z10000K1'
+			},
+			Z3K3: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z1212'
+			}
+		}
+	],
+	Z4K3: 'Z1000'
+};
+
+QUnit.test( 'GenericSchema disallows extra keys', async ( assert ) => {
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const Z4 = ( await normalize( anotherCanonicalZ4,
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
+	const schemaMap = await SchemaFactory.NORMAL().createUserDefined(
+		[ Z4 ], /* benjamin= */ true
+	);
+	const objectKey = await ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const topLevel = schemaMap.get( objectKey.asString() );
+	assert.true( await topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' } } ) );
+	assert.false( await topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' }, Z10000K2: { Z1K1: 'Z6', Z6K1: 'not a string' } } ) );
 } );
 
 QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', async ( assert ) => {

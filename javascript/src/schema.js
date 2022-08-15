@@ -476,6 +476,10 @@ class Schema extends BaseSchema {
 	}
 }
 
+const noSchema_ = { not: {} };
+const noAjv_ = new Ajv();
+const justNo_ = new Schema( noAjv_.compile( noSchema_ ) );
+
 class GenericSchema extends BaseSchema {
 	constructor( keyMap ) {
 		super();
@@ -498,18 +502,27 @@ class GenericSchema extends BaseSchema {
 	 * @return {Promise<ValidationStatus>} a validation status instance
 	 */
 	async validateStatus( maybeValid ) {
-		// TODO (T296842): Check for stray keys; allow non-local keys
+		const allKeys = new Set( Object.keys( maybeValid ) );
+		allKeys.delete( 'Z1K1' );
 		for ( const key of this.keyMap_.keys() ) {
-			// TODO (T290996): How to signal optional keys?
+			// TODO (T290996): How to signal non-optional keys?
 			if ( maybeValid[ key ] === undefined ) {
 				continue;
 			}
+			// If key is not present, maybeValid[ key ] is undefined, which will
+			// not validate well.
 			const howsIt = await this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
 			if ( !howsIt.isValid() ) {
 				// TODO (T296842): Somehow include key.
 				// TODO (T296842): Consider conjunction of all errors?
 				return howsIt;
 			}
+			allKeys.delete( key );
+		}
+
+		// TODO (T296842): Better errors for stray keys; allow non-local keys?
+		if ( allKeys.size > 0 ) {
+			return justNo_.validateStatus( maybeValid );
 		}
 		return new ValidationStatus( null, true );
 	}
