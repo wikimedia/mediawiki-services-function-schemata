@@ -1,6 +1,7 @@
 'use strict';
 
 const {
+	builtInTypes,
 	convertBenjaminArrayToZList,
 	convertItemArrayToZList,
 	convertArrayToKnownTypedList,
@@ -18,8 +19,9 @@ const {
 	// getTail,
 	getTypedListType,
 	inferType,
+	isBuiltInType,
 	// isEmptyZList,
-	// isUserDefined,
+	isUserDefined,
 	kidFromGlobalKey,
 	makeFalse,
 	makeResultEnvelopeWithVoid,
@@ -65,6 +67,13 @@ QUnit.test( 'is*', async ( assert ) => {
 	assert.strictEqual( isString( {} ), false );
 	assert.strictEqual( isArray( {} ), false );
 	assert.strictEqual( isObject( {} ), true );
+} );
+
+QUnit.test( 'built-in types', async ( assert ) => {
+	for ( const ZID of builtInTypes() ) {
+		assert.true( isBuiltInType( ZID ) );
+		assert.false( isUserDefined( ZID ) );
+	}
 } );
 
 QUnit.test( 'convertBenjaminArrayToZList with empty array, canonical', async ( assert ) => {

@@ -627,14 +627,23 @@ function setMetadataValue( envelope, key, value ) {
 	return envelope;
 }
 
-const builtInTypes = new Set( [
+const builtInTypesArray_ = Object.freeze( [
 	'Z1', 'Z11', 'Z12', 'Z14', 'Z16', 'Z17', 'Z18', 'Z2', 'Z20', 'Z21',
 	'Z22', 'Z23', 'Z3', 'Z31', 'Z32', 'Z39', 'Z4', 'Z40', 'Z5', 'Z50', 'Z6',
 	'Z60', 'Z61', 'Z7', 'Z8', 'Z80', 'Z86', 'Z9', 'Z99'
 ] );
+const builtInTypes_ = new Set( builtInTypesArray_ );
+
+function builtInTypes() {
+	return builtInTypesArray_;
+}
+
+function isBuiltInType( ZID ) {
+	return builtInTypes_.has( ZID );
+}
 
 function isUserDefined( ZID ) {
-	return !builtInTypes.has( ZID );
+	return !builtInTypes_.has( ZID );
 }
 
 function inferType( object ) {
@@ -679,6 +688,7 @@ function wrapInQuote( data ) {
 }
 
 module.exports = {
+	builtInTypes,
 	convertItemArrayToZList,
 	convertBenjaminArrayToZList,
 	convertArrayToKnownTypedList,
@@ -697,6 +707,7 @@ module.exports = {
 	getTail,
 	getTypedListType,
 	inferType,
+	isBuiltInType,
 	isEmptyZList,
 	isUserDefined,
 	kidFromGlobalKey,
