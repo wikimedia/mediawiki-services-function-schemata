@@ -4,7 +4,7 @@ const Ajv = require( 'ajv' ).default;
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { isString, isUserDefined, convertZListToItemArray } = require( './utils.js' );
+const { isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
 const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const { Mutex } = require( 'async-mutex' );
@@ -138,7 +138,7 @@ async function findIdentity( Z4 ) {
 		const identity = await findIdentity( Z4.Z4K1 );
 		if (
 			( await validatesAsReference( identity ) ).isValid() &&
-            isUserDefined( identity.Z9K1 ) ) {
+            !isBuiltInType( identity.Z9K1 ) ) {
 			return Z4;
 		}
 		return identity;
@@ -690,8 +690,12 @@ class SchemaFactory {
 			const propertyType = Z3.Z3K1;
 			const identity = await findIdentity( propertyType );
 			let subValidator;
-			if ( ( await validatesAsReference( identity ) ).isValid() ) {
-				subValidator = this.create( propertyType.Z9K1 );
+			// TODO (T316787): Ensure that this works properly for nested user-
+			// defined types.
+			if (
+				( await validatesAsReference( identity ) ).isValid() &&
+                isBuiltInType( identity.Z9K1 ) ) {
+				subValidator = this.create( identity.Z9K1 );
 			} else {
 				const key = ( await ZObjectKeyFactory.create( propertyType ) ).asString();
 				if ( !( typeCache.has( key ) ) ) {
