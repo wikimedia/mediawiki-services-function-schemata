@@ -36,7 +36,7 @@
 						{
 							"Z1K1": "Z11",
 							"Z11K1": "Z1002",
-							"Z11K2": "language"
+							"Z11K2": "Language"
 						}
 					]
 				}
@@ -52,7 +52,7 @@
 						{
 							"Z1K1": "Z11",
 							"Z11K1": "Z1002",
-							"Z11K2": "part-of-speech"
+							"Z11K2": "Part of speech"
 						}
 					]
 				}
