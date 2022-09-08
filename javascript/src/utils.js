@@ -46,6 +46,27 @@ function deepCopy( o ) {
 }
 
 /**
+ * Recursively freezes an object and its properties so that it cannot be
+ * modified or extended.
+ *
+ * Use this function with caution. In the context of ZObjects, this
+ * function should be safe. But for other use cases, make sure there are no
+ * cycles in the object or properites that are not supposed to be frozen (window).
+ *
+ * @param {*} o any object.
+ * @return {*} the same object that was the input, but frozen.
+ */
+function deepFreeze( o ) {
+	Object.keys( o ).forEach( ( property ) => {
+		const child = o[ property ];
+		if ( child && ( typeof child === 'object' ) && !Object.isFrozen( child ) ) {
+			deepFreeze( child );
+		}
+	} );
+	return Object.freeze( o );
+}
+
+/**
  * Create a Z24 / Void object.  (Z24 is the only possible value of the type
  * Z21 / Unit).
  *
@@ -703,6 +724,7 @@ module.exports = {
 	isGlobalKey,
 	deepEqual,
 	deepCopy,
+	deepFreeze,
 	getHead,
 	getTail,
 	getTypedListType,
