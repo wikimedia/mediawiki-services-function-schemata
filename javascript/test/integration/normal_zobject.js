@@ -9,32 +9,32 @@ QUnit.module( 'NORMAL' );
 
 const factory = SchemaFactory.NORMAL();
 
-async function test( ZID ) {
+function test( ZID ) {
 	const normalValidator = factory.create( ZID );
 	const normalFile = path.join( 'test_data', 'normal_zobject', ZID + '.yaml' );
 	const testDescriptor = readYaml( normalFile );
 	const info = testDescriptor.test_information;
-	await testValidation( info.name, normalValidator, testDescriptor.test_objects );
+	testValidation( info.name, normalValidator, testDescriptor.test_objects );
 }
 
-test( 'GENERIC' ).then();
-test( 'LIST' ).then();
-test( 'Z1' ).then();
-test( 'Z2' ).then();
-test( 'Z3' ).then();
-test( 'Z4' ).then();
-test( 'Z7' ).then();
-test( 'Z8' ).then();
-test( 'Z12' ).then();
-test( 'Z14' ).then();
-test( 'Z17' ).then();
-test( 'Z18' ).then();
-test( 'Z22' ).then();
-test( 'Z32' ).then();
-test( 'Z39' ).then();
-test( 'Z40' ).then();
-test( 'Z60' ).then();
-test( 'Z61' ).then();
-test( 'Z80' ).then();
-test( 'Z86' ).then();
-test( 'Z99' ).then();
+test( 'GENERIC' );
+test( 'LIST' );
+test( 'Z1' );
+test( 'Z2' );
+test( 'Z3' );
+test( 'Z4' );
+test( 'Z7' );
+test( 'Z8' );
+test( 'Z12' );
+test( 'Z14' );
+test( 'Z17' );
+test( 'Z18' );
+test( 'Z22' );
+test( 'Z32' );
+test( 'Z39' );
+test( 'Z40' );
+test( 'Z60' );
+test( 'Z61' );
+test( 'Z80' );
+test( 'Z86' );
+test( 'Z99' );

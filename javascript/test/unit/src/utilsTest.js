@@ -47,7 +47,7 @@ const canonicalize = require( '../../../src/canonicalize.js' );
 
 QUnit.module( 'utils.js' );
 
-QUnit.test( 'is*', async ( assert ) => {
+QUnit.test( 'is*', ( assert ) => {
 	assert.strictEqual( isString(), false );
 	assert.strictEqual( isArray(), false );
 	assert.strictEqual( isObject(), false );
@@ -69,14 +69,14 @@ QUnit.test( 'is*', async ( assert ) => {
 	assert.strictEqual( isObject( {} ), true );
 } );
 
-QUnit.test( 'built-in types', async ( assert ) => {
+QUnit.test( 'built-in types', ( assert ) => {
 	for ( const ZID of builtInTypes() ) {
 		assert.true( isBuiltInType( ZID ) );
 		assert.false( isUserDefined( ZID ) );
 	}
 } );
 
-QUnit.test( 'convertBenjaminArrayToZList with empty array, canonical', async ( assert ) => {
+QUnit.test( 'convertBenjaminArrayToZList with empty array, canonical', ( assert ) => {
 	const array = [ 'Z1' ];
 	const expected = {
 		Z1K1: {
@@ -85,10 +85,10 @@ QUnit.test( 'convertBenjaminArrayToZList with empty array, canonical', async ( a
 			Z881K1: 'Z1'
 		}
 	};
-	assert.deepEqual( expected, await convertBenjaminArrayToZList( array, /* canonical= */true ) );
+	assert.deepEqual( expected, convertBenjaminArrayToZList( array, /* canonical= */true ) );
 } );
 
-QUnit.test( 'convertItemArrayToZList with empty array, canonical', async ( assert ) => {
+QUnit.test( 'convertItemArrayToZList with empty array, canonical', ( assert ) => {
 	const array = [];
 	const expected = {
 		Z1K1: {
@@ -97,10 +97,10 @@ QUnit.test( 'convertItemArrayToZList with empty array, canonical', async ( asser
 			Z881K1: 'Z1'
 		}
 	};
-	assert.deepEqual( expected, await convertItemArrayToZList( array, /* canonical= */true ) );
+	assert.deepEqual( expected, convertItemArrayToZList( array, /* canonical= */true ) );
 } );
 
-QUnit.test( 'convertBenjaminArrayToZList with empty array, normal', async ( assert ) => {
+QUnit.test( 'convertBenjaminArrayToZList with empty array, normal', ( assert ) => {
 	const array = [ { Z1K1: 'Z9', Z9K1: 'Z1' } ];
 	const expected = {
 		Z1K1: {
@@ -118,10 +118,10 @@ QUnit.test( 'convertBenjaminArrayToZList with empty array, normal', async ( asse
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertItemArrayToZList with empty array, normal', async ( assert ) => {
+QUnit.test( 'convertItemArrayToZList with empty array, normal', ( assert ) => {
 	const array = [];
 	const expected = {
 		Z1K1: {
@@ -139,10 +139,10 @@ QUnit.test( 'convertItemArrayToZList with empty array, normal', async ( assert )
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertItemArrayToZList( array ) );
+	assert.deepEqual( expected, convertItemArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertBenjaminArrayToZList with multiple types', async ( assert ) => {
+QUnit.test( 'convertBenjaminArrayToZList with multiple types', ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z9',
@@ -188,10 +188,10 @@ QUnit.test( 'convertBenjaminArrayToZList with multiple types', async ( assert ) 
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertItemArrayToZList with multiple types', async ( assert ) => {
+QUnit.test( 'convertItemArrayToZList with multiple types', ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z6',
@@ -233,10 +233,10 @@ QUnit.test( 'convertItemArrayToZList with multiple types', async ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertItemArrayToZList( array ) );
+	assert.deepEqual( expected, convertItemArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertBenjaminArrayToZList with single type', async ( assert ) => {
+QUnit.test( 'convertBenjaminArrayToZList with single type', ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z9',
@@ -276,10 +276,10 @@ QUnit.test( 'convertBenjaminArrayToZList with single type', async ( assert ) => 
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertItemArrayToZList with single type', async ( assert ) => {
+QUnit.test( 'convertItemArrayToZList with single type', ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z6',
@@ -315,10 +315,10 @@ QUnit.test( 'convertItemArrayToZList with single type', async ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertItemArrayToZList( array ) );
+	assert.deepEqual( expected, convertItemArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertBenjaminArrayToZList with function call types', async ( assert ) => {
+QUnit.test( 'convertBenjaminArrayToZList with function call types', ( assert ) => {
 	const array = [
 		{
 			Z1K1: {
@@ -388,10 +388,10 @@ QUnit.test( 'convertBenjaminArrayToZList with function call types', async ( asse
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertItemArrayToZList with function call types', async ( assert ) => {
+QUnit.test( 'convertItemArrayToZList with function call types', ( assert ) => {
 	const array = [
 		{
 			Z1K1: {
@@ -451,10 +451,10 @@ QUnit.test( 'convertItemArrayToZList with function call types', async ( assert )
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertItemArrayToZList( array ) );
+	assert.deepEqual( expected, convertItemArrayToZList( array ) );
 } );
 
-QUnit.test( 'convertBenjaminArrayToZList with canonical function call types', async ( assert ) => {
+QUnit.test( 'convertBenjaminArrayToZList with canonical function call types', ( assert ) => {
 	const array = [
 		{
 			Z1K1: 'Z7',
@@ -498,10 +498,10 @@ QUnit.test( 'convertBenjaminArrayToZList with canonical function call types', as
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertBenjaminArrayToZList( array, /* canonical */true ) );
+	assert.deepEqual( expected, convertBenjaminArrayToZList( array, /* canonical */true ) );
 } );
 
-QUnit.test( 'convertItemArrayToZList with canonical function call types', async ( assert ) => {
+QUnit.test( 'convertItemArrayToZList with canonical function call types', ( assert ) => {
 	const array = [
 		{
 			Z1K1: {
@@ -540,7 +540,7 @@ QUnit.test( 'convertItemArrayToZList with canonical function call types', async 
 			}
 		}
 	};
-	assert.deepEqual( expected, await convertItemArrayToZList( array, /* canonical */true ) );
+	assert.deepEqual( expected, convertItemArrayToZList( array, /* canonical */true ) );
 } );
 
 QUnit.test( 'convertArrayToKnownTypedLists canonical with string type', ( assert ) => {
@@ -749,7 +749,7 @@ QUnit.test( 'convertZListToItemArray with undefined', ( assert ) => {
 	assert.deepEqual( [], convertZListToItemArray( undefined ) );
 } );
 
-QUnit.test( 'isZid', async ( assert ) => {
+QUnit.test( 'isZid', ( assert ) => {
 	const testValues = [
 		{ value: '', isKey: false, isZid: false, isGlobalKey: false, isReference: false, message: 'Empty string' },
 
@@ -831,7 +831,7 @@ const bogusMapType = {
 	Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
 };
 
-QUnit.test( 'isZMap', async ( assert ) => {
+QUnit.test( 'isZMap', ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
@@ -850,7 +850,7 @@ QUnit.test( 'isZMap', async ( assert ) => {
 	assert.strictEqual( isZMap( bogusZMap ), false );
 } );
 
-QUnit.test( 'getZMapValue', async ( assert ) => {
+QUnit.test( 'getZMapValue', ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
@@ -876,26 +876,26 @@ QUnit.test( 'getZMapValue', async ( assert ) => {
 	);
 } );
 
-QUnit.test( 'getZMapValue with (Benjamin) canonical form', async ( assert ) => {
+QUnit.test( 'getZMapValue with (Benjamin) canonical form', ( assert ) => {
 	const emptyZMap =
-		( await canonicalize( { Z1K1: mapType1, K1: { Z1K1: listType1 } }, false, true ) ).Z22K1;
-	const singletonZMap = ( await canonicalize( { Z1K1: mapType1,
+		canonicalize( { Z1K1: mapType1, K1: { Z1K1: listType1 } }, false, true ).Z22K1;
+	const singletonZMap = canonicalize( { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
-			K2: { Z1K1: listType1 } } }, false, true ) ).Z22K1;
-	const doubletonZMap = ( await canonicalize( { Z1K1: mapType1,
+			K2: { Z1K1: listType1 } } }, false, true ).Z22K1;
+	const doubletonZMap = canonicalize( { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
 			K2: { Z1K1: listType1,
 				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
-				K2: { Z1K1: listType1 } } } }, false, true ) ).Z22K1;
+				K2: { Z1K1: listType1 } } } }, false, true ).Z22K1;
 	assert.strictEqual( getZMapValue( emptyZMap, 'warnings', true ), undefined );
 	assert.strictEqual( getZMapValue( singletonZMap, 'not there', true ), undefined );
 	assert.deepEqual( getZMapValue( singletonZMap, 'warnings', true ), 'Be warned!' );
 	assert.strictEqual( getZMapValue( doubletonZMap, 'not there', true ), undefined );
 	assert.deepEqual( getZMapValue( doubletonZMap, 'warnings', true ), 'Be warned!' );
 	assert.deepEqual( getZMapValue( doubletonZMap, 'errors', true ),
-		( await canonicalize( error1, false, true ) ).Z22K1 );
+		canonicalize( error1, false, true ).Z22K1 );
 
 	// Double-check that trying to get a ZMapValue on undefined returns undefined.
 	assert.strictEqual(
@@ -904,7 +904,7 @@ QUnit.test( 'getZMapValue with (Benjamin) canonical form', async ( assert ) => {
 	);
 } );
 
-QUnit.test( 'setZMapValue', async ( assert ) => {
+QUnit.test( 'setZMapValue', ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
@@ -928,7 +928,7 @@ QUnit.test( 'setZMapValue', async ( assert ) => {
 	);
 } );
 
-QUnit.test( 'setMetadataValue', async ( assert ) => {
+QUnit.test( 'setMetadataValue', ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
@@ -968,7 +968,7 @@ QUnit.test( 'setMetadataValue', async ( assert ) => {
 	);
 } );
 
-QUnit.test( 'make* functions', async ( assert ) => {
+QUnit.test( 'make* functions', ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
@@ -1021,7 +1021,7 @@ QUnit.test( 'make* functions', async ( assert ) => {
 	);
 } );
 
-QUnit.test( 'isVoid', async ( assert ) => {
+QUnit.test( 'isVoid', ( assert ) => {
 	assert.strictEqual( isVoid( [] ), false );
 	assert.strictEqual( isVoid( '' ), false );
 	assert.strictEqual( isVoid( 'z24' ), false );
@@ -1034,7 +1034,7 @@ QUnit.test( 'isVoid', async ( assert ) => {
 	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: 'Z24' } ), true );
 } );
 
-QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
+QUnit.test( 'maybeUpgradeResultEnvelope', ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
@@ -1052,7 +1052,7 @@ QUnit.test( 'maybeUpgradeResultEnvelope', async ( assert ) => {
 	assert.strictEqual( maybeUpgradeResultEnvelope( undefined ), undefined );
 } );
 
-QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
+QUnit.test( 'maybeDowngradeResultEnvelope', ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
@@ -1101,7 +1101,7 @@ QUnit.test( 'maybeDowngradeResultEnvelope', async ( assert ) => {
 	);
 } );
 
-QUnit.test( 'getError', async ( assert ) => {
+QUnit.test( 'getError', ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
 			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
@@ -1129,7 +1129,7 @@ QUnit.test( 'getError', async ( assert ) => {
 	assert.deepEqual( getError( mappedResultEnvelopeWithWarnings ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
 } );
 
-QUnit.test( 'inferType', async ( assert ) => {
+QUnit.test( 'inferType', ( assert ) => {
 	assert.deepEqual( inferType( '' ), 'Z6' );
 	assert.deepEqual( inferType( 'Z' ), 'Z6' );
 	assert.deepEqual( inferType( 'Z0' ), 'Z6' );
@@ -1139,7 +1139,7 @@ QUnit.test( 'inferType', async ( assert ) => {
 	assert.deepEqual( inferType( { Z1K1: 'Z1' } ), 'Z1' );
 } );
 
-QUnit.test( 'kidFromGlobalKey', async ( assert ) => {
+QUnit.test( 'kidFromGlobalKey', ( assert ) => {
 	assert.strictEqual( kidFromGlobalKey( 'Z1K1' ), 'K1' );
 	assert.strictEqual( kidFromGlobalKey( 'Z1K123' ), 'K123' );
 	assert.strictEqual( kidFromGlobalKey( 'Z1K1234567890' ), 'K1234567890' );

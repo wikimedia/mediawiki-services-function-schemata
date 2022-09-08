@@ -36,15 +36,15 @@ function getMissingZ5( Z5, codes ) {
 	return notFound;
 }
 
-async function testValidation( baseName, validator, testObjects ) {
+function testValidation( baseName, validator, testObjects ) {
 	// Serialized function calls subsumed in the "success" block should validate
 	// successfully.
 	const successes = testObjects.success || [];
 	for ( let i = 0; i < successes.length; ++i ) {
 		const testObject = successes[ i ];
 		const name = baseName + ': ' + testObject.name;
-		QUnit.test( name, async ( assert ) => {
-			const status = await validator.validateStatus( testObject.object );
+		QUnit.test( name, ( assert ) => {
+			const status = validator.validateStatus( testObject.object );
 
 			assert.true( status.isValid() );
 		} );
@@ -55,8 +55,8 @@ async function testValidation( baseName, validator, testObjects ) {
 	for ( let i = 0; i < failures.length; ++i ) {
 		const testObject = failures[ i ];
 		const name = baseName + ': ' + testObject.name;
-		QUnit.test( name, async ( assert ) => {
-			const status = await validator.validateStatus( testObject.object );
+		QUnit.test( name, ( assert ) => {
+			const status = validator.validateStatus( testObject.object );
 
 			assert.false( status.isValid() );
 		} );
@@ -71,13 +71,13 @@ async function testValidation( baseName, validator, testObjects ) {
  * @param {Object} testObjects the .yaml object containing test definitions
  * @param {Object} errorValidator the Ajv validator for ZErrors (Z5)
  */
-async function testErrors( baseName, validator, testObjects, errorValidator ) {
+function testErrors( baseName, validator, testObjects, errorValidator ) {
 
 	// Every test object must return an error on validation.
 	// testObjects.slice(13, 14).forEach((testObject) => {
-	testObjects.forEach( async ( testObject ) => {
+	testObjects.forEach( ( testObject ) => {
 		const name = baseName + ': ' + testObject.name;
-		const status = await validator.validateStatus( testObject.object );
+		const status = validator.validateStatus( testObject.object );
 
 		// Check that validator is finding the correct error types
 		QUnit.test( `${name}: detection`, ( assert ) => {
@@ -102,8 +102,8 @@ async function testErrors( baseName, validator, testObjects, errorValidator ) {
 		} );
 
 		// Check that the detected errors are valid Z5 objects
-		QUnit.test( `${name}: wellformedness`, async ( assert ) => {
-			const errorStatus = await errorValidator.validateStatus( status.getZ5() );
+		QUnit.test( `${name}: wellformedness`, ( assert ) => {
+			const errorStatus = errorValidator.validateStatus( status.getZ5() );
 			assert.true( errorStatus.isValid() );
 		} );
 
@@ -118,11 +118,11 @@ async function testErrors( baseName, validator, testObjects, errorValidator ) {
  * @param {Function} fn the function that will be tested
  * @param {Object} testObjects the .yaml object containing test definitions
  */
-async function test( baseName, fn, testObjects ) {
+function test( baseName, fn, testObjects ) {
 	const successes = testObjects.success || [];
-	successes.forEach( async ( testObject ) => {
-		await QUnit.test( `${baseName}: ${testObject.name}`, async ( assert ) => {
-			const envelope = await fn( testObject.object );
+	successes.forEach( ( testObject ) => {
+		QUnit.test( `${baseName}: ${testObject.name}`, ( assert ) => {
+			const envelope = fn( testObject.object );
 			const data = envelope.Z22K1;
 			const metadata = envelope.Z22K2;
 
@@ -132,9 +132,9 @@ async function test( baseName, fn, testObjects ) {
 	} );
 
 	const errors = testObjects.throws || [];
-	errors.forEach( async ( testObject ) => {
-		await QUnit.test( `${baseName}: ${testObject.name}`, async ( assert ) => {
-			const envelope = await fn( testObject.object );
+	errors.forEach( ( testObject ) => {
+		QUnit.test( `${baseName}: ${testObject.name}`, ( assert ) => {
+			const envelope = fn( testObject.object );
 			const data = envelope.Z22K1;
 			const metadata = envelope.Z22K2;
 

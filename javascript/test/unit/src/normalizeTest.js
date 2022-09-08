@@ -17,7 +17,7 @@ QUnit.module( 'normalization' );
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true );
 
 	// eslint-disable-next-line qunit/no-test-expect-argument
-	test( info.name, normalizeNonGenerically, testDescriptor.test_objects ).then();
+	test( info.name, normalizeNonGenerically, testDescriptor.test_objects );
 }
 
 {
@@ -28,5 +28,5 @@ QUnit.module( 'normalization' );
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ false );
 
 	// eslint-disable-next-line qunit/no-test-expect-argument
-	test( info.name, normalizeBenjamins, testDescriptor.test_objects ).then();
+	test( info.name, normalizeBenjamins, testDescriptor.test_objects );
 }

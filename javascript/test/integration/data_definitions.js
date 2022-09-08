@@ -16,23 +16,23 @@ const badInner = path.join( 'test_data', 'bad_definitions', 'bad_inner' );
 const factory = SchemaFactory.CANONICAL();
 const validator = factory.create( 'Z2' );
 
-async function testDataWellformedness( ZID, object, isValidZ2, isValidInner, description ) {
+function testDataWellformedness( ZID, object, isValidZ2, isValidInner, description ) {
 	const name = ZID + ' ZPersistentObject: ' + description;
 
 	// Validate Z2
-	QUnit.test( name, async ( assert ) => {
-		const status = await validator.validateStatus( object );
+	QUnit.test( name, ( assert ) => {
+		const status = validator.validateStatus( object );
 		assert.strictEqual( status.isValid(), isValidZ2 );
 	} );
 
 	// Validate inner ZObject if validator is available
 	const innerObject = object.Z2K2;
 	const innerType = inferType( innerObject );
-	const innerValidator = await factory.create( innerType );
+	const innerValidator = factory.create( innerType );
 	if ( innerValidator ) {
 		const innerName = ZID + ' Inner ZObject: ' + description;
-		QUnit.test( innerName, async ( assert ) => {
-			const innerStatus = await innerValidator.validateStatus( innerObject );
+		QUnit.test( innerName, ( assert ) => {
+			const innerStatus = innerValidator.validateStatus( innerObject );
 			assert.strictEqual( innerStatus.isValid(), isValidInner );
 		} );
 	} else {
@@ -41,8 +41,7 @@ async function testDataWellformedness( ZID, object, isValidZ2, isValidInner, des
 	}
 }
 
-async function testForFilesInDirectory( directory, isValidZ2, isValidInner, description ) {
-	const promises = [];
+function testForFilesInDirectory( directory, isValidZ2, isValidInner, description ) {
 	for ( const file of fs.readdirSync( directory ) ) {
 		const ZID = file.split( '.' )[ 0 ];
 		const fileRegex = /(Z[1-9]\d*)\.json/;
@@ -53,13 +52,11 @@ async function testForFilesInDirectory( directory, isValidZ2, isValidInner, desc
 
 		const jsonFile = fs.readFileSync( path.join( directory, file ), { encoding: 'utf8' } );
 		const object = JSON.parse( jsonFile );
-		promises.push(
-			testDataWellformedness( ZID, object, isValidZ2, isValidInner, description ) );
+		testDataWellformedness( ZID, object, isValidZ2, isValidInner, description );
 	}
-	await Promise.all( promises );
 }
 
-async function testNaturalLanguagesParsing( directory, languages ) {
+function testNaturalLanguagesParsing( directory, languages ) {
 	const languageMapping = {};
 	const allFiles = [];
 
@@ -92,26 +89,26 @@ async function testNaturalLanguagesParsing( directory, languages ) {
 
 	const expected = JSON.parse( fs.readFileSync( languages, { encoding: 'utf8' } ) );
 
-	QUnit.test( 'validateLanguageParsing', async ( assert ) => {
+	QUnit.test( 'validateLanguageParsing', ( assert ) => {
 		assert.deepEqual( languageMapping, expected );
 	} );
 }
 
 // Test wellformedness of files in data/definitions directory
 {
-	testForFilesInDirectory( dataPath, true, true, 'ZObject is fully wellformed.' ).then();
+	testForFilesInDirectory( dataPath, true, true, 'ZObject is fully wellformed.' );
 }
 
 // Test failure of test files in test_data/bad_definitions/bad_persistent directory
 {
-	testForFilesInDirectory( badPersistent, false, true, 'ZPersistentObject is not wellformed.' ).then();
+	testForFilesInDirectory( badPersistent, false, true, 'ZPersistentObject is not wellformed.' );
 }
 
 // Test failure of test files in test_data/bad_definitions/bad_inner directory
 {
-	testForFilesInDirectory( badInner, true, false, 'Inner ZObject is not wellformed.' ).then();
+	testForFilesInDirectory( badInner, true, false, 'Inner ZObject is not wellformed.' );
 }
 
 {
-	testNaturalLanguagesParsing( dataPath, naturalLanguages ).then();
+	testNaturalLanguagesParsing( dataPath, naturalLanguages );
 }

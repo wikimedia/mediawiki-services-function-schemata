@@ -19,7 +19,7 @@ QUnit.module( 'canonicalization' );
 	);
 
 	// eslint-disable-next-line qunit/no-test-expect-argument
-	test( info.name, canonicalizeWithVoid, testDescriptor.test_objects ).then();
+	test( info.name, canonicalizeWithVoid, testDescriptor.test_objects );
 }
 
 {
@@ -33,5 +33,5 @@ QUnit.module( 'canonicalization' );
 	);
 
 	// eslint-disable-next-line qunit/no-test-expect-argument
-	test( info.name, canonicalizeWithVoid, testDescriptor.test_objects ).then();
+	test( info.name, canonicalizeWithVoid, testDescriptor.test_objects );
 }

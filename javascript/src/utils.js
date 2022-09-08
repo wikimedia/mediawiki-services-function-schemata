@@ -182,12 +182,12 @@ function convertArrayToZListInternal( array, headKey, tailKey, tailType ) {
  * @param {boolean} canonical whether to output in canonical form
  * @return {Object} type of all the elements of the list or Z1
  */
-async function inferItemType( array, canonical = false ) {
+function inferItemType( array, canonical = false ) {
 	const { ZObjectKeyFactory } = require( './schema.js' );
 	let headType;
 	const Z1K1s = new Set();
 	for ( const element of array ) {
-		Z1K1s.add( ( await ZObjectKeyFactory.create( element.Z1K1 ) ).asString() );
+		Z1K1s.add( ( ZObjectKeyFactory.create( element.Z1K1 ) ).asString() );
 	}
 
 	// If inferred type is a resolver type, return Z1 instead
@@ -209,8 +209,8 @@ async function inferItemType( array, canonical = false ) {
  * @param {boolean} benjamin whether to expect a benjamin array as input
  * @return {Object} a Typed List corresponding to the input array
  */
-async function convertItemArrayToZList( array, canonical = false ) {
-	const headType = await inferItemType( array, canonical );
+function convertItemArrayToZList( array, canonical = false ) {
+	const headType = inferItemType( array, canonical );
 	return convertArrayToKnownTypedList( array, headType, canonical );
 }
 
@@ -223,7 +223,7 @@ async function convertItemArrayToZList( array, canonical = false ) {
  * @param {boolean} benjamin whether to expect a benjamin array as input
  * @return {Object} a Typed List corresponding to the input array
  */
-async function convertBenjaminArrayToZList( array, canonical = false ) {
+function convertBenjaminArrayToZList( array, canonical = false ) {
 	const headType = array.length >= 1 ? array[ 0 ] : ( canonical ? 'Z1' : { Z1K1: 'Z9', Z9K1: 'Z1' } );
 	return convertArrayToKnownTypedList( array.slice( 1 ), headType, canonical );
 }

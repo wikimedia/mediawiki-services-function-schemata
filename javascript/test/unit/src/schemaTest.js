@@ -34,7 +34,7 @@ QUnit.test( 'unsuccessful parse', ( assert ) => {
 	assert.deepEqual( schema, null );
 } );
 
-QUnit.test( 'validation matches ajv\'s decision', async ( assert ) => {
+QUnit.test( 'validation matches ajv\'s decision', ( assert ) => {
 	const schema = factory.parse( {
 		type: 'object',
 		required: [ 'prop1' ],
@@ -47,16 +47,16 @@ QUnit.test( 'validation matches ajv\'s decision', async ( assert ) => {
 
 	// Successful validation; "validate_" is the underlying ajv validator.
 	const strongObject = { prop1: 'strong' };
-	assert.true( await schema.validate( strongObject ) );
+	assert.true( schema.validate( strongObject ) );
 	assert.true( schema.validate_( strongObject ) );
 
 	// Unsuccessful validation.
 	const errayObject = { prop1: [ 'erray' ] };
-	assert.false( await schema.validate( errayObject ) );
+	assert.false( schema.validate( errayObject ) );
 	assert.false( schema.validate_( errayObject ) );
 } );
 
-QUnit.test( 'ValidationStatus.parserErrors is populated', async ( assert ) => {
+QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
 	const schema = factory.parse( {
 		type: 'object',
 		required: [ 'prop1' ],
@@ -68,7 +68,7 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', async ( assert ) => {
 	} );
 
 	// Unsuccessful validation populates errors.
-	const statusInvalid = await schema.validateStatus( { prop1: [ 'erray' ] } );
+	const statusInvalid = schema.validateStatus( { prop1: [ 'erray' ] } );
 
 	assert.false( statusInvalid.isValid() );
 	assert.deepEqual(
@@ -94,7 +94,7 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', async ( assert ) => {
 	);
 
 	// Unsuccessful validation populates errors.
-	const statusValid = await schema.validateStatus( { prop1: 'string' } );
+	const statusValid = schema.validateStatus( { prop1: 'string' } );
 
 	assert.true( statusValid.isValid() );
 	assert.deepEqual( [], statusValid.getParserErrors() );
@@ -104,10 +104,10 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', async ( assert ) => {
 	assert.strictEqual( statusValid.toString(), '{"isValid":true,"zError":null}' );
 } );
 
-QUnit.test( 'subValidator for built-in schema', async ( assert ) => {
+QUnit.test( 'subValidator for built-in schema', ( assert ) => {
 	const Z8Schema = SchemaFactory.NORMAL().create( 'Z8' );
 	const Z8K2Schema = Z8Schema.subValidator( 'Z8K2' );
-	assert.true( await Z8K2Schema.validate( { Z1K1: 'Z9', Z9K1: 'Z40' } ) );
+	assert.true( Z8K2Schema.validate( { Z1K1: 'Z9', Z9K1: 'Z40' } ) );
 } );
 
 const canonicalZ4 = {
@@ -166,11 +166,11 @@ const canonicalZ4 = {
 	Z4K3: 'Z1000'
 };
 
-QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
+QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = ( await normalize( canonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
-	const schemaMap = await SchemaFactory.NORMAL().createUserDefined(
+	const Z4 = normalize( canonicalZ4,
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	const schemaMap = SchemaFactory.NORMAL().createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
 	// TODO (T298049): Why is the first entry here a ZObjectKey instead of a UserDefinedTypeKey?
@@ -182,17 +182,17 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', async ( assert ) => {
 		] );
 } );
 
-QUnit.test( 'subValidator for generic schema', async ( assert ) => {
+QUnit.test( 'subValidator for generic schema', ( assert ) => {
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = ( await normalize( canonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
-	const schemaMap = await SchemaFactory.NORMAL().createUserDefined(
+	const Z4 = normalize( canonicalZ4,
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	const schemaMap = SchemaFactory.NORMAL().createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
-	const objectKey = await ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
 	const topLevel = schemaMap.get( objectKey.asString() );
 	const Z6Schema = topLevel.subValidator( 'Z10000K1' );
-	assert.true( await Z6Schema.validate( { Z1K1: 'Z6', Z6K1: 'Z 4 0' } ) );
+	assert.true( Z6Schema.validate( { Z1K1: 'Z6', Z6K1: 'Z 4 0' } ) );
 } );
 
 const anotherCanonicalZ4 = {
@@ -216,30 +216,30 @@ const anotherCanonicalZ4 = {
 	Z4K3: 'Z1000'
 };
 
-QUnit.test( 'GenericSchema disallows extra keys', async ( assert ) => {
+QUnit.test( 'GenericSchema disallows extra keys', ( assert ) => {
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = ( await normalize( anotherCanonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
-	const schemaMap = await SchemaFactory.NORMAL().createUserDefined(
+	const Z4 = normalize( anotherCanonicalZ4,
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	const schemaMap = SchemaFactory.NORMAL().createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
-	const objectKey = await ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
 	const topLevel = schemaMap.get( objectKey.asString() );
-	assert.true( await topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' } } ) );
-	assert.false( await topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' }, Z10000K2: { Z1K1: 'Z6', Z6K1: 'not a string' } } ) );
+	assert.true( topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' } } ) );
+	assert.false( topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' }, Z10000K2: { Z1K1: 'Z6', Z6K1: 'not a string' } } ) );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', async ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', ( assert ) => {
 	const Z7 = {
 		Z1K1: 'Z7',
 		Z7K1: 'Z4200',
 		Z4200K1: 'Z14',
 		Z4200K2: 'Z17'
 	};
-	assert.deepEqual( ( await ZObjectKeyFactory.create( Z7, /* benjamin= */ true ) ).asString(), 'Z4200(Z14,Z17)' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z7, /* benjamin= */ true ).asString(), 'Z4200(Z14,Z17)' );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', async ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -270,10 +270,10 @@ QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', async ( assert
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ( await ZObjectKeyFactory.create( Z4, /* benjamin= */ true ) ).asString(), 'Z4200(Z14,Z17)' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z4, /* benjamin= */ true ).asString(), 'Z4200(Z14,Z17)' );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with user-defined type', async ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with user-defined type', ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -317,10 +317,10 @@ QUnit.test( 'ZObjectKeyFactory with user-defined type', async ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ( await ZObjectKeyFactory.create( Z4, /* benjamin= */ true ) ).asString(), '<Z6,Z931(Z6,Z12)>' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z4, /* benjamin= */ true ).asString(), '<Z6,Z931(Z6,Z12)>' );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', async ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( assert ) => {
 	const Z1 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -347,17 +347,17 @@ QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', async
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ( await ZObjectKeyFactory.create( Z1, /* benjamin= */ true ) ).asString(), 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z1, /* benjamin= */ true ).asString(), 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)' );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with invalid object', async ( assert ) => {
+QUnit.test( 'ZObjectKeyFactory with invalid object', ( assert ) => {
 	const invalidZObject = {
 		Hello: 'Molly',
 		This: 'is Louis, Molly'
 	};
 	let failedResponse;
 	try {
-		failedResponse = ( await ZObjectKeyFactory.create( invalidZObject ) ).asString();
+		failedResponse = ZObjectKeyFactory.create( invalidZObject ).asString();
 	} catch ( error ) {
 		// These are implementation details and not guaranteed-stable
 		assert.strictEqual( error.name, 'Error' );
@@ -370,15 +370,15 @@ QUnit.test( 'ZObjectKeyFactory with invalid object', async ( assert ) => {
 	assert.deepEqual( failedResponse, undefined );
 } );
 
-QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', async ( assert ) => {
-	const key = await ZObjectKeyFactory.create( {
+QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', ( assert ) => {
+	const key = ZObjectKeyFactory.create( {
 		Z1K1: 'Z6',
 		Z6K1: 'Smörgåsbord'
 	}, /* benjamin= */ true );
 	assert.deepEqual( key.type(), 'ZObjectKey' );
 } );
 
-QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', async ( assert ) => {
+QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', ( assert ) => {
 	const Z1 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -405,11 +405,11 @@ QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', async ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	const key = await ZObjectKeyFactory.create( Z1, /* benjamin= */ true );
+	const key = ZObjectKeyFactory.create( Z1, /* benjamin= */ true );
 	assert.deepEqual( key.type(), 'GenericTypeKey' );
 } );
 
-QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', async ( assert ) => {
+QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -453,19 +453,19 @@ QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', async ( assert
 			Z9K1: 'Z1001'
 		}
 	};
-	const key = await ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const key = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
 	assert.deepEqual( key.type(), 'UserDefinedTypeKey' );
 } );
 
-QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', async ( assert ) => {
-	const key = await ZObjectKeyFactory.create( {
+QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', ( assert ) => {
+	const key = ZObjectKeyFactory.create( {
 		Z1K1: 'Z9',
 		Z9K1: 'Z9'
 	}, /* benjamin= */ true );
 	assert.deepEqual( key.type(), 'SimpleTypeKey' );
 } );
 
-QUnit.test( 'validatesAsZObject', async ( assert ) => {
+QUnit.test( 'validatesAsZObject', ( assert ) => {
 	const input = {
 		Z1K1: {
 			Z1K1: 'Z9',
@@ -476,10 +476,10 @@ QUnit.test( 'validatesAsZObject', async ( assert ) => {
 			Z6K1: 'air on the G Z6'
 		}
 	};
-	assert.true( ( await validatesAsZObject( input ) ).isValid() );
+	assert.true( validatesAsZObject( input ).isValid() );
 } );
 
-QUnit.test( 'validatesAsType', async ( assert ) => {
+QUnit.test( 'validatesAsType', ( assert ) => {
 	const Z4 = {
 		Z1K1: 'Z4',
 		Z4K1: {
@@ -511,28 +511,28 @@ QUnit.test( 'validatesAsType', async ( assert ) => {
 		}
 	};
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const normalizedZ4 = ( await normalize( Z4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
-	assert.true( ( await validatesAsType( normalizedZ4 ) ).isValid() );
+	const normalizedZ4 = normalize( Z4,
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	assert.true( validatesAsType( normalizedZ4 ).isValid() );
 } );
 
-QUnit.test( 'validatesAsError', async ( assert ) => {
+QUnit.test( 'validatesAsError', ( assert ) => {
 	const Z5 = { Z1K1: 'Z5', Z5K1: 'Z500', Z5K2: { Z1K1: { Z1K1: 'Z7', Z7K1: 'Z885', Z885K1: 'Z500' }, Z500K1: 'Basic data' } };
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const normalizedZ5 = ( await normalize( Z5,
-	/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ) ).Z22K1;
-	assert.true( ( await validatesAsError( normalizedZ5 ) ).isValid() );
+	const normalizedZ5 = normalize( Z5,
+	/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	assert.true( validatesAsError( normalizedZ5 ).isValid() );
 } );
 
-QUnit.test( 'validatesAsString', async ( assert ) => {
+QUnit.test( 'validatesAsString', ( assert ) => {
 	const input = {
 		Z1K1: 'Z6',
 		Z6K1: 'air on the G Z6'
 	};
-	assert.true( ( await validatesAsString( input ) ).isValid() );
+	assert.true( validatesAsString( input ).isValid() );
 } );
 
-QUnit.test( 'validatesAsFunctionCall', async ( assert ) => {
+QUnit.test( 'validatesAsFunctionCall', ( assert ) => {
 	const input = {
 		Z1K1: {
 			Z1K1: 'Z9',
@@ -543,10 +543,10 @@ QUnit.test( 'validatesAsFunctionCall', async ( assert ) => {
 			Z9K1: 'Z801'
 		}
 	};
-	assert.true( ( await validatesAsFunctionCall( input ) ).isValid() );
+	assert.true( validatesAsFunctionCall( input ).isValid() );
 } );
 
-QUnit.test( 'validatesAsArgumentReference', async ( assert ) => {
+QUnit.test( 'validatesAsArgumentReference', ( assert ) => {
 	const input = {
 		Z1K1: {
 			Z1K1: 'Z9',
@@ -557,13 +557,50 @@ QUnit.test( 'validatesAsArgumentReference', async ( assert ) => {
 			Z6K1: 'Z801K1'
 		}
 	};
-	assert.true( ( await validatesAsArgumentReference( input ) ).isValid() );
+	assert.true( validatesAsArgumentReference( input ).isValid() );
 } );
 
-QUnit.test( 'isVoid', async ( assert ) => {
+QUnit.test( 'isVoid', ( assert ) => {
 	const input = {
 		Z1K1: 'Z9',
 		Z9K1: 'Z24'
 	};
 	assert.true( ( isVoid( input ) ) );
+} );
+
+QUnit.test( 'concurrency no cross-contaminatation', async ( assert ) => {
+	// This test serves purely illustrative purposes that the validators will
+	// not cross-contaminate validtion results. It does not infer anything
+	// about the implementation details.
+	const input1 = {
+		Z1K1: 'Z5',
+		Z5K1: 'Z500',
+		Z5K2: {
+			Z1K1: {
+				Z1K1: 'Z7',
+				Z7K1: 'Z885',
+				Z885K1: 'Z500'
+			},
+			Z500K1: 'Basic data'
+		}
+	};
+	const input2 = {
+		Z1K1: 'nothing'
+	};
+	await Promise.all(
+		[
+			// eslint-disable-next-line no-unused-vars
+			new Promise( function ( resolve, reject ) {
+				resolve( validatesAsError( input1 ) );
+			} ),
+			// eslint-disable-next-line no-unused-vars
+			new Promise( function ( resolve, reject ) {
+				resolve( validatesAsError( input2 ) );
+			} )
+		] ).then(
+		( results ) => {
+			// If there is any concurrency issue, these two runs would get the same error (flakily).
+			assert.notStrictEqual( results[ 0 ].getParserErrors(), results[ 1 ].getParserErrors() );
+		}
+	);
 } );

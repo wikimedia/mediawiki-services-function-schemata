@@ -13,8 +13,8 @@ const mixedFactory = SchemaFactory.MIXED();
 const mixedZ1Validator = mixedFactory.create( 'Z1' );
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-async function normalize( o, generically, benjamin ) {
-	const partialNormalize = async ( ZObject ) => await normalize( ZObject, generically, benjamin );
+function normalize( o, generically, benjamin ) {
+	const partialNormalize = ( ZObject ) => normalize( ZObject, generically, benjamin );
 	if ( isString( o ) ) {
 		if ( isReference( o ) ) {
 			return { Z1K1: 'Z9', Z9K1: o };
@@ -26,13 +26,9 @@ async function normalize( o, generically, benjamin ) {
 	// If benjamin = true, interprets array as benjamin array
 	if ( isArray( o ) ) {
 		if ( benjamin ) {
-			return await convertBenjaminArrayToZList(
-				await Promise.all( o.map( partialNormalize ) ), false
-			);
+			return convertBenjaminArrayToZList( o.map( partialNormalize ), false );
 		} else {
-			return await convertItemArrayToZList(
-				await Promise.all( o.map( partialNormalize ) ), false
-			);
+			return convertItemArrayToZList( o.map( partialNormalize ), false );
 		}
 	}
 
@@ -56,7 +52,7 @@ async function normalize( o, generically, benjamin ) {
 			result.Z9K1 = o.Z9K1;
 			continue;
 		}
-		result[ keys[ i ] ] = await partialNormalize( o[ keys[ i ] ] );
+		result[ keys[ i ] ] = partialNormalize( o[ keys[ i ] ] );
 	}
 	return result;
 }
@@ -78,11 +74,11 @@ async function normalize( o, generically, benjamin ) {
  * @return {Object} a Z22 / Evaluation result
  */
 // eslint-disable-next-line no-unused-vars
-async function normalizeExport( o, generically = true, withVoid = false, fromBenjamin = true ) {
-	const status = await mixedZ1Validator.validateStatus( o );
+function normalizeExport( o, generically = true, withVoid = false, fromBenjamin = true ) {
+	const status = mixedZ1Validator.validateStatus( o );
 
 	if ( status.isValid() ) {
-		return makeMappedResultEnvelope( await normalize( o, generically, fromBenjamin ), null );
+		return makeMappedResultEnvelope( normalize( o, generically, fromBenjamin ), null );
 	} else {
 		return makeMappedResultEnvelope( null, status.getZ5() );
 	}

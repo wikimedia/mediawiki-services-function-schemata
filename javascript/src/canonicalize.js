@@ -16,9 +16,9 @@ const Z7Validator = normalFactory.create( 'Z7_literal' );
 const Z9Validator = normalFactory.create( 'Z9_literal' );
 const TypedListValidator = normalFactory.create( 'LIST_literal' );
 
-async function canonicalizeObject( o, benjamin ) {
-	if ( await Z9Validator.validate( o ) ) {
-		o.Z9K1 = await canonicalize( o.Z9K1, benjamin );
+function canonicalizeObject( o, benjamin ) {
+	if ( Z9Validator.validate( o ) ) {
+		o.Z9K1 = canonicalize( o.Z9K1, benjamin );
 
 		// return as string if Z9K1 is a valid reference string
 		if ( isString( o.Z9K1 ) && isReference( o.Z9K1 ) ) {
@@ -26,8 +26,8 @@ async function canonicalizeObject( o, benjamin ) {
 		}
 	}
 
-	if ( await Z6Validator.validate( o ) ) {
-		o.Z6K1 = await canonicalize( o.Z6K1, benjamin );
+	if ( Z6Validator.validate( o ) ) {
+		o.Z6K1 = canonicalize( o.Z6K1, benjamin );
 
 		// return as string if Z6/String doesn't need to be escaped, i.e., is not in Zxxxx format
 		if ( isString( o.Z6K1 ) && !isReference( o.Z6K1 ) ) {
@@ -35,32 +35,30 @@ async function canonicalizeObject( o, benjamin ) {
 		}
 	}
 
-	if ( await TypedListValidator.validate( o ) ) {
-		const itemList = await Promise.all(
-			convertZListToItemArray( o ).map( ( e ) => canonicalize( e, benjamin ) )
-		);
+	if ( TypedListValidator.validate( o ) ) {
+		const itemList = convertZListToItemArray( o ).map( ( e ) => canonicalize( e, benjamin ) );
 
 		if ( benjamin ) {
 			let itemType;
 			// FIXME: Should we search recursively for Z881?
 			if (
-				await Z7Validator.validate( o.Z1K1 ) &&
-				( await canonicalize( o.Z1K1.Z7K1 ) === 'Z881' )
+				Z7Validator.validate( o.Z1K1 ) &&
+				( canonicalize( o.Z1K1.Z7K1 ) === 'Z881' )
 			) {
 				// If type is a function call to Z881,
 				// itemType is the canonical content of Z88K1.
-				itemType = await canonicalize( o.Z1K1.Z881K1, benjamin );
+				itemType = canonicalize( o.Z1K1.Z881K1, benjamin );
 			} else if (
-				await Z4Validator.validate( o.Z1K1 ) &&
-				await Z7Validator.validate( o.Z1K1.Z4K1 ) &&
-				( await canonicalize( o.Z1K1.Z4K1.Z7K1 ) === 'Z881' )
+				Z4Validator.validate( o.Z1K1 ) &&
+				Z7Validator.validate( o.Z1K1.Z4K1 ) &&
+				( canonicalize( o.Z1K1.Z4K1.Z7K1 ) === 'Z881' )
 			) {
 				// If type is a literal and Z4K1 is function call to Z881,
 				// itemType is the content of Z4K1.Z88K1
-				itemType = await canonicalize( o.Z1K1.Z4K1.Z881K1, benjamin );
+				itemType = canonicalize( o.Z1K1.Z4K1.Z881K1, benjamin );
 			} else {
 				// Else, itemType is the whole type ZObject transformed into canonical form.
-				itemType = await canonicalize( o.Z1K1, benjamin );
+				itemType = canonicalize( o.Z1K1, benjamin );
 			}
 			return [ itemType ].concat( itemList );
 		}
@@ -71,17 +69,17 @@ async function canonicalizeObject( o, benjamin ) {
 	const result = {};
 
 	for ( let i = 0; i < keys.length; i++ ) {
-		result[ keys[ i ] ] = await canonicalize( o[ keys[ i ] ], benjamin );
+		result[ keys[ i ] ] = canonicalize( o[ keys[ i ] ], benjamin );
 	}
 	return result;
 }
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-async function canonicalize( o, benjamin ) {
+function canonicalize( o, benjamin ) {
 	if ( isString( o ) ) {
 		return o;
 	}
-	return await canonicalizeObject( o, benjamin );
+	return canonicalizeObject( o, benjamin );
 }
 
 /**
@@ -94,19 +92,19 @@ async function canonicalize( o, benjamin ) {
  * else to simple arrays
  * @return {Array} an array of [data, error]
  */
-async function canonicalizeExport( o, withVoid = false, toBenjamin = true ) {
-	const normalized = await normalize( o, /* generically= */false, withVoid, toBenjamin );
+function canonicalizeExport( o, withVoid = false, toBenjamin = true ) {
+	const normalized = normalize( o, /* generically= */false, withVoid, toBenjamin );
 
 	const possibleError = getError( normalized );
-	if ( ( await Z5Validator.validateStatus( possibleError ) ).isValid() ) {
+	if ( ( Z5Validator.validateStatus( possibleError ) ).isValid() ) {
 		// forward the error that happened in preliminary normalization
 		return normalized;
 	}
 
-	const status = await normalZ1Validator.validateStatus( normalized );
+	const status = normalZ1Validator.validateStatus( normalized );
 
 	if ( status.isValid() ) {
-		return makeMappedResultEnvelope( await canonicalize( normalized.Z22K1, toBenjamin ), null );
+		return makeMappedResultEnvelope( canonicalize( normalized.Z22K1, toBenjamin ), null );
 	} else {
 		return makeMappedResultEnvelope( null, status.getZ5() );
 	}
