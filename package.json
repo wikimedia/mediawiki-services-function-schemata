@@ -22,5 +22,9 @@
 		"eslint-plugin-yml": "^0.14.0",
 		"nyc": "14.1.1",
 		"qunit": "2.18.2"
+	},
+	"nyc": {
+		"include": "javascript",
+		"exclude": "javascript/test"
 	}
 }
