@@ -7,8 +7,8 @@
 	"scripts": {
 		"lint": "eslint --cache --max-warnings 0 .",
 		"lint:fix": "eslint --fix .",
-		"test": "npm run lint && PREQ_CONNECT_TIMEOUT=15 nyc qunit javascript/",
-		"test:nolint": "PREQ_CONNECT_TIMEOUT=15 nyc qunit javascript/"
+		"test:nolint": "PREQ_CONNECT_TIMEOUT=15 nyc -r=text -r=html qunit javascript/test/",
+		"test": "npm run lint && npm run test:nolint"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -22,5 +22,9 @@
 		"eslint-plugin-yml": "^0.14.0",
 		"nyc": "14.1.1",
 		"qunit": "2.18.2"
+	},
+	"nyc": {
+		"include": "javascript",
+		"exclude": "javascript/test"
 	}
 }
