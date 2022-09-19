@@ -468,31 +468,6 @@ function getValueFromCanonicalZMap( ZMap, key, benjamin = true ) {
 }
 
 /**
- * Creates a Z22 containing goodResult and BadResult.
- *
- * @param {Object} goodResult Z22K1 of resulting Z22
- * @param {Object} badResult Z22K2 of resulting Z22
- * @param {boolean} canonical whether output should be in canonical form
- * @return {Object} a Z22
- */
-function makeResultEnvelopeWithVoid( goodResult = null, badResult = null, canonical = false ) {
-	let Z1K1;
-	if ( canonical ) {
-		Z1K1 = 'Z22';
-	} else {
-		Z1K1 = {
-			Z1K1: 'Z9',
-			Z9K1: 'Z22'
-		};
-	}
-	return {
-		Z1K1: Z1K1,
-		Z22K1: goodResult === null ? makeVoid( canonical ) : goodResult,
-		Z22K2: badResult === null ? makeVoid( canonical ) : badResult
-	};
-}
-
-/**
  * Creates a map-based Z22 containing result and metadata.  metadata is normally a Z883 / Map.
  * However, if metadata is a Z5 / Error object, we place it in a new ZMap, as the value of an entry
  * with key "errors".  This is to support our transition from the older basic Z22s to map-based
@@ -734,7 +709,6 @@ module.exports = {
 	isUserDefined,
 	kidFromGlobalKey,
 	makeFalse,
-	makeResultEnvelopeWithVoid,
 	makeMappedResultEnvelope,
 	makeTrue,
 	makeVoid,

@@ -24,7 +24,6 @@ const {
 	isUserDefined,
 	kidFromGlobalKey,
 	makeFalse,
-	makeResultEnvelopeWithVoid,
 	makeMappedResultEnvelope,
 	makeTrue,
 	makeVoid,
@@ -980,10 +979,6 @@ QUnit.test( 'make* functions', ( assert ) => {
 	assert.deepEqual( makeVoid(), { Z1K1: 'Z9', Z9K1: 'Z24' } );
 	assert.deepEqual( makeVoid( false ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
 	assert.deepEqual( makeVoid( true ), 'Z24' );
-
-	assert.deepEqual( makeResultEnvelopeWithVoid( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
-	assert.deepEqual( makeResultEnvelopeWithVoid( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
-	assert.deepEqual( makeResultEnvelopeWithVoid( null, null ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
 
 	assert.deepEqual( makeMappedResultEnvelope( null, null, true ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
 	assert.deepEqual( makeMappedResultEnvelope( null, null, false ), { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } } );
