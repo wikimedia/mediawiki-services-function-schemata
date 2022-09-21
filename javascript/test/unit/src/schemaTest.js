@@ -16,11 +16,13 @@ const {
 
 QUnit.module( 'schema.js' );
 
-const factory = new SchemaFactory();
+const EMPTY_FACTORY = new SchemaFactory();
+const NORMAL_FACTORY = SchemaFactory.NORMAL();
+const CANONICAL_FACTORY = SchemaFactory.CANONICAL();
 
 QUnit.test( 'successful parse', ( assert ) => {
 	// Trivial valid JSON Schema.
-	const schema = factory.parse( {
+	const schema = EMPTY_FACTORY.parse( {
 		type: 'object'
 	} );
 
@@ -28,14 +30,19 @@ QUnit.test( 'successful parse', ( assert ) => {
 } );
 
 QUnit.test( 'unsuccessful parse', ( assert ) => {
-	const schema = factory.parse( {
+	const schema = EMPTY_FACTORY.parse( {
 		type: 'not supported'
 	} );
 	assert.deepEqual( schema, null );
 } );
 
+QUnit.test( 'nonexist schema name', ( assert ) => {
+	const schema = EMPTY_FACTORY.create( 'Z10' );
+	assert.strictEqual( schema, null );
+} );
+
 QUnit.test( 'validation matches ajv\'s decision', ( assert ) => {
-	const schema = factory.parse( {
+	const schema = EMPTY_FACTORY.parse( {
 		type: 'object',
 		required: [ 'prop1' ],
 		properties: {
@@ -57,7 +64,7 @@ QUnit.test( 'validation matches ajv\'s decision', ( assert ) => {
 } );
 
 QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
-	const schema = factory.parse( {
+	const schema = EMPTY_FACTORY.parse( {
 		type: 'object',
 		required: [ 'prop1' ],
 		properties: {
@@ -105,9 +112,54 @@ QUnit.test( 'ValidationStatus.parserErrors is populated', ( assert ) => {
 } );
 
 QUnit.test( 'subValidator for built-in schema', ( assert ) => {
-	const Z8Schema = SchemaFactory.NORMAL().create( 'Z8' );
+	const Z8Schema = NORMAL_FACTORY.create( 'Z8' );
 	const Z8K2Schema = Z8Schema.subValidator( 'Z8K2' );
 	assert.true( Z8K2Schema.validate( { Z1K1: 'Z9', Z9K1: 'Z40' } ) );
+	assert.deepEqual(
+		Z8Schema.subValidatorKeys(),
+		[ 'Z1K1', 'Z8K1', 'Z8K2', 'Z8K3', 'Z8K4', 'Z8K5' ] );
+} );
+
+QUnit.test( 'subvalidators for ZID_literal schema', ( assert ) => {
+	const Z8LiteralSchema = NORMAL_FACTORY.create( 'Z8_literal' );
+	assert.deepEqual(
+		Z8LiteralSchema.subValidatorKeys(),
+		[ 'Z1K1', 'Z8K1', 'Z8K2', 'Z8K3', 'Z8K4', 'Z8K5' ] );
+	const Z1K1Schema = Z8LiteralSchema.subValidator( 'Z1K1' );
+	const Z8K1Schema = Z8LiteralSchema.subValidator( 'Z8K1' );
+	const Z8K2Schema = Z8LiteralSchema.subValidator( 'Z8K2' );
+	const Z8K3Schema = Z8LiteralSchema.subValidator( 'Z8K3' );
+	const Z8K4Schema = Z8LiteralSchema.subValidator( 'Z8K4' );
+	const Z8K5Schema = Z8LiteralSchema.subValidator( 'Z8K5' );
+	assert.true( Z1K1Schema.validate( { Z1K1: 'Z9', Z9K1: 'Z8' } ) );
+	assert.false( Z8K1Schema.validate( {} ) );
+	assert.false( Z8K2Schema.validate( {} ) );
+	assert.false( Z8K3Schema.validate( {} ) );
+	assert.false( Z8K4Schema.validate( {} ) );
+	assert.false( Z8K5Schema.validate( {} ) );
+} );
+
+QUnit.test( 'no subvalidator for CANONICAL Z9 schema', ( assert ) => {
+	const Z9Schema = CANONICAL_FACTORY.create( 'Z9' );
+	assert.deepEqual( Z9Schema.subValidatorKeys(), [] );
+} );
+
+QUnit.test( 'subvalidators for GENERIC', ( assert ) => {
+	const genericSchema = NORMAL_FACTORY.create( 'GENERIC' );
+	assert.true(
+		genericSchema.subValidator( 'Z1K1' ).validate( {
+			Z1K1: 'Z9',
+			Z9K1: 'Z10001'
+		} ) );
+} );
+
+QUnit.test( 'subvalidators for GENERIC_literal', ( assert ) => {
+	const genericSchema = NORMAL_FACTORY.create( 'GENERIC' );
+	assert.true(
+		genericSchema.subValidator( 'Z1K1' ).validate( {
+			Z1K1: 'Z9',
+			Z9K1: 'Z10001'
+		} ) );
 } );
 
 const canonicalZ4 = {
@@ -170,7 +222,7 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 	const Z4 = normalize( canonicalZ4,
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = SchemaFactory.NORMAL().createUserDefined(
+	const schemaMap = NORMAL_FACTORY.createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
 	// TODO (T298049): Why is the first entry here a ZObjectKey instead of a UserDefinedTypeKey?
@@ -182,11 +234,11 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 		] );
 } );
 
-QUnit.test( 'subValidator for generic schema', ( assert ) => {
+QUnit.test( 'subValidator for user-defined generic schema', ( assert ) => {
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 	const Z4 = normalize( canonicalZ4,
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = SchemaFactory.NORMAL().createUserDefined(
+	const schemaMap = NORMAL_FACTORY.createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
 	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
@@ -195,32 +247,31 @@ QUnit.test( 'subValidator for generic schema', ( assert ) => {
 	assert.true( Z6Schema.validate( { Z1K1: 'Z6', Z6K1: 'Z 4 0' } ) );
 } );
 
-const anotherCanonicalZ4 = {
-	Z1K1: 'Z4',
-	Z4K1: 'Z10000',
-	Z4K2: [
-		'Z3',
-		{
-			Z1K1: 'Z3',
-			Z3K1: 'Z6',
-			Z3K2: {
-				Z1K1: 'Z6',
-				Z6K1: 'Z10000K1'
-			},
-			Z3K3: {
-				Z1K1: 'Z9',
-				Z9K1: 'Z1212'
-			}
-		}
-	],
-	Z4K3: 'Z1000'
-};
-
 QUnit.test( 'GenericSchema disallows extra keys', ( assert ) => {
+	const anotherCanonicalZ4 = {
+		Z1K1: 'Z4',
+		Z4K1: 'Z10000',
+		Z4K2: [
+			'Z3',
+			{
+				Z1K1: 'Z3',
+				Z3K1: 'Z6',
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'Z10000K1'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			}
+		],
+		Z4K3: 'Z1000'
+	};
 	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
 	const Z4 = normalize( anotherCanonicalZ4,
 		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = SchemaFactory.NORMAL().createUserDefined(
+	const schemaMap = NORMAL_FACTORY.createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
 	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );

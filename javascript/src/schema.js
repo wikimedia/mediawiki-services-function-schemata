@@ -9,6 +9,8 @@ const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 
+const SCHEMA_NAME_REGEX = '(Z[1-9]\\d*(K[1-9]\\d*)?|LIST|RESOLVER|GENERIC)';
+
 let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
 	Z8Validator, Z9Validator, Z18Validator;
 
@@ -441,8 +443,19 @@ class BaseSchema {
 		return this.validateStatus( maybeValid ).isValid();
 	}
 
+	/**
+	 * @param {string} key
+	 * @return {Schema} a schema for a sub part of the main schema.
+	 */
 	subValidator( key ) {
 		return this.keyMap_.get( key );
+	}
+
+	/**
+	 * @return {Array<string>} All the available subvalidators' keys.
+	 */
+	subValidatorKeys() {
+		return Array.from( this.keyMap_.keys() );
 	}
 }
 
@@ -628,6 +641,43 @@ class SchemaFactory {
 	}
 
 	/**
+	 * Gets the AJV schemas for *all* the sub components of a schema that is defined
+	 * in the ZID_literal.properties section.
+	 * The returned map looks like Z1K1: AjvValidator, Z8K1: AjvValidator...
+	 * If such mapping cannot be found, an empty map will be returned.
+	 *
+	 * @param {string} schemaName the name of the schema. It can be ZID or ZID_literal.
+	 * @return {Map<string, *>} A mapping of the subcomponent keys and their AJV schema.
+	 */
+	getSubSchemas_( schemaName ) {
+		// For both ZID schema and ZID_literal schema, the schema definition is the same.
+		// This behavior is defined by the schema factory above.
+		let zid;
+		if ( schemaName.match( `^${SCHEMA_NAME_REGEX}$` ) ) {
+			zid = schemaName;
+		} else if ( schemaName.match( `^${SCHEMA_NAME_REGEX}_literal$` ) ) {
+			zid = schemaName.split( '_' )[ 0 ];
+		} else {
+			console.info(
+				`Cannot process schema name to get sub-validators: ${schemaName}. ` +
+				'Accecptable format examples: Z42 and Z42_literal. Returning empty.' );
+			return new Map();
+		}
+
+		const overallSchema = this.ajv_.getSchema( schemaName ).schema;
+		// If this schema doesn't have a zid_literal field or the field does not
+		// contain properties (like Z1), we simply return an empty map.
+		if ( !overallSchema.definitions.objects[ `${zid}_literal` ] ||
+			!overallSchema.definitions.objects[ `${zid}_literal` ].properties ) {
+			return new Map();
+		}
+		const keys = Object.keys( overallSchema.definitions.objects[ `${zid}_literal` ].properties );
+		const keyPathPrefix = `${zid}#/definitions/objects/${zid}_literal/properties/`;
+		return new Map(
+			keys.map( ( k ) => [ k, this.ajv_.getSchema( `${keyPathPrefix}${k}` ) ] ) );
+	}
+
+	/**
 	 * Create a schema for the desired native type. A schema for normalized
 	 * Z11s, for example, can be created as easily as
 	 *
@@ -643,21 +693,9 @@ class SchemaFactory {
 			type = 'Z40';
 		}
 		let validate = null;
-		const subValidators = new Map();
 		let message = null;
 		try {
 			validate = this.ajv_.getSchema( type );
-			let i = 1;
-			while ( true ) {
-				const key = `${type}K${i}`;
-				const reference = `${type}#/definitions/objects/${key}`;
-				const subValidator = this.ajv_.getSchema( reference );
-				if ( subValidator === undefined ) {
-					break;
-				}
-				subValidators.set( key, subValidator );
-				i += 1;
-			}
 		} catch ( err ) {
 			message = err.message;
 			validate = null;
@@ -666,6 +704,7 @@ class SchemaFactory {
 			console.error( 'Could not find schema', schemaName, message );
 			return null;
 		}
+		const subValidators = this.getSubSchemas_( type );
 		return new Schema( validate, subValidators );
 	}
 
