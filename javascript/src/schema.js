@@ -778,20 +778,20 @@ class SchemaFactory {
 			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
 		}
 
-		// TODO (T304648): Interrogate whether doing this operation twice (normalized and normalZ4s)
-		// is intentional and, if so, add comment to the code explaining why.
 		const normalZ4s = Z4s.map(
 			( Z4 ) => normalize( Z4,
 				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
 			).Z22K1 );
 
-		// TODO (T304648): Interrogate whether doing the following identical loops and duplicating
-		// ZObjectKeyFactory.create( item ).asString() is intentional, and if so, add comment
-		// the code explaining why.
+		// Create a GenericSchema for each of the requested Z4s.
 		for ( const Z4 of normalZ4s ) {
 			const key = ZObjectKeyFactory.create( Z4 ).asString();
 			typeCache.set( key, new GenericSchema( new Map() ) );
 		}
+
+		// Populate all of the GenericSchemata with key maps.
+		// We iterate twice here to avoid circular references and to ensure we
+		// don't try to create schemata multiple times for any given Z4.
 		for ( const Z4 of normalZ4s ) {
 			const key = ZObjectKeyFactory.create( Z4 ).asString();
 			typeCache.get( key ).updateKeyMap( this.keyMapForUserDefined( Z4, typeCache ) );
