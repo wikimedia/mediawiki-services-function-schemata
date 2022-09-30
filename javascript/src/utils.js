@@ -614,9 +614,7 @@ function getError( envelope, benjamin = true ) {
 function setMetadataValue( envelope, key, value ) {
 	let zMap = envelope.Z22K2;
 	if ( zMap === undefined || isVoid( zMap ) ) {
-		const keyType = { Z1K1: 'Z9', Z9K1: 'Z6' };
-		const valueType = { Z1K1: 'Z9', Z9K1: 'Z1' };
-		zMap = makeEmptyZMap( keyType, valueType );
+		zMap = makeEmptyZResponseEnvelopeMap();
 	}
 	zMap = setZMapValue( zMap, key, value );
 	envelope.Z22K2 = zMap;
