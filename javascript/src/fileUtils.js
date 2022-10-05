@@ -15,7 +15,13 @@ function dataDir( ...pathComponents ) {
 		'data', ...pathComponents );
 }
 
+function readJSON( fileName ) {
+	const text = fs.readFileSync( fileName, { encoding: 'utf8' } );
+	return JSON.parse( text );
+}
+
 module.exports = {
 	dataDir,
+	readJSON,
 	readYaml
 };
