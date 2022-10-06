@@ -8,12 +8,14 @@
 		"lint": "eslint --cache --max-warnings 0 .",
 		"lint:fix": "eslint --fix .",
 		"test:nolint": "PREQ_CONNECT_TIMEOUT=15 nyc -r=text -r=html qunit javascript/test/",
-		"test": "npm run lint && npm run test:nolint"
+		"test": "npm run lint && npm run test:nolint",
+		"benchmark": "node javascript/benchmarks/*.js"
 	},
 	"license": "MIT",
 	"dependencies": {
 		"ajv": "8.6.2",
 		"avro-js": "1.11.1",
+		"benchmark": "2.1.4",
 		"yaml": "1.10.0"
 	},
 	"devDependencies": {
@@ -26,6 +28,9 @@
 	},
 	"nyc": {
 		"include": "javascript",
-		"exclude": "javascript/test"
+		"exclude": [
+			"javascript/test",
+			"javascript/benchmarks"
+		]
 	}
 }
