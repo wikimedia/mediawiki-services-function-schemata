@@ -1,6 +1,7 @@
 'use strict';
 
 const avro = require( 'avro-js' );
+const semver = require( 'semver' );
 const { validatesAsQuote, validatesAsReference, validatesAsString } = require( './schema.js' );
 
 // TODO (T320217): Read these from .avsc file.
@@ -57,7 +58,27 @@ const Z1_SCHEMA_ = {
 
 // A ZObject is the union of arbitrary Z1s, Z6s, and Z9s.
 const Z1_UNION_ = [ Z6_SCHEMA_, Z9_SCHEMA_, Z99_SCHEMA_, Z1_SCHEMA_ ];
+
+const ZOBJECT_SCHEMA_ = {
+	type: 'record',
+	namespace: 'ztypes',
+	name: 'ZOBJECT',
+	fields: [
+		{
+			name: 'reentrant',
+			type: 'boolean'
+		},
+		{
+			name: 'zobject',
+			type: Z1_UNION_
+		}
+	]
+};
+
+// semver 0.0.1
 const avroSchema = avro.parse( Z1_UNION_ );
+// semver 0.0.2
+const zobjectSchemaV002 = avro.parse( ZOBJECT_SCHEMA_ );
 
 /**
  * Transform a ZObject into the form expected by the serialization schema.
@@ -118,16 +139,32 @@ function recoverNormalFromSerialization( serializedZObject ) {
 	throw new Error( 'Invalid serialization form; must define one of ztypes.(Z1|Z6|Z9|Z99}' );
 }
 
-function convertZObjectToBinary( ZObject ) {
-	return avroSchema.toBuffer( formatNormalForSerialization( ZObject ) );
+function convertZObjectToBinary( ZObject, version = '0.0.1' ) {
+	if ( semver.gte( version, '0.0.2' ) ) {
+		return zobjectSchemaV002.toBuffer( {
+			reentrant: ZObject.reentrant,
+			zobject: formatNormalForSerialization( ZObject.zobject )
+		} );
+	} else {
+		return avroSchema.toBuffer( formatNormalForSerialization( ZObject ) );
+	}
 }
 
-function getZObjectFromBinary( buffer ) {
-	return recoverNormalFromSerialization( avroSchema.fromBuffer( buffer ) );
+function getZObjectFromBinary( buffer, version = '0.0.1' ) {
+	if ( semver.gte( version, '0.0.2' ) ) {
+		const recovered = zobjectSchemaV002.fromBuffer( buffer );
+		return {
+			reentrant: recovered.reentrant,
+			zobject: recoverNormalFromSerialization( recovered.zobject )
+		};
+	} else {
+		return recoverNormalFromSerialization( avroSchema.fromBuffer( buffer ) );
+	}
 }
 
 module.exports = {
 	avroSchema,
+	zobjectSchemaV002,
 	convertZObjectToBinary,
 	getZObjectFromBinary,
 	formatNormalForSerialization,

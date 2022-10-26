@@ -19,7 +19,7 @@ QUnit.test( 'binaries should be small', ( assert ) => {
 
 // Idempotence check: serialization then deserialization should produce the
 // original object.
-QUnit.test( 'serialization should be invertible', ( assert ) => {
+QUnit.test( 'serialization 0.0.1 should be invertible', ( assert ) => {
 	const serialized = convertZObjectToBinary( hugeFunctionCall );
 	const deserialized = getZObjectFromBinary( serialized );
 	assert.deepEqual( deserialized, hugeFunctionCall );
@@ -30,4 +30,14 @@ QUnit.test( 'recoverNormalFromSerialization should throw error on bad input', ( 
 	assert.throws( () => {
 		recoverNormalFromSerialization( degenerate );
 	} );
+} );
+
+QUnit.test( 'serialization 0.0.2 should be invertible', ( assert ) => {
+	const original = {
+		reentrant: true,
+		zobject: hugeFunctionCall
+	};
+	const serialized = convertZObjectToBinary( original, '0.0.2' );
+	const deserialized = getZObjectFromBinary( serialized, '0.0.2' );
+	assert.deepEqual( deserialized, original );
 } );
