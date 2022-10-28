@@ -1,7 +1,7 @@
 'use strict';
 
 const path = require( 'path' );
-const { convertZObjectToBinary, getZObjectFromBinary, recoverNormalFromSerialization } = require( '../../../src/serialize.js' );
+const { convertWrappedZObjectToVersionedBinary, convertZObjectToBinary, getWrappedZObjectFromVersionedBinary, getZObjectFromBinary, recoverNormalFromSerialization } = require( '../../../src/serialize.js' );
 const { readJSON } = require( '../../../src/fileUtils.js' );
 
 QUnit.module( 'serialization' );
@@ -39,5 +39,22 @@ QUnit.test( 'serialization 0.0.2 should be invertible', ( assert ) => {
 	};
 	const serialized = convertZObjectToBinary( original, '0.0.2' );
 	const deserialized = getZObjectFromBinary( serialized, '0.0.2' );
+	assert.deepEqual( deserialized, original );
+} );
+
+QUnit.test( 'wrapped serialization should be invertible with version 0.0.1', ( assert ) => {
+	const original = hugeFunctionCall;
+	const serialized = convertWrappedZObjectToVersionedBinary( original, '0.0.1' );
+	const deserialized = getWrappedZObjectFromVersionedBinary( serialized );
+	assert.deepEqual( deserialized, original );
+} );
+
+QUnit.test( 'wrapped serialization should be invertible with version 0.0.2', ( assert ) => {
+	const original = {
+		reentrant: true,
+		zobject: hugeFunctionCall
+	};
+	const serialized = convertWrappedZObjectToVersionedBinary( original, '0.0.2' );
+	const deserialized = getWrappedZObjectFromVersionedBinary( serialized );
 	assert.deepEqual( deserialized, original );
 } );

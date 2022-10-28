@@ -162,11 +162,28 @@ function getZObjectFromBinary( buffer, version = '0.0.1' ) {
 	}
 }
 
+function convertWrappedZObjectToVersionedBinary( wrappedZObject, version ) {
+	const serialized = convertZObjectToBinary( wrappedZObject, version );
+	const semverBuffer = Buffer.from( version );
+	const lengthBuffer = Buffer.from( String.fromCharCode( semverBuffer.length ) );
+	return Buffer.concat( [ lengthBuffer, semverBuffer, serialized ] );
+}
+
+function getWrappedZObjectFromVersionedBinary( buffer ) {
+	const length = buffer.slice( 0, 1 );
+	const lengthPivot = 1 + length.toString().charCodeAt( 0 );
+	const version = buffer.slice( 1, lengthPivot ).toString();
+	const avroSerialized = buffer.slice( lengthPivot, buffer.length );
+	return getZObjectFromBinary( avroSerialized, version );
+}
+
 module.exports = {
 	avroSchema,
-	zobjectSchemaV002,
+	convertWrappedZObjectToVersionedBinary,
 	convertZObjectToBinary,
+	getWrappedZObjectFromVersionedBinary,
 	getZObjectFromBinary,
 	formatNormalForSerialization,
-	recoverNormalFromSerialization
+	recoverNormalFromSerialization,
+	zobjectSchemaV002
 };
