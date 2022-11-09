@@ -153,4 +153,4 @@ suite.add( 'ZObjectKeyFactory with invalid object', () => {
 The benchmark setup is incorrect in someway.` );
 } );
 
-suite.run( { async: true } );
+suite.run();

@@ -1076,44 +1076,44 @@ QUnit.test( 'kidFromGlobalKey', ( assert ) => {
 	assert.strictEqual( kidFromGlobalKey( 'Z1234567890K1234567890' ), 'K1234567890' );
 } );
 
-QUnit.test( 'inferItemType', async ( assert ) => {
+QUnit.test( 'inferItemType', ( assert ) => {
 	const singletonZ1Array = [ { Z1K1: 'Z1' } ];
 	assert.deepEqual(
-		await inferItemType( singletonZ1Array, /* canonical= */true ),
+		inferItemType( singletonZ1Array, /* canonical= */true ),
 		'Z1',
 		'Basic Z1 list is identified as such'
 	);
 	assert.deepEqual(
-		await inferItemType( singletonZ1Array, /* canonical= */false ),
+		inferItemType( singletonZ1Array, /* canonical= */false ),
 		{ Z1K1: 'Z9', Z9K1: 'Z1' },
 		'Basic Z1 list is identified as such in normal form too'
 	);
 	assert.deepEqual(
-		await inferItemType( singletonZ1Array ),
+		inferItemType( singletonZ1Array ),
 		{ Z1K1: 'Z9', Z9K1: 'Z1' },
 		'Basic Z1 list is identified as such in normal form even when not specified'
 	);
 
 	assert.deepEqual(
-		await inferItemType( [ { Z1K1: 'Z6', Z6K1: 'Test' } ], /* canonical= */true ),
+		inferItemType( [ { Z1K1: 'Z6', Z6K1: 'Test' } ], /* canonical= */true ),
 		'Z6',
 		'Basic Z6 list is identified as such'
 	);
 
 	assert.deepEqual(
-		await inferItemType( [ { Z1K1: 'Z6', Z6K1: 'Test' }, { Z1K1: 'Z6', Z6K1: 'Second test' } ], /* canonical= */true ),
+		inferItemType( [ { Z1K1: 'Z6', Z6K1: 'Test' }, { Z1K1: 'Z6', Z6K1: 'Second test' } ], /* canonical= */true ),
 		'Z6',
 		'Z6 list of length two is identified as such'
 	);
 
 	assert.deepEqual(
-		await inferItemType( [ { Z1K1: 'Z6', Z6K1: 'Test' }, { Z1K1: 'Z6', Z6K1: 'Second test' }, { Z1K1: 'Z40', Z40K1: 'Z42' } ], /* canonical= */true ),
+		inferItemType( [ { Z1K1: 'Z6', Z6K1: 'Test' }, { Z1K1: 'Z6', Z6K1: 'Second test' }, { Z1K1: 'Z40', Z40K1: 'Z42' } ], /* canonical= */true ),
 		'Z1',
 		'List with mixed types falls back to Z1'
 	);
 
 	assert.deepEqual(
-		await inferItemType( [ { Z1K1: 'Z9', Z9K1: 'Z12345' } ], /* canonical= */true ),
+		inferItemType( [ { Z1K1: 'Z9', Z9K1: 'Z12345' } ], /* canonical= */true ),
 		'Z1',
 		'Basic Z9 list falls back as a Z1 as it is a resolver type'
 	);
