@@ -617,6 +617,8 @@ QUnit.test( 'isVoid', ( assert ) => {
 		Z9K1: 'Z24'
 	};
 	assert.true( ( isVoid( input ) ) );
+	// Check this doesn't throw.
+	assert.false( ( isVoid( null ) ) );
 } );
 
 QUnit.test( 'concurrency no cross-contaminatation', async ( assert ) => {
