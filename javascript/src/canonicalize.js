@@ -83,8 +83,8 @@ function canonicalize( o, benjamin ) {
 }
 
 /**
- * Canonicalizes a normalized ZObject. Returns either the canonicalized
- * ZObject or a Z5/Error.
+ * Canonicalizes a normalized ZObject. Returns a Z22/'Evaluation result' containing the
+ * canonicalized ZObject or a Z5/Error (in the metadata map of the Z22).
  *
  * @param {Object} o a ZObject
  * @param {boolean} withVoid Ignored deprecated flag.

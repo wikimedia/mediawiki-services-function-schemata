@@ -58,8 +58,8 @@ function normalize( o, generically, benjamin ) {
 }
 
 /**
- * Normalizes a canonical ZObject. Returns the normalized ZObject or a
- * Z5/Error in a Z22/Pair.
+ * Normalizes a canonical ZObject. Returns a Z22/'Evaluation result' containing the normalized
+ * ZObject or a Z5/Error (in the metadata map of the Z22).
  *
  * If called with fromBenjamin = false, the arrays found
  * in the input ZObject are understood to be simple arrays, and their type

@@ -470,8 +470,7 @@ function getValueFromCanonicalZMap( ZMap, key, benjamin = true ) {
 /**
  * Creates a map-based Z22 containing result and metadata.  metadata is normally a Z883 / Map.
  * However, if metadata is a Z5 / Error object, we place it in a new ZMap, as the value of an entry
- * with key "errors".  This is to support our transition from the older basic Z22s to map-based
- * Z22s.
+ * with key "errors", as a programming convenience.
  *
  * @param {Object} result Z22K1 of resulting Z22
  * @param {Object} metadata Z22K2 of resulting Z22 - either a Z883 / Map or a Z5 / Error
@@ -505,74 +504,7 @@ function makeMappedResultEnvelope( result = null, metadata = null, canonical = f
 }
 
 /**
- * Converts a "basic" Z22/Evaluation result into a metadata-map Z22.
- * Z22K1, the result, remains the same.  Z22K2, instead of a Z5/Error (or Z24/void),
- * will contain a Z882/Map (Z6 -> Z1).  If the input Z22K2 contains a Z5,
- * the map will contain an entry with key "errors", holding the Z5 value that previously
- * was in Z22K2.
- *
- * N.B.: Temporary method, supporting transition to map-based Z22.
- * Modifies the value of Z22K2 in place
- *
- * If the input already has a metadata map, returns it without any modification.
- *
- * @param {Object} ResultEnvelope a basic Z22/Evaluation result in normal form
- * @return {Object} a metadata-map Z22/Evaluation result in normal form
- */
-function maybeUpgradeResultEnvelope( ResultEnvelope ) {
-	if ( ResultEnvelope === undefined ) {
-		console.error( 'maybeUpgradeResultEnvelope called with undefined; please fix your caller' );
-		return undefined;
-	}
-	if ( isVoid( ResultEnvelope.Z22K2 ) || isZMap( ResultEnvelope.Z22K2 ) ) {
-		// Nothing to do: Z22K2 is void or result envelope already has a metadata map
-		return ResultEnvelope;
-	}
-
-	const errorValue = ResultEnvelope.Z22K2;
-	const keyType = { Z1K1: 'Z9', Z9K1: 'Z6' };
-	const valueType = { Z1K1: 'Z9', Z9K1: 'Z1' };
-	const ZMap = makeEmptyZMap( keyType, valueType );
-	setZMapValue( ZMap, { Z1K1: 'Z6', Z6K1: 'errors' }, errorValue );
-	ResultEnvelope.Z22K2 = ZMap;
-	return ResultEnvelope;
-}
-
-/**
- * Converts a metadata-map Z22/Evaluation result into a "basic" Z22.
- * Z22K1, the result, remains the same.  Z22K2, instead of a Z882/Map (Z6 -> Z1),
- * will contain a Z5/Error extracted from the "errors" entry in the map (or Z24/void if
- * there is no such entry).
- *
- * N.B.: Temporary method, supporting transition to map-based Z22.
- * Modifies the value of Z22K2 in place.
- *
- * If the input is already basic, returns it without any modification.
- *
- * @param {Object} ResultEnvelope a Z22/Evaluation result with metadata map
- * @return {Object} a basic Z22/Evaluation result
- */
-function maybeDowngradeResultEnvelope( ResultEnvelope ) {
-	if ( ResultEnvelope === undefined ) {
-		console.error( 'maybeDowngradeResultEnvelope called with undefined; please fix your caller' );
-		return undefined;
-	}
-	if ( isVoid( ResultEnvelope.Z22K2 ) || !isZMap( ResultEnvelope.Z22K2 ) ) {
-		// Nothing to do; Z22K2 is void or result envelope is already basic
-		return ResultEnvelope;
-	}
-
-	let errorValue = getZMapValue( ResultEnvelope.Z22K2, { Z1K1: 'Z6', Z6K1: 'errors' } );
-	if ( errorValue === undefined ) {
-		errorValue = makeVoid();
-	}
-	ResultEnvelope.Z22K2 = errorValue;
-	return ResultEnvelope;
-}
-
-/**
  * Retrieves the Z5/Error, if present, from the given Z22/Evaluation result (envelope).
- * Works both with older "basic" Z22s and with newer map-based Z22s.
  *
  * @param {Object} envelope a Z22/Evaluation result (envelope), in normal OR canonical form
  * @param {boolean} benjamin If envelope canonical, whether to expect Benjamin format
@@ -594,7 +526,7 @@ function getError( envelope, benjamin = true ) {
 			error = makeVoid( canonical );
 		}
 		return error;
-	} else {
+	} else { // metadata is Z24/void
 		return metadata;
 	}
 }
@@ -720,8 +652,6 @@ module.exports = {
 	isZMap,
 	setZMapValue,
 	getZMapValue,
-	maybeUpgradeResultEnvelope,
-	maybeDowngradeResultEnvelope,
 	getError,
 	setMetadataValue
 };

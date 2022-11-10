@@ -38,8 +38,6 @@ const {
 	isZMap,
 	setZMapValue,
 	getZMapValue,
-	maybeUpgradeResultEnvelope,
-	maybeDowngradeResultEnvelope,
 	getError,
 	setMetadataValue
 } = require( '../../../src/utils.js' );
@@ -1030,73 +1028,6 @@ QUnit.test( 'isVoid', ( assert ) => {
 	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: 'Z24' } ), true );
 } );
 
-QUnit.test( 'maybeUpgradeResultEnvelope', ( assert ) => {
-	const singletonZMapErrorsOnly = { Z1K1: mapType1,
-		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
-			K2: { Z1K1: listType1 } } };
-	const basicResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
-	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
-	const emptyResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } };
-	assert.strictEqual( maybeUpgradeResultEnvelope( mappedResultEnvelopeErrorsOnly ),
-		mappedResultEnvelopeErrorsOnly );
-	assert.strictEqual( maybeUpgradeResultEnvelope( emptyResultEnvelope ), emptyResultEnvelope );
-	assert.deepEqual( maybeUpgradeResultEnvelope( basicResultEnvelopeErrorsOnly ),
-		mappedResultEnvelopeErrorsOnly );
-
-	// Double-check that trying to upgrade undefined returns undefined.
-	assert.strictEqual( maybeUpgradeResultEnvelope( undefined ), undefined );
-} );
-
-QUnit.test( 'maybeDowngradeResultEnvelope', ( assert ) => {
-	const singletonZMapErrorsOnly = { Z1K1: mapType1,
-		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
-			K2: { Z1K1: listType1 } } };
-	const emptyResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' } };
-	const doubletonZMap = { Z1K1: mapType1,
-		K1: { Z1K1: listType1,
-			K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'warnings' }, K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' } },
-			K2: { Z1K1: listType1,
-				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
-				K2: { Z1K1: listType1 } } } };
-	const basicResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
-	const mappedResultEnvelopeErrorsOnly = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: singletonZMapErrorsOnly };
-	const mappedResultEnvelope2Entries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: doubletonZMap };
-	assert.deepEqual( maybeDowngradeResultEnvelope( { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } ), { Z1K1: 'Z22', Z22K1: 'Z24', Z22K2: 'Z24' } );
-	assert.deepEqual( maybeDowngradeResultEnvelope( emptyResultEnvelope ), emptyResultEnvelope );
-	assert.deepEqual( maybeDowngradeResultEnvelope( mappedResultEnvelopeErrorsOnly ),
-		basicResultEnvelopeErrorsOnly );
-	assert.deepEqual( maybeDowngradeResultEnvelope( mappedResultEnvelope2Entries ),
-		basicResultEnvelopeErrorsOnly );
-
-	// Double-check that trying to downgrade undefined returns undefined.
-	assert.strictEqual( maybeDowngradeResultEnvelope( undefined ), undefined );
-
-	// If the mapped ResultEnvelope has an errors key but no value, it should be a void
-	const mappedResultEnvelopeEmptyErrors = {
-		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' },
-		Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' },
-		Z22K2: {
-			Z1K1: mapType1,
-			K1: {
-				Z1K1: listType1,
-				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' } },
-				K2: { Z1K1: listType1 }
-			}
-		}
-	};
-	const unmappedResultEnvelopeEmptyErrors = {
-		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' },
-		Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' },
-		Z22K2: { Z1K1: 'Z9', Z9K1: 'Z24' }
-	};
-	assert.deepEqual(
-		maybeDowngradeResultEnvelope( mappedResultEnvelopeEmptyErrors ),
-		unmappedResultEnvelopeEmptyErrors
-	);
-} );
-
 QUnit.test( 'getError', ( assert ) => {
 	const singletonZMapErrorsOnly = { Z1K1: mapType1,
 		K1: { Z1K1: listType1,
@@ -1116,11 +1047,9 @@ QUnit.test( 'getError', ( assert ) => {
 			K2: { Z1K1: listType1,
 				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
 				K2: { Z1K1: listType1 } } } };
-	const basicResultEnvelope = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: error1 };
 	const mappedResultEnvelope2Entries = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z22' }, Z22K1: { Z1K1: 'Z9', Z9K1: 'Z24' }, Z22K2: doubletonZMap };
 	assert.strictEqual( getError( mappedResultEnvelopeErrorsOnly ), error1 );
 	assert.strictEqual( getError( mappedResultEnvelope2Entries ), error1 );
-	assert.strictEqual( getError( basicResultEnvelope ), error1 );
 	assert.deepEqual( getError( mappedResultEnvelopeNoEntries ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
 	assert.deepEqual( getError( mappedResultEnvelopeWithWarnings ), { Z1K1: 'Z9', Z9K1: 'Z24' } );
 } );
