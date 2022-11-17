@@ -120,6 +120,11 @@ QUnit.test( 'subValidator for built-in schema', ( assert ) => {
 		[ 'Z1K1', 'Z8K1', 'Z8K2', 'Z8K3', 'Z8K4', 'Z8K5' ] );
 } );
 
+QUnit.test( 'no dummy subvalidator for built-in schema', ( assert ) => {
+	const DummySchema = NORMAL_FACTORY.getSubSchemas_( 'Dummy' );
+	assert.true( DummySchema instanceof Map && DummySchema.size === 0 );
+} );
+
 QUnit.test( 'subvalidators for ZID_literal schema', ( assert ) => {
 	const Z8LiteralSchema = NORMAL_FACTORY.create( 'Z8_literal' );
 	assert.deepEqual(
