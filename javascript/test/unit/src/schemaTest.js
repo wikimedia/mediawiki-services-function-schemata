@@ -167,6 +167,18 @@ QUnit.test( 'subvalidators for GENERIC_literal', ( assert ) => {
 		} ) );
 } );
 
+QUnit.test( 'validator for Z41/Z42 falls back to Z40 schema', ( assert ) => {
+	const Z41Schema = CANONICAL_FACTORY.create( 'Z41' );
+	assert.true( Z41Schema.validate( { Z1K1: 'Z40', Z40K1: 'Z41' } ) );
+	assert.true( Z41Schema.validate( { Z1K1: 'Z40', Z40K1: 'Z42' } ) );
+	assert.deepEqual( Z41Schema.subValidatorKeys(), [ 'Z1K1', 'Z40K1' ] );
+
+	const Z42Schema = CANONICAL_FACTORY.create( 'Z42' );
+	assert.true( Z42Schema.validate( { Z1K1: 'Z40', Z40K1: 'Z41' } ) );
+	assert.true( Z42Schema.validate( { Z1K1: 'Z40', Z40K1: 'Z42' } ) );
+	assert.deepEqual( Z42Schema.subValidatorKeys(), [ 'Z1K1', 'Z40K1' ] );
+} );
+
 const canonicalZ4 = {
 	Z1K1: 'Z4',
 	Z4K1: 'Z10000',
