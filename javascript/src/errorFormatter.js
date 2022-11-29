@@ -178,6 +178,31 @@ class ErrorFormatter {
 	}
 
 	/**
+	 * Wrap an error message in a Z5/Error of type Z507/'Error in evaluation'.
+	 * Typically, the message will come from a caught error (an ordinary error,
+	 * not a ZError).
+	 *
+	 * @param {string} message
+	 * @param {Object} call the Z7/'Function call' being evaluated when the error arose
+	 * @return {Object} a Z5/Error object
+	 */
+	static wrapMessageInEvaluationError( message, call ) {
+		const wrappedError = this.createZErrorInstance(
+			errorTypes.error.generic_error,
+			{
+				errorInformation: message
+			}
+		);
+		return this.createZErrorInstance(
+			errorTypes.error.error_in_evaluation,
+			{
+				functionCall: call,
+				propagatedError: wrappedError
+			}
+		);
+	}
+
+	/**
 	 * Matches an Ajv parser error to one of the error descriptors in
 	 * Wikifunctions. When no descriptor is found for an error, the
 	 * function returns null.
@@ -244,6 +269,8 @@ class ErrorFormatter {
 	 * Creates an instance of a generic error given its errorType and an array
 	 * with the values of its keys.
 	 *
+	 * Note: "GenericError" here does not refer to Z500/'Generic error'.
+	 *
 	 * @param {string} errorType
 	 * @param {Object} errorKeys
 	 * @return {Object}
@@ -282,9 +309,18 @@ class ErrorFormatter {
 		}
 
 		switch ( errorType ) {
+			case errorTypes.error.generic_error:
+				errorKeys.push( err.errorInformation );
+				break;
+
 			case errorTypes.error.not_wellformed:
 				errorKeys.push( err.subtype );
 				errorKeys.push( err.value );
+				break;
+
+			case errorTypes.error.error_in_evaluation:
+				errorKeys.push( wrapInQuote( err.functionCall ) );
+				errorKeys.push( wrapInQuote( err.propagatedError ) );
 				break;
 
 			case errorTypes.error.list_of_errors:

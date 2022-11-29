@@ -2,6 +2,9 @@
 
 const errorFormatter = require( '../../../src/errorFormatter.js' );
 
+const path = require( 'path' );
+const { readJSON } = require( '../../../src/fileUtils.js' );
+
 QUnit.module( 'errorFormatter' );
 
 QUnit.test( 'createZErrorInstance: Undefined error type', ( assert ) => {
@@ -98,6 +101,81 @@ QUnit.test( 'createZErrorInstance', ( assert ) => {
 					Z885K1: { Z1K1: 'Z9', Z9K1: 'Z502' }
 				},
 				Z502K1: { Z1K1: 'Z9', Z9K1: 'Z526' }
+			}
+		}
+	);
+} );
+
+QUnit.test( 'wrapMessageInEvaluationError', ( assert ) => {
+	const message = 'This could be any string';
+	const functionCall = readJSON( path.join( 'test_data', 'function_call', 'Z7_to_Z811.json' ) );
+	const error = errorFormatter.wrapMessageInEvaluationError( message, functionCall );
+	assert.deepEqual(
+		error,
+		{
+			Z1K1: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z5'
+			},
+			Z5K1: {
+				Z1K1: 'Z9',
+				Z9K1: 'Z507'
+			},
+			Z5K2: {
+				Z1K1: {
+					Z1K1: {
+						Z1K1: 'Z9',
+						Z9K1: 'Z7'
+					},
+					Z7K1: {
+						Z1K1: 'Z9',
+						Z9K1: 'Z885'
+					},
+					Z885K1: {
+						Z1K1: 'Z9',
+						Z9K1: 'Z507'
+					}
+				},
+				Z507K1: {
+					Z1K1: {
+						Z1K1: 'Z9',
+						Z9K1: 'Z99'
+					},
+					Z99K1: functionCall
+				},
+				Z507K2: {
+					Z1K1: {
+						Z1K1: 'Z9',
+						Z9K1: 'Z99'
+					},
+					Z99K1: {
+						Z1K1: {
+							Z1K1: 'Z9',
+							Z9K1: 'Z5'
+						},
+						Z5K1: {
+							Z1K1: 'Z9',
+							Z9K1: 'Z500'
+						},
+						Z5K2: {
+							Z1K1: {
+								Z1K1: {
+									Z1K1: 'Z9',
+									Z9K1: 'Z7'
+								},
+								Z7K1: {
+									Z1K1: 'Z9',
+									Z9K1: 'Z885'
+								},
+								Z885K1: {
+									Z1K1: 'Z9',
+									Z9K1: 'Z500'
+								}
+							},
+							Z500K1: message
+						}
+					}
+				}
 			}
 		}
 	);
