@@ -61,13 +61,14 @@ function normalError( codes, args ) {
 }
 
 const error = {
+	generic_error: 'Z500', // error information
 	syntax_error: 'Z501', // message from parser, input string
 	not_wellformed: 'Z502', // sub error code, maybe more
 	not_implemented_yet: 'Z503', // function name
 	zid_not_found: 'Z504', // zid
 	number_of_arguments_mismatch: 'Z505', // expected number, actual number, args
 	argument_type_mismatch: 'Z506', // expected type, actual type, arg, propagated error
-	error_in_evaluation: 'Z507', // function call
+	error_in_evaluation: 'Z507', // function call, propagated error
 	competing_keys: 'Z508', // object
 	list_of_errors: 'Z509', // list of errors
 	nil: 'Z510', // -
