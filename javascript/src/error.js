@@ -1,5 +1,7 @@
 'use strict';
 
+const { isString, isZid, wrapInZ6, wrapInZ9 } = require( './utils.js' );
+
 function innerError( codes, args, normalized = false ) {
 	const z1k1 = normalized ?
 		{ Z1K1: 'Z9', Z9K1: codes[ 0 ] } :
@@ -26,6 +28,8 @@ function innerError( codes, args, normalized = false ) {
  * form. When codes.length > 1, arguments refer to the last error code informed.
  * The arguments are not validated!
  *
+ * @deprecated Please use makeErrorInCanonicalForm() instead.
+ *
  * @param {Array} codes An array of error codes Zxxx
  * @param {Array} args The arguments of the last error in 'codes'
  * @return {Object}
@@ -41,6 +45,8 @@ function canonicalError( codes, args ) {
  * A helper function that takes error codes and error arguments and creates a Z5/Error in normal
  * form.
  * The arguments are not validated!
+ *
+ * @deprecated Please use makeErrorInNormalForm() instead.
  *
  * @param {Array} codes An array of error codes Zxxx
  * @param {Array} args The arguments of the last error in 'codes'
@@ -58,6 +64,77 @@ function normalError( codes, args ) {
 		},
 		Z5K1: innerError( codes, argsZ6, true )
 	};
+}
+
+/**
+ * Generate a Z5/ZError instance of a given type with its arguments, in canonical form.
+ *
+ * This code does not validate the inputs. Checking that the given ZID refers to a known
+ * Z50/ZErrorType, that the supplied arguments relate to the given error code, or that the
+ * arguments are in the appropriate form or wrapped in a Z99/ZQuote is left to callers.
+ *
+ * @param {string} errorType The ZID of the ZErrorType to generate
+ * @param {Array} [args] The relevant arguments, if any
+ * @return {Object} A Z5/ZError instance in canonical form
+ * @throws Will throw an error if the error type is not valid
+ */
+function makeErrorInCanonicalForm( errorType, args = [] ) {
+	return makeErrorInGivenForm( errorType, args, true );
+}
+
+/**
+ * Generate a Z5/ZError instance of a given type with its arguments, in normal form.
+ *
+ * This code does not validate the inputs. Checking that the given ZID refers to a known
+ * Z50/ZErrorType, that the supplied arguments relate to the given error code, or that the
+ * arguments are in the appropriate form or wrapped in a Z99/ZQuote is left to callers.
+ *
+ * @param {string} errorType The ZID of the Z50/ZErrorType to generate
+ * @param {Array} [args] The relevant arguments, if any
+ * @return {Object} A Z5/ZError instance in normal form
+ * @throws Will throw an error if the error type is not valid
+ */
+function makeErrorInNormalForm( errorType, args = [] ) {
+	return makeErrorInGivenForm( errorType, args, false );
+}
+
+/**
+ * Internal implementation function for makeErrorInCanonicalForm() and makeErrorInNormalForm()
+ *
+ * @param {string} errorType The ZID of the Z50/ZErrorType to generate
+ * @param {Array} args The relevant arguments, if any
+ * @param {boolean} canonical Whether to output in canonical or normal form
+ * @return {Object} A Z5/ZError instance in either canonical or normal form
+ */
+function makeErrorInGivenForm( errorType, args, canonical ) {
+	if ( !isString( errorType ) ) {
+		throw new Error( 'Missing error type.' );
+	}
+
+	if ( !isZid( errorType ) ) {
+		throw new Error( `Invalid error type: "${errorType}".` );
+	}
+
+	const baseError = {
+		Z1K1: canonical ? 'Z5' : wrapInZ9( 'Z5' ),
+		Z5K1: canonical ? errorType : wrapInZ9( errorType ),
+		Z5K2: {
+			Z1K1: {
+				Z1K1: canonical ? 'Z7' : wrapInZ9( 'Z7' ),
+				Z7K1: canonical ? 'Z885' : wrapInZ9( 'Z885' ),
+				Z885K1: canonical ? errorType : wrapInZ9( errorType )
+			}
+		}
+	};
+
+	for ( let index = 0; index < args.length; index++ ) {
+		let argument = args[ index ];
+		argument = !canonical && ( typeof argument === 'string' ) ? wrapInZ6( argument ) : argument;
+
+		baseError.Z5K2[ ( errorType + 'K' + ( index + 1 ) ) ] = argument;
+	}
+
+	return baseError;
 }
 
 const error = {
@@ -117,5 +194,7 @@ const error = {
 module.exports = {
 	error,
 	canonicalError,
-	normalError
+	normalError,
+	makeErrorInCanonicalForm,
+	makeErrorInNormalForm
 };
