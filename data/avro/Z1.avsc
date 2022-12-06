@@ -1,0 +1,14 @@
+{
+	"type": "record",
+	"namespace": "ztypes",
+	"name": "Z1",
+	"fields": [
+		{
+			"name": "valueMap",
+			"type": {
+				"type": "map",
+				"values": [ "ztypes.Z1", "ztypes.Z6", "ztypes.Z9", "ztypes.Z99" ]
+			}
+		}
+	]
+}
