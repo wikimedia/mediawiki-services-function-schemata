@@ -1,0 +1,11 @@
+{
+	"type": "record",
+	"namespace": "ztypes",
+	"name": "Z99",
+	"fields": [
+		{
+			"type": "string",
+			"name": "Z99K1"
+		}
+	]
+}

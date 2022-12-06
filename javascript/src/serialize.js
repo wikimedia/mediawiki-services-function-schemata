@@ -1,65 +1,23 @@
 'use strict';
 
 const avro = require( 'avro-js' );
+const { dataDir, readJSON } = require( './fileUtils.js' );
 const semver = require( 'semver' );
 const { validatesAsQuote, validatesAsReference, validatesAsString } = require( './schema.js' );
 
-// TODO (T320217): Read these from .avsc file.
-const Z9_SCHEMA_ = {
-	type: 'record',
-	namespace: 'ztypes',
-	name: 'Z9',
-	fields: [
-		{
-			type: 'string',
-			name: 'Z9K1'
-		}
-	]
-};
-
-const Z6_SCHEMA_ = {
-	type: 'record',
-	namespace: 'ztypes',
-	name: 'Z6',
-	fields: [
-		{
-			type: 'string',
-			name: 'Z6K1'
-		}
-	]
-};
-
-const Z99_SCHEMA_ = {
-	type: 'record',
-	namespace: 'ztypes',
-	name: 'Z99',
-	fields: [
-		{
-			type: 'string',
-			name: 'Z99K1'
-		}
-	]
-};
-
-const Z1_SCHEMA_ = {
-	type: 'record',
-	namespace: 'ztypes',
-	name: 'Z1',
-	fields: [
-		{
-			name: 'valueMap',
-			type: {
-				type: 'map',
-				values: [ 'ztypes.Z1', 'ztypes.Z6', 'ztypes.Z9', 'ztypes.Z99' ]
-			}
-		}
-	]
-};
+const Z1_SCHEMA_ = readJSON( dataDir( 'avro', 'Z1.avsc' ) );
+const Z6_SCHEMA_ = readJSON( dataDir( 'avro', 'Z6.avsc' ) );
+const Z9_SCHEMA_ = readJSON( dataDir( 'avro', 'Z9.avsc' ) );
+const Z99_SCHEMA_ = readJSON( dataDir( 'avro', 'Z99.avsc' ) );
 
 // A ZObject is the union of arbitrary Z1s, Z6s, and Z9s.
+// Note that Z1_SCHEMA_ must go last because it references the others by name.
 const Z1_UNION_ = [ Z6_SCHEMA_, Z9_SCHEMA_, Z99_SCHEMA_, Z1_SCHEMA_ ];
+// semver 0.0.1
+const avroSchema = avro.parse( Z1_UNION_ );
 
-const ZOBJECT_SCHEMA_ = {
+// Requests in v0.0.2 also indicate whether to use reentrance.
+const V002_REQUEST_SCHEMA_ = {
 	type: 'record',
 	namespace: 'ztypes',
 	name: 'ZOBJECT',
@@ -74,11 +32,8 @@ const ZOBJECT_SCHEMA_ = {
 		}
 	]
 };
-
-// semver 0.0.1
-const avroSchema = avro.parse( Z1_UNION_ );
 // semver 0.0.2
-const zobjectSchemaV002 = avro.parse( ZOBJECT_SCHEMA_ );
+const zobjectSchemaV002 = avro.parse( V002_REQUEST_SCHEMA_ );
 
 /**
  * Transform a ZObject into the form expected by the serialization schema.
