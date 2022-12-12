@@ -50,6 +50,12 @@ function testForFilesInDirectory( directory, isValidZ2, isValidInner, descriptio
 			return;
 		}
 
+		// Validate ZID isn't reserved for testing
+		QUnit.test( ZID, ( assert ) => {
+			const numericZID = Number( String( ZID ).slice( 1 ) );
+			assert.true( numericZID < 400 || numericZID > 499, 'The ZID range Z400 to Z499 is reserved for test objects!' );
+		} );
+
 		const jsonFile = fs.readFileSync( path.join( directory, file ), { encoding: 'utf8' } );
 		const object = JSON.parse( jsonFile );
 		testDataWellformedness( ZID, object, isValidZ2, isValidInner, description );
