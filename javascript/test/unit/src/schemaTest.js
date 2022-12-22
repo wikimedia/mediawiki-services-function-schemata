@@ -298,6 +298,79 @@ QUnit.test( 'GenericSchema disallows extra keys', ( assert ) => {
 	assert.false( topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' }, Z10000K2: { Z1K1: 'Z6', Z6K1: 'not a string' } } ) );
 } );
 
+QUnit.test( 'GenericSchema allows the danger trio', ( assert ) => {
+	const anotherCanonicalZ4 = {
+		Z1K1: 'Z4',
+		Z4K1: 'Z10000',
+		Z4K2: [
+			'Z3',
+			{
+				Z1K1: 'Z3',
+				Z3K1: 'Z6',
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'Z10000K1'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			},
+			{
+				Z1K1: 'Z3',
+				Z3K1: 'Z6',
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'Z10000K2'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			},
+			{
+				Z1K1: 'Z3',
+				Z3K1: 'Z6',
+				Z3K2: {
+					Z1K1: 'Z6',
+					Z6K1: 'Z10000K3'
+				},
+				Z3K3: {
+					Z1K1: 'Z9',
+					Z9K1: 'Z1212'
+				}
+			}
+		],
+		Z4K3: 'Z1000'
+	};
+	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
+	const Z4 = normalize( anotherCanonicalZ4,
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	const schemaMap = NORMAL_FACTORY.createUserDefined(
+		[ Z4 ], /* benjamin= */ true
+	);
+	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const topLevel = schemaMap.get( objectKey.asString() );
+
+	const toValidate = normalize(
+		{
+			Z1K1: Z4,
+			Z10000K1: 'Z40000',
+			Z10000K2: {
+				Z1K1: 'Z18',
+				Z18K1: 'Z40000K1'
+			},
+			Z10000K3: {
+				Z1K1: 'Z7',
+				Z7K1: 'Z40001'
+			}
+		},
+		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true
+	).Z22K1;
+
+	assert.true( topLevel.validate( toValidate ) );
+} );
+
 QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', ( assert ) => {
 	const Z7 = {
 		Z1K1: 'Z7',

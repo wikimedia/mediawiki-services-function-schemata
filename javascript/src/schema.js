@@ -144,6 +144,28 @@ function validatesAsBoolean( Z1 ) {
 }
 
 /**
+ * Validates a ZObject against the Function Call, Reference, and Argument Reference
+ * schemata. Returns the first valid status or the final failing status.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {ValidationStatus} whether Z1 can validated as any of the Danger Trio
+ */
+function validatesAsDangerTrio( Z1 ) {
+	let validationStatus;
+	for ( const validatorFunction of [
+		validatesAsFunctionCall,
+		validatesAsReference,
+		validatesAsArgumentReference
+	] ) {
+		validationStatus = validatorFunction( Z1 );
+		if ( validationStatus.isValid() ) {
+			break;
+		}
+	}
+	return validationStatus;
+}
+
+/**
  * Finds the identity of a type. This might be a Function Call (in the case of
  * a generic type), a Reference (in the case of a builtin), or the Z4 itself
  * (in the case of a user-defined type).
@@ -536,19 +558,29 @@ class GenericSchema extends BaseSchema {
 		const allKeys = new Set( Object.keys( maybeValid ) );
 		allKeys.delete( 'Z1K1' );
 		for ( const key of this.keyMap_.keys() ) {
+			const toValidate = maybeValid[ key ];
 			// TODO (T290996): How to signal non-optional keys?
-			if ( maybeValid[ key ] === undefined ) {
+			if ( toValidate === undefined ) {
 				continue;
 			}
+			allKeys.delete( key );
+
+			// Allow unresolved Z7, Z9, or Z18 to pass validation. This is a stopgap
+			// measure that will be phased out pending a massive validator overhaul.
+			const canSkip = validatesAsDangerTrio( toValidate ).isValid();
+			if ( canSkip ) {
+				continue;
+			}
+
 			// If key is not present, maybeValid[ key ] is undefined, which will
 			// not validate well.
-			const howsIt = this.keyMap_.get( key ).validateStatus( maybeValid[ key ] );
+			const howsIt = this.keyMap_.get( key ).validateStatus( toValidate );
 			if ( !howsIt.isValid() ) {
+				console.log( 'failed to validate', maybeValid, 'at key', key, 'with value', maybeValid[ key ] );
 				// TODO (T296842): Somehow include key.
 				// TODO (T296842): Consider conjunction of all errors?
 				return howsIt;
 			}
-			allKeys.delete( key );
 		}
 
 		// TODO (T296842): Better errors for stray keys; allow non-local keys?
