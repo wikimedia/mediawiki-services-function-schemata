@@ -12,7 +12,7 @@ const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 const SCHEMA_NAME_REGEX = '(Z[1-9]\\d*(K[1-9]\\d*)?|LIST|RESOLVER|GENERIC)';
 
 let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
-	Z8Validator, Z9Validator, Z18Validator, Z99Validator;
+	Z8Validator, Z9Validator, Z18Validator, Z40Validator, Z99Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
@@ -26,6 +26,7 @@ function initializeValidators() {
 	Z8Validator = defaultFactory.create( 'Z8_literal' );
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 	Z18Validator = defaultFactory.create( 'Z18_literal' );
+	Z40Validator = defaultFactory.create( 'Z40_literal' );
 	Z99Validator = defaultFactory.create( 'Z99_literal' );
 }
 
@@ -130,6 +131,16 @@ function validatesAsArgumentReference( Z1 ) {
  */
 function validatesAsQuote( Z1 ) {
 	return Z99Validator.validateStatus( Z1 );
+}
+
+/**
+ * Validates a ZObject against the Boolean schema.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {ValidationStatus} whether Z1 can validated as a Boolean
+ */
+function validatesAsBoolean( Z1 ) {
+	return Z40Validator.validateStatus( Z1 );
 }
 
 /**
@@ -825,5 +836,6 @@ module.exports = {
 	validatesAsReference,
 	validatesAsQuote,
 	validatesAsArgumentReference,
+	validatesAsBoolean,
 	ZObjectKeyFactory
 };

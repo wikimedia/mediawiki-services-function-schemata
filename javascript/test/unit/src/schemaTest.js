@@ -8,6 +8,7 @@ const {
 	validatesAsString,
 	validatesAsFunctionCall,
 	validatesAsArgumentReference,
+	validatesAsBoolean,
 	ZObjectKeyFactory } = require( '../../../src/schema.js' );
 const normalize = require( '../../../src/normalize.js' );
 const {
@@ -626,6 +627,34 @@ QUnit.test( 'validatesAsArgumentReference', ( assert ) => {
 		}
 	};
 	assert.true( validatesAsArgumentReference( input ).isValid() );
+} );
+
+QUnit.test( 'validatesAsBoolean, valid input', ( assert ) => {
+	const input = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z40'
+		},
+		Z40K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z41'
+		}
+	};
+	assert.true( validatesAsBoolean( input ).isValid() );
+} );
+
+QUnit.test( 'validatesAsBoolean, invalid input', ( assert ) => {
+	const input = {
+		Z1K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z40'
+		},
+		Z40K1: {
+			Z1K1: 'Z9',
+			Z9K1: 'Z411'
+		}
+	};
+	assert.false( validatesAsBoolean( input ).isValid() );
 } );
 
 QUnit.test( 'isVoid', ( assert ) => {
