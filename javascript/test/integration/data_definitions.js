@@ -64,29 +64,21 @@ function testForFilesInDirectory( directory, isValidZ2, isValidInner, descriptio
 
 function testNaturalLanguagesParsing( directory, languages ) {
 	const languageMapping = {};
-	const allFiles = [];
 
-	for ( const file of fs.readdirSync( directory ) ) {
-		const ZID = file.split( '.' )[ 0 ];
-		const ZidNumber = parseInt( ZID.slice( 1 ) );
-		if ( ZidNumber > 1000 && ZidNumber < 2000 ) {
-			const jsonFile = fs.readFileSync( path.join( directory, file ), { encoding: 'utf8' } );
-			allFiles.push( JSON.parse( jsonFile ) );
-		}
-	}
+	const allNaturalLanguageZObjects = getAllZObjectsInRange( directory, 1001, 1999 );
 
-	for ( const index in allFiles ) {
+	for ( const index in allNaturalLanguageZObjects ) {
 		const isoCodes = [];
-		const language = allFiles[ index ];
+		const languageObject = allNaturalLanguageZObjects[ index ];
 
-		isoCodes.push( language.Z2K2.Z60K1 );
-		if ( 'Z60K2' in language.Z2K2 ) {
-			const aliases = language.Z2K2.Z60K2.slice( 1 );
+		isoCodes.push( languageObject.Z2K2.Z60K1 );
+		if ( 'Z60K2' in languageObject.Z2K2 ) {
+			const aliases = languageObject.Z2K2.Z60K2.slice( 1 );
 			for ( const alias in aliases ) {
 				isoCodes.push( aliases[ alias ] );
 			}
 		}
-		const zid = language.Z2K1.Z6K1;
+		const zid = languageObject.Z2K1.Z6K1;
 
 		for ( const code in isoCodes ) {
 			languageMapping[ isoCodes[ code ] ] = zid;
@@ -95,9 +87,24 @@ function testNaturalLanguagesParsing( directory, languages ) {
 
 	const expected = JSON.parse( fs.readFileSync( languages, { encoding: 'utf8' } ) );
 
-	QUnit.test( 'validateLanguageParsing', ( assert ) => {
+	QUnit.test( 'validateNaturalLanguageParsing', ( assert ) => {
 		assert.deepEqual( languageMapping, expected );
 	} );
+}
+
+function getAllZObjectsInRange( directory, lowerZid, upperZid ) {
+	const allFiles = [];
+
+	for ( const file of fs.readdirSync( directory ) ) {
+		const ZID = file.split( '.' )[ 0 ];
+		const ZidNumber = parseInt( ZID.slice( 1 ) );
+		if ( ZidNumber >= lowerZid && ZidNumber <= upperZid ) {
+			const jsonFile = fs.readFileSync( path.join( directory, file ), { encoding: 'utf8' } );
+			allFiles.push( JSON.parse( jsonFile ) );
+		}
+	}
+
+	return allFiles;
 }
 
 // Test wellformedness of files in data/definitions directory
