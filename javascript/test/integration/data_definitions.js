@@ -10,6 +10,7 @@ QUnit.module( 'data_definitions' );
 
 const dataPath = dataDir( 'definitions' );
 const naturalLanguages = dataDir( 'definitions/naturalLanguages.json' );
+const softwareLanguages = dataDir( 'definitions/softwareLanguages.json' );
 const badPersistent = path.join( 'test_data', 'bad_definitions', 'bad_persistent' );
 const badInner = path.join( 'test_data', 'bad_definitions', 'bad_inner' );
 
@@ -92,6 +93,22 @@ function testNaturalLanguagesParsing( directory, languages ) {
 	} );
 }
 
+function testSoftwareLanguagesParsing( directory, languages ) {
+	const languageMapping = {};
+	const allSoftwareLanguageZObjects = getAllZObjectsInRange( directory, 600, 699 );
+
+	for ( const index in allSoftwareLanguageZObjects ) {
+		const languageObject = allSoftwareLanguageZObjects[ index ];
+		languageMapping[ languageObject.Z2K2.Z61K1 ] = languageObject.Z2K1.Z6K1;
+	}
+
+	const expected = JSON.parse( fs.readFileSync( languages, { encoding: 'utf8' } ) );
+
+	QUnit.test( 'validateSoftwareLanguageParsing', ( assert ) => {
+		assert.deepEqual( languageMapping, expected );
+	} );
+}
+
 function getAllZObjectsInRange( directory, lowerZid, upperZid ) {
 	const allFiles = [];
 
@@ -124,4 +141,8 @@ function getAllZObjectsInRange( directory, lowerZid, upperZid ) {
 
 {
 	testNaturalLanguagesParsing( dataPath, naturalLanguages );
+}
+
+{
+	testSoftwareLanguagesParsing( dataPath, softwareLanguages );
 }
