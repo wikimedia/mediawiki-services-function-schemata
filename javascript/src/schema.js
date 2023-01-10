@@ -4,7 +4,7 @@ const Ajv = require( 'ajv' ).default;
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
+const { isBuiltInType, isString, convertZListToItemArray, getError, isVoid } = require( './utils.js' );
 const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
@@ -438,10 +438,7 @@ class ZObjectKeyFactory {
 		);
 
 		// (T304144): If validation failed with an error; return it.
-		if (
-			normalizedEnvelope.Z22K1.Z1K1 === 'Z9' &&
-			normalizedEnvelope.Z22K1.Z9K1 === 'Z24'
-		) {
+		if ( !isVoid( getError( normalizedEnvelope ) ) ) {
 			const responseError = new Error( 'Invalid ZObject input for type' );
 			responseError.errorZObjectPayload = normalizedEnvelope.Z22K2;
 			throw responseError;
