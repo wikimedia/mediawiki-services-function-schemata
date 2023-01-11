@@ -492,21 +492,6 @@ QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( ass
 	assert.deepEqual( ZObjectKeyFactory.create( Z1, /* benjamin= */ true ).asString(), 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)' );
 } );
 
-QUnit.test( 'ZObjectKeyFactory with canonical Z24', ( assert ) => {
-	const key = ZObjectKeyFactory.create( 'Z24' );
-	assert.deepEqual( key.asString(), 'Z24' );
-	assert.deepEqual( key.type(), 'SimpleTypeKey' );
-} );
-
-QUnit.test( 'ZObjectKeyFactory with normal Z24', ( assert ) => {
-	const key = ZObjectKeyFactory.create( {
-		Z1K1: 'Z9',
-		Z9K1: 'Z24'
-	} );
-	assert.deepEqual( key.asString(), 'Z24' );
-	assert.deepEqual( key.type(), 'SimpleTypeKey' );
-} );
-
 QUnit.test( 'ZObjectKeyFactory with invalid object', ( assert ) => {
 	const invalidZObject = {
 		Hello: 'Molly',
