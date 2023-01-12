@@ -12,8 +12,10 @@ A number of ZObjects are pre-defined for the Wikifunctions system, and used by t
 
 The ranges of which ZIDs can be used for which types are documented [on Meta](https://meta.wikimedia.org/wiki/Abstract_Wikipedia/Reserved_ZIDs), though this will move to wikifunctions.org when that site goes live.
 
-When updating the definitions, you must regenerate the `dependencies.json` file using the `maintenance/generateDependenciesFile.php` script in the WikiLambda MediaWiki extension (this means that you need to make these changes to the sub-module check-out of this repo within the extension).
+When updating the definitions, you must manually update the `dependencies.json` file (running the tests will inform you of the missing items).
 
-When updating the natural language definitions, you must also update the `naturalLanguages.json` file. This process is currently manual.
+When updating the natural language definitions, you must also update the `naturalLanguages.json` file.
+
+When updating the software language definitions, you must also update the `softwareLanguages.json` file.
 
 You can spot gaps in the generated definitions with a simple script, //e.g.// in node: `const definitions = fs.readdirSync('./data/definitions'); for ( let i = 1001; i <= 1880; i++ ) {if ( !definitions.includes('Z' + i + '.json' ) ) { console.log( 'Unused ZNaturalLanguage ZID: Z' + i ); } };`.
