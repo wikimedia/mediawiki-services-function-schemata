@@ -576,7 +576,6 @@ class GenericSchema extends BaseSchema {
 			// not validate well.
 			const howsIt = this.keyMap_.get( key ).validateStatus( toValidate );
 			if ( !howsIt.isValid() ) {
-				console.log( 'failed to validate', maybeValid, 'at key', key, 'with value', maybeValid[ key ] );
 				// TODO (T296842): Somehow include key.
 				// TODO (T296842): Consider conjunction of all errors?
 				return howsIt;
