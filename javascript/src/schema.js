@@ -857,6 +857,7 @@ class SchemaFactory {
 initializeValidators();
 
 module.exports = {
+	findIdentity,
 	SchemaFactory,
 	validatesAsZObject,
 	validatesAsType,
