@@ -344,10 +344,10 @@ class UserDefinedTypeKey extends GenericTypeKey {
 	}
 
 	static create( identity ) {
-		const children = [];
+		const children = {};
 		for ( const Z3 of convertZListToItemArray( identity.Z4K2 ) ) {
 			// eslint-disable-next-line no-use-before-define
-			children.push( ZObjectKeyFactory.create( Z3.Z3K1 ) );
+			children[ Z3.Z3K2.Z6K1 ] = ZObjectKeyFactory.create( Z3.Z3K1 );
 		}
 		return new UserDefinedTypeKey( children );
 	}
@@ -361,8 +361,8 @@ class UserDefinedTypeKey extends GenericTypeKey {
 	asString() {
 		if ( this.string_ === null ) {
 			const subKeys = [];
-			for ( const child of this.children_ ) {
-				subKeys.push( child.asString() );
+			for ( const child of Object.entries( this.children_ ) ) {
+				subKeys.push( child[ 0 ] + ':' + child[ 1 ].asString() );
 			}
 			this.string_ = '<' + subKeys.join( ',' ) + '>';
 		}
@@ -397,22 +397,22 @@ class ZObjectKeyFactory {
 	 *
 	 *  "Z831(Z6,Z40)"
 	 *
-	 * If the type is user-defined, the unique identifier will be the unique
+	 * If the type is user-defined, the unique identifier will be the keys IDs and unique
 	 * identifiers of the type's attributes (enclosed in angle brackets, comma-
 	 * separated), e.g.
 	 *
 	 *  {
 	 *      ...
 	 *      Z4K2: [
-	 *          { Z3K1: K1, Z3K2: Z40 },
-	 *          { Z3K1: K2, Z3K2: Z6 },
-	 *          { Z3K1: K3, Z3K2: Z86 }
+	 *          { Z3K1: Z40, Z3K2: Z123K1 },
+	 *          { Z3K1: Z6,  Z3K2: Z123K2 },
+	 *          { Z3K1: Z86, Z3K2: Z123K3 }
 	 *      ]
 	 * }
 	 *
 	 * produces a key like
 	 *
-	 *  "<Z40,Z6,Z86>"
+	 *  "<Z123K1:Z40,Z123K2:Z6,Z123K3:Z86>"
 	 *
 	 * Otherwise, if the object is not a type, the unique identifier will be
 	 * the unique identifier of the object's type specification (Z1K1), then

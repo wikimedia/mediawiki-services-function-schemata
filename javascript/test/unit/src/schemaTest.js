@@ -247,7 +247,7 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 	assert.deepEqual(
 		[ ...schemaMap.keys() ],
 		[
-			'<Z6,Z931(Z6)>',
+			'<Z10000K1:Z6,Z10000K2:Z931(Z6)>',
 			'Z931(Z6)'
 		] );
 } );
@@ -459,7 +459,7 @@ QUnit.test( 'ZObjectKeyFactory with user-defined type', ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ZObjectKeyFactory.create( Z4, /* benjamin= */ true ).asString(), '<Z6,Z931(Z6,Z12)>' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z4, /* benjamin= */ true ).asString(), '<K1:Z6,K2:Z931(Z6,Z12)>' );
 } );
 
 QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( assert ) => {
