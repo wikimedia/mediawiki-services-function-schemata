@@ -243,7 +243,6 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 	const schemaMap = NORMAL_FACTORY.createUserDefined(
 		[ Z4 ], /* benjamin= */ true
 	);
-	// TODO (T298049): Why is the first entry here a ZObjectKey instead of a UserDefinedTypeKey?
 	assert.deepEqual(
 		[ ...schemaMap.keys() ],
 		[
