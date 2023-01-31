@@ -1,7 +1,14 @@
 'use strict';
 
 const path = require( 'path' );
-const { convertWrappedZObjectToVersionedBinary, convertZObjectToBinary, getWrappedZObjectFromVersionedBinary, getZObjectFromBinary, recoverNormalFromSerialization } = require( '../../../src/serialize.js' );
+const {
+	convertWrappedZObjectToVersionedBinary,
+	convertZObjectToBinary,
+	getWrappedZObjectFromVersionedBinary,
+	getZObjectFromBinary,
+	formatNormalForSerialization,
+	recoverNormalFromSerialization
+} = require( '../../../src/serialize.js' );
 const { readJSON } = require( '../../../src/fileUtils.js' );
 
 QUnit.module( 'serialization' );
@@ -57,6 +64,50 @@ QUnit.test( 'wrapped serialization should be invertible with version 0.0.2', ( a
 	const serialized = convertWrappedZObjectToVersionedBinary( original, '0.0.2' );
 	const deserialized = getWrappedZObjectFromVersionedBinary( serialized );
 	assert.deepEqual( deserialized, original );
+} );
+
+QUnit.test( 'formatNormalForSerialization/recoverNormalFromSerialization: quote', ( assert ) => {
+	// FIXME: Why does validatesAsQuote() require normal form but the others require canonical?
+	const quote = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z99' }, Z99K1: 'Hello, this is dog' };
+	const expected = { 'ztypes.Z99': { Z99K1: '"Hello, this is dog"' } };
+	const normalFormQuote = formatNormalForSerialization( quote );
+	assert.deepEqual( normalFormQuote, expected );
+
+	const recoveredForm = recoverNormalFromSerialization( normalFormQuote );
+	assert.deepEqual( recoveredForm, quote );
+} );
+
+QUnit.test( 'formatNormalForSerialization/recoverNormalFromSerialization: reference', ( assert ) => {
+	const reference = { Z1K1: 'Z9', Z9K1: 'Z1' };
+	const expected = { 'ztypes.Z9': { Z9K1: 'Z1' } };
+	const normalFormReference = formatNormalForSerialization( reference );
+	assert.deepEqual( normalFormReference, expected );
+
+	const recoveredForm = recoverNormalFromSerialization( normalFormReference );
+	assert.deepEqual( recoveredForm, reference );
+} );
+
+QUnit.test( 'formatNormalForSerialization/recoverNormalFromSerialization: string', ( assert ) => {
+	const string = { Z1K1: 'Z6', Z6K1: 'String value' };
+	const expected = { 'ztypes.Z6': { Z6K1: 'String value' } };
+	const normalFormString = formatNormalForSerialization( string );
+	assert.deepEqual( normalFormString, expected );
+
+	const recoveredForm = recoverNormalFromSerialization( normalFormString );
+	assert.deepEqual( recoveredForm, string );
+} );
+
+QUnit.test( 'formatNormalForSerialization/recoverNormalFromSerialization: custom type', ( assert ) => {
+	const custom = { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z400' }, Z400K1: { Z1K1: 'Z6', Z6K1: 'Inner string value' } };
+	const expected = { 'ztypes.Z1': { valueMap: {
+		Z1K1: { 'ztypes.Z9': { Z9K1: 'Z400' } },
+		Z400K1: { 'ztypes.Z6': { Z6K1: 'Inner string value' } }
+	} } };
+	const normalFormCustom = formatNormalForSerialization( custom );
+	assert.deepEqual( normalFormCustom, expected );
+
+	const recoveredForm = recoverNormalFromSerialization( normalFormCustom );
+	assert.deepEqual( recoveredForm, custom );
 } );
 
 QUnit.test( 'serialization 0.0.3', ( assert ) => {
