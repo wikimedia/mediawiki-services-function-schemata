@@ -111,6 +111,15 @@ QUnit.test( 'compareTypes is false when identities are not equal', ( assert ) =>
 	assert.false( compareTypes( wrappedA, wrappedB ) );
 } );
 
+QUnit.test( 'compareTypes is false when comparandIdentity input identity is not valid', ( assert ) => {
+	const canonicalTypeA = Z9_( 'Hello' );
+	const canonicalTypeB = Z9_( 'Z2' );
+	const typeA = boldlyNormalize( canonicalTypeA );
+	const typeB = boldlyNormalize( canonicalTypeB );
+
+	assert.false( compareTypes( typeA, typeB ) );
+} );
+
 QUnit.test( 'compareTypes is true when the keys of user-defined types type-compare', ( assert ) => {
 	let typeA, typeB;
 	const identityA = Z9_( 'Z88888' );
@@ -159,5 +168,14 @@ QUnit.test( 'compareTypes is false when the keys of user-defined types do not ty
 	const deepKeysB = shallowKeysB.concat( [ boldlyNormalize( Z4_( identityB, shallowKeysB ) ) ] );
 	typeA = boldlyNormalize( Z4_( identityA, deepKeysA ) );
 	typeB = boldlyNormalize( Z4_( identityB, deepKeysB ) );
+	assert.false( compareTypes( typeA, typeB ) );
+} );
+
+QUnit.test( 'compareTypes is false when the input identities are not valid', ( assert ) => {
+	// This is purely to capture the final 'return' in the code.
+	const identity = Z9_( 'Hello' );
+	const shallowKeys = [ Z9_( 'Z6' ), Z4_( Z9_( 'Z55555' ) ) ];
+	const typeA = boldlyNormalize( Z4_( identity, shallowKeys ) );
+	const typeB = boldlyNormalize( Z4_( identity, shallowKeys ) );
 	assert.false( compareTypes( typeA, typeB ) );
 } );
