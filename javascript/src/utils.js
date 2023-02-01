@@ -359,16 +359,14 @@ function makeEmptyZResponseEnvelopeMap() {
 
 /**
  * Does a quick check to determine if the given ZObject is a Z883 / Map.
- * Does not validate the ZObject.
+ * Does not validate the ZObject (i.e., assumes the ZObject is well-formed).
  *
  * @param {Object} ZObject a Z1/ZObject, in canonical or normal form
  * @return {boolean}
  */
 function isZMap( ZObject ) {
-	return ( ZObject && isObject( ZObject ) && isObject( ZObject.Z1K1 ) &&
-		( ( ZObject.Z1K1.Z1K1 === 'Z7' && ZObject.Z1K1.Z7K1 === 'Z883' ) ||
-			( isObject( ZObject.Z1K1.Z1K1 ) && isObject( ZObject.Z1K1.Z7K1 ) &&
-				ZObject.Z1K1.Z1K1.Z9K1 === 'Z7' && ZObject.Z1K1.Z7K1.Z9K1 === 'Z883' ) ) );
+	const { ZObjectKeyFactory } = require( './schema.js' );
+	return ZObjectKeyFactory.create( ZObject.Z1K1 ).ZID_ === 'Z883';
 }
 
 /**
@@ -407,9 +405,11 @@ function setZMapValue( ZMap, key, value, callback = null ) {
 	}
 
 	// The key isn't present in the map, so add an entry for it
+	const { findIdentity } = require( './schema.js' );
+	const ZMapType = findIdentity( ZMap.Z1K1 );
 	const listType = tail.Z1K1;
-	const keyType = ZMap.Z1K1.Z883K1;
-	const valueType = ZMap.Z1K1.Z883K2;
+	const keyType = ZMapType.Z883K1;
+	const valueType = ZMapType.Z883K2;
 	const pairType = {
 		Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
 		Z7K1: { Z1K1: 'Z9', Z9K1: 'Z882' },
