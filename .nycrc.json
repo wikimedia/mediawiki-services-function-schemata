@@ -29,7 +29,7 @@
 
 	"//": "Set our thresholds for what we require as a minimum; these should rise over time and eventually each be 100%.",
 	"functions": 100.0,
-	"branches": 85.0,
+	"branches": 86.0,
 	"statements": 95.0,
 	"lines": 95.0,
 

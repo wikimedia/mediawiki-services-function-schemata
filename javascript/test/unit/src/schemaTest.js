@@ -237,12 +237,8 @@ const canonicalZ4 = {
 };
 
 QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = normalize( canonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = NORMAL_FACTORY.createUserDefined(
-		[ Z4 ], /* benjamin= */ true
-	);
+	const Z4 = normalize( canonicalZ4 ).Z22K1;
+	const schemaMap = NORMAL_FACTORY.createUserDefined( [ Z4 ] );
 	assert.deepEqual(
 		[ ...schemaMap.keys() ],
 		[
@@ -252,13 +248,9 @@ QUnit.test( 'Create GenericSchema from user-defined Z4', ( assert ) => {
 } );
 
 QUnit.test( 'subValidator for user-defined generic schema', ( assert ) => {
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = normalize( canonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = NORMAL_FACTORY.createUserDefined(
-		[ Z4 ], /* benjamin= */ true
-	);
-	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const Z4 = normalize( canonicalZ4 ).Z22K1;
+	const schemaMap = NORMAL_FACTORY.createUserDefined( [ Z4 ] );
+	const objectKey = ZObjectKeyFactory.create( Z4 );
 	const topLevel = schemaMap.get( objectKey.asString() );
 	const Z6Schema = topLevel.subValidator( 'Z10000K1' );
 	assert.true( Z6Schema.validate( { Z1K1: 'Z6', Z6K1: 'Z 4 0' } ) );
@@ -285,13 +277,9 @@ QUnit.test( 'GenericSchema disallows extra keys', ( assert ) => {
 		],
 		Z4K3: 'Z1000'
 	};
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = normalize( anotherCanonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = NORMAL_FACTORY.createUserDefined(
-		[ Z4 ], /* benjamin= */ true
-	);
-	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const Z4 = normalize( anotherCanonicalZ4 ).Z22K1;
+	const schemaMap = NORMAL_FACTORY.createUserDefined( [ Z4 ] );
+	const objectKey = ZObjectKeyFactory.create( Z4 );
 	const topLevel = schemaMap.get( objectKey.asString() );
 	assert.true( topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' } } ) );
 	assert.false( topLevel.validate( { Z1K1: Z4, Z10000K1: { Z1K1: 'Z6', Z6K1: 'a string' }, Z10000K2: { Z1K1: 'Z6', Z6K1: 'not a string' } } ) );
@@ -342,13 +330,10 @@ QUnit.test( 'GenericSchema allows the danger trio', ( assert ) => {
 		],
 		Z4K3: 'Z1000'
 	};
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const Z4 = normalize( anotherCanonicalZ4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const schemaMap = NORMAL_FACTORY.createUserDefined(
-		[ Z4 ], /* benjamin= */ true
-	);
-	const objectKey = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+
+	const Z4 = normalize( anotherCanonicalZ4 ).Z22K1;
+	const schemaMap = NORMAL_FACTORY.createUserDefined( [ Z4 ] );
+	const objectKey = ZObjectKeyFactory.create( Z4 );
 	const topLevel = schemaMap.get( objectKey.asString() );
 
 	const toValidate = normalize(
@@ -363,8 +348,7 @@ QUnit.test( 'GenericSchema allows the danger trio', ( assert ) => {
 				Z1K1: 'Z7',
 				Z7K1: 'Z40001'
 			}
-		},
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true
+		}
 	).Z22K1;
 
 	assert.true( topLevel.validate( toValidate ) );
@@ -377,7 +361,7 @@ QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', ( assert ) => {
 		Z4200K1: 'Z14',
 		Z4200K2: 'Z17'
 	};
-	assert.deepEqual( ZObjectKeyFactory.create( Z7, /* benjamin= */ true ).asString(), 'Z4200(Z14,Z17)' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z7 ).asString(), 'Z4200(Z14,Z17)' );
 } );
 
 QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', ( assert ) => {
@@ -411,7 +395,7 @@ QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as reified types', ( assert ) => 
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ZObjectKeyFactory.create( Z4, /* benjamin= */ true ).asString(), 'Z4200(Z14,Z17)' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z4 ).asString(), 'Z4200(Z14,Z17)' );
 } );
 
 QUnit.test( 'ZObjectKeyFactory with user-defined type', ( assert ) => {
@@ -458,7 +442,7 @@ QUnit.test( 'ZObjectKeyFactory with user-defined type', ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ZObjectKeyFactory.create( Z4, /* benjamin= */ true ).asString(), '<K1:Z6,K2:Z931(Z6,Z12)>' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z4 ).asString(), '<K1:Z6,K2:Z931(Z6,Z12)>' );
 } );
 
 QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( assert ) => {
@@ -488,7 +472,7 @@ QUnit.test( 'ZObjectKeyFactory with generic type parameterized by object', ( ass
 			Z9K1: 'Z1001'
 		}
 	};
-	assert.deepEqual( ZObjectKeyFactory.create( Z1, /* benjamin= */ true ).asString(), 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)' );
+	assert.deepEqual( ZObjectKeyFactory.create( Z1 ).asString(), 'Z4200(Z6{"Z6K1":"Smörgåsbord"},Z17)' );
 } );
 
 QUnit.test( 'ZObjectKeyFactory with invalid object', ( assert ) => {
@@ -515,7 +499,7 @@ QUnit.test( 'ZObjectKey\'s type() is ZObjectKey', ( assert ) => {
 	const key = ZObjectKeyFactory.create( {
 		Z1K1: 'Z6',
 		Z6K1: 'Smörgåsbord'
-	}, /* benjamin= */ true );
+	} );
 	assert.deepEqual( key.type(), 'ZObjectKey' );
 } );
 
@@ -546,7 +530,7 @@ QUnit.test( 'GenericTypeKey\'s type() is GenericTypeKey', ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	const key = ZObjectKeyFactory.create( Z1, /* benjamin= */ true );
+	const key = ZObjectKeyFactory.create( Z1 );
 	assert.deepEqual( key.type(), 'GenericTypeKey' );
 } );
 
@@ -594,7 +578,7 @@ QUnit.test( 'UserDefinedTypeKey\'s type() is UserDefinedTypeKey', ( assert ) => 
 			Z9K1: 'Z1001'
 		}
 	};
-	const key = ZObjectKeyFactory.create( Z4, /* benjamin= */ true );
+	const key = ZObjectKeyFactory.create( Z4 );
 	assert.deepEqual( key.type(), 'UserDefinedTypeKey' );
 } );
 
@@ -602,7 +586,7 @@ QUnit.test( 'SimpleTypeKey\'s type() is SimpleTypeKey', ( assert ) => {
 	const key = ZObjectKeyFactory.create( {
 		Z1K1: 'Z9',
 		Z9K1: 'Z9'
-	}, /* benjamin= */ true );
+	} );
 	assert.deepEqual( key.type(), 'SimpleTypeKey' );
 } );
 
@@ -651,17 +635,14 @@ QUnit.test( 'validatesAsType', ( assert ) => {
 			Z9K1: 'Z1001'
 		}
 	};
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const normalizedZ4 = normalize( Z4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+
+	const normalizedZ4 = normalize( Z4 ).Z22K1;
 	assert.true( validatesAsType( normalizedZ4 ).isValid() );
 } );
 
 QUnit.test( 'validatesAsError', ( assert ) => {
 	const Z5 = { Z1K1: 'Z5', Z5K1: 'Z500', Z5K2: { Z1K1: { Z1K1: 'Z7', Z7K1: 'Z885', Z885K1: 'Z500' }, Z500K1: 'Basic data' } };
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const normalizedZ5 = normalize( Z5,
-	/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
+	const normalizedZ5 = normalize( Z5 ).Z22K1;
 	assert.true( validatesAsError( normalizedZ5 ).isValid() );
 } );
 

@@ -3,7 +3,7 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 
 const { error } = require( './error.js' );
-const { convertBenjaminArrayToZList, convertItemArrayToZList, isArray, isReference, isString,
+const { convertBenjaminArrayToZList, isArray, isReference, isString,
 	makeMappedResultEnvelope } = require( './utils.js' );
 const { SchemaFactory } = require( './schema' );
 
@@ -13,8 +13,8 @@ const mixedFactory = SchemaFactory.MIXED();
 const mixedZ1Validator = mixedFactory.create( 'Z1' );
 
 // the input is assumed to be a well-formed ZObject, or else the behaviour is undefined
-function normalize( o, generically, benjamin ) {
-	const partialNormalize = ( ZObject ) => normalize( ZObject, generically, benjamin );
+function normalize( o ) {
+	const partialNormalize = ( ZObject ) => normalize( ZObject );
 	if ( isString( o ) ) {
 		if ( isReference( o ) ) {
 			return { Z1K1: 'Z9', Z9K1: o };
@@ -23,13 +23,8 @@ function normalize( o, generically, benjamin ) {
 		}
 	}
 
-	// If benjamin = true, interprets array as benjamin array
 	if ( isArray( o ) ) {
-		if ( benjamin ) {
-			return convertBenjaminArrayToZList( o.map( partialNormalize ), false );
-		} else {
-			return convertItemArrayToZList( o.map( partialNormalize ), false );
-		}
+		return convertBenjaminArrayToZList( o.map( partialNormalize ), false );
 	}
 
 	if ( o.Z1K1 === 'Z5' &&
@@ -61,24 +56,15 @@ function normalize( o, generically, benjamin ) {
  * Normalizes a canonical ZObject. Returns a Z22/'Evaluation result' containing the normalized
  * ZObject or a Z5/Error (in the metadata map of the Z22).
  *
- * If called with fromBenjamin = false, the arrays found
- * in the input ZObject are understood to be simple arrays, and their type
- * is inferred from the items. Else, the input arrays are benjamin arrays
- * and their first element is the list type declaration.
- *
  * @param {Object} o a ZObject
- * @param {boolean} generically whether to produce generic lists (Z10s if false)
- * @param {boolean} withVoid Ignored deprecated flag.
- * @param {boolean} fromBenjamin If true, assume input has benjamin arrays,
- * else infer type from simple arrays
  * @return {Object} a Z22 / Evaluation result
  */
-// eslint-disable-next-line no-unused-vars
-function normalizeExport( o, generically = true, withVoid = false, fromBenjamin = true ) {
+
+function normalizeExport( o ) {
 	const status = mixedZ1Validator.validateStatus( o );
 
 	if ( status.isValid() ) {
-		return makeMappedResultEnvelope( normalize( o, generically, fromBenjamin ), null );
+		return makeMappedResultEnvelope( normalize( o ), null );
 	} else {
 		return makeMappedResultEnvelope( null, status.getZ5() );
 	}
