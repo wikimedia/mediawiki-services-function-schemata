@@ -152,7 +152,7 @@ QUnit.test( 'ZObject immutability', ( assert ) => {
 	// The original builder and base JSON can still be modified.
 	jsonObj.val2 = 'Foo';
 	assert.deepEqual( jsonObj, { val: 'Bar', val2: 'Foo' } );
-	assert.deepEqual( jsonObj, builder.normalJSON );
+	assert.deepEqual( builder.normalJSON, jsonObj );
 	// This modification does not propagate to the ZObject.
 	assert.deepEqual( zObj.normalJSON, { val: 'Bar' } );
 } );

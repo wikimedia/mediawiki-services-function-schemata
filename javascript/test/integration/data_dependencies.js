@@ -94,5 +94,5 @@ dataDirectory.forEach( ( file ) => {
 } );
 
 QUnit.test( 'Dependencies file is up-to-date', ( assert ) => {
-	assert.deepEqual( dependencies, generateDependenciesFile( dataPath ) );
+	assert.deepEqual( generateDependenciesFile( dataPath ), dependencies );
 } );

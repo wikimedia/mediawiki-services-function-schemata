@@ -83,7 +83,7 @@ QUnit.test( 'convertBenjaminArrayToZList with empty array, canonical', ( assert 
 			Z881K1: 'Z1'
 		}
 	};
-	assert.deepEqual( expected, convertBenjaminArrayToZList( array, /* canonical= */true ) );
+	assert.deepEqual( convertBenjaminArrayToZList( array, /* canonical= */true ), expected );
 } );
 
 QUnit.test( 'convertItemArrayToZList with empty array, canonical', ( assert ) => {
@@ -95,7 +95,7 @@ QUnit.test( 'convertItemArrayToZList with empty array, canonical', ( assert ) =>
 			Z881K1: 'Z1'
 		}
 	};
-	assert.deepEqual( expected, convertItemArrayToZList( array, /* canonical= */true ) );
+	assert.deepEqual( convertItemArrayToZList( array, /* canonical= */true ), expected );
 } );
 
 QUnit.test( 'convertBenjaminArrayToZList with empty array, normal', ( assert ) => {
@@ -116,7 +116,7 @@ QUnit.test( 'convertBenjaminArrayToZList with empty array, normal', ( assert ) =
 			}
 		}
 	};
-	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( convertBenjaminArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertItemArrayToZList with empty array, normal', ( assert ) => {
@@ -137,7 +137,7 @@ QUnit.test( 'convertItemArrayToZList with empty array, normal', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertItemArrayToZList( array ) );
+	assert.deepEqual( convertItemArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertBenjaminArrayToZList with multiple types', ( assert ) => {
@@ -186,7 +186,7 @@ QUnit.test( 'convertBenjaminArrayToZList with multiple types', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( convertBenjaminArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertItemArrayToZList with multiple types', ( assert ) => {
@@ -231,7 +231,7 @@ QUnit.test( 'convertItemArrayToZList with multiple types', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertItemArrayToZList( array ) );
+	assert.deepEqual( convertItemArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertBenjaminArrayToZList with single type', ( assert ) => {
@@ -274,7 +274,7 @@ QUnit.test( 'convertBenjaminArrayToZList with single type', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( convertBenjaminArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertItemArrayToZList with single type', ( assert ) => {
@@ -313,7 +313,7 @@ QUnit.test( 'convertItemArrayToZList with single type', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertItemArrayToZList( array ) );
+	assert.deepEqual( convertItemArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertBenjaminArrayToZList with function call types', ( assert ) => {
@@ -386,7 +386,7 @@ QUnit.test( 'convertBenjaminArrayToZList with function call types', ( assert ) =
 			}
 		}
 	};
-	assert.deepEqual( expected, convertBenjaminArrayToZList( array ) );
+	assert.deepEqual( convertBenjaminArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertItemArrayToZList with function call types', ( assert ) => {
@@ -449,7 +449,7 @@ QUnit.test( 'convertItemArrayToZList with function call types', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertItemArrayToZList( array ) );
+	assert.deepEqual( convertItemArrayToZList( array ), expected );
 } );
 
 QUnit.test( 'convertBenjaminArrayToZList with canonical function call types', ( assert ) => {
@@ -496,7 +496,7 @@ QUnit.test( 'convertBenjaminArrayToZList with canonical function call types', ( 
 			}
 		}
 	};
-	assert.deepEqual( expected, convertBenjaminArrayToZList( array, /* canonical */true ) );
+	assert.deepEqual( convertBenjaminArrayToZList( array, /* canonical */true ), expected );
 } );
 
 QUnit.test( 'convertItemArrayToZList with canonical function call types', ( assert ) => {
@@ -538,7 +538,7 @@ QUnit.test( 'convertItemArrayToZList with canonical function call types', ( asse
 			}
 		}
 	};
-	assert.deepEqual( expected, convertItemArrayToZList( array, /* canonical */true ) );
+	assert.deepEqual( convertItemArrayToZList( array, /* canonical */true ), expected );
 } );
 
 QUnit.test( 'convertArrayToKnownTypedLists canonical with string type', ( assert ) => {
@@ -559,7 +559,7 @@ QUnit.test( 'convertArrayToKnownTypedLists canonical with string type', ( assert
 			}
 		}
 	};
-	assert.deepEqual( expected, convertArrayToKnownTypedList( array, 'Z6', /* canonical */true ) );
+	assert.deepEqual( convertArrayToKnownTypedList( array, 'Z6', /* canonical */true ), expected );
 } );
 
 QUnit.test( 'convertArrayToKnownTypedLists normal with string type', ( assert ) => {
@@ -589,7 +589,7 @@ QUnit.test( 'convertArrayToKnownTypedLists normal with string type', ( assert ) 
 			}
 		}
 	};
-	assert.deepEqual( expected, convertArrayToKnownTypedList( array, 'Z6' ) );
+	assert.deepEqual( convertArrayToKnownTypedList( array, 'Z6' ), expected );
 } );
 
 QUnit.test( 'getTypedListType return canonical with canonical reference', ( assert ) => {
@@ -599,7 +599,7 @@ QUnit.test( 'getTypedListType return canonical with canonical reference', ( asse
 		Z7K1: 'Z881',
 		Z881K1: 'Z6'
 	};
-	assert.deepEqual( expected, getTypedListType( elementType, true ) );
+	assert.deepEqual( getTypedListType( elementType, true ), expected );
 } );
 
 QUnit.test( 'getTypedListType return canonical with normal reference', ( assert ) => {
@@ -612,7 +612,7 @@ QUnit.test( 'getTypedListType return canonical with normal reference', ( assert 
 		Z7K1: 'Z881',
 		Z881K1: 'Z6'
 	};
-	assert.deepEqual( expected, getTypedListType( elementType, true ) );
+	assert.deepEqual( getTypedListType( elementType, true ), expected );
 } );
 
 QUnit.test( 'getTypedListType return normal with canonical reference', ( assert ) => {
@@ -631,7 +631,7 @@ QUnit.test( 'getTypedListType return normal with canonical reference', ( assert 
 			Z9K1: 'Z6'
 		}
 	};
-	assert.deepEqual( expected, getTypedListType( elementType ) );
+	assert.deepEqual( getTypedListType( elementType ), expected );
 } );
 
 QUnit.test( 'getTypedListType return normal with normal reference', ( assert ) => {
@@ -653,7 +653,7 @@ QUnit.test( 'getTypedListType return normal with normal reference', ( assert ) =
 			Z9K1: 'Z6'
 		}
 	};
-	assert.deepEqual( expected, getTypedListType( elementType ) );
+	assert.deepEqual( getTypedListType( elementType ), expected );
 } );
 
 QUnit.test( 'getTypedListType with canonical function call', ( assert ) => {
@@ -667,7 +667,7 @@ QUnit.test( 'getTypedListType with canonical function call', ( assert ) => {
 		Z7K1: 'Z881',
 		Z881K1: elementType
 	};
-	assert.deepEqual( expected, getTypedListType( elementType, true ) );
+	assert.deepEqual( getTypedListType( elementType, true ), expected );
 } );
 
 QUnit.test( 'getTypedListType with normal function call', ( assert ) => {
@@ -701,7 +701,7 @@ QUnit.test( 'getTypedListType with normal function call', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, getTypedListType( elementType ) );
+	assert.deepEqual( getTypedListType( elementType ), expected );
 } );
 
 QUnit.test( 'convertZListToItemArray with Typed List', ( assert ) => {
@@ -740,11 +740,11 @@ QUnit.test( 'convertZListToItemArray with Typed List', ( assert ) => {
 			}
 		}
 	};
-	assert.deepEqual( expected, convertZListToItemArray( ZList ) );
+	assert.deepEqual( convertZListToItemArray( ZList ), expected );
 } );
 
 QUnit.test( 'convertZListToItemArray with undefined', ( assert ) => {
-	assert.deepEqual( [], convertZListToItemArray( undefined ) );
+	assert.deepEqual( convertZListToItemArray( undefined ), [] );
 } );
 
 QUnit.test( 'isZid', ( assert ) => {
