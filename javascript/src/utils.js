@@ -138,6 +138,16 @@ function getTail( ZList ) {
 }
 
 /**
+ * Sets the tail of a ZList.
+ *
+ * @param {Object} ZList a generic typed list (Z881)
+ * @param {Object} newValue object to be set as new tail
+ */
+function setTail( ZList, newValue ) {
+	ZList.K2 = newValue;
+}
+
+/**
  * Determines whether an already-validated ZList is empty. Because the list has
  * already been validated, it is sufficient to check for the presence of K1.
  *
@@ -371,14 +381,16 @@ function isZMap( ZObject ) {
  * @param {Object} ZMap a Z883/Typed map, in normal form
  * @param {Object} key a Z6 or Z39 instance, in normal form
  * @param {Object} value a Z1/ZObject, in normal form
+ * @param {Function} callback a function to call on new entries before returning
  * @return {Object} the updated ZMap, in normal form
  */
-function setZMapValue( ZMap, key, value ) {
+function setZMapValue( ZMap, key, value, callback = null ) {
 	if ( ZMap === undefined ) {
 		console.error( 'setZMapValue called with undefined; please fix your caller' );
 		return undefined;
 	}
 
+	let penultimateTail = null;
 	let tail = ZMap.K1;
 	while ( true ) {
 		if ( isEmptyZList( tail ) ) {
@@ -390,9 +402,12 @@ function setZMapValue( ZMap, key, value ) {
 			entry.K2 = value;
 			return ZMap;
 		}
+		penultimateTail = tail;
 		tail = getTail( tail );
 	}
+
 	// The key isn't present in the map, so add an entry for it
+	const listType = tail.Z1K1;
 	const keyType = ZMap.Z1K1.Z883K1;
 	const valueType = ZMap.Z1K1.Z883K2;
 	const pairType = {
@@ -401,9 +416,26 @@ function setZMapValue( ZMap, key, value ) {
 		Z882K1: keyType,
 		Z882K2: valueType
 	};
-	tail.K1 = { Z1K1: pairType, K1: key, K2: value };
-	const listType = tail.Z1K1;
-	tail.K2 = { Z1K1: listType };
+	let newTail = {
+		Z1K1: listType,
+		K1: {
+			Z1K1: pairType,
+			K1: key,
+			K2: value
+		},
+		K2: {
+			Z1K1: listType
+		}
+	};
+	if ( callback !== null ) {
+		newTail = callback( newTail );
+	}
+
+	if ( penultimateTail === null ) {
+		ZMap.K1 = newTail;
+	} else {
+		setTail( penultimateTail, newTail );
+	}
 	return ZMap;
 }
 

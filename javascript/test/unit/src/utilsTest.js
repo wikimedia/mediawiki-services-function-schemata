@@ -926,6 +926,129 @@ QUnit.test( 'setZMapValue', ( assert ) => {
 	);
 } );
 
+QUnit.test( 'setZMapValue with callback', ( assert ) => {
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const beWarned = 'Be warned!';
+	const dontBeWarned = 'nm, don\'t be warned';
+
+	// Assert that callback should be called with the new tail.
+	const expectedTail = {
+		Z1K1: listType1,
+		K1: {
+			Z1K1: pairType1,
+			K1: {
+				Z1K1: 'Z6',
+				Z6K1: 'warnings'
+			},
+			K2: {
+				Z1K1: 'Z6',
+				Z6K1: beWarned
+			}
+		},
+		K2: {
+			Z1K1: listType1
+		}
+	};
+	const callback = function ( newTail ) {
+		assert.deepEqual( newTail, expectedTail );
+		const newerTail = { ...newTail };
+		newerTail.K1.K2.Z6K1 = dontBeWarned;
+		return newerTail;
+	};
+
+	// Assert that result is the expected map.
+	const expectedZMap = {
+		Z1K1: mapType1,
+		K1: {
+			Z1K1: listType1,
+			K1: {
+				Z1K1: pairType1,
+				K1: {
+					Z1K1: 'Z6',
+					Z6K1: 'warnings'
+				},
+				K2: {
+					Z1K1: 'Z6',
+					Z6K1: dontBeWarned
+				}
+			},
+			K2: {
+				Z1K1: listType1
+			}
+		}
+	};
+	assert.deepEqual(
+		setZMapValue(
+			emptyZMap,
+			{ Z1K1: 'Z6', Z6K1: 'warnings' },
+			{ Z1K1: 'Z6', Z6K1: beWarned },
+			callback ),
+		expectedZMap
+	);
+} );
+
+QUnit.test( 'setZMapValue appends to a non-empty list', ( assert ) => {
+	function Z6_( someString ) {
+		return {
+			Z1K1: 'Z6',
+			Z6K1: someString
+		};
+	}
+	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
+	const warningKey = Z6_( 'warnings' );
+	const reassuranceKey = Z6_( 'reassurances' );
+	const beWarned = Z6_( 'Be warned!' );
+	const dontBeWarned = Z6_( 'nm, don\'t be warned' );
+
+	// Assert that result is the expected map.
+	const firstExpectedZMap = {
+		Z1K1: mapType1,
+		K1: {
+			Z1K1: listType1,
+			K1: {
+				Z1K1: pairType1,
+				K1: warningKey,
+				K2: beWarned
+			},
+			K2: {
+				Z1K1: listType1
+			}
+		}
+	};
+	const firstResult = setZMapValue( emptyZMap, warningKey, beWarned );
+	assert.deepEqual(
+		firstResult, firstExpectedZMap
+	);
+
+	// Do it again.
+	const secondExpectedZMap = {
+		Z1K1: mapType1,
+		K1: {
+			Z1K1: listType1,
+			K1: {
+				Z1K1: pairType1,
+				K1: warningKey,
+				K2: beWarned
+			},
+			K2: {
+				Z1K1: listType1,
+				K1: {
+					Z1K1: pairType1,
+					K1: reassuranceKey,
+					K2: dontBeWarned
+				},
+				K2: {
+					Z1K1: listType1
+				}
+			}
+		}
+	};
+	const secondResult = setZMapValue( firstResult, reassuranceKey, dontBeWarned );
+	assert.deepEqual(
+		secondResult, secondExpectedZMap
+	);
+} );
+
 QUnit.test( 'setMetadataValue', ( assert ) => {
 	const emptyZMap = { Z1K1: mapType1, K1: { Z1K1: listType1 } };
 	const singletonZMap = { Z1K1: mapType1,
