@@ -188,7 +188,7 @@ class ErrorFormatter {
 	 */
 	static wrapMessageInEvaluationError( message, call ) {
 		const wrappedError = this.createZErrorInstance(
-			errorTypes.error.generic_error,
+			errorTypes.error.unknown_error,
 			{
 				errorInformation: message
 			}
@@ -309,7 +309,7 @@ class ErrorFormatter {
 		}
 
 		switch ( errorType ) {
-			case errorTypes.error.generic_error:
+			case errorTypes.error.unknown_error:
 				errorKeys.push( err.errorInformation );
 				break;
 
