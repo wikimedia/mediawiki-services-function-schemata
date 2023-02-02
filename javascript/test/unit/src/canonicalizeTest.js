@@ -13,25 +13,8 @@ QUnit.module( 'canonicalization' );
 	const testDescriptor = readYaml( testPath );
 	const info = testDescriptor.test_information;
 
-	// See T304144 re: the withVoid arg of canonicalize, and the impact of setting it to true
-	const canonicalizeWithVoid = ( ZObject ) => canonicalize(
-		ZObject, /* withVoid= */ true, /* toBenjamin= */ true
-	);
+	const canonicalizeFunction = ( ZObject ) => canonicalize( ZObject );
 
 	// eslint-disable-next-line qunit/no-test-expect-argument
-	test( info.name, canonicalizeWithVoid, testDescriptor.test_objects );
-}
-
-{
-	const testPath = path.join( 'test_data', 'canonicalization_legacy.yaml' );
-	const testDescriptor = readYaml( testPath );
-	const info = testDescriptor.test_information;
-
-	// See T304144 re: the withVoid arg of canonicalize, and the impact of setting it to true
-	const canonicalizeWithVoid = ( ZObject ) => canonicalize(
-		ZObject, /* withVoid= */ true, /* toBenjamin= */ false
-	);
-
-	// eslint-disable-next-line qunit/no-test-expect-argument
-	test( info.name, canonicalizeWithVoid, testDescriptor.test_objects );
+	test( info.name, canonicalizeFunction, testDescriptor.test_objects );
 }

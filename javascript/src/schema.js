@@ -423,19 +423,12 @@ class ZObjectKeyFactory {
 	 *  "Z6{Z6K1:vittles}"
 	 *
 	 * @param {Object} ZObject a ZObject
-	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
 	 * @return {Object} (Simple|Generic|UserDefined)TypeKey or ZObjectKey
 	 * @throws {Error} If input is not a valid ZObject.
 	 */
-	static create( ZObject, benjamin = true ) {
+	static create( ZObject ) {
 		const normalize = require( './normalize.js' );
-		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-		const normalizedEnvelope = normalize(
-			ZObject,
-			/* generically= */ true,
-			/* withVoid= */ true,
-			/* fromBenjamin */ benjamin
-		);
+		const normalizedEnvelope = normalize( ZObject );
 
 		// (T304144): If validation failed with an error; return it.
 		if (
@@ -812,18 +805,13 @@ class SchemaFactory {
 	 *  const Z10001Schema = factory.createUserDefined([Z4]);
 	 *
 	 * @param {Object} Z4s the descriptor for the user-defined types
-	 * @param {boolean} benjamin whether the zobject to be normalized contains benjamin arrays
 	 * @return {Schema} a fully-initialized Schema
 	 */
-	createUserDefined( Z4s, benjamin = true ) {
+	createUserDefined( Z4s ) {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
 
-		// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-		const normalized = Z4s.map(
-			( o ) => normalize( o,
-				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
-			).Z22K1 );
+		const normalized = Z4s.map( ( o ) => normalize( o ).Z22K1 );
 
 		const errorArray = normalized.map( ( o ) => Z5Validator.validateStatus( o ).isValid() );
 		const errorIndex = errorArray.indexOf( true );
@@ -832,9 +820,7 @@ class SchemaFactory {
 		}
 
 		const normalZ4s = Z4s.map(
-			( Z4 ) => normalize( Z4,
-				/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ benjamin
-			).Z22K1 );
+			( Z4 ) => normalize( Z4 ).Z22K1 );
 
 		// Create a GenericSchema for each of the requested Z4s.
 		for ( const Z4 of normalZ4s ) {

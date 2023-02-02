@@ -13,11 +13,9 @@ function test( ZID ) {
 	const normalize = require( '../../src/normalize.js' );
 	const normalFile = path.join( 'test_data', 'normal_user_defined', ZID + '.yaml' );
 	const testDescriptor = readYaml( normalFile );
-	// See T304144 re: the withVoid arg of normalize, and the impact of setting it to true
-	const testZ4 = normalize( testDescriptor.test_Z4,
-		/* generically= */ true, /* withVoid= */ true, /* fromBenjamin= */ true ).Z22K1;
-	const normalValidatorMap = factory.createUserDefined( [ testZ4 ], /* benjamin= */ true );
-	const genericKey = ZObjectKeyFactory.create( testZ4, /* benjamin= */ true ).asString();
+	const testZ4 = normalize( testDescriptor.test_Z4 ).Z22K1;
+	const normalValidatorMap = factory.createUserDefined( [ testZ4 ] );
+	const genericKey = ZObjectKeyFactory.create( testZ4 ).asString();
 	const normalValidator = normalValidatorMap.get( genericKey );
 	const info = testDescriptor.test_information;
 	testValidation( info.name, normalValidator, testDescriptor.test_objects );
