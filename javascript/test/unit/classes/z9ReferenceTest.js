@@ -26,7 +26,7 @@ QUnit.test( 'Z9Builder fromZObject: success', ( assert ) => {
 	const builder = Z9Builder.fromZObject( correctZ9 );
 	assert.strictEqual( builder.normalJSON.Z1K1, 'Z9' );
 	assert.strictEqual( builder.normalJSON.Z9K1, 'Z10008' );
-	assert.deepEqual( correctZ9.normalJSON, builder.normalJSON );
+	assert.deepEqual( builder.normalJSON, correctZ9.normalJSON );
 } );
 
 QUnit.test( 'Z9Builder fromZObject: modified afterwards', ( assert ) => {
