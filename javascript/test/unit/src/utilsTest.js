@@ -799,6 +799,18 @@ const mapType1 = {
 	Z883K1: { Z1K1: 'Z9', Z9K1: 'Z6' },
 	Z883K2: { Z1K1: 'Z9', Z9K1: 'Z1' }
 };
+const resolvedMapType = {
+	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z4' },
+	Z4K1: mapType1,
+	Z4K2: {
+		Z1K1: {
+			Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
+			Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' },
+			Z881K1: { Z1K1: 'Z9', Z9K1: 'Z3' }
+		}
+	},
+	Z4K3: { Z1K1: 'Z9', Z9K1: 'Z831' }
+};
 const listType1 = {
 	Z1K1: { Z1K1: 'Z9', Z9K1: 'Z7' },
 	Z7K1: { Z1K1: 'Z9', Z9K1: 'Z881' },
@@ -841,10 +853,17 @@ QUnit.test( 'isZMap', ( assert ) => {
 			K2: { Z1K1: listType1,
 				K1: { Z1K1: pairType1, K1: { Z1K1: 'Z6', Z6K1: 'errors' }, K2: error1 },
 				K2: { Z1K1: listType1 } } } };
+	const ZMapWithResolvedType = {
+		Z1K1: resolvedMapType,
+		K1: {
+			Z1K1: listType1
+		}
+	};
 	const bogusZMap = { Z1K1: bogusMapType, K1: { Z1K1: listType1 } };
 	assert.strictEqual( isZMap( emptyZMap ), true );
 	assert.strictEqual( isZMap( singletonZMap ), true );
 	assert.strictEqual( isZMap( doubletonZMap ), true );
+	assert.strictEqual( isZMap( ZMapWithResolvedType ), true );
 	assert.strictEqual( isZMap( bogusZMap ), false );
 } );
 
@@ -923,6 +942,36 @@ QUnit.test( 'setZMapValue', ( assert ) => {
 	assert.strictEqual(
 		setZMapValue( undefined, { Z1K1: 'Z6', Z6K1: 'warnings' }, { Z1K1: 'Z6', Z6K1: 'Be warned!' } ),
 		undefined
+	);
+} );
+
+QUnit.test( 'setZMapValue with resolved type', ( assert ) => {
+	// Ensure that type inference works correctly when the ZMap's type has been resolved.
+	const ZMapWithResolvedType = {
+		Z1K1: resolvedMapType,
+		K1: {
+			Z1K1: listType1
+		}
+	};
+	const expectedZMap = {
+		Z1K1: resolvedMapType,
+		K1: {
+			Z1K1: listType1,
+			K1: {
+				Z1K1: pairType1,
+				K1: { Z1K1: 'Z6', Z6K1: 'warnings' },
+				K2: { Z1K1: 'Z6', Z6K1: 'Be warned!' }
+			},
+			K2: { Z1K1: listType1 }
+		}
+	};
+	assert.deepEqual(
+		setZMapValue(
+			ZMapWithResolvedType,
+			{ Z1K1: 'Z6', Z6K1: 'warnings' },
+			{ Z1K1: 'Z6', Z6K1: 'Be warned!' }
+		),
+		expectedZMap
 	);
 } );
 
