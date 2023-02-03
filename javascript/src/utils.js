@@ -3,6 +3,88 @@
 // NOTE: This file is used in a MediaWiki context as well, and so MUST parse as a
 // stand-alone JS file without use of require()
 
+function checkTypeShallowly( ZObject, keys ) {
+	if ( ZObject === null || ZObject === undefined ) {
+		return false;
+	}
+	for ( const key of keys ) {
+		if ( ZObject[ key ] === undefined ) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function isZArgumentReference( ZObject ) {
+	return checkTypeShallowly( ZObject, [ 'Z1K1', 'Z18K1' ] );
+}
+
+function isZFunctionCall( ZObject ) {
+	return checkTypeShallowly( ZObject, [ 'Z1K1', 'Z7K1' ] );
+}
+
+function isZReference( ZObject ) {
+	if ( !checkTypeShallowly( ZObject, [ 'Z1K1', 'Z9K1' ] ) ) {
+		return false;
+	}
+	return ZObject.Z9K1.match( /^Z[1-9]\d*$/ ) !== null;
+}
+
+function isZType( ZObject ) {
+	if ( !checkTypeShallowly( ZObject, [ 'Z1K1', 'Z4K1', 'Z4K2', 'Z4K3' ] ) ) {
+		return false;
+	}
+	const identity = ZObject.Z4K1;
+	if ( isMemberOfDangerTrio( identity ) || isZType( identity ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Finds the identity of a type. This might be a Function Call (in the case of
+ * a generic type), a Reference (in the case of a builtin), or the Z4 itself
+ * (in the case of a user-defined type).
+ *
+ * @param {Object} Z4 a Type
+ * @return {Object|null} the Z4's identity
+ */
+function findIdentity( Z4 ) {
+	if ( isZFunctionCall( Z4 ) || isZReference( Z4 ) ) {
+		return Z4;
+	}
+	if ( isZType( Z4 ) ) {
+		const identity = findIdentity( Z4.Z4K1 );
+		if ( isZReference( identity ) && !isBuiltInType( identity.Z9K1 ) ) {
+			return Z4;
+		}
+		return identity;
+	}
+	// I guess this wasn't a type.
+	return null;
+}
+
+/**
+ * Type-checks Z1 against Function Call, Reference, and Argument Reference.
+ * Returns the true if Z1 can plausibly be interpreted as belonging to one of
+ * those three types, else false.
+ *
+ * @param {Object} Z1 object to be validated
+ * @return {boolean} whether Z1's type is any of the Danger Trio
+ */
+function isMemberOfDangerTrio( Z1 ) {
+	for ( const typeComparisonFunction of [
+		isZArgumentReference,
+		isZFunctionCall,
+		isZReference
+	] ) {
+		if ( typeComparisonFunction( Z1 ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 function isString( s ) {
 	return typeof s === 'string' || s instanceof String;
 }
@@ -358,6 +440,25 @@ function makeEmptyZResponseEnvelopeMap() {
 }
 
 /**
+ * If an object has an .asJSON() method, calls that method and returns the result;
+ * otherwise, returns the original object intact.
+ *
+ * This is a last resort function, to be called sparingly. If we are calling this
+ * function, it means we have received a ZWrapper from function-orchestrator
+ * code.
+ *
+ * @param {Object} ZObject a ZObject which may be a ZWrapper
+ * @return {Object} the ZObject intact or converted to bare JSON
+ */
+function maybeAsJSON( ZObject ) {
+	try {
+		return ZObject.asJSON();
+	} catch ( e ) {
+		return ZObject;
+	}
+}
+
+/**
  * Does a quick check to determine if the given ZObject is a Z883 / Map.
  * Does not validate the ZObject (i.e., assumes the ZObject is well-formed).
  *
@@ -366,7 +467,7 @@ function makeEmptyZResponseEnvelopeMap() {
  */
 function isZMap( ZObject ) {
 	const { ZObjectKeyFactory } = require( './schema.js' );
-	return ZObjectKeyFactory.create( ZObject.Z1K1 ).ZID_ === 'Z883';
+	return ZObjectKeyFactory.create( maybeAsJSON( ZObject.Z1K1 ) ).ZID_ === 'Z883';
 }
 
 /**
@@ -405,7 +506,6 @@ function setZMapValue( ZMap, key, value, callback = null ) {
 	}
 
 	// The key isn't present in the map, so add an entry for it
-	const { findIdentity } = require( './schema.js' );
 	const ZMapType = findIdentity( ZMap.Z1K1 );
 	const listType = tail.Z1K1;
 	const keyType = ZMapType.Z883K1;
@@ -651,7 +751,13 @@ module.exports = {
 	convertBenjaminArrayToZList,
 	convertArrayToKnownTypedList,
 	convertZListToItemArray,
+	findIdentity,
 	inferItemType,
+	isMemberOfDangerTrio,
+	isZArgumentReference,
+	isZFunctionCall,
+	isZReference,
+	isZType,
 	isString,
 	isArray,
 	isObject,

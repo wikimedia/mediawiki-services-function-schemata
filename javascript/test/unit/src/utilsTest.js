@@ -6,7 +6,13 @@ const {
 	convertBenjaminArrayToZList,
 	convertArrayToKnownTypedList,
 	convertZListToItemArray,
+	findIdentity,
+	isMemberOfDangerTrio,
 	inferItemType,
+	isZArgumentReference,
+	isZFunctionCall,
+	isZReference,
+	isZType,
 	isString,
 	isArray,
 	isObject,
@@ -1290,4 +1296,84 @@ QUnit.test( 'inferItemType', ( assert ) => {
 		'Basic Z9 list falls back as a Z1 as it is a resolver type'
 	);
 
+} );
+
+function Z9_( ZID ) {
+	return { Z1K1: 'Z9', Z9K1: ZID };
+}
+
+const someArgumentReference = {
+	Z1K1: Z9_( 'Z18' ),
+	Z18K1: Z9_( 'Z30000K1' )
+};
+
+const someReference = Z9_( 'Z30001' );
+const builtInReference = Z9_( 'Z39' );
+
+const someFunctionCall = {
+	Z1K1: Z9_( 'Z7' ),
+	Z7K1: Z9_( 'Z30002' )
+};
+
+const typeWithFunctionCallIdentity = {
+	Z1K1: Z9_( 'Z4' ),
+	Z4K1: someFunctionCall,
+	Z4K2: convertArrayToKnownTypedList( [], Z9_( 'Z3' ) ),
+	Z4K3: Z9_( 'Z30003' )
+};
+
+const typeWithBuiltInReferenceIdentity = { ...typeWithFunctionCallIdentity };
+typeWithBuiltInReferenceIdentity.Z4K1 = builtInReference;
+
+const typeWithReferenceIdentity = { ...typeWithFunctionCallIdentity };
+typeWithReferenceIdentity.Z4K1 = someReference;
+
+const typeWithTypeWithReferenceIdentityIdentity = { ...typeWithBuiltInReferenceIdentity };
+typeWithTypeWithReferenceIdentityIdentity.Z4K1 = typeWithReferenceIdentity;
+
+QUnit.test( 'isZArgumentReference', ( assert ) => {
+	assert.true( isZArgumentReference( someArgumentReference ) );
+	assert.false( isZArgumentReference( someFunctionCall ) );
+	assert.false( isZArgumentReference( someReference ) );
+	assert.false( isZArgumentReference( typeWithFunctionCallIdentity ) );
+} );
+
+QUnit.test( 'isZFunctionCall', ( assert ) => {
+	assert.false( isZFunctionCall( someArgumentReference ) );
+	assert.true( isZFunctionCall( someFunctionCall ) );
+	assert.false( isZFunctionCall( someReference ) );
+	assert.false( isZFunctionCall( typeWithFunctionCallIdentity ) );
+} );
+
+QUnit.test( 'isZReference', ( assert ) => {
+	assert.false( isZReference( someArgumentReference ) );
+	assert.false( isZReference( someFunctionCall ) );
+	assert.true( isZReference( someReference ) );
+	assert.false( isZReference( typeWithFunctionCallIdentity ) );
+} );
+
+QUnit.test( 'isZType', ( assert ) => {
+	assert.false( isZType( someArgumentReference ) );
+	assert.false( isZType( someFunctionCall ) );
+	assert.false( isZType( someReference ) );
+	assert.true( isZType( typeWithFunctionCallIdentity ) );
+} );
+
+QUnit.test( 'isMemberOfDangerTrio', ( assert ) => {
+	assert.true( isMemberOfDangerTrio( someArgumentReference ) );
+	assert.true( isMemberOfDangerTrio( someReference ) );
+	assert.true( isMemberOfDangerTrio( someFunctionCall ) );
+	assert.false( isMemberOfDangerTrio( typeWithFunctionCallIdentity ) );
+	assert.false( isMemberOfDangerTrio( typeWithReferenceIdentity ) );
+} );
+
+QUnit.test( 'findIdentity', ( assert ) => {
+	assert.strictEqual( findIdentity( someFunctionCall ), someFunctionCall );
+	assert.strictEqual( findIdentity( someReference ), someReference );
+	assert.strictEqual( findIdentity( builtInReference ), builtInReference );
+	assert.strictEqual( findIdentity( typeWithFunctionCallIdentity ), someFunctionCall );
+	assert.strictEqual( findIdentity( typeWithBuiltInReferenceIdentity ), builtInReference );
+	assert.strictEqual( findIdentity( typeWithReferenceIdentity ), typeWithReferenceIdentity );
+	assert.strictEqual(
+		findIdentity( typeWithTypeWithReferenceIdentityIdentity ), typeWithReferenceIdentity );
 } );

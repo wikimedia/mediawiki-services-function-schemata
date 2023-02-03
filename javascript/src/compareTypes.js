@@ -1,7 +1,12 @@
 'use strict';
 
-const { findIdentity, validatesAsFunctionCall, validatesAsReference, validatesAsType } = require( './schema.js' );
-const { convertZListToItemArray } = require( './utils.js' );
+const {
+	convertZListToItemArray,
+	findIdentity,
+	isZFunctionCall,
+	isZReference,
+	isZType
+} = require( './utils.js' );
 
 /**
  * Determine whether comparand type-compares to comparator.
@@ -25,22 +30,22 @@ function compareTypes( comparand, comparator ) {
 	const comparandIdentity = findIdentity( comparand );
 	const comparatorIdentity = findIdentity( comparator );
 
-	if ( validatesAsFunctionCall( comparandIdentity ).isValid() ) {
+	if ( isZFunctionCall( comparandIdentity ) ) {
 		return true;
 	}
 
-	if ( validatesAsFunctionCall( comparatorIdentity ).isValid() ) {
+	if ( isZFunctionCall( comparatorIdentity ) ) {
 		return true;
 	}
 
-	if ( validatesAsReference( comparatorIdentity ).isValid() ) {
+	if ( isZReference( comparatorIdentity ) ) {
 		// Case 1: comparatorIdentity is Z1.
 		if ( comparatorIdentity.Z9K1 === 'Z1' ) {
 			return true;
 		}
 
 		// Case 2: identities are both references to built-in types.
-		if ( validatesAsReference( comparandIdentity ).isValid() ) {
+		if ( isZReference( comparandIdentity ) ) {
 			return comparandIdentity.Z9K1 === comparatorIdentity.Z9K1;
 		}
 	}
@@ -51,7 +56,7 @@ function compareTypes( comparand, comparator ) {
 	// in a 1:1 relationship with type B's such that each key in type A
 	// type-compares to the corresponding key in type B, then we say that the
 	// two types type-compare.
-	if ( validatesAsType( comparator ).isValid() && validatesAsType( comparand ).isValid() ) {
+	if ( isZType( comparator ) && isZType( comparand ) ) {
 		const comparandKeys = convertZListToItemArray( comparand.Z4K2 );
 		const comparatorKeys = convertZListToItemArray( comparator.Z4K2 );
 		if ( comparatorKeys.length !== comparandKeys.length ) {

@@ -4,7 +4,7 @@ const Ajv = require( 'ajv' ).default;
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { getError, isVoid, isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
+const { findIdentity, getError, isMemberOfDangerTrio, isVoid, isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
 const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
@@ -130,55 +130,6 @@ function validatesAsQuote( Z1 ) {
  */
 function validatesAsBoolean( Z1 ) {
 	return Z40Validator.validateStatus( Z1 );
-}
-
-/**
- * Validates a ZObject against the Function Call, Reference, and Argument Reference
- * schemata. Returns the first valid status or the final failing status.
- *
- * @param {Object} Z1 object to be validated
- * @return {ValidationStatus} whether Z1 can validated as any of the Danger Trio
- */
-function validatesAsDangerTrio( Z1 ) {
-	let validationStatus;
-	for ( const validatorFunction of [
-		validatesAsFunctionCall,
-		validatesAsReference,
-		validatesAsArgumentReference
-	] ) {
-		validationStatus = validatorFunction( Z1 );
-		if ( validationStatus.isValid() ) {
-			break;
-		}
-	}
-	return validationStatus;
-}
-
-/**
- * Finds the identity of a type. This might be a Function Call (in the case of
- * a generic type), a Reference (in the case of a builtin), or the Z4 itself
- * (in the case of a user-defined type).
- *
- * @param {Object} Z4 a Type
- * @return {Object|null} the Z4's identity
- */
-function findIdentity( Z4 ) {
-	if (
-		validatesAsFunctionCall( Z4 ).isValid() ||
-        validatesAsReference( Z4 ).isValid() ) {
-		return Z4;
-	}
-	if ( validatesAsType( Z4 ).isValid() ) {
-		const identity = findIdentity( Z4.Z4K1 );
-		if (
-			validatesAsReference( identity ).isValid() &&
-            !isBuiltInType( identity.Z9K1 ) ) {
-			return Z4;
-		}
-		return identity;
-	}
-	// I guess this wasn't a type.
-	return null;
 }
 
 /**
@@ -542,8 +493,7 @@ class GenericSchema extends BaseSchema {
 
 			// Allow unresolved Z7, Z9, or Z18 to pass validation. This is a stopgap
 			// measure that will be phased out pending a massive validator overhaul.
-			const canSkip = validatesAsDangerTrio( toValidate ).isValid();
-			if ( canSkip ) {
+			if ( isMemberOfDangerTrio( toValidate ) ) {
 				continue;
 			}
 
@@ -819,7 +769,6 @@ class SchemaFactory {
 initializeValidators();
 
 module.exports = {
-	findIdentity,
 	SchemaFactory,
 	validatesAsZObject,
 	validatesAsType,
