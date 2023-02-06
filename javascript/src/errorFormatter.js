@@ -266,17 +266,15 @@ class ErrorFormatter {
 	}
 
 	/**
-	 * Creates an instance of a generic error given its errorType and an array
+	 * Creates an instance of a typed error given its errorType and an array
 	 * with the values of its keys.
-	 *
-	 * Note: "GenericError" here does not refer to Z500/'Generic error'.
 	 *
 	 * @param {string} errorType
 	 * @param {Object} errorKeys
 	 * @return {Object}
 	 */
-	static createGenericError( errorType, errorKeys ) {
-		const genericError = {
+	static createTypedError( errorType, errorKeys ) {
+		const typedError = {
 			Z1K1: {
 				Z1K1: wrapInZ9( 'Z7' ),
 				Z7K1: wrapInZ9( 'Z885' ),
@@ -286,11 +284,11 @@ class ErrorFormatter {
 
 		for ( let index = 0; index < errorKeys.length; index++ ) {
 			if ( errorKeys[ index ] ) {
-				genericError[ `${errorType}K${index + 1}` ] = errorKeys[ index ];
+				typedError[ `${errorType}K${index + 1}` ] = errorKeys[ index ];
 			}
 		}
 
-		return genericError;
+		return typedError;
 	}
 
 	/**
@@ -391,14 +389,14 @@ class ErrorFormatter {
 				break;
 		}
 
-		// Create generic error instance with errorType->error
-		const genericError = this.createGenericError( errorType, errorKeys );
+		// Create a typed error instance with errorType->error
+		const typedError = this.createTypedError( errorType, errorKeys );
 
 		// Create error Z5
 		return {
 			Z1K1: wrapInZ9( 'Z5' ),
 			Z5K1: wrapInZ9( errorType ),
-			Z5K2: genericError
+			Z5K2: typedError
 		};
 	}
 
