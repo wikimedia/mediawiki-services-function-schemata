@@ -4,7 +4,7 @@ const Ajv = require( 'ajv' ).default;
 
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
+const { getError, isVoid, isBuiltInType, isString, convertZListToItemArray } = require( './utils.js' );
 const { readYaml } = require( './fileUtils.js' );
 const { ValidationStatus } = require( './validationStatus.js' );
 const stableStringify = require( 'json-stable-stringify-without-jsonify' );
@@ -12,7 +12,7 @@ const stableStringify = require( 'json-stable-stringify-without-jsonify' );
 const SCHEMA_NAME_REGEX = '(Z[1-9]\\d*(K[1-9]\\d*)?|LIST|RESOLVER|GENERIC)';
 
 let Z1Validator, Z4Validator, Z5Validator, Z6Validator, Z7Validator,
-	Z8Validator, Z9Validator, Z18Validator, Z40Validator, Z99Validator;
+	Z9Validator, Z18Validator, Z40Validator, Z99Validator;
 
 function initializeValidators() {
 	// eslint-disable-next-line no-use-before-define
@@ -23,7 +23,6 @@ function initializeValidators() {
 	Z5Validator = defaultFactory.create( 'Z5_literal' );
 	Z6Validator = defaultFactory.create( 'Z6_literal' );
 	Z7Validator = defaultFactory.create( 'Z7_literal' );
-	Z8Validator = defaultFactory.create( 'Z8_literal' );
 	Z9Validator = defaultFactory.create( 'Z9_literal' );
 	Z18Validator = defaultFactory.create( 'Z18_literal' );
 	Z40Validator = defaultFactory.create( 'Z40_literal' );
@@ -81,16 +80,6 @@ function validatesAsError( Z1 ) {
  */
 function validatesAsString( Z1 ) {
 	return Z6Validator.validateStatus( Z1 );
-}
-
-/**
- * Determines whether argument is a Z8.
- *
- * @param {Object} Z1 a ZObject
- * @return {ValidationStatus} Status is only valid if Z1 validates as Z8
- */
-function validatesAsFunction( Z1 ) {
-	return Z8Validator.validateStatus( Z1 );
 }
 
 /**
@@ -200,9 +189,6 @@ function findIdentity( Z4 ) {
  * @return {Object|null} the associated ZID
  */
 function getZIDForType( Z4 ) {
-	if ( validatesAsFunction( Z4 ).isValid() ) {
-		return getZIDForType( Z4.Z8K5 );
-	}
 	if ( validatesAsReference( Z4 ).isValid() ) {
 		return Z4.Z9K1;
 	}
@@ -211,10 +197,6 @@ function getZIDForType( Z4 ) {
 	}
 	if ( validatesAsType( Z4 ).isValid() ) {
 		return getZIDForType( Z4.Z4K1 );
-	}
-	if ( isString( Z4 ) ) {
-		// If Z4 is a string, original object was a Z6 or a Z9.
-		return Z4;
 	}
 	// I guess this wasn't a type.
 	return null;
@@ -739,13 +721,8 @@ class SchemaFactory {
 			type = 'Z40';
 		}
 		let validate = null;
-		let message = null;
-		try {
-			validate = this.ajv_.getSchema( type );
-		} catch ( err ) {
-			message = err.message;
-			validate = null;
-		}
+		const message = null;
+		validate = this.ajv_.getSchema( type );
 		if ( validate === null || validate === undefined ) {
 			console.error( 'Could not find schema', schemaName, message );
 			return null;
@@ -811,16 +788,15 @@ class SchemaFactory {
 		const typeCache = new Map();
 		const normalize = require( './normalize.js' );
 
-		const normalized = Z4s.map( ( o ) => normalize( o ).Z22K1 );
-
-		const errorArray = normalized.map( ( o ) => Z5Validator.validateStatus( o ).isValid() );
-		const errorIndex = errorArray.indexOf( true );
-		if ( errorIndex > -1 ) {
-			throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4s[ errorIndex ] ) );
+		const normalZ4s = [];
+		for ( let errorIndex = 0; errorIndex < Z4s.length; ++errorIndex ) {
+			const Z4 = Z4s[ errorIndex ];
+			const normalizedEnvelope = normalize( Z4 );
+			if ( !isVoid( getError( normalizedEnvelope ) ) ) {
+				throw new Error( 'Failed to normalized Z4 at index: ' + errorIndex + '. Object: ' + JSON.stringify( Z4 ) );
+			}
+			normalZ4s.push( normalizedEnvelope.Z22K1 );
 		}
-
-		const normalZ4s = Z4s.map(
-			( Z4 ) => normalize( Z4 ).Z22K1 );
 
 		// Create a GenericSchema for each of the requested Z4s.
 		for ( const Z4 of normalZ4s ) {
@@ -850,7 +826,6 @@ module.exports = {
 	validatesAsError,
 	validatesAsString,
 	validatesAsFunctionCall,
-	validatesAsFunction,
 	validatesAsReference,
 	validatesAsQuote,
 	validatesAsArgumentReference,

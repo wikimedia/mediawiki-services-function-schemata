@@ -354,6 +354,13 @@ QUnit.test( 'GenericSchema allows the danger trio', ( assert ) => {
 	assert.true( topLevel.validate( toValidate ) );
 } );
 
+QUnit.test( 'createUserDefined disallows unnormalizable objects', ( assert ) => {
+	const youCantNormalizeMe = 4;
+	assert.throws( () => {
+		NORMAL_FACTORY.createUserDefined( [ youCantNormalizeMe ] );
+	}, /Failed to normalize/ );
+} );
+
 QUnit.test( 'ZObjectKeyFactory with Z7K1 & Z4s as references', ( assert ) => {
 	const Z7 = {
 		Z1K1: 'Z7',
