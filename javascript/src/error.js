@@ -75,8 +75,6 @@ function makeErrorInGivenForm( errorType, args, canonical ) {
 
 const error = {
 	unknown_error: 'Z500', // error information
-	// Deprecated name
-	generic_error: 'Z500', // error information
 	syntax_error: 'Z501', // message from parser, input string
 	not_wellformed: 'Z502', // sub error code, maybe more
 	not_implemented_yet: 'Z503', // function name
