@@ -165,6 +165,29 @@ function makeVoid( canonical = false ) {
 }
 
 /**
+ * Checks whether the input is a reference to the given ZID.
+ *
+ * @param {Object | string} ZObject a ZObject
+ * @param {string} ZID the ZID to be compared against
+ * @return {boolean} true iff ZObject is a reference with the given ZID
+ */
+function isThisReference( ZObject, ZID ) {
+	// Canonical-form reference.
+	if ( isString( ZObject ) ) {
+		return ZObject === ZID;
+	}
+	// Normal-form reference.
+	let theReference;
+	try {
+		theReference = ZObject.Z9K1;
+	} catch ( e ) {
+		// Z9K1 of ZObject could not be accessed, probably because ZObject was undefined.
+		return false;
+	}
+	return theReference === ZID;
+}
+
+/**
  * Checks whether the input is a Z24 / Void.  Allows for either canonical
  * or normalized input (corresponding to what makeVoid produces).
  *
@@ -172,13 +195,23 @@ function makeVoid( canonical = false ) {
  * @return {boolean} whether v is a Z24
  */
 function isVoid( v ) {
-	if ( isString( v ) ) {
-		return ( v === 'Z24' );
+	// Case 1: v is a reference to Z24.
+	if ( isThisReference( v, 'Z24' ) ) {
+		return true;
 	}
-	if ( isObject( v ) ) {
-		return ( v.Z1K1 === 'Z9' && v.Z9K1 === 'Z24' );
+
+	// Case 2: v is an object whose type is the reference Z21.
+	// FIXME: This is still not correct. If v.Z1K1 is a Z4 whose Z4K1/Identity is
+	// Z21, this should (but won't) return true. We can't use findIdentity here
+	// because findIdentity is defined only for normal-form objects.
+	let maybeVoidType;
+	try {
+		maybeVoidType = v.Z1K1;
+	} catch ( e ) {
+		// Z1K1 of v could not be accessed, probably because v was undefined.
+		return false;
 	}
-	return false;
+	return isThisReference( maybeVoidType, 'Z21' );
 }
 
 /**
