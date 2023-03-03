@@ -1204,6 +1204,8 @@ QUnit.test( 'isVoid', ( assert ) => {
 	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: '' } ), false );
 	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: 'z24' } ), false );
 	assert.strictEqual( isVoid( { Z1K1: 'Z9', Z9K1: 'Z24' } ), true );
+	assert.strictEqual( isVoid( { Z1K1: 'Z21' } ), true );
+	assert.strictEqual( isVoid( { Z1K1: { Z1K1: 'Z9', Z9K1: 'Z21' } } ), true );
 } );
 
 QUnit.test( 'getError', ( assert ) => {
