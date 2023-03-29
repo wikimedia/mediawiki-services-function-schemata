@@ -70,6 +70,45 @@ const V003_REQUEST_SCHEMA_ = {
 // semver 0.0.3
 const requestSchemaV003 = avro.parse( V003_REQUEST_SCHEMA_ );
 
+// Requests in v0.0.4 rely on a minimal set of information instead of an entire
+// Z7, allowing for further compression and facilitating later extension.
+const V004_REQUEST_SCHEMA_ = {
+	type: 'record',
+	namespace: 'ztypes',
+	name: 'ZOBJECT',
+	fields: [
+		{
+			name: 'reentrant',
+			type: 'boolean'
+		},
+		{
+			name: 'remainingTime',
+			type: 'double'
+		},
+		{
+			name: 'codingLanguage',
+			type: 'string'
+		},
+		{
+			name: 'codeString',
+			type: 'string'
+		},
+		{
+			name: 'functionName',
+			type: 'string'
+		},
+		{
+			name: 'functionArguments',
+			type: {
+				type: 'map',
+				values: Z1_UNION_
+			}
+		}
+	]
+};
+// semver 0.0.4
+const requestSchemaV004 = avro.parse( V004_REQUEST_SCHEMA_ );
+
 /**
  * Transform a ZObject into the form expected by the serialization schema.
  *
@@ -129,11 +168,16 @@ function recoverNormalFromSerialization( serializedZObject ) {
 	throw new Error( 'Invalid serialization form; must define one of ztypes.(Z1|Z6|Z9|Z99}' );
 }
 
-function convertRequestToBinaryV003( ZObject ) {
+function convertRequestToBinaryV004( ZObject ) {
 	const toSerialize = {
 		reentrant: ZObject.reentrant,
 		functionArguments: {}
 	};
+
+	// This is the only difference between semver v0.0.3 and v0.0.4.
+	if ( ZObject.remainingTime !== null ) {
+		toSerialize.remainingTime = ZObject.remainingTime;
+	}
 	const actualObject = ZObject.zobject;
 	for ( const key of Object.keys( actualObject ) ) {
 		if ( key === 'Z1K1' ) {
@@ -154,7 +198,10 @@ function convertRequestToBinaryV003( ZObject ) {
 
 function convertZObjectToBinary( ZObject, version = '0.0.1' ) {
 	if ( semver.gte( version, '0.0.3' ) ) {
-		const toSerialize = convertRequestToBinaryV003( ZObject );
+		const toSerialize = convertRequestToBinaryV004( ZObject );
+		if ( semver.gte( version, '0.0.4' ) ) {
+			return requestSchemaV004.toBuffer( toSerialize );
+		}
 		return requestSchemaV003.toBuffer( toSerialize );
 	} else if ( semver.gte( version, '0.0.2' ) ) {
 		return zobjectSchemaV002.toBuffer( {
@@ -166,8 +213,7 @@ function convertZObjectToBinary( ZObject, version = '0.0.1' ) {
 	}
 }
 
-function recoverRequestFromBinaryV003( buffer ) {
-	const recovered = requestSchemaV003.fromBuffer( buffer );
+function recoverRequestFromAvroFormat3Or4( recovered ) {
 	// Copy all members so that the result loses the ZOBJECT type annotation.
 	const result = { ...recovered };
 	for ( const key of Object.keys( recovered.functionArguments ) ) {
@@ -179,7 +225,13 @@ function recoverRequestFromBinaryV003( buffer ) {
 
 function getZObjectFromBinary( buffer, version = '0.0.1' ) {
 	if ( semver.gte( version, '0.0.3' ) ) {
-		return recoverRequestFromBinaryV003( buffer );
+		let recovered;
+		if ( semver.gte( version, '0.0.4' ) ) {
+			recovered = requestSchemaV004.fromBuffer( buffer );
+		} else {
+			recovered = requestSchemaV003.fromBuffer( buffer );
+		}
+		return recoverRequestFromAvroFormat3Or4( recovered );
 	} else if ( semver.gte( version, '0.0.2' ) ) {
 		const recovered = zobjectSchemaV002.fromBuffer( buffer );
 		return {

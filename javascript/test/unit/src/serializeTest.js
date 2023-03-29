@@ -133,3 +133,30 @@ QUnit.test( 'serialization 0.0.3', ( assert ) => {
 
 	assert.deepEqual( deserialized, expected );
 } );
+
+QUnit.test( 'serialization 0.0.4', ( assert ) => {
+	const bigFunctionCall = readJSON( path.join( 'test_data', 'function_call', 'decently_big.json' ) );
+	const e = 2.718281828459;
+	const original = {
+		reentrant: true,
+		zobject: bigFunctionCall,
+		remainingTime: e
+	};
+	const serialized = convertWrappedZObjectToVersionedBinary( original, '0.0.4' );
+	const deserialized = getWrappedZObjectFromVersionedBinary( serialized );
+	const expected = {
+		reentrant: true,
+		remainingTime: e,
+		codingLanguage: 'python-3',
+		codeString: 'def Z1802(Z1802K1, Z1802K2):\n    return {Z1802K2: str(Z1802K1[Z1802K2])}',
+		functionName: 'Z1802',
+		functionArguments: {
+			Z1802K1: {
+				Z1K1: 'Z6',
+				Z6K1: 'true?'
+			}
+		}
+	};
+
+	assert.deepEqual( deserialized, expected );
+} );
