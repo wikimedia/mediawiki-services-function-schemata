@@ -1,7 +1,0 @@
-*node_modules*
-composer.phar
-*vendor*
-/.phpunit.result.cache
-.eslintcache
-coverage
-.nyc_output
